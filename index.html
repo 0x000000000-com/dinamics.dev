@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dinamics · 你要的，都造得出来</title>
+<meta name="description" content="Dinamics：网站、App、AI 智能体、交易系统、智能合约、视频，十八般技术，一家做齐。">
+<meta name="theme-color" content="#0A0A0B">
+<meta property="og:title" content="Dinamics · 你要的，都造得出来">
+<meta property="og:description" content="你要的，都造得出来。十八般技术，一家做齐。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201024%201024%22%20role%3D%22img%22%20aria-label%3D%22Dinamics%22%3E%3Ctitle%3EDinamics%3C/title%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22gi%22%20gradientUnits%3D%22userSpaceOnUse%22%20x1%3D%220%22%20y1%3D%22225.3%22%20x2%3D%220%22%20y2%3D%22798.7%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23F3D48E%22/%3E%3Cstop%20offset%3D%22.55%22%20stop-color%3D%22%23D9B26B%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%239C7430%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221024%22%20height%3D%221024%22%20rx%3D%22229%22%20fill%3D%22%230A0A0B%22/%3E%3Crect%20x%3D%224%22%20y%3D%224%22%20width%3D%221016%22%20height%3D%221016%22%20rx%3D%22225%22%20fill%3D%22none%22%20stroke%3D%22%23D9B26B%22%20stroke-opacity%3D%22.28%22%20stroke-width%3D%226%22/%3E%3Cpolygon%20points%3D%22371.99%2C225.28%20376.57%2C225.28%20381.15%2C225.28%20385.74%2C225.28%20390.32%2C225.28%20394.91%2C225.28%20399.49%2C225.28%20404.08%2C225.28%20408.66%2C225.28%20413.25%2C225.28%20417.83%2C225.28%20422.42%2C225.28%20427.00%2C225.28%20431.59%2C225.28%20436.17%2C225.28%20440.76%2C225.28%20445.34%2C225.28%20449.93%2C225.28%20454.51%2C225.28%20459.10%2C225.28%20463.68%2C225.28%20468.27%2C225.28%20472.85%2C225.28%20477.44%2C225.28%20482.02%2C225.28%20486.61%2C225.28%20491.19%2C225.28%20495.78%2C225.28%20500.36%2C225.28%20504.95%2C225.28%20510.28%2C225.32%20515.78%2C225.45%20521.28%2C225.70%20526.77%2C226.05%20532.25%2C226.50%20537.72%2C227.06%20543.19%2C227.73%20548.63%2C228.50%20554.07%2C229.37%20559.48%2C230.35%20564.87%2C231.43%20570.25%2C232.62%20575.60%2C233.91%20580.92%2C235.30%20586.21%2C236.79%20591.48%2C238.38%20596.71%2C240.08%20601.91%2C241.87%20607.08%2C243.77%20612.21%2C245.76%20617.30%2C247.85%20622.35%2C250.04%20627.35%2C252.33%20632.31%2C254.71%20637.22%2C257.18%20642.09%2C259.75%20646.90%2C262.41%20651.67%2C265.17%20656.38%2C268.01%20661.03%2C270.94%20665.63%2C273.97%20670.17%2C277.08%20674.64%2C280.28%20679.06%2C283.56%20683.41%2C286.92%20687.70%2C290.37%20691.91%2C293.91%20696.06%2C297.52%20700.15%2C301.21%20704.15%2C304.98%20708.09%2C308.82%20711.95%2C312.74%20715.74%2C316.73%20719.45%2C320.80%20723.07%2C324.93%20726.62%2C329.13%20730.09%2C333.41%20733.48%2C337.74%20736.78%2C342.14%20740.00%2C346.61%20743.13%2C351.13%20746.17%2C355.72%20749.12%2C360.36%20751.99%2C365.05%20754.76%2C369.80%20757.45%2C374.61%20760.04%2C379.46%20762.53%2C384.36%20764.93%2C389.31%20767.24%2C394.31%20769.45%2C399.35%20771.56%2C404.43%20773.58%2C409.55%20775.49%2C414.70%20777.31%2C419.90%20779.03%2C425.12%20780.65%2C430.38%20782.16%2C435.67%20783.58%2C440.99%20784.89%2C446.33%20786.10%2C451.70%20787.20%2C457.09%20788.20%2C462.50%20789.10%2C467.93%20789.89%2C473.37%20790.58%2C478.83%20791.17%2C484.30%20791.65%2C489.78%20792.02%2C495.27%20792.29%2C500.77%20792.45%2C506.27%20792.51%2C511.77%20792.46%2C517.27%20792.31%2C522.77%20792.05%2C528.26%20791.68%2C533.75%20791.21%2C539.24%20790.64%2C544.71%20789.96%2C550.17%20789.17%2C555.61%20788.28%2C561.04%20787.29%2C566.45%20786.19%2C571.84%20784.99%2C577.21%20783.69%2C582.56%20782.28%2C587.88%20780.78%2C593.17%20779.17%2C598.43%20777.46%2C603.66%20775.65%2C608.86%20773.74%2C614.02%20771.74%2C619.14%20769.63%2C624.22%20767.43%2C629.27%20765.13%2C634.26%20762.74%2C639.22%20760.25%2C644.13%20757.67%2C648.98%20754.99%2C653.79%20752.23%2C658.55%20749.37%2C663.25%20746.42%2C667.89%20743.39%2C672.48%20740.26%2C677.01%20737.05%2C681.48%20733.76%2C685.89%20730.38%2C690.23%20726.92%2C694.51%20723.38%2C698.72%20719.75%2C702.86%20716.05%2C706.93%20712.27%2C710.93%20708.42%2C714.85%20704.49%2C718.70%20700.49%2C722.48%20696.41%2C726.17%20692.27%2C729.79%20688.05%2C733.33%20683.77%2C736.79%20679.43%2C740.16%20675.02%2C743.45%20670.55%2C746.66%20666.01%2C749.77%20661.42%2C752.80%20656.77%2C755.75%20652.07%2C758.60%20647.31%2C761.36%20642.50%2C764.03%20637.64%2C766.61%20632.73%2C769.09%20627.77%2C771.48%20622.77%2C773.77%20617.73%2C775.97%20612.64%2C778.07%20607.52%2C780.07%20602.35%2C781.97%20597.15%2C783.77%20591.92%2C785.48%20586.66%2C787.08%20581.37%2C788.58%20576.05%2C789.98%20570.70%2C791.28%20565.33%2C792.47%20559.94%2C793.56%20554.52%2C794.55%20549.09%2C795.43%20543.65%2C796.21%20538.19%2C796.88%20532.71%2C797.45%20527.23%2C797.92%20521.74%2C798.28%20516.25%2C798.53%20510.75%2C798.68%20505.33%2C798.72%20500.75%2C798.72%20496.17%2C798.72%20491.58%2C798.72%20487.00%2C798.72%20482.41%2C798.72%20477.83%2C798.72%20473.24%2C798.72%20468.66%2C798.72%20464.07%2C798.72%20459.49%2C798.72%20454.90%2C798.72%20450.32%2C798.72%20445.73%2C798.72%20441.15%2C798.72%20436.56%2C798.72%20431.98%2C798.72%20427.39%2C798.72%20422.81%2C798.72%20418.22%2C798.72%20413.64%2C798.72%20409.05%2C798.72%20404.47%2C798.72%20399.88%2C798.72%20395.30%2C798.72%20390.71%2C798.72%20386.13%2C798.72%20381.54%2C798.72%20381.54%2C798.72%20386.13%2C797.94%20390.71%2C797.16%20395.30%2C796.39%20399.88%2C795.61%20404.47%2C794.85%20409.05%2C794.08%20413.64%2C793.32%20418.22%2C792.56%20422.81%2C791.80%20427.39%2C791.04%20431.98%2C790.29%20436.56%2C789.54%20441.15%2C788.80%20445.73%2C788.05%20450.32%2C787.31%20454.90%2C786.57%20459.49%2C785.84%20464.07%2C785.11%20468.66%2C784.38%20473.24%2C783.65%20477.83%2C782.93%20482.41%2C782.21%20487.00%2C781.49%20491.58%2C780.78%20496.17%2C780.07%20500.75%2C779.36%20505.33%2C778.65%20510.39%2C777.91%20515.46%2C777.07%20520.51%2C776.14%20525.52%2C775.12%20530.50%2C774.00%20535.45%2C772.80%20540.36%2C771.50%20545.23%2C770.12%20550.06%2C768.64%20554.84%2C767.08%20559.59%2C765.44%20564.29%2C763.70%20568.95%2C761.89%20573.55%2C759.99%20578.11%2C758.01%20582.62%2C755.95%20587.08%2C753.81%20591.49%2C751.59%20595.84%2C749.29%20600.13%2C746.92%20604.37%2C744.47%20608.55%2C741.95%20612.67%2C739.36%20616.74%2C736.70%20620.74%2C733.97%20624.67%2C731.17%20628.55%2C728.31%20632.36%2C725.37%20636.10%2C722.38%20639.78%2C719.32%20643.39%2C716.20%20646.93%2C713.03%20650.41%2C709.79%20653.81%2C706.50%20657.14%2C703.15%20660.40%2C699.75%20663.59%2C696.30%20666.70%2C692.79%20669.74%2C689.24%20672.70%2C685.64%20675.59%2C681.99%20678.41%2C678.30%20681.14%2C674.56%20683.80%2C670.79%20686.38%2C666.97%20688.88%2C663.11%20691.31%2C659.22%20693.65%2C655.29%20695.91%2C651.33%20698.10%2C647.34%20700.20%2C643.31%20702.22%2C639.26%20704.17%2C635.18%20706.03%2C631.07%20707.81%2C626.94%20709.50%2C622.79%20711.12%2C618.61%20712.65%2C614.42%20714.10%2C610.21%20715.47%2C605.98%20716.75%2C601.73%20717.95%2C597.47%20719.07%2C593.20%20720.11%2C588.92%20721.07%2C584.63%20721.94%2C580.34%20722.73%2C576.04%20723.43%2C571.73%20724.06%2C567.42%20724.60%2C563.11%20725.07%2C558.80%20725.45%2C554.49%20725.74%2C550.19%20725.96%2C545.88%20726.10%2C541.59%20726.16%2C537.30%20726.13%2C533.03%20726.03%2C528.76%20725.85%2C524.50%20725.59%2C520.26%20725.25%2C516.03%20724.83%2C511.82%20724.34%2C507.63%20723.77%2C503.45%20723.12%2C499.30%20722.39%2C495.16%20721.60%2C491.05%20720.72%2C486.97%20719.78%2C482.91%20718.76%2C478.87%20717.66%2C474.86%20716.50%2C470.89%20715.26%2C466.94%20713.96%2C463.02%20712.58%2C459.14%20711.13%2C455.29%20709.62%2C451.47%20708.04%2C447.70%20706.39%2C443.95%20704.68%2C440.25%20702.90%2C436.59%20701.06%2C432.97%20699.15%2C429.38%20697.18%2C425.85%20695.15%2C422.35%20693.06%2C418.90%20690.91%2C415.50%20688.71%2C412.14%20686.44%2C408.83%20684.12%2C405.56%20681.74%2C402.35%20679.31%2C399.19%20676.82%2C396.07%20674.28%2C393.01%20671.69%2C390.01%20669.05%2C387.05%20666.36%2C384.15%20663.62%2C381.30%20660.84%2C378.51%20658.00%2C375.78%20655.13%2C373.10%20652.20%2C370.49%20649.24%2C367.93%20646.23%2C365.42%20643.19%2C362.98%20640.10%2C360.60%20636.98%2C358.28%20633.81%2C356.02%20630.62%2C353.82%20627.38%2C351.69%20624.12%2C349.61%20620.82%2C347.60%20617.49%2C345.66%20614.13%2C343.78%20610.74%2C341.96%20607.32%2C340.21%20603.87%2C338.52%20600.40%2C336.90%20596.91%2C335.34%20593.39%2C333.85%20589.85%2C332.43%20586.29%2C331.07%20582.71%2C329.78%20579.11%2C328.56%20575.50%2C327.41%20571.86%2C326.32%20568.22%2C325.30%20564.56%2C324.35%20560.88%2C323.46%20557.20%2C322.65%20553.51%2C321.90%20549.80%2C321.22%20546.09%2C320.61%20542.38%2C320.06%20538.65%2C319.59%20534.93%2C319.18%20531.20%2C318.84%20527.47%2C318.57%20523.74%2C318.37%20520.00%2C318.23%20516.27%2C318.16%20512.55%2C318.16%20508.82%2C318.23%20504.95%2C318.36%20500.36%2C318.52%20495.78%2C318.66%20491.19%2C318.81%20486.61%2C318.95%20482.02%2C319.08%20477.44%2C319.21%20472.85%2C319.34%20468.27%2C319.46%20463.68%2C319.58%20459.10%2C319.69%20454.51%2C319.80%20449.93%2C319.90%20445.34%2C320.00%20440.76%2C320.09%20436.17%2C320.18%20431.59%2C320.27%20427.00%2C320.34%20422.42%2C320.42%20417.83%2C320.49%20413.25%2C320.55%20408.66%2C320.61%20404.08%2C320.66%20399.49%2C320.71%20394.91%2C320.75%20390.32%2C320.78%20385.74%2C320.81%20381.15%2C320.83%20376.57%2C320.85%20371.99%2C320.85%22%20fill%3D%22url%28%23gi%29%22/%3E%3Cpolygon%20points%3D%22242.96%2C392.53%20338.53%2C392.53%20338.53%2C798.72%20242.96%2C798.72%22%20fill%3D%22url%28%23gi%29%22/%3E%3Ccircle%20cx%3D%22290.75%22%20cy%3D%22273.07%22%20r%3D%2252.57%22%20fill%3D%22url%28%23gi%29%22/%3E%3C/svg%3E%0A">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
+<style>
+/* VOICE    a master craftsman's shop sign: few words, exact, quietly sure
+   IDEA     a gold-leaf tile wall on onyx where two thousand small Dinamics marks flip like a stadium card stunt, with six secrets hidden in it
+   PICTURE  the hero mosaic draws the mark, then each of the eighteen crafts, then a working QR code; it also writes, rains, plays snake and retells the logo
+   COLOUR+TYPE onyx #0A0A0B, the logo's gold #F3D48E-#D9B26B-#A47A36, ivory #F2EDE3; Noto Serif SC 900 for titles, Archivo for everything else
+   LAYOUT   full-bleed mosaic with copy left and figure right; an 18-tile wall; three steps; a gold band to close */
+:root{--bg:#0A0A0B;--ink:#F2EDE3;--ink2:#A39D92;--co:#D9B26B;--gold:linear-gradient(180deg,#F3D48E,#D9B26B 55%,#A47A36);--wash:#16140F;--tile:#0E0E0F;--line:rgba(217,178,107,.2);--mono:ui-monospace,"SF Mono","Cascadia Mono",Menlo,Consolas,"Liberation Mono","Noto Sans Mono CJK SC","PingFang SC","Microsoft YaHei",monospace;color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:16px;background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16.5px/1.65 "Archivo","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;overflow-x:clip;-webkit-font-smoothing:antialiased}
+::selection{background:#D9B26B;color:#0A0A0B}
+h1,h2,h3,.cap b,.n{font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;font-weight:900;margin:0;text-wrap:balance}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--co);outline-offset:3px;border-radius:4px}
+.lockup{display:block;height:100%;width:auto}
+#lk circle{transition:opacity .25s}
+.flying #lk circle{opacity:0}
+/* header */
+.top{position:absolute;inset:0 0 auto;z-index:3;display:flex;align-items:center;gap:30px;padding:22px max(4vw,18px)}
+.brand{display:block;height:30px}
+.nav{display:flex;gap:28px;margin-left:auto}
+.nav a{text-decoration:none;font-weight:500;font-size:15.5px;padding:10px 0;border-bottom:2px solid transparent}
+.nav a:hover{border-color:var(--co)}
+.eggs{position:relative}
+.pill{display:flex;align-items:center;gap:7px;height:42px;padding:0 14px;border:1.5px solid var(--line);border-radius:10px;background:rgba(10,10,11,.6);color:var(--ink);font:600 14px/1 "Archivo","PingFang SC","Microsoft YaHei",sans-serif;cursor:pointer;white-space:nowrap}
+.pill:hover{border-color:rgba(217,178,107,.6)}
+.pill svg{width:15px;height:15px;fill:var(--co);flex:none}
+.pill b{color:var(--co);font-weight:700;font-variant-numeric:tabular-nums}
+.pill.all{background:var(--gold);border-color:transparent;color:#0A0A0B}
+.pill.all b{color:#0A0A0B}.pill.all svg{fill:#0A0A0B}
+.pill.bump{animation:bump .6s ease-out}
+@keyframes bump{30%{transform:scale(1.14)}}
+.panel{position:absolute;right:0;top:calc(100% + 10px);z-index:6;width:340px;padding:18px 18px 14px;border:1px solid rgba(217,178,107,.38);border-radius:14px;background:#111112;box-shadow:0 26px 64px -22px #000}
+.panel[hidden]{display:none}
+.ph{margin:0 0 8px;font-weight:600;font-size:15px}
+.panel ol{list-style:none;margin:0;padding:0}
+.panel li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:1px 8px;padding:9px 0;border-top:1px solid rgba(217,178,107,.13);font-size:14px;line-height:1.45}
+.panel li i{grid-row:1/span 2;font-style:normal;color:var(--ink2)}
+.panel li b{font-weight:600}
+.panel li span{color:var(--ink2);font-size:13px}
+.panel li.ok i,.panel li.ok b{color:var(--co)}
+.tlink{margin-top:10px;width:100%;min-height:42px;border:1px solid var(--line);border-radius:10px;background:none;color:var(--ink);font:500 14px var(--mono);cursor:pointer}
+.tlink:hover{border-color:var(--co)}
+.lang{display:flex;border:1.5px solid var(--line);border-radius:10px;overflow:hidden;background:rgba(10,10,11,.6)}
+.lang button{border:0;background:none;cursor:pointer;min-width:46px;height:42px;font:600 14px/1 "Archivo",sans-serif;color:var(--ink2)}
+.lang button[aria-pressed=true]{background:var(--gold);color:#0A0A0B}
+/* hero */
+.hero{position:relative;height:clamp(680px,100svh,980px);overflow:hidden;isolation:isolate}
+#mosaic{position:absolute;inset:0;width:100%;height:100%;z-index:0;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.hero.game,.hero.game #mosaic{touch-action:none}
+.hero.game #mosaic{cursor:default}
+.copy{position:absolute;z-index:2;left:max(5vw,20px);top:50%;transform:translateY(-44%);width:min(610px,44vw)}
+.copy h1{font-size:clamp(46px,5.5vw,92px);line-height:1.06;letter-spacing:-.01em}
+:lang(en) .copy h1{font-size:clamp(40px,4.4vw,74px);line-height:1.04}
+.lede,.sub,.art p,.step p{word-break:keep-all;overflow-wrap:anywhere}
+.lede{font-size:clamp(17px,1.3vw,20px);color:var(--ink2);margin:26px 0 36px;max-width:28em}
+.btn{display:inline-flex;align-items:center;min-height:54px;padding:0 28px;border-radius:12px;background:var(--gold);color:#0A0A0B;text-decoration:none;font-weight:600;font-size:16.5px;box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 12px 30px -16px rgba(217,178,107,.75)}
+.btn:hover{filter:brightness(1.07)}
+.cap{position:absolute;z-index:2;left:50%;top:80%;transform:translateX(-50%);display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:4px 14px;width:max-content;max-width:calc(100vw - 32px);padding:8px 14px;border:0;border-radius:10px;background:none;color:var(--ink);font:inherit;cursor:pointer;white-space:nowrap}
+.cap b{font-size:clamp(22px,2vw,30px);line-height:1.2;text-wrap:nowrap}
+.cap span{font:600 14px/1 "Archivo","PingFang SC","Microsoft YaHei",sans-serif;color:var(--co);font-variant-numeric:tabular-nums}
+.tbtn{position:absolute;z-index:2;right:max(4vw,18px);bottom:22px;width:44px;height:44px;border:1.5px solid var(--line);border-radius:10px;background:rgba(10,10,11,.6);color:var(--co);font:600 15px/1 var(--mono);cursor:pointer;opacity:.8}
+.tbtn:hover{opacity:1;border-color:var(--co)}
+/* sections */
+.band{padding:clamp(72px,8vw,128px) max(5vw,20px)}
+.wrap{max-width:1240px;margin:0 auto}
+.band h2{font-size:clamp(32px,3.6vw,52px);line-height:1.12}
+.sub{color:var(--ink2);max-width:34em;margin:18px 0 52px;font-size:17px}
+.wall{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.art{--tb:var(--tile);position:relative;padding:28px 20px 26px;background:var(--tile);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transition:background-color .25s}
+.art::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 0 0,var(--line) 0 8px,transparent 8.5px),radial-gradient(circle at 100% 0,var(--line) 0 8px,transparent 8.5px),radial-gradient(circle at 0 100%,var(--line) 0 8px,transparent 8.5px),radial-gradient(circle at 100% 100%,var(--line) 0 8px,transparent 8.5px)}
+.art:hover{--tb:var(--wash);background:var(--wash)}
+.art svg{display:block;width:62px;height:62px;margin-bottom:20px;color:var(--co);overflow:visible}
+.art line{stroke:currentColor;stroke-linecap:round}
+.art line.k{stroke:var(--tb)}
+.art h3{font-size:21px;line-height:1.3}
+.art p{margin:8px 0 0;font-size:14.5px;line-height:1.6;color:var(--ink2)}
+.art .eta{margin-top:14px;font:600 13.5px/1.45 "Archivo","PingFang SC","Microsoft YaHei",sans-serif;color:var(--co)}
+/* works: three covers drawn in code, each in that product's own colours */
+.wgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:30px}
+.work{display:flex;flex-direction:column}
+.cover{position:relative;aspect-ratio:4/3;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#0E0E0F}
+.cover>svg{position:absolute;inset:0;display:block;width:100%;height:100%}
+.cover[data-cv=zero]{background:linear-gradient(#151a26,#0a0d14)}
+.wtext{display:flex;flex-direction:column;flex:1}
+.whead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 14px;margin-top:22px}
+.work h3{font-size:24px;line-height:1.25}
+.st{display:inline-flex;align-items:center;gap:7px;font:600 13px/1.2 "Archivo","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink2)}
+.st i{width:7px;height:7px;border-radius:50%;background:var(--ink2)}
+.st.live{color:var(--co)}.st.live i{background:var(--co);box-shadow:0 0 0 3px rgba(217,178,107,.2)}
+.work p{margin:10px 0 0;color:var(--ink2);font-size:15px;line-height:1.7;word-break:keep-all;overflow-wrap:anywhere}
+.tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:16px 0 0;padding:0}
+.tags li{padding:6px 10px;border:1px solid var(--line);border-radius:8px;font:600 13px/1.2 "Archivo","PingFang SC","Microsoft YaHei",sans-serif;color:var(--co)}
+.go{align-self:flex-start;margin-top:20px;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1.5px solid var(--line);border-radius:10px;color:var(--ink);text-decoration:none;font-weight:600;font-size:15px}
+.go:hover{border-color:var(--co)}
+.go svg{width:13px;height:13px;stroke:var(--co);fill:none;stroke-width:2}
+.go.off{border-style:dashed;color:var(--ink2);font-weight:500}
+.px-sheen{transform:translateX(-170px) skewX(-18deg)}
+.on .px-sheen{animation:pxs 4.4s .3s ease-in-out infinite}
+@keyframes pxs{0%{transform:translateX(-170px) skewX(-18deg)}46%,100%{transform:translateX(540px) skewX(-18deg)}}
+.zr-addr{position:absolute;left:0;right:0;bottom:16%;text-align:center;font:600 clamp(17px,2.1vw,27px)/1 var(--mono);letter-spacing:.02em;color:#e9e5d9;white-space:nowrap}
+.zr-addr .z{color:#5d6576}.zr-addr .z.ok{color:#ebc65c;text-shadow:0 0 14px rgba(235,198,92,.5)}.zr-addr .r{color:#5d6576}
+.bd-l{fill:#33311f}
+.on .bd-l{animation:bdon .28s var(--d) forwards,bdb 2.8s calc(var(--d) + .3s) ease-in-out infinite}
+@keyframes bdon{to{fill:#ffe600}}
+@keyframes bdb{0%,100%{opacity:1}50%{opacity:.55}}
+.on .bd-you{animation:bdy 2.8s 1.6s ease-in-out infinite}
+@keyframes bdy{0%,100%{stroke-opacity:1}50%{stroke-opacity:.45}}
+.steps{list-style:none;margin:52px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--co)}
+.step{padding:30px 32px 6px 0}
+.step+.step{padding-left:32px;border-left:1px solid var(--line)}
+.n{display:block;font-size:58px;line-height:1;color:var(--co)}
+.step h3{font-size:24px;margin:20px 0 10px}
+.step p{margin:0;color:var(--ink2);max-width:24em}
+.talk{background:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Cg%20stroke%3D%27%230A0A0B%27%20stroke-opacity%3D%27.08%27%20stroke-linecap%3D%27round%27%3E%3Cline%20x1%3D%2722%27%20y1%3D%2742%27%20x2%3D%2722%27%20y2%3D%2788%27%20stroke-width%3D%2711%27/%3E%3Cline%20x1%3D%2722%27%20y1%3D%2717%27%20x2%3D%2722%27%20y2%3D%2717%27%20stroke-width%3D%2713%27/%3E%3Cline%20x1%3D%2737%27%20y1%3D%2714%27%20x2%3D%2752%27%20y2%3D%2714%27%20stroke-width%3D%2710%27/%3E%3Cline%20x1%3D%2752.0%27%20y1%3D%2714.0%27%20x2%3D%2763.4%27%20y2%3D%2715.8%27%20stroke-width%3D%2711.5%27/%3E%3Cline%20x1%3D%2763.4%27%20y1%3D%2715.8%27%20x2%3D%2773.7%27%20y2%3D%2721.1%27%20stroke-width%3D%2711.2%27/%3E%3Cline%20x1%3D%2773.7%27%20y1%3D%2721.1%27%20x2%3D%2781.9%27%20y2%3D%2729.3%27%20stroke-width%3D%2710.7%27/%3E%3Cline%20x1%3D%2781.9%27%20y1%3D%2729.3%27%20x2%3D%2787.2%27%20y2%3D%2739.6%27%20stroke-width%3D%2710.0%27/%3E%3Cline%20x1%3D%2787.2%27%20y1%3D%2739.6%27%20x2%3D%2789.0%27%20y2%3D%2751.0%27%20stroke-width%3D%279.1%27/%3E%3Cline%20x1%3D%2789.0%27%20y1%3D%2751.0%27%20x2%3D%2787.2%27%20y2%3D%2762.4%27%20stroke-width%3D%278.1%27/%3E%3Cline%20x1%3D%2787.2%27%20y1%3D%2762.4%27%20x2%3D%2781.9%27%20y2%3D%2772.7%27%20stroke-width%3D%276.9%27/%3E%3Cline%20x1%3D%2781.9%27%20y1%3D%2772.7%27%20x2%3D%2773.7%27%20y2%3D%2780.9%27%20stroke-width%3D%275.5%27/%3E%3Cline%20x1%3D%2773.7%27%20y1%3D%2780.9%27%20x2%3D%2763.4%27%20y2%3D%2786.2%27%20stroke-width%3D%274.0%27/%3E%3Cline%20x1%3D%2763.4%27%20y1%3D%2786.2%27%20x2%3D%2752.0%27%20y2%3D%2788.0%27%20stroke-width%3D%272.4%27/%3E%3Cline%20x1%3D%2752%27%20y1%3D%2788%27%20x2%3D%2736%27%20y2%3D%2788%27%20stroke-width%3D%271.5%27/%3E%3C/g%3E%3C/svg%3E") repeat 0 0/68px 68px,var(--gold);color:#0A0A0B}
+.talk h2{color:#0A0A0B}
+.talk p{color:rgba(10,10,11,.8);font-size:18px;margin:18px 0 34px}
+.talk ::selection{background:#0A0A0B;color:#F3D48E}
+.mail{display:flex;flex-wrap:wrap;gap:16px 22px;align-items:center}
+.mail a{font:700 clamp(24px,3.2vw,38px)/1.2 "Archivo",sans-serif;color:#0A0A0B;text-decoration:none;border-bottom:2px solid rgba(10,10,11,.45);overflow-wrap:anywhere}
+.mail a:hover{border-color:#0A0A0B}
+.mail button{min-height:46px;padding:0 20px;border-radius:10px;border:1.5px solid rgba(10,10,11,.62);background:transparent;color:#0A0A0B;font:600 15px "Archivo","PingFang SC","Microsoft YaHei",sans-serif;cursor:pointer}
+.mail button:hover{background:rgba(10,10,11,.08)}
+.talk :focus-visible{outline-color:#0A0A0B}
+footer{display:flex;flex-wrap:wrap;align-items:center;gap:14px 36px;padding:40px max(5vw,20px) 46px;color:var(--ink2);font-size:14.5px}
+footer .brand{height:24px}
+footer a{color:var(--co)}
+footer .ver{margin-left:auto;font:500 13px/1 "Archivo",sans-serif}
+footer .stat{flex-basis:100%;font-size:13.5px;line-height:1.6}
+/* terminal, drops down from the top edge */
+.term{position:fixed;z-index:20;top:0;left:50%;width:min(820px,100%);height:min(58vh,460px);display:flex;flex-direction:column;transform:translate(-50%,-104%);transition:transform .32s cubic-bezier(.2,.8,.2,1);background:#0D0D0E;border:1px solid rgba(217,178,107,.4);border-top:0;border-radius:0 0 16px 16px;box-shadow:0 40px 90px -30px #000;color:var(--ink);font:14.5px/1.6 var(--mono)}
+.term.on{transform:translate(-50%,0)}
+.term[hidden]{display:none}
+.tbar{display:flex;align-items:center;justify-content:space-between;padding:8px 10px 8px 18px;border-bottom:1px solid rgba(217,178,107,.16);font:600 13px/1 "Archivo","PingFang SC","Microsoft YaHei",sans-serif;color:var(--ink2)}
+.tbar button{width:36px;height:36px;border:0;border-radius:8px;background:none;color:var(--ink2);font:400 22px/1 "Archivo",sans-serif;cursor:pointer}
+.tbar button:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+.tout{position:relative;flex:1;min-height:0;overflow:auto;padding:14px 18px 8px;white-space:pre-wrap;overflow-wrap:anywhere}
+.tout i{font-style:normal;color:var(--co)}
+.tout .d{color:var(--ink2)}
+.tout .g{color:var(--co)}
+.tout .tg{display:grid;grid-template-columns:max-content 1fr;column-gap:28px;row-gap:1px;white-space:normal}
+.tout .tg .th{grid-column:1/-1;margin-bottom:4px}
+.tout .tg span:not(.th):nth-child(even){padding-left:16px}
+.tchips{display:flex;flex-wrap:wrap;gap:8px;padding:10px 18px 2px;border-top:1px solid rgba(217,178,107,.12)}
+.tchips button{min-height:36px;padding:0 13px;border:1px solid rgba(217,178,107,.38);border-radius:8px;background:rgba(217,178,107,.07);color:var(--ink);font:500 14px/1 var(--mono);cursor:pointer}
+.tchips button:hover{border-color:var(--co);color:var(--co)}
+.tin{display:flex;gap:10px;align-items:center;padding:8px 18px 16px}
+.tin label{color:var(--co);white-space:nowrap}
+.tin input{flex:1;min-width:0;border:0;outline:0;background:none;color:var(--ink);font:inherit;caret-color:var(--co)}
+.toast{position:fixed;z-index:21;left:50%;bottom:24px;width:max-content;max-width:min(560px,calc(100% - 32px));display:flex;gap:10px;align-items:flex-start;padding:14px 18px;border:1px solid rgba(217,178,107,.45);border-radius:14px;background:#121212;color:var(--ink);font-size:15px;line-height:1.5;box-shadow:0 20px 50px -20px #000;transform:translate(-50%,24px);opacity:0;pointer-events:none;transition:transform .35s,opacity .35s}
+.toast.on{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+.toast svg{flex:none;width:17px;height:17px;margin-top:3px;fill:var(--co)}
+.toast a{color:var(--co)}
+@media (max-width:1099px){.wall{grid-template-columns:repeat(3,minmax(0,1fr))}.wgrid{grid-template-columns:minmax(0,1fr);gap:44px}.work{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 34px;align-items:center}.whead{margin-top:0}}
+@media (max-width:699px){.work{display:flex;align-items:stretch}.whead{margin-top:20px}}
+@media (max-width:899px){
+  .hero{height:auto;min-height:max(100svh,760px)}
+  .copy{position:relative;left:auto;top:auto;transform:none;width:auto;padding:112px 20px 0}
+  .copy h1{font-size:clamp(40px,11.2vw,64px)}
+  .lede{margin:20px 0 28px}
+  .fig{height:min(92vw,460px);margin-top:12px}
+  .capspace{height:84px}
+}
+@media (min-width:900px){.fig,.capspace{display:none}}
+@media (max-width:799px){.steps{grid-template-columns:minmax(0,1fr)}.step,.step+.step{padding:26px 0;border-left:0;border-bottom:1px solid var(--line)}}
+@media (max-width:899px){.nav{display:none}.top{gap:14px}.eggs{margin-left:auto}}
+@media (max-width:719px){.top{gap:12px}.brand{height:26px}.panel{position:fixed;left:16px;right:16px;top:76px;width:auto}.toast{top:12px;bottom:auto;transform:translate(-50%,-24px)}.toast.on{transform:translate(-50%,0)}.term-open .toast{top:calc(min(58vh,460px) + 12px)}}
+@media (max-width:599px){.wall{grid-template-columns:minmax(0,1fr)}.art{display:grid;grid-template-columns:52px minmax(0,1fr);column-gap:18px;padding:22px 18px}.art svg{grid-row:1/span 3;width:52px;height:52px;margin:2px 0 0}.art h3{font-size:20px}.art p{margin-top:4px}.art .eta{margin-top:8px}footer .ver{margin-left:0}}
+@media (max-width:419px){.pill .pl{display:none}.pill{padding:0 11px}.brand{height:22px}}
+@media (pointer:coarse){.tin input{font-size:16px}.tchips button{min-height:42px}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.art,.term,.toast{transition:none}.cover *{animation:none!important}.bd-l{fill:#ffe600}.px-sheen{display:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="lg" gradientUnits="userSpaceOnUse" x1="0" y1="0.0" x2="0" y2="240.0"><stop offset="0" stop-color="#F3D48E"/><stop offset=".55" stop-color="#D9B26B"/><stop offset="1" stop-color="#9C7430"/></linearGradient></defs><symbol id="lk" viewBox="0 0 1483 248"><g transform="translate(4,4)"><polygon points="54.00,0.00 55.92,0.00 57.84,0.00 59.76,0.00 61.68,0.00 63.59,0.00 65.51,0.00 67.43,0.00 69.35,0.00 71.27,0.00 73.19,0.00 75.11,0.00 77.03,0.00 78.95,0.00 80.86,0.00 82.78,0.00 84.70,0.00 86.62,0.00 88.54,0.00 90.46,0.00 92.38,0.00 94.30,0.00 96.22,0.00 98.13,0.00 100.05,0.00 101.97,0.00 103.89,0.00 105.81,0.00 107.73,0.00 109.65,0.00 111.88,0.01 114.18,0.07 116.48,0.18 118.78,0.32 121.08,0.51 123.37,0.75 125.65,1.03 127.93,1.35 130.21,1.71 132.47,2.12 134.73,2.58 136.98,3.07 139.22,3.61 141.44,4.19 143.66,4.82 145.86,5.48 148.06,6.19 150.23,6.95 152.39,7.74 154.54,8.57 156.67,9.45 158.78,10.36 160.88,11.32 162.95,12.32 165.01,13.35 167.05,14.43 169.06,15.54 171.05,16.69 173.03,17.88 174.97,19.11 176.90,20.38 178.80,21.68 180.67,23.02 182.52,24.39 184.34,25.80 186.13,27.24 187.90,28.72 189.64,30.23 191.34,31.78 193.02,33.35 194.67,34.96 196.29,36.60 197.87,38.28 199.42,39.98 200.94,41.71 202.43,43.47 203.88,45.25 205.29,47.07 206.68,48.91 208.02,50.78 209.33,52.67 210.61,54.59 211.84,56.53 213.04,58.50 214.20,60.49 215.33,62.50 216.41,64.53 217.45,66.58 218.46,68.65 219.42,70.74 220.35,72.85 221.23,74.98 222.08,77.12 222.88,79.28 223.64,81.45 224.36,83.64 225.04,85.84 225.67,88.05 226.26,90.28 226.81,92.52 227.32,94.76 227.78,97.02 228.20,99.28 228.57,101.55 228.91,103.83 229.19,106.12 229.44,108.41 229.64,110.70 229.80,113.00 229.91,115.30 229.98,117.60 230.00,119.90 229.98,122.21 229.92,124.51 229.81,126.81 229.65,129.10 229.46,131.40 229.22,133.69 228.93,135.97 228.60,138.25 228.23,140.53 227.82,142.79 227.36,145.05 226.85,147.29 226.31,149.53 225.72,151.76 225.09,153.97 224.42,156.17 223.70,158.36 222.95,160.54 222.15,162.70 221.31,164.84 220.43,166.97 219.50,169.08 218.54,171.17 217.54,173.24 216.50,175.30 215.42,177.33 214.30,179.34 213.14,181.33 211.95,183.30 210.71,185.25 209.44,187.17 208.13,189.06 206.79,190.93 205.41,192.78 204.00,194.59 202.55,196.38 201.07,198.15 199.55,199.88 198.00,201.58 196.42,203.26 194.81,204.90 193.16,206.51 191.49,208.09 189.78,209.64 188.05,211.15 186.28,212.63 184.49,214.08 182.67,215.49 180.83,216.87 178.96,218.21 177.06,219.51 175.14,220.78 173.19,222.01 171.22,223.21 169.23,224.36 167.22,225.48 165.18,226.56 163.13,227.60 161.05,228.60 158.96,229.56 156.85,230.48 154.72,231.36 152.58,232.19 150.42,232.99 148.24,233.74 146.05,234.46 143.85,235.13 141.63,235.76 139.40,236.34 137.17,236.88 134.92,237.38 132.66,237.84 130.40,238.25 128.12,238.62 125.84,238.95 123.56,239.23 121.27,239.47 118.97,239.66 116.68,239.81 114.38,239.92 112.08,239.98 109.81,240.00 107.89,240.00 105.97,240.00 104.05,240.00 102.13,240.00 100.22,240.00 98.30,240.00 96.38,240.00 94.46,240.00 92.54,240.00 90.62,240.00 88.70,240.00 86.78,240.00 84.86,240.00 82.95,240.00 81.03,240.00 79.11,240.00 77.19,240.00 75.27,240.00 73.35,240.00 71.43,240.00 69.51,240.00 67.59,240.00 65.68,240.00 63.76,240.00 61.84,240.00 59.92,240.00 58.00,240.00 58.00,240.00 59.92,239.67 61.84,239.35 63.76,239.02 65.68,238.70 67.59,238.38 69.51,238.06 71.43,237.74 73.35,237.42 75.27,237.10 77.19,236.79 79.11,236.47 81.03,236.16 82.95,235.85 84.86,235.54 86.78,235.23 88.70,234.92 90.62,234.61 92.54,234.30 94.46,234.00 96.38,233.69 98.30,233.39 100.22,233.09 102.13,232.79 104.05,232.49 105.97,232.19 107.89,231.90 109.81,231.60 111.92,231.29 114.05,230.94 116.16,230.55 118.26,230.12 120.34,229.66 122.41,229.15 124.47,228.61 126.51,228.03 128.53,227.41 130.53,226.76 132.52,226.07 134.49,225.34 136.43,224.58 138.36,223.79 140.27,222.96 142.16,222.10 144.02,221.20 145.87,220.27 147.69,219.31 149.49,218.32 151.26,217.30 153.01,216.24 154.73,215.16 156.43,214.04 158.11,212.90 159.76,211.73 161.38,210.53 162.97,209.30 164.54,208.05 166.08,206.77 167.59,205.46 169.07,204.13 170.53,202.78 171.95,201.40 173.35,200.00 174.71,198.58 176.04,197.13 177.35,195.67 178.62,194.18 179.86,192.67 181.07,191.15 182.25,189.60 183.39,188.04 184.50,186.46 185.58,184.86 186.63,183.24 187.64,181.62 188.63,179.97 189.57,178.31 190.49,176.64 191.37,174.96 192.21,173.26 193.03,171.55 193.81,169.84 194.55,168.11 195.26,166.37 195.94,164.62 196.58,162.86 197.18,161.10 197.76,159.33 198.29,157.56 198.80,155.77 199.27,153.99 199.70,152.19 200.10,150.40 200.46,148.60 200.80,146.80 201.09,145.00 201.35,143.19 201.58,141.39 201.77,139.59 201.93,137.78 202.06,135.98 202.15,134.18 202.21,132.38 202.23,130.59 202.22,128.80 202.18,127.01 202.10,125.23 201.99,123.46 201.85,121.69 201.68,119.93 201.47,118.17 201.23,116.42 200.96,114.68 200.66,112.95 200.32,111.23 199.96,109.52 199.56,107.82 199.13,106.13 198.68,104.46 198.19,102.79 197.67,101.14 197.12,99.50 196.55,97.88 195.94,96.26 195.31,94.67 194.65,93.09 193.96,91.52 193.24,89.97 192.50,88.44 191.72,86.92 190.93,85.42 190.10,83.94 189.25,82.48 188.38,81.04 187.48,79.61 186.56,78.20 185.61,76.82 184.64,75.45 183.64,74.11 182.62,72.78 181.58,71.48 180.52,70.20 179.44,68.94 178.33,67.71 177.20,66.49 176.06,65.30 174.89,64.13 173.71,62.99 172.50,61.87 171.28,60.77 170.04,59.70 168.78,58.65 167.51,57.63 166.21,56.64 164.91,55.66 163.58,54.72 162.24,53.80 160.89,52.90 159.52,52.04 158.14,51.20 156.75,50.38 155.34,49.59 153.92,48.83 152.49,48.10 151.05,47.39 149.60,46.72 148.14,46.06 146.66,45.44 145.18,44.85 143.69,44.28 142.19,43.74 140.69,43.23 139.17,42.74 137.65,42.29 136.13,41.86 134.60,41.46 133.06,41.09 131.52,40.75 129.97,40.44 128.42,40.15 126.87,39.90 125.31,39.67 123.76,39.47 122.20,39.30 120.64,39.16 119.07,39.04 117.51,38.96 115.95,38.90 114.39,38.87 112.83,38.87 111.27,38.90 109.65,38.96 107.73,39.02 105.81,39.08 103.89,39.14 101.97,39.20 100.05,39.26 98.13,39.31 96.22,39.37 94.30,39.42 92.38,39.47 90.46,39.51 88.54,39.56 86.62,39.60 84.70,39.64 82.78,39.68 80.86,39.72 78.95,39.75 77.03,39.79 75.11,39.82 73.19,39.85 71.27,39.87 69.35,39.90 67.43,39.92 65.51,39.94 63.59,39.96 61.68,39.97 59.76,39.98 57.84,39.99 55.92,40.00 54.00,40.00" fill="url(#lg)"/><polygon points="0.00,70.00 40.00,70.00 40.00,240.00 0.00,240.00" fill="url(#lg)"/><circle cx="20.00" cy="20.00" r="22.00" fill="url(#lg)"/><path d="M306.5917113024133 180.0V60.0H371.0302176387395Q393.0665457488532 60.0 408.91038055266336 66.9062850524636Q424.7542153564735 73.8125701049272 433.2475440456816 87.18091914771597Q441.74087273488965 100.54926819050472 441.74087273488965 120.07973007221224Q441.74087273488965 139.45073180949527 433.2475440456816 152.81908085228403Q424.7542153564735 166.1874298950728 408.91038055266336 173.0937149475364Q393.0665457488532 180.0 371.0302176387395 180.0ZM334.58164097696124 157.15103169668782H369.52668297795736Q378.9197905026928 157.15103169668782 386.8207746965884 154.89576701486058Q394.721758890484 152.64050233303334 400.57250924805413 148.24767862582218Q406.42325960562425 143.854854918611 409.6352851539983 137.26752746434227Q412.8473107023724 130.68020001007352 412.8473107023724 122.0008842314981V117.96873530111708Q412.8473107023724 109.28941952254164 409.6352851539983 102.70968718511911Q406.42325960562425 96.12995484769658 400.57250924805413 91.73713114048542Q394.721758890484 87.34430743327424 386.8207746965884 85.09663786829321Q378.9197905026928 82.84896830331219 369.52668297795736 82.84896830331219H334.58164097696124Z M480.19418715060795 180.0V60.0H508.1841168251559V180.0Z M551.8008421785353 180.0V60.0H577.8695430751055L642.9912368341314 121.92470920696053Q645.1553601138041 123.75472196409189 648.1927352840613 126.93636704508116Q651.2301104543185 130.11801212607043 654.5218660749049 133.47430758517658Q657.8136216954912 136.83060304428273 660.1979660543581 139.51867745830614H661.625549546678Q661.4660894022536 135.79789100927377 661.226899185617 130.41792596813087Q660.9877089689802 125.037960926988 660.9877089689802 121.51457289726525V60.0H687.793024271595V180.0H662.233084275683L597.2101643450037 117.68049395442023Q592.585745538002 113.2762962266127 587.5247007857081 107.93430676970087Q582.4636560334142 102.59231731278904 579.3807101620797 99.36510153072251H578.1277770478766Q578.2872371923011 101.65074667993458 578.4466973367255 107.22055233288677Q578.60615748115 112.79035798583897 578.60615748115 119.88263012766993V180.0Z M712.7601720600435 180.0 772.6728095616392 60.0H804.2316979669871L864.1443354685827 180.0H833.4890794212041L822.5013704522239 157.40948952553438H752.4819829171165L741.5094641818287 180.0ZM763.1888591095164 135.19836179992012H811.7944942598239L798.3085514886295 106.64699042828731Q797.4656800654299 104.7714069700787 795.8748575249352 101.13794571010479Q794.2840349844406 97.50448445013086 792.6780222102536 93.65839722780899Q791.0720094360665 89.81231000548713 789.7925120675746 86.92298364971214Q788.5130146990828 84.03365729393715 788.2776033861962 83.66153387781883H786.8955905949534Q785.3693078929787 87.10897073907948 783.4139943625578 91.5891196353491Q781.4586808321369 96.06926853161873 779.6704225629868 100.21530690534698Q777.8821642938367 104.36134527907524 776.6748018807108 106.80645057271178Z M889.923974212846 180.0V60.0H933.4503789696811L959.7767915081796 120.11736987233007Q961.0145343886903 122.9877270906625 962.9698479191111 127.95007263330163Q964.925161449532 132.91241817594076 967.032340007531 138.35314415185331Q969.1395185655302 143.79387012776584 970.8100711782371 148.24363855665064H972.0326238250553Q973.5437162933378 144.2874407947317 975.5711647791246 139.1086903859945Q977.5986132649115 133.92993997725728 979.6412519843908 128.8726741287135Q981.6838907038701 123.81540828016973 983.0810937288053 120.43629016117904L1009.4075062673038 60.0H1051.9543274977075V180.0H1023.9643978231595V108.46966923399383Q1023.9643978231595 105.37909093646725 1024.051723012218 101.57472089278068Q1024.1390482012764 97.77035084909409 1024.3136985793933 94.06090111131216Q1024.4883489575102 90.35145137353024 1024.6478091019346 87.6405542996223H1023.2506060769995Q1022.3469737190302 90.38183184091508 1020.9269853435565 94.19379700144788Q1019.5069969680826 98.00576216198066 1018.0870085926088 101.80253708882103Q1016.667020217135 105.5993120156614 1015.4292773366243 108.46966923399383L983.9696850904658 180.0H957.0429225370035L925.4238701464205 108.46966923399383Q923.8216362759836 104.7943788673469 922.3067275946051 100.88749340090945Q920.7918189132267 96.98060793447199 919.6338061049282 93.4685939253456Q918.4757932966298 89.9565799162192 917.6025414060452 87.6405542996223H916.2053383811101Q916.379988759227 89.79711977179473 916.4673139482854 93.30913378092112Q916.5546391373439 96.82114779004752 916.6419643264023 100.72803325648496Q916.7292895154608 104.63491872292241 916.7292895154608 108.46966923399383V180.0Z M1095.6621196345498 180.0V60.0H1123.6520493090975V180.0Z M1235.8912576474168 182.09580453740276Q1211.4629527522438 182.09580453740276 1194.985056274486 175.02246422366846Q1178.507159796728 167.94912390993417 1170.2758066746953 154.07201396648713Q1162.0444535526626 140.19490402304012 1162.0444535526626 119.92026992778776Q1162.0444535526626 90.21451541422302 1180.9826455577495 74.05935543841014Q1199.9208375628364 57.904195462597244 1235.762177970377 57.904195462597244Q1256.0823827667066 57.904195462597244 1271.5769168142829 63.736013992070696Q1287.0714508618594 69.56783252154415 1295.7470250460306 80.46451201640758Q1304.4225992302017 91.36119151127102 1304.4225992302017 106.71523455186545H1277.017381624774Q1277.017381624774 98.1953789177145 1271.7551222400746 92.42813753610679Q1266.492862855375 86.66089615449907 1257.1453260317169 83.70702996020425Q1247.7977892080587 80.75316376590943 1235.2230366023339 80.75316376590943Q1221.494050092061 80.75316376590943 1211.5352369449936 85.16877282365924Q1201.5764237979263 89.58438188140904 1196.1774896193408 97.8308879277883Q1190.7785554407553 106.07739397416753 1190.7785554407553 117.6498150122681V122.01607446519051Q1190.7785554407553 133.71757518033073 1196.1774896193408 142.05140641576844Q1201.5764237979263 150.38523765120613 1211.5921816666673 154.81603694264834Q1221.6079395354081 159.24683623409055 1235.3065455782962 159.24683623409055Q1248.4508200194489 159.24683623409055 1257.9160624995502 156.38789034570038Q1267.3813049796518 153.52894445731025 1272.5714294089853 147.77689330939495Q1277.761553838319 142.02484216147965 1277.761553838319 133.66444667175318H1304.5820593746262Q1304.5820593746262 148.6539987224214 1296.0317859637444 159.54308310043862Q1287.4815125528628 170.43216747845585 1272.0667085774987 176.2639860079293Q1256.6519046021347 182.09580453740276 1235.8912576474168 182.09580453740276Z M1402.1965051269704 182.09580453740276Q1388.406683063236 182.09580453740276 1376.3937452480554 180.42143571159983Q1364.3808074328747 178.7470668857969 1355.367306513066 174.45294238824053Q1346.3538055932572 170.15881789068416 1341.3079137653099 162.4514159030021Q1336.2620219373625 154.74401391532004 1336.2620219373625 142.6931378252542Q1336.2620219373625 142.34383706902042 1336.2620219373625 141.8122908178235Q1336.2620219373625 141.28074456662662 1336.4366723154794 140.901063343008H1364.0165402990237Q1363.8418899209069 141.5996648554756 1363.7621598486946 142.52986146773367Q1363.6824297764824 143.46005807999177 1363.6824297764824 144.62184979204036Q1363.6824297764824 150.02082127997173 1368.2916583497918 153.37333783532773Q1372.900886923101 156.72585439068376 1381.420742557252 158.24454197581235Q1389.9405981914028 159.76322956094094 1401.3383688513866 159.76322956094094Q1406.2513274798523 159.76322956094094 1411.2668015310692 159.35698408303352Q1416.2822755822858 158.95073860512613 1420.8839090387487 158.11546229877268Q1425.4855424952118 157.28018599241926 1429.1493842225705 155.76909352413688Q1432.8132259499293 154.2580010558545 1434.9507849753134 151.97617211973846Q1437.0883440006974 149.69434318362246 1437.0883440006974 146.62658754598044Q1437.0883440006974 142.2071995844805 1432.9992503486428 139.58366500897688Q1428.910156696588 136.9601304334733 1421.9469269224508 135.28198270392022Q1414.9836971483135 133.60383497436715 1406.2891538266997 132.4116627949337Q1397.594610505086 131.21949061550026 1388.288790860063 129.74255751835287Q1378.9829712150402 128.26562442120547 1370.2884278934264 125.73319393851048Q1361.5938845718126 123.20076345581548 1354.6306547976756 119.15342429174203Q1347.6674250235383 115.10608512766858 1343.5783313714837 108.69337074217083Q1339.489237719429 102.28065635667308 1339.489237719429 92.97861561540034Q1339.489237719429 84.41311466148031 1343.635313402503 77.87509950269308Q1347.7813890855773 71.33708434390583 1355.7773682040693 66.87590458507877Q1363.7733473225614 62.414724826251714 1375.281303140834 60.15946014442448Q1386.7892589591067 57.904195462597244 1401.497828995811 57.904195462597244Q1416.3962396443249 57.904195462597244 1427.642219895422 60.311325172002746Q1438.8882001465192 62.71845488140825 1446.3830134811992 67.24417447875513Q1453.8778268158792 71.769894076102 1457.6024667873535 78.20539381213838Q1461.327106758828 84.64089354817476 1461.327106758828 92.69763360143652V95.43127871653718H1434.0965395315172V93.2975359042493Q1434.0965395315172 89.48560805306242 1430.0720230273282 86.53933697561382Q1426.0475065231394 83.59306589816521 1419.069123824656 81.85415723384246Q1412.0907411261721 80.11524856951971 1403.0848726325555 80.11524856951971Q1390.874611016757 80.11524856951971 1383.212817039498 81.64153127149451Q1375.5510230622392 83.16781397346932 1371.9669114070928 85.79894366581912Q1368.3827997519463 88.43007335816893 1368.3827997519463 91.64209890654303Q1368.3827997519463 95.58310643476953 1372.4718934040009 97.9674507936364Q1376.5609870560554 100.35179515250329 1383.5242168301927 101.79075266541965Q1390.48744660433 103.229710178336 1399.1819899259438 104.42188235776945Q1407.8765332475575 105.61405453720288 1417.1823528925804 107.16312258971632Q1426.4881725376033 108.71219064222976 1435.182715859217 111.1497008190201Q1443.8772591808308 113.58721099581042 1450.840488954968 117.6990899984037Q1457.8037187291052 121.81096900099696 1461.8928123811597 128.0338427746854Q1465.9819060332145 134.25671654837384 1465.9819060332145 143.36891667783726Q1465.9819060332145 157.41689809565105 1457.8948228219137 165.9557974859364Q1449.8077396106132 174.49469687622172 1435.433242787104 178.29525070681223Q1421.0587459635951 182.09580453740276 1402.1965051269704 182.09580453740276Z" fill="url(#lg)"/></g></symbol></svg>
+<main>
+<section class="hero" id="top">
+  <canvas id="mosaic" aria-hidden="true"></canvas>
+  <header class="top">
+    <a class="brand" href="#top" aria-label="Dinamics"><svg class="lockup" viewBox="0 0 1483 248"><use href="#lk"/></svg></a>
+    <nav class="nav" aria-label="主导航"><a href="#arts" data-t="nav1">能做什么</a><a href="#works" data-t="navw">作品</a><a href="#how" data-t="nav2">怎么合作</a><a href="#talk" data-t="nav3">联系我们</a></nav>
+    <div class="eggs"><button type="button" class="pill" id="pill" aria-expanded="false" aria-controls="eggPanel"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.8" r="3.3"/><path d="M6.6 8 5.5 13.6h5L9.4 8z"/></svg><span class="pl" data-t="pill">彩蛋</span><b id="pillN">0/6</b></button>
+      <div class="panel" id="eggPanel" hidden><p class="ph" id="eggTitle"></p><ol id="eggList"></ol><button type="button" class="tlink" id="termOpen2"></button></div></div>
+    <div class="lang" role="group" aria-label="语言 / Language"><button type="button" data-lang="zh" aria-pressed="true">中</button><button type="button" data-lang="en" aria-pressed="false">EN</button></div>
+  </header>
+  <div class="copy" id="copy">
+    <h1 data-t="h1">你要的，<br>都造得出来。</h1>
+    <p class="lede" data-t="lede">网站、App、AI 智能体、交易系统、智能合约、视频……十八般技术，一家做齐。</p>
+    <a class="btn" href="#talk" data-t="cta">说说你要做的事</a>
+  </div>
+  <div class="fig" aria-hidden="true"></div><div class="capspace" aria-hidden="true"></div>
+  <button class="cap" id="cap" type="button"><b>Dinamics</b><span>十八般技术</span></button>
+  <button class="tbtn" id="termBtn" type="button">&gt;_</button>
+</section>
+<section class="band arts" id="arts"><div class="wrap">
+  <h2 data-t="h2">十八般技术，样样拿得出手。</h2>
+  <p class="sub" data-t="sub2">每一门交付什么，第一版大概要多久，都写在这里。</p>
+  <div class="wall" id="wall"></div>
+</div></section>
+<section class="band works" id="works"><div class="wrap">
+  <h2 data-t="h2w">做出来的，自己看。</h2>
+  <p class="sub" data-t="subw">先放三件，都已经上线，点进去就能看。</p>
+  <div class="wgrid" id="worklist"></div>
+</div></section>
+<section class="band how" id="how"><div class="wrap">
+  <h2 data-t="h2b">从一句话到上线，三步。</h2>
+  <ol class="steps" id="steps"></ol>
+</div></section>
+<section class="band talk" id="talk"><div class="wrap">
+  <h2 data-t="h2c">你要做的事，说给我们听。</h2>
+  <p data-t="talk">发一封邮件，说说你想做什么。</p>
+  <div class="mail"><a id="mail" href="mailto:dsj@dinamics.dev">dsj@dinamics.dev</a><button type="button" id="copyMail" data-t="copy">复制邮箱</button></div>
+</div></section>
+</main>
+<footer>
+  <a class="brand" href="#top" aria-label="Dinamics"><svg class="lockup" viewBox="0 0 1483 248"><use href="#lk"/></svg></a>
+  <span data-t="foot1">Dinamics 是 <a href="https://dsj.vc">DSJ Ventures</a> 投资的企业。</span>
+  <span data-t="foot2">© 2026 Dinamics</span>
+  <span class="ver">v11</span>
+  <span class="stat" id="stat"></span>
+</footer>
+<div class="term" id="term" role="dialog" aria-label="Dinamics 终端" hidden>
+  <div class="tbar"><span id="termTitle">Dinamics 终端</span><button type="button" id="termX">×</button></div>
+  <div class="tout" id="tout" aria-live="polite"></div>
+  <div class="tchips" id="tchips" role="toolbar"></div>
+  <form class="tin" id="tform" autocomplete="off"><label for="tinput" id="tlabel">访客@dinamics ~ $</label><input id="tinput" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="go"></form>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+{
+const G=[{"id":"dinamics","zh":"Dinamics","en":"Dinamics","s":[[22,42,22,88,11,0],[22,17,22,17,13,0],[37,14,52,14,10,0],[52.0,14.0,63.4,15.8,11.5,0],[63.4,15.8,73.7,21.1,11.2,0],[73.7,21.1,81.9,29.3,10.7,0],[81.9,29.3,87.2,39.6,10.0,0],[87.2,39.6,89.0,51.0,9.1,0],[89.0,51.0,87.2,62.4,8.1,0],[87.2,62.4,81.9,72.7,6.9,0],[81.9,72.7,73.7,80.9,5.5,0],[73.7,80.9,63.4,86.2,4.0,0],[63.4,86.2,52.0,88.0,2.4,0],[52,88,36,88,1.5,0]]},{"id":"web","zh":"官网","en":"Websites","s":[[18,24,82,24,8,0],[82,24,82,76,8,0],[82,76,18,76,8,0],[18,76,18,24,8,0],[18,40,82,40,8,0]]},{"id":"platform","zh":"网页平台","en":"Web platforms","s":[[18,26,82,26,8,0],[20,50,20,50,10,0],[34,50,82,50,8,0],[20,74,20,74,10,0],[34,74,70,74,8,0]]},{"id":"app","zh":"手机 App","en":"Mobile apps","s":[[32,14,68,14,8,0],[68,14,68,86,8,0],[68,86,32,86,8,0],[32,86,32,14,8,0],[50,74,50,74,8,0]]},{"id":"bot","zh":"聊天机器人","en":"Chatbots","s":[[18,20,82,20,8,0],[82,20,82,64,8,0],[82,64,38,64,8,0],[38,64,18,84,8,0],[18,84,18,20,8,0]]},{"id":"mini","zh":"Mini App","en":"Mini Apps","s":[[14,46,86,18,7,0],[86,18,60,84,7,0],[60,84,46,58,7,0],[46,58,14,46,7,0],[46,58,86,18,7,0]]},{"id":"agent","zh":"AI 智能体","en":"AI agents","s":[[22,82,40,20,8,0],[40,20,58,82,8,0],[29,60,51,60,8,0],[78,20,78,82,8,0],[78,20,78,82,8,0]]},{"id":"auto","zh":"自动化","en":"Automation","s":[[18,36,82,36,8,0],[68,22,82,36,8,0],[82,64,18,64,8,0],[32,78,18,64,8,0],[68,22,82,36,8,0]]},{"id":"data","zh":"数据看板","en":"Data dashboards","s":[[18,82,18,58,8,0],[34,82,34,44,8,0],[50,82,50,50,8,0],[66,82,66,32,8,0],[82,82,82,20,8,0]]},{"id":"brand","zh":"品牌 Logo","en":"Brand & logo","s":[[50,86,26,46,7,0],[26,46,50,16,7,0],[50,16,74,46,7,0],[74,46,50,86,7,0],[50,86,50,56,7,0]]},{"id":"ui","zh":"界面设计","en":"Interface design","s":[[18,22,82,22,8,0],[82,22,82,78,8,0],[82,78,18,78,8,0],[18,78,18,22,8,0],[40,22,40,78,8,0]]},{"id":"game","zh":"游戏","en":"Games","s":[[14,50,42,50,8,0],[28,36,28,64,8,0],[64,58,64,58,13,0],[82,42,82,42,13,0],[64,58,64,58,13,0]]},{"id":"doc","zh":"商务文档","en":"Business documents","s":[[28,14,58,14,7,0],[58,14,74,30,7,0],[74,30,74,86,7,0],[74,86,28,86,7,0],[28,86,28,14,7,0]]},{"id":"deck","zh":"路演 PPT","en":"Pitch decks","s":[[14,20,86,20,8,0],[22,20,22,62,8,0],[78,20,78,62,8,0],[22,62,78,62,8,0],[50,62,50,86,8,0]]},{"id":"trade","zh":"交易系统","en":"Trading systems","s":[[18,56,18,80,8,0],[34,46,34,72,8,0],[50,52,50,66,8,0],[66,30,66,56,8,0],[82,18,82,42,8,0]]},{"id":"chain","zh":"智能合约","en":"Smart contracts","s":[[19,70,25,70,16,0],[47,50,53,50,16,0],[75,30,81,30,16,0],[30,63,42,57,5,0],[58,43,70,37,5,0]]},{"id":"video","zh":"视频内容","en":"Video","s":[[34,18,34,62,8,0],[34,62,72,40,8,0],[72,40,34,18,8,0],[16,82,84,82,6,0],[44,82,44,82,14,0]]},{"id":"shield","zh":"服务器与安全","en":"Servers & security","s":[[22,20,78,20,8,0],[78,20,78,48,8,0],[78,48,50,84,8,0],[50,84,22,48,8,0],[22,48,22,20,8,0]]},{"id":"hw","zh":"硬件与网络","en":"Hardware & networks","s":[[22,32,78,32,20,0],[22,62,78,62,20,0],[68,32,68,32,6,1],[68,62,68,62,6,1],[50,72,50,88,6,0]]}], D={"zh":{"title":"Dinamics · 你要的，都造得出来","nav1":"能做什么","nav2":"怎么合作","nav3":"联系我们","h1":"你要的，<br>都造得出来。","lede":"网站、App、AI 智能体、交易系统、智能合约、视频……<br>十八般技术，一家做齐。","cta":"说说你要做的事","capHand":"Dinamics","capAll":"十八般技术","capNext":"换下一门技术","h2":"十八般技术，样样拿得出手。","sub2":"每一门交付什么，第一版大概要多久，都写在这里。","first":"首版","h2b":"从一句话到上线，三步。","steps":[["说清楚要什么","一句话也行。细节我们来问，你只管回答。"],["看方案和报价","方案写清做什么、多久、多少钱，你点头才开工。"],["交付上线","上线以后，改版、维护、加功能，一样找我们。"]],"h2c":"你要做的事，说给我们听。","talk":"发一封邮件，说说你想做什么。","copy":"复制邮箱","copied":"已复制","foot1":"Dinamics 是 <a href=\"https://dsj.vc\">DSJ Ventures</a> 投资的企业。","foot2":"© 2026 Dinamics","pill":"彩蛋","pillAria":"彩蛋：找到了 {n} / {k}，点开看提示","eggTitle":"这一页藏了 {k} 个彩蛋","eggTitleAll":"6 个彩蛋，全被你找到了。","eggUnknown":"？？？","eggFound":"找到第 {n} 个彩蛋：{name}。","eggLeft":"还剩 {k} 个。","eggAll":"6 个彩蛋全被你找到了。这么爱折腾，我们想认识你：","termOpen":"打开终端（` 键）","termBtn":"打开终端（` 键）","qrB":"用手机扫一扫","qrS":"直接给我们写信","qrBt":"这面墙是个二维码","qrSt":"点这里直接写信","qrAria":"给我们写信","txS":"继续敲 · Esc 收起","dotS":"i 上那个点飞出去，画出了 D","rainB":"瓷砖雨","rainS":"松手就停","rainS2":"一会儿就停","snB":"贪吃蛇","snStartK":"按方向键开始 · Esc 退出","snStartT":"滑一下开始 · 点这里退出","snAte":"吃下 {name}","snOver":"撞上了 · 吃下 {n} / 18 门","snAgainK":"方向键再来一局 · Esc 退出","snAgainT":"滑一下再来 · 点这里退出","snWin":"十八般技术，全吃下了。","snQuitK":"Esc 退出","snQuitT":"点这里退出","snQuit":"退出贪吃蛇","stat":"整页 {kb} KB，没有一个图片文件。首屏这 {n} 块瓷砖，是代码当场一块一块画出来的。","tabHidden":"还有 {k} 个彩蛋没找到 · Dinamics","console":"你打开了控制台。会看这里的人，我们想认识：dsj@dinamics.dev\n这一页藏了 6 个彩蛋。输入 dinamics() 打开终端。","consoleRet":"终端开了，在页面最上面。","term":{"title":"Dinamics 终端","prompt":"访客@dinamics ~ $","input":"输入命令","close":"关闭终端","hello":"Dinamics 终端：在这里打命令，首屏的瓷砖墙会照做。点下面的按钮试试，或者输入 help 看全部。","bar":"常用命令","help":"可以用的命令：\n  help          就是这张表\n  ls            看看这里有什么\n  cat 文件      读文件，比如 cat crafts.txt\n  say 文字      让瓷砖写字，比如 say 你好\n  qr            把墙变成二维码\n  snake         贪吃蛇\n  rain          下一场瓷砖雨\n  eggs          彩蛋进度和提示\n  whoami        你是谁\n  date          现在几点\n  mail          给我们写信\n  clear         清屏\n  exit          关掉终端（Esc 也行）","sayUsage":"要写什么？比如：say 你好","catUsage":"要读哪个？比如：cat crafts.txt","contact":"邮箱：{m}\n输入 mail 直接写信。","secrets":"这一页藏了 {k} 个彩蛋，你找到了 {n} 个。输入 eggs 看提示。","nofile":"没有这个文件：{f}","eggHead":"彩蛋 {n} / {k}","eggFoot":"想从头再找：eggs reset","reset":"彩蛋进度清空了，从头再找吧。","whoami":"访客。屏幕 {w}×{h}，时区 {tz}，浏览器语言 {l}。\n这些是你的浏览器自己算的，没有发给任何人。","mailing":"正在打开邮件……","sudo":"不用 sudo。想要什么，写信告诉我们就行：输入 mail。","rm":"这里没什么可删的。","hi":"你好。想做什么，说给我们听：输入 mail。","about":"Dinamics：网站、App、AI 智能体、交易系统、智能合约、视频……十八般技术，一家做齐。","unknown":"没有这个命令：{c}。输入 help 看看能做什么。","try":["say 你好","snake","qr","rain","eggs","help"]},"navw":"作品","h2w":"做出来的，自己看。","subw":"先放三件，都已经上线，点进去就能看。","wOpen":"打开 {h}","wNone":"还在设计，没有上线","wDid":"我们做了"},"en":{"title":"Dinamics · Whatever you need, built","nav1":"What we build","nav2":"How we work","nav3":"Contact","h1":"Anything,<br>engineered.","lede":"Websites, apps, AI agents, trading systems, smart contracts, video — eighteen crafts under one roof.","cta":"Tell us what you’re building","capHand":"Dinamics","capAll":"18 crafts","capNext":"Show the next craft","h2":"Eighteen crafts. Every one ready to show.","sub2":"What each craft delivers, and roughly how long the first version takes.","first":"First version","h2b":"From one sentence to launch, in three steps.","steps":[["Tell us what you need","One sentence is enough. We ask the questions; you just answer."],["See the plan and price","The plan spells out what we build, how long it takes and what it costs. Work starts when you say yes."],["Launch","After launch, redesigns, upkeep and new features come to us too."]],"h2c":"Tell us what you want to build.","talk":"Send us an email and tell us what you have in mind.","copy":"Copy email","copied":"Copied","foot1":"Dinamics is a <a href=\"https://dsj.vc\">DSJ Ventures</a> portfolio company.","foot2":"© 2026 Dinamics","pill":"Secrets","pillAria":"Secrets: {n} of {k} found. Open for hints","eggTitle":"{k} secrets are hidden on this page","eggTitleAll":"You found all 6.","eggUnknown":"???","eggFound":"Secret {n} found: {name}.","eggLeft":"{k} to go.","eggAll":"You found all 6 secrets. People this curious are our kind of people: ","termOpen":"Open the terminal (` key)","termBtn":"Open the terminal (` key)","qrB":"Scan me with your phone","qrS":"It opens an email to us","qrBt":"This wall is a QR code","qrSt":"Tap here to email us","qrAria":"Email us","txS":"Keep typing · Esc to clear","dotS":"The dot of the i flies out and draws the D","rainB":"Tile rain","rainS":"Let go to stop","rainS2":"Stopping soon","snB":"Snake","snStartK":"Arrow keys to start · Esc to quit","snStartT":"Swipe to start · Tap here to quit","snAte":"Ate {name}","snOver":"Crashed · {n} of 18 crafts eaten","snAgainK":"Arrow keys to play again · Esc to quit","snAgainT":"Swipe to play again · Tap here to quit","snWin":"All eighteen crafts, eaten.","snQuitK":"Esc to quit","snQuitT":"Tap here to quit","snQuit":"Quit snake","stat":"This page is {kb} KB with no image files. The {n} tiles up top are drawn by code, one at a time, as you watch.","tabHidden":"{k} secrets still hidden · Dinamics","console":"You opened the console. People who look in here are people we'd like to meet: dsj@dinamics.dev\nThis page hides 6 secrets. Type dinamics() to open the terminal.","consoleRet":"The terminal is open at the top of the page.","term":{"title":"Dinamics terminal","prompt":"visitor@dinamics ~ $","input":"Type a command","close":"Close the terminal","hello":"Dinamics terminal: type a command and the wall up top does it. Tap a command below, or type help for the full list.","bar":"Quick commands","help":"Commands:\n  help          this list\n  ls            see what is here\n  cat <file>    read a file, e.g. cat crafts.txt\n  say <text>    make the wall write, e.g. say hello\n  qr            turn the wall into a QR code\n  snake         play snake\n  rain          make it rain tiles\n  eggs          secrets found, and hints\n  whoami        who you are\n  date          what time it is\n  mail          write to us\n  clear         clear the screen\n  exit          close the terminal (Esc works too)","sayUsage":"Say what? For example: say hello","catUsage":"Read which file? For example: cat crafts.txt","contact":"Email: {m}\nType mail to write to us.","secrets":"{k} secrets are hidden on this page. You have found {n}. Type eggs for hints.","nofile":"No such file: {f}","eggHead":"Secrets {n} / {k}","eggFoot":"To start over: eggs reset","reset":"Progress cleared. Happy hunting.","whoami":"A visitor. Screen {w}×{h}, time zone {tz}, browser language {l}.\nYour browser worked this out by itself; none of it was sent anywhere.","mailing":"Opening your email…","sudo":"No sudo needed. Whatever you want, just write to us: type mail.","rm":"Nothing here to delete.","hi":"Hello. Tell us what you want to build: type mail.","about":"Dinamics: websites, apps, AI agents, trading systems, smart contracts, video — eighteen crafts under one roof.","unknown":"Command not found: {c}. Type help to see what you can do.","try":["say hello","snake","qr","rain","eggs","help"]},"navw":"Work","h2w":"See what we've built.","subw":"Three to start, all live. Click through and look.","wOpen":"Open {h}","wNone":"In design, not live yet","wDid":"What we did"},"arts":[["官网","品牌官网、活动页、多语言网站","2–5 天","Websites","Brand sites, campaign pages, multilingual sites","2–5 days"],["网页平台","会员、订单、管理后台、数据库","2–4 周","Web platforms","Members, orders, admin panels, databases","2–4 weeks"],["手机 App","iOS、Android 跨平台应用","3–6 周，不含审核","Mobile apps","Cross-platform iOS and Android apps","3–6 weeks, plus store review"],["聊天机器人","Telegram、WhatsApp、LINE 机器人，频道推送，自动客服","1–3 天","Chatbots","Telegram, WhatsApp and LINE bots, channel posts, auto-replies","1–3 days"],["Mini App","在 Telegram 里直接打开的应用","2–4 周","Mini Apps","Apps that open right inside Telegram","2–4 weeks"],["AI 智能体","客服问答、知识库、多个模型互相审核","1–2 周","AI agents","Support answers, knowledge bases, models that review each other","1–2 weeks"],["自动化","文件处理、系统对接、定时任务","1–2 周","Automation","File handling, system integrations, scheduled jobs","1–2 weeks"],["数据看板","公开数据采集、数据管道、看板、指数、报表","3 天–2 周","Data dashboards","Public data collection, pipelines, dashboards, indices, reports","3 days–2 weeks"],["品牌 Logo","Logo、品牌规范、海报","1–5 天","Brand and logo","Logos, brand guidelines, posters","1–5 days"],["界面设计","App 和网站界面、设计系统","1–5 天","Interface design","App and web interfaces, design systems","1–5 days"],["游戏","网页小游戏、学习类游戏、Roblox 游戏","1–4 周","Games","Web games, learning games, Roblox games","1–4 weeks"],["商务文档","计划书、白皮书、合同初稿、财务模型","当天–3 天","Business documents","Business plans, white papers, draft contracts, financial models","Same day–3 days"],["路演 PPT","融资路演、产品发布、内部汇报","当天–3 天","Pitch decks","Fundraising, product launches, internal reviews","Same day–3 days"],["交易系统","行情、自动下单、熔断保护、撮合引擎","1–2 周","Trading systems","Market data, automated orders, circuit breakers, matching engines","1–2 weeks"],["智能合约","代币、金库合约、链上收款、钱包","1–3 周","Smart contracts","Tokens, vault contracts, on-chain payments, wallets","1–3 weeks"],["视频内容","剧本、分镜、AI 视频、配音、剪辑","按条报价","Video","Scripts, storyboards, AI video, voice-over, editing","Quoted per video"],["服务器与安全","部署、权限锁、自动还原、备份、漏洞自查","1–3 天","Servers and security","Deployment, permission locks, auto-restore, backups, vulnerability checks","1–3 days"],["硬件与网络","主机托管、远程连接、VPN 节点、算力调度","约 1 周","Hardware and networks","Hosting, remote access, VPN nodes, compute scheduling","About 1 week"]],"mail":"dsj@dinamics.dev","works":[{"id":"phrax","url":"https://phrax.co","host":"phrax.co","crafts":[2,10],"zh":{"n":"牌所 PHRAX","s":"已上线","d":"泰国佛牌平台：查佛牌的来历、押牌借钱、卖牌，还有佛牌资讯。"},"en":{"n":"PHRAX","s":"Live","d":"A Thai amulet platform: check where an amulet comes from, pawn it, sell it, and keep up with amulet news."}},{"id":"zero","url":"https://0x000000000.com","host":"0x000000000.com","crafts":[2,15,17,16],"zh":{"n":"零九零","s":"已上线","d":"靓号地址铸造：钥匙分两半，你那一半只在你自己的电脑上，平台拿不到你的私钥；首页免费查地址有没有被投毒。"},"en":{"n":"0x000000000","s":"Live","d":"A vanity address foundry. The key is split in two and your half never leaves your own computer, so the platform never sees your private key. Free address-poisoning check on the home page."}},{"id":"bdy","url":"https://www.budayangai.com","host":"budayangai.com","crafts":[1,9,16,18],"zh":{"n":"不打烊 AI 工作站","s":"已上线","d":"放在曼谷机房的独享 Mac mini，AI 智能体 24 小时不停；选配、报价、发给顾问下单，都在官网上一步做完，全部 USDT 结算。"},"en":{"n":"不打烊 AI Workstation","s":"Live","d":"Dedicated Mac minis in a Bangkok data centre that keep AI agents running around the clock. Pick a setup, get the price on the spot and send it to an advisor, all settled in USDT."}}],"zeroLogo":"<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 256 256\" role=\"img\" aria-label=\"0x000000000\"> <defs> <linearGradient id=\"zr-tile\" x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\"><stop offset=\"0\" stop-color=\"#151a26\"/><stop offset=\"1\" stop-color=\"#0a0d14\"/></linearGradient> <linearGradient id=\"zr-gold\" gradientUnits=\"userSpaceOnUse\" x1=\"0\" y1=\"106.66\" x2=\"0\" y2=\"149.34\"><stop offset=\"0\" stop-color=\"#f0d98c\"/><stop offset=\"0.55\" stop-color=\"#ebc65c\"/><stop offset=\"1\" stop-color=\"#c9a227\"/></linearGradient> <radialGradient id=\"zr-glow\" cx=\"0.5\" cy=\"0.5\" r=\"0.5\"><stop offset=\"0.45\" stop-color=\"#ebc65c\" stop-opacity=\"0.16\"/><stop offset=\"1\" stop-color=\"#ebc65c\" stop-opacity=\"0\"/></radialGradient> <mask id=\"zr-cut\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"256\" height=\"256\"> <rect width=\"256\" height=\"256\" fill=\"#fff\"/> <path d=\"M108.5 149.34 123.61 127.37 109.44 106.66H117.92L126.2 119.6Q126.75 120.46 127.26 121.48Q127.76 122.5 128.07 123.13Q128.31 122.5 128.82 121.48Q129.33 120.46 129.87 119.6L138.22 106.66H146.64L132.47 127.44L147.5 149.34H139.01L130.02 135.59Q129.47 134.72 128.97 133.59Q128.46 132.46 128.07 131.76Q127.76 132.46 127.18 133.59Q126.6 134.72 125.98 135.59L116.91 149.34Z\" fill=\"#000\" stroke=\"#000\" stroke-width=\"5\" stroke-linejoin=\"round\"/> </mask> </defs> <rect x=\"6\" y=\"6\" width=\"244\" height=\"244\" rx=\"58\" fill=\"url(#zr-tile)\" stroke=\"#2b3240\" stroke-width=\"3\"/> <circle cx=\"128\" cy=\"128\" r=\"46\" fill=\"url(#zr-glow)\"/> <g fill=\"none\" stroke=\"#e9e5d9\" stroke-width=\"6.5\"> <circle cx=\"82\" cy=\"82\" r=\"17\"/><circle cx=\"128\" cy=\"82\" r=\"17\"/><circle cx=\"174\" cy=\"82\" r=\"17\"/> <circle cx=\"82\" cy=\"128\" r=\"17\"/><circle cx=\"174\" cy=\"128\" r=\"17\"/> <circle cx=\"82\" cy=\"174\" r=\"17\"/><circle cx=\"128\" cy=\"174\" r=\"17\"/><circle cx=\"174\" cy=\"174\" r=\"17\"/> </g> <circle cx=\"128\" cy=\"128\" r=\"17\" fill=\"none\" stroke=\"url(#zr-gold)\" stroke-width=\"6.5\" mask=\"url(#zr-cut)\"/> <path d=\"M108.5 149.34 123.61 127.37 109.44 106.66H117.92L126.2 119.6Q126.75 120.46 127.26 121.48Q127.76 122.5 128.07 123.13Q128.31 122.5 128.82 121.48Q129.33 120.46 129.87 119.6L138.22 106.66H146.64L132.47 127.44L147.5 149.34H139.01L130.02 135.59Q129.47 134.72 128.97 133.59Q128.46 132.46 128.07 131.76Q127.76 132.46 127.18 133.59Q126.6 134.72 125.98 135.59L116.91 149.34Z\" fill=\"url(#zr-gold)\"/> </svg>","eggs":[{"id":"type","zh":{"n":"瓷砖会写字","h":"提示：直接敲键盘。手机上：打开终端，输入 say 你好","d":"敲什么，瓷砖就拼什么。"},"en":{"n":"The wall writes","h":"Hint: just start typing. On a phone: open the terminal and type say hello","d":"Whatever you type, the tiles spell out."}},{"id":"term","zh":{"n":"藏着的终端","h":"提示：Esc 下面那个键；首屏右下角也有个入口。","d":"输入 help，看它还能做什么。"},"en":{"n":"A hidden terminal","h":"Hint: the key under Esc, or the little >_ at the bottom right of the wall.","d":"Type help to see what else it does."}},{"id":"qr","zh":{"n":"会扫码的墙","h":"提示：盯着首屏，看它翻完一整轮。","d":"十八门翻完，墙会拼成一个真的二维码，扫了直接给我们写信。"},"en":{"n":"A wall you can scan","h":"Hint: watch the wall for one full round.","d":"After the eighteen crafts the wall becomes a real QR code. Scan it to email us."}},{"id":"snake","zh":{"n":"贪吃蛇","h":"提示：↑↑↓↓←→←→BA，或者在终端里输入 snake。","d":"吃的是十八门技术，吃满 18 门算赢。"},"en":{"n":"Snake","h":"Hint: ↑↑↓↓←→←→BA, or type snake in the terminal.","d":"It eats the eighteen crafts. Eat all 18 to win."}},{"id":"rain","zh":{"n":"瓷砖雨","h":"提示：在首屏的墙上按住不放。","d":"每一滴雨，都是十八门技术里的一门。"},"en":{"n":"Tile rain","h":"Hint: press and hold on the wall.","d":"Every raindrop is one of the eighteen crafts."}},{"id":"dot","zh":{"n":"会飞的点","h":"提示：标志上那个点，是会飞的。","d":"i 上的点飞出去，画出了 D，这就是我们标志的来历。"},"en":{"n":"The flying dot","h":"Hint: the dot in our logo can fly.","d":"The dot of the i flies out and draws the D. That is the story of our logo."}}]}, QM=["11111110101011111111101111111","10000010011010010010001000001","10111010100111110011101011101","10111010001001101100101011101","10111010111100011110101011101","10000010000011001100001000001","11111110101010101010101111111","00000000110111000111000000000","00000110000111110001101010101","01111101011000001011010111000","10100010111010010100101100100","01011001100001000010111011010","11011011100000110111111101000","01010000000101101111111110001","10000011111000111000110011000","11010100101100100101110111111","10111011011101011010010000111","11001001001000011011101110001","11110111100000101001110010101","10011100001001011010101001011","10111110000111000100111110100","00000000110010111011100010000","11111110001011101001101011000","10000010111110101101100011000","10111010001100100011111111001","10111010001000101100010101110","10111010010110110101011111010","10000010000010001110010011101","11111110010110111101011100100"], KB=110, A=D.arts, T={zh:D.zh,en:D.en}, EG=D.eggs, EK=EG.map(e=>e.id);
+const $=s=>document.querySelector(s), root=document.documentElement, tt=(s,o)=>s.replace(/\{(\w+)\}/g,(m,k)=>k in o?o[k]:m);
+const hero=$('#top'), cv=$('#mosaic'), ctx=cv.getContext('2d'), cap=$('#cap'), copyEl=$('#copy'), wall=$('#wall');
+const RM=matchMedia('(prefers-reduced-motion: reduce)'), COARSE=matchMedia('(hover: none)');
+/* shapes: 0..18 the mark and the eighteen crafts, then the QR code, two text slots and a blank wall */
+const NG=G.length, QR=NG, TXA=NG+1, TXB=NG+2, BL=NG+3, CYC=NG+1, shapeAt=p=>p<NG?p:QR;
+let lang='zh', cur=0, pos=0, ready=false, mode='wall', typed='', typeT=0, dotBusy=false, dotA=null, sn=null, rn=null, rainHold=false;
+try{const q=new URLSearchParams(location.search).get('lang'), s=localStorage.getItem('dinamics-lang');lang=(q==='en'||location.hash==='#en')?'en':q==='zh'?'zh':s==='en'?'en':'zh'}catch(e){}
+
+const lines=s=>s.map(t=>`<line x1="${t[0]}" y1="${t[1]}" x2="${t[2]}" y2="${t[3]}" stroke-width="${t[4]}"${t[5]?' class="k"':''}/>`).join('');
+function renderWall(){const o=lang==='zh'?0:3;wall.innerHTML=A.map((a,i)=>`<article class="art" data-g="${i+1}"><svg viewBox="0 0 100 100" aria-hidden="true">${lines(G[i+1].s)}</svg><h3>${a[o]}</h3><p>${a[o+1]}</p><p class="eta">${T[lang].first} ${a[o+2].replace(/ (?=[天周]|days?|weeks?)/g,' ')}</p></article>`).join('')}
+const HEX='0123456789abcdef',hx=n=>Array.from({length:n},()=>HEX[Math.random()*16|0]).join('');
+const COVER={
+ phrax:()=>`<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="pxbg" cx="50%" cy="42%" r="72%"><stop offset="0" stop-color="#3D100C"/><stop offset="1" stop-color="#120606"/></radialGradient><linearGradient id="pxg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFE9A6"/><stop offset=".5" stop-color="#F2C75C"/><stop offset="1" stop-color="#9C7330"/></linearGradient><linearGradient id="pxs" x1="0" x2="1"><stop offset="0" stop-color="#FFE9A6" stop-opacity="0"/><stop offset=".5" stop-color="#FFF6D8" stop-opacity=".5"/><stop offset="1" stop-color="#FFE9A6" stop-opacity="0"/></linearGradient><clipPath id="pxc"><path d="M130 258V130Q130 90 200 52Q270 90 270 130V258Z"/></clipPath></defs>
+  <rect width="400" height="300" fill="url(#pxbg)"/><g stroke="#F2C75C" stroke-opacity=".14">${[278,286,294].map(y=>`<path d="M0 ${y}H400"/>`).join('')}</g>
+  <path d="M200 12q9 12 0 26q-9-14 0-26z" fill="url(#pxg)"/><path d="M118 270V126Q118 80 200 38Q282 80 282 126V270" fill="none" stroke="url(#pxg)" stroke-width="3.2"/>
+  <path d="M130 258V130Q130 90 200 52Q270 90 270 130V258Z" fill="#1F0807" stroke="url(#pxg)" stroke-opacity=".7"/>
+  <text x="200" y="160" text-anchor="middle" font-family="Noto Serif SC,serif" font-weight="900" font-size="27" letter-spacing="3" fill="url(#pxg)">PHRAX</text>
+  <text x="200" y="190" text-anchor="middle" font-size="12.5" fill="#FFF3D6" fill-opacity=".85">ศูนย์ซื้อขายพระเครื่อง</text>
+  <g fill="none" stroke="url(#pxg)" stroke-width="1.4">${[-2,-1,0,1,2].map(k=>`<path d="M${200+k*22-10} 236q10-20 20 0q-10 8-20 0z"/>`).join('')}</g>
+  <path d="M92 270H308" stroke="url(#pxg)" stroke-width="2.2"/><g clip-path="url(#pxc)"><rect class="px-sheen" x="0" y="0" width="80" height="300" fill="url(#pxs)"/></g></svg>`,
+ zero:()=>`${D.zeroLogo.replace('<svg ','<svg class="zr-logo" aria-hidden="true" style="position:absolute;inset:auto;left:50%;top:12%;width:31%;height:auto;transform:translateX(-50%)" ')}<div class="zr-addr" aria-hidden="true"><span>0x</span>${'<span class="z">0</span>'.repeat(9)}<span class="r">…${hx(4)}</span></div>`,
+ bdy:()=>{let g='';const W=62,H=30,gx=24,gy=26,x0=200-(4*W+3*gx)/2,y0=96;
+  for(let r=0;r<3;r++)for(let c=0;c<4;c++){const x=x0+c*(W+gx),y=y0+r*(H+gy),you=r===1&&c===2,d=((r*4+c)*.12).toFixed(2);
+    g+=`<rect x="${x}" y="${y}" width="${W}" height="${H}" rx="8" fill="#11161b" stroke="${you?'#ffe600':'#f1f1ec'}" stroke-opacity="${you?1:.5}" stroke-width="${you?2.4:2}"${you?' class="bd-you"':''}/><circle class="bd-l" style="--d:${d}s" cx="${x+W-14}" cy="${y+H/2}" r="4.2"/>`}
+  return `<svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><linearGradient id="bdbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0d1114"/><stop offset="1" stop-color="#07090b"/></linearGradient></defs><rect width="400" height="300" fill="url(#bdbg)"/>
+  <g stroke="#1b232b">${[60,240,272].map(y=>`<path d="M0 ${y}H400"/>`).join('')}${[40,120,200,280,360].map(x=>`<path d="M${x} 240V300"/>`).join('')}</g>${g}
+  <text class="bd-time" x="28" y="44" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="13" fill="#f1f1ec" fill-opacity=".72"></text>
+  <rect x="318" y="30" width="54" height="22" rx="6" fill="#161615"/><rect x="326" y="36" width="30" height="10" rx="3" fill="none" stroke="#f1f1ec" stroke-width="1.6"/><circle cx="350" cy="41" r="2" fill="#ffe600"/></svg>`}};
+let zrT=0;const cio=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('on',e.isIntersecting)),{threshold:.2});
+function renderWorks(){const t=T[lang],el=$('#worklist');cio.disconnect();
+  el.innerHTML=D.works.map(w=>`<article class="work"><div class="cover" data-cv="${w.id}">${COVER[w.id]()}</div><div class="wtext"><div class="whead"><h3>${w[lang].n}</h3><span class="st${w.url?' live':''}"><i></i>${w[lang].s}</span></div><p>${w[lang].d}</p>
+    <ul class="tags" aria-label="${t.wDid}">${w.crafts.map(k=>`<li>${A[k-1][lang==='zh'?0:3]}</li>`).join('')}</ul>
+    ${w.url?`<a class="go" href="${w.url}" target="_blank" rel="noopener">${tt(t.wOpen,{h:w.host})}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 9 9 3M4 3h5v5"/></svg></a>`:`<span class="go off">${t.wNone}</span>`}</div></article>`).join('');
+  el.querySelectorAll('.cover').forEach(c=>cio.observe(c));bkk();zeroRun()}
+function bkk(){const e=$('.bd-time');if(!e)return;try{e.textContent=(lang==='zh'?'曼谷 ':'Bangkok ')+new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Bangkok',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date())}catch(err){}}
+setInterval(bkk,15000);
+function zeroRun(){clearInterval(zrT);const el=$('.zr-addr');if(!el)return;const z=[...el.querySelectorAll('.z')],tail=el.querySelector('.r');
+  if(RM.matches){z.forEach(s=>s.classList.add('ok'));return}let t0=performance.now();
+  zrT=setInterval(()=>{if(!el.isConnected){clearInterval(zrT);return}if(!el.closest('.cover').classList.contains('on')){t0=performance.now();return}
+    const now=performance.now(),lock=Math.min(9,Math.floor((now-t0)/260));
+    z.forEach((s,i)=>{if(i<lock){if(!s.classList.contains('ok')){s.textContent='0';s.classList.add('ok')}}else s.textContent=HEX[Math.random()*16|0]});
+    if(lock>=9&&now-t0>260*9+2800){t0=now;z.forEach(s=>s.classList.remove('ok'));tail.textContent='…'+hx(4)}},70)}
+function renderSteps(){$('#steps').innerHTML=T[lang].steps.map((s,i)=>`<li class="step"><span class="n" aria-hidden="true">${lang==='zh'?'一二三'[i]:i+1}</span><h3>${s[0]}</h3><p>${s[1]}</p></li>`).join('')}
+function setCap(k,b,s){const t=T[lang];
+  if(b==null){
+    if(k===QR){b=COARSE.matches?t.qrBt:t.qrB;s=COARSE.matches?t.qrSt:t.qrS}
+    else if(k===TXA||k===TXB){b=typed;s=t.txS}
+    else if(k===BL){b='';s=''}
+    else{b=k===0?t.capHand:A[k-1][lang==='zh'?0:3];s=k>0?`${k} / 18`:t.capAll}}
+  cap.querySelector('b').textContent=b;cap.querySelector('span').textContent=s;
+  cap.setAttribute('aria-label',mode==='snake'?t.snQuit:k===QR?t.qrAria:t.capNext);
+  placeCap(k);if(ready&&CALM)requestAnimationFrame(()=>{calm();kick()})}
+function placeCap(k){if(!W)return;cap.style.left=cx+'px';cap.style.top=(mode==='snake'?(fy1+1)*tile+6:k===QR&&mode==='wall'?(qy0+QT)*tile+6:cy+S*.45)+'px'}
+function setLang(l){
+  lang=l;root.lang=l==='zh'?'zh-CN':'en';document.title=T[l].title;const t=T[l];
+  document.querySelectorAll('[data-t]').forEach(el=>{const v=t[el.dataset.t];if(typeof v==='string')el.innerHTML=v});
+  document.querySelectorAll('.lang button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===l)));
+  renderWall();renderWorks();renderSteps();
+  if(mode==='snake')snakeCap();else if(mode==='rain')setCap(cur,t.rainB,rn&&rn.timed?t.rainS2:t.rainS);else if(dotBusy)setCap(BL);else setCap(cur);
+  $('#tlabel').textContent=t.term.prompt;$('#tinput').setAttribute('aria-label',t.term.input);$('#termTitle').textContent=t.term.title;$('#term').setAttribute('aria-label',t.term.title);chips();$('#termX').setAttribute('aria-label',t.term.close);
+  const tb=$('#termBtn');tb.setAttribute('aria-label',t.termBtn);tb.title=t.termBtn;
+  eggsUI();stats();
+  try{localStorage.setItem('dinamics-lang',l)}catch(e){}
+  if(ready)layout();
+}
+document.querySelectorAll('.lang button').forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+
+/* mark -> craft morph on the wall */
+const ease=t=>1-Math.pow(1-t,3), eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+function morph(svg,from,to,ms){const L=svg.querySelectorAll('line'),t0=performance.now();
+  (function step(now){const p=Math.min(1,(now-t0)/ms),e=ease(p);
+    L.forEach((ln,j)=>{const a=from[j],b=to[j];['x1','y1','x2','y2'].forEach((k,n)=>ln.setAttribute(k,(a[n]+(b[n]-a[n])*e).toFixed(2)));ln.setAttribute('stroke-width',(a[4]+(b[4]-a[4])*e).toFixed(2));ln.classList.toggle('k',!!(p>.5?b[5]:a[5]))});
+    if(p<1)requestAnimationFrame(step)})(t0)}
+wall.addEventListener('pointerover',e=>{const art=e.target.closest('.art');if(!art||art.contains(e.relatedTarget)||RM.matches)return;morph(art.querySelector('svg'),G[0].s,G[+art.dataset.g].s,620)});
+
+/* the mosaic: every tile is a small mark; together they draw one big shape */
+let W=0,H=0,dpr=1,tile=28,cols=0,rows=0,N=0,cx=0,cy=0,S=0,fx0=0,fx1=0,fy0=0,fy1=0,qx0=0,qy0=0,FC,TC,ST,CALM,FA,QP,INS=[],SPR=[],raf=0,timer=0,px=-1e4,py=-1e4,hov=0,hovT=0,visible=true;
+const DUR=440,WAVE=1050,C={g0:'#F3D48E',g1:'#D9B26B',g2:'#A47A36',ink:'#0A0A0B',out:.2,calm:.06};
+function sprites(){const n=Math.round(tile*dpr),mk=()=>{const c=document.createElement('canvas');c.width=c.height=n;return c};
+  SPR=G.map(g=>[0,1].map(ins=>{const c=mk(),x=c.getContext('2d'),gr=x.createLinearGradient(0,0,0,n);gr.addColorStop(0,C.g0);gr.addColorStop(.55,C.g1);gr.addColorStop(1,C.g2);
+    if(ins){x.fillStyle=gr;const m=Math.max(1,n*.045),r=n*.2;x.beginPath();x.roundRect?x.roundRect(m,m,n-2*m,n-2*m,r):x.rect(m,m,n-2*m,n-2*m);x.fill()}
+    const k=ins?.6:.66,o=n*(1-k)/2,sc=n*k/100;x.lineCap='round';
+    for(const t of g.s){const col=t[5]?(ins?gr:C.ink):(ins?C.ink:C.g1),w=t[4]*sc*1.1;
+      if(t[0]===t[2]&&t[1]===t[3]){x.fillStyle=col;x.beginPath();x.arc(o+t[0]*sc,o+t[1]*sc,w/2,0,7);x.fill()}
+      else{x.strokeStyle=col;x.lineWidth=w;x.beginPath();x.moveTo(o+t[0]*sc,o+t[1]*sc);x.lineTo(o+t[2]*sc,o+t[3]*sc);x.stroke()}}
+    return c}));
+}
+function segq(u,v,t){const dx=t[2]-t[0],dy=t[3]-t[1],L=dx*dx+dy*dy;let q=L?((u-t[0])*dx+(v-t[1])*dy)/L:0;return q<0?0:q>1?1:q}
+function segd(u,v,t){const q=segq(u,v,t);return Math.hypot(t[0]+q*(t[2]-t[0])-u,t[1]+q*(t[3]-t[1])-v)}
+function hit(g,u,v,grow){let inn=0;for(const t of g.s){const d=segd(u,v,t);if(t[5]){if(d<=t[4]/2+.4)return 0}else if(d<=t[4]/2+grow)inn=1}return inn}
+function raster(){const upt=100*tile/S,grow=Math.max(.5,upt*.12),o=upt*.32;
+  INS=G.map(g=>{const a=new Uint8Array(N);for(let i=0;i<N;i++){const u=((i%cols+.5)*tile-(cx-S/2))/S*100,v=(((i/cols|0)+.5)*tile-(cy-S/2))/S*100;
+    if(u<-15||u>115||v<-15||v>115)continue;const k=hit(g,u-o,v-o,grow)+hit(g,u+o,v-o,grow)+hit(g,u-o,v+o,grow)+hit(g,u+o,v+o,grow);a[i]=hit(g,u,v,grow)?(k>=1?1:0):(k>=3?1:0)}return a});
+  INS[QR]=new Uint8Array(N);INS[TXA]=new Uint8Array(N);INS[TXB]=new Uint8Array(N);INS[BL]=new Uint8Array(N);
+  if(typed&&(cur===TXA||cur===TXB))INS[cur]=textMask(typed)}
+/* the QR code: drawn once as a gold plate (rounded dark modules, rounded finder marks, the mark in the middle),
+   then cut into wall tiles so it flips in like everything else; two modules per tile, quiet zone of four */
+const QN=QM.length,QT=Math.ceil((QN+8)/2),QO=4;let QIMG=null,qrAt=0;
+function qrMap(){QP=new Int16Array(N).fill(-1);
+  for(let ty=0;ty<QT;ty++)for(let tx=0;tx<QT;tx++){const X=qx0+tx,Y=qy0+ty;if(X>=0&&Y>=0&&X<cols&&Y<rows)QP[Y*cols+X]=ty*QT+tx}
+  const n=Math.round(tile*dpr),P=QT*n,m=n/2,c=document.createElement('canvas');c.width=c.height=P;const x=c.getContext('2d');
+  const rr=(X,Y,w,h,r)=>{x.roundRect?x.roundRect(X,Y,w,h,r):x.rect(X,Y,w,h)};
+  const pg=x.createLinearGradient(0,0,0,P);pg.addColorStop(0,'#F9E8B8');pg.addColorStop(1,'#ECCD8A');x.fillStyle=pg;x.beginPath();rr(1,1,P-2,P-2,n*1.1);x.fill();
+  x.lineWidth=Math.max(1,dpr*1.25);x.strokeStyle='#B48943';x.beginPath();rr(1.5,1.5,P-3,P-3,n*1.1);x.stroke();
+  const o=QO*m,f=(r,q)=>(r<7&&q<7)||(r<7&&q>=QN-7)||(r>=QN-7&&q<7),L0=(QN>>1)-3,L1=(QN>>1)+3,hole=(r,q)=>r>=L0&&r<=L1&&q>=L0&&q<=L1,gp=m*.05;
+  x.fillStyle=C.ink;x.beginPath();
+  for(let r=0;r<QN;r++)for(let q=0;q<QN;q++)if(QM[r][q]==='1'&&!f(r,q)&&!hole(r,q))rr(o+q*m+gp,o+r*m+gp,m-2*gp,m-2*gp,m*.25);
+  x.fill();
+  for(const [fr,fq] of [[0,0],[0,QN-7],[QN-7,0]]){const X=o+fq*m,Y=o+fr*m;x.beginPath();rr(X,Y,7*m,7*m,.5*m);rr(X+m,Y+m,5*m,5*m,.3*m);x.fill('evenodd');x.beginPath();rr(X+2*m,Y+2*m,3*m,3*m,.25*m);x.fill()}
+  const LX=o+L0*m,LS=(L1-L0+1)*m;x.beginPath();rr(LX+m*.2,LX+m*.2,LS-m*.4,LS-m*.4,m*1.4);x.fill();
+  const gg=x.createLinearGradient(0,LX,0,LX+LS);gg.addColorStop(0,C.g0);gg.addColorStop(.55,C.g1);gg.addColorStop(1,C.g2);
+  const k=.6,sc=LS*k/100,ox=LX+LS*(1-k)/2;x.lineCap='round';x.strokeStyle=gg;x.fillStyle=gg;
+  for(const t of G[0].s){const w=t[4]*sc*1.05;if(t[0]===t[2]&&t[1]===t[3]){x.beginPath();x.arc(ox+t[0]*sc,ox+t[1]*sc,w/2,0,7);x.fill()}else{x.lineWidth=w;x.beginPath();x.moveTo(ox+t[0]*sc,ox+t[1]*sc);x.lineTo(ox+t[2]*sc,ox+t[3]*sc);x.stroke()}}
+  QIMG=c}
+function calm(){CALM=new Uint8Array(N);const hr=hero.getBoundingClientRect();
+  for(const r of [copyEl.getBoundingClientRect(),$('.top').getBoundingClientRect(),cap.getBoundingClientRect(),$('#termBtn').getBoundingClientRect()]){const x0=Math.max(0,Math.floor((r.left-hr.left)/tile)-1),x1=Math.min(cols-1,Math.ceil((r.right-hr.left)/tile)),y0=Math.max(0,Math.floor((r.top-hr.top)/tile)-1),y1=Math.min(rows-1,Math.ceil((r.bottom-hr.top)/tile));
+    for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++)CALM[y*cols+x]=1}}
+function layout(){
+  const hr=hero.getBoundingClientRect(),cr=copyEl.getBoundingClientRect();W=hr.width;H=hr.height;dpr=Math.min(2,devicePixelRatio||1);
+  tile=W<600?15:W<1100?20:24;const nc=Math.ceil(W/tile),nr=Math.ceil(H/tile),same=nc===cols&&nr===rows&&FC;cols=nc;rows=nr;N=cols*rows;
+  cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
+  if(W>=900){const x0=cr.right-hr.left+56,x1=W-Math.max(40,W*.045);S=Math.max(220,Math.min(x1-x0,H-230));cx=(x0+x1)/2;cy=H/2-6}
+  else{const y0=cr.bottom-hr.top+18,y1=H-92;S=Math.max(180,Math.min(W-36,y1-y0));cx=W/2;cy=y0+(y1-y0)/2}
+  fx0=Math.max(0,Math.ceil((cx-S/2)/tile-.5));fx1=Math.min(cols-1,Math.floor((cx+S/2)/tile-.5));fy0=Math.max(0,Math.ceil((cy-S/2)/tile-.5));fy1=Math.min(rows-1,Math.floor((cy+S/2)/tile-.5));
+  qx0=Math.round(cx/tile-QT/2);qy0=Math.round(cy/tile-QT/2);if(W>=900)qx0=Math.max(qx0,Math.ceil((cr.right-hr.left)/tile)+1);
+  qx0=Math.max(0,Math.min(cols-QT,qx0));qy0=Math.max(0,Math.min(rows-QT,qy0));
+  FA=new Float32Array(rows);for(let r=0;r<rows;r++){const y=(r+.5)*tile,f=.78*H;FA[r]=y<f?1:Math.max(0,1-(y-f)/(.22*H))}
+  sprites();raster();qrMap();
+  if(!same){FC=new Int16Array(N).fill(cur);TC=new Int16Array(N).fill(cur);ST=new Float64Array(N)}
+  placeCap(cur);calm();
+  if(mode==='snake')snakeReset();if(mode==='rain')rainCols();
+  ready=true;stats();kick();
+}
+function draw(now){
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+  if(mode==='snake')return drawSnake(now);
+  if(mode==='rain')return drawRain(now);
+  let busy=false,qbusy=false;const R=130,still=cur===QR;
+  for(let i=0;i<N;i++){
+    let g=TC[i],sy=1;const st=ST[i];
+    if(now<st){g=FC[i];busy=true}
+    else if(now<st+DUR){const p=(now-st)/DUR;sy=Math.max(.04,Math.abs(Math.cos(p*Math.PI)));g=p<.5?FC[i]:TC[i];busy=true}
+    else if(FC[i]!==TC[i])FC[i]=TC[i];
+    if(g<0)continue;
+    const r=i/cols|0,x=(i%cols)*tile+tile/2,y=r*tile+tile/2;
+    if(g===QR&&QP[i]>=0){if(sy<1||now<st)qbusy=true;const k=QP[i],n=QIMG.width/QT;ctx.globalAlpha=1;ctx.drawImage(QIMG,(k%QT)*n,((k/QT)|0)*n,n,n,x-tile/2,y-tile*sy/2,tile,tile*sy);continue}
+    const ins=g===QR?0:INS[g][i];let f=0;
+    if(hov>0&&!still){const d=Math.hypot(x-px,y-py);if(d<R)f=(1-d/R)*hov}
+    const s=tile*(1+f*(ins?.06:.18));
+    ctx.globalAlpha=(ins?1:Math.min(1,(CALM[i]?C.calm:C.out)+f*.45))*FA[r];
+    ctx.drawImage(SPR[g<NG?g:0][ins],x-s/2,y-s*sy/2,s,s*sy)}
+  ctx.globalAlpha=1;
+  if(cur===QR&&!qbusy){const X=qx0*tile,Y=qy0*tile,Z=QT*tile;ctx.drawImage(QIMG,X,Y,Z,Z);   /* settled: one draw, no seams between tiles */
+    if(!qrAt)qrAt=now;const p=(now-qrAt)/1500;
+    if(p<1&&!RM.matches){busy=true;ctx.save();ctx.beginPath();ctx.roundRect?ctx.roundRect(X,Y,Z,Z,tile*1.1/1):ctx.rect(X,Y,Z,Z);ctx.clip();
+      const bx=X-Z*.5+p*Z*2,gr=ctx.createLinearGradient(bx-Z*.18,0,bx+Z*.18,0);gr.addColorStop(0,'rgba(255,255,255,0)');gr.addColorStop(.5,'rgba(255,250,232,.5)');gr.addColorStop(1,'rgba(255,255,255,0)');
+      ctx.fillStyle=gr;ctx.setTransform(dpr,0,-.35*dpr,dpr,(Y+Z/2)*.35*dpr,0);ctx.fillRect(bx-Z*.2,Y,Z*.4,Z);ctx.restore()}}
+  if(dotA&&drawDot(now))busy=true;
+  return busy}
+function kick(){if(!raf)raf=requestAnimationFrame(loop)}
+function loop(now){raf=0;hov+=(hovT-hov)*.2;if(Math.abs(hovT-hov)<.01)hov=hovT;if(draw(now)||hov!==hovT)kick()}
+const look=(g,i)=>g===QR?(QP[i]>=0?100+QP[i]:0):(g<NG?g:0)*2+INS[g][i];  /* every plate tile is its own piece */
+function wave(next,ox,oy,spread){const now=performance.now(),diag=Math.hypot(W,H);
+  for(let i=0;i<N;i++){const shown=now>=ST[i]+DUR/2?TC[i]:FC[i];FC[i]=RM.matches?next:shown;TC[i]=next;
+    ST[i]=RM.matches||(shown>=0&&look(shown,i)===look(next,i))?0:now+Math.hypot((i%cols)*tile+tile/2-ox,(i/cols|0)*tile+tile/2-oy)/diag*spread+Math.random()*90}
+  cur=next;if(next!==QR)qrAt=0;setCap(cur);kick();schedule();
+  if(next===QR)setTimeout(()=>{if(cur===QR&&mode==='wall')egg('qr')},RM.matches?300:spread+DUR+500)}
+function schedule(){clearTimeout(timer);if(RM.matches||!visible||document.hidden||mode!=='wall'||typed||dotBusy)return;
+  timer=setTimeout(()=>{pos=(pos+1)%CYC;wave(shapeAt(pos),cx,cy,WAVE)},cur===0?3600:cur===QR?7000:3000)}
+function advance(ox,oy){pos=(pos+1)%CYC;wave(shapeAt(pos),ox,oy,WAVE)}
+let lp=null,swallow=false;
+cv.addEventListener('click',e=>{if(swallow){swallow=false;return}if(mode!=='wall'||dotBusy)return;const r=cv.getBoundingClientRect();clearTyped(false);advance(e.clientX-r.left,e.clientY-r.top)});
+cap.addEventListener('click',()=>{if(mode==='snake'){snakeEnd();return}if(mode!=='wall'||dotBusy)return;if(cur===QR){location.href='mailto:'+D.mail;return}clearTyped(false);advance(cx,cy)});
+hero.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||mode!=='wall')return;const r=cv.getBoundingClientRect();px=e.clientX-r.left;py=e.clientY-r.top;hovT=1;kick()});
+hero.addEventListener('pointerleave',()=>{hovT=0;kick()});
+new IntersectionObserver(es=>{visible=es[0].isIntersecting;if(visible){if(sn)sn.next=performance.now()+200;kick();schedule()}else clearTimeout(timer)}).observe(hero);
+document.addEventListener('visibilitychange',()=>{const k=EK.length-nFound();document.title=document.hidden&&k>0?tt(T[lang].tabHidden,{k}):T[lang].title;if(!document.hidden&&sn)sn.next=performance.now()+200;schedule()});
+let rt=0;const ro=new ResizeObserver(()=>{clearTimeout(rt);rt=setTimeout(layout,120)});ro.observe(hero);
+
+/* secret 1: type and the wall spells it out */
+const TF='"Archivo","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC","Noto Sans SC",sans-serif';
+function textMask(s){const m=new Uint8Array(N),gw=fx1-fx0+1,gh=fy1-fy0+1;if(!s||gw<4||gh<4)return m;
+  const R=8,cw=gw*R,ch=gh*R,o=document.createElement('canvas');o.width=cw;o.height=ch;const x=o.getContext('2d',{willReadFrequently:true});
+  const cjk=/[\u2E80-\u9FFF\u3040-\u30FF\uAC00-\uD7AF\uF900-\uFAFF]/.test(s),wt=cjk?500:800,thr=cjk?.45:.42,minF=(cjk?9:7.5)*R;
+  const fit=L=>{x.font=`${wt} 100px ${TF}`;const w=Math.max(...L.map(l=>x.measureText(l).width),1);return Math.min(cw*.92/w*100,ch*.8/L.length/1.1)};
+  const two=a=>{if(a.length<2)return null;let k=-1,b=1e9;for(let j=1;j<a.length;j++)if(a[j]===' '||a[j-1]===' '){const d=Math.abs(j-a.length/2);if(d<b){b=d;k=j}}if(k<0)k=Math.ceil(a.length/2);const p=[a.slice(0,k).join('').trim(),a.slice(k).join('').trim()];return p[0]&&p[1]?p:null};
+  let a=[...s.trim()],L,fs;
+  for(;;){const one=[a.join('')],tw=two(a),f1=fit(one),f2=tw?fit(tw):0;
+    if(f1>=minF){L=one;fs=f1;break}if(f2>=minF){L=tw;fs=f2;break}if(a.length<=1){L=one;fs=f1;break}a=a.slice(1)}
+  if(cjk)fs=Math.max(R,Math.floor(fs/R)*R);
+  x.font=`${wt} ${fs}px ${TF}`;x.fillStyle='#fff';x.textAlign='center';x.textBaseline='alphabetic';
+  const ms=L.map(l=>x.measureText(l)),asc=Math.max(...ms.map(q=>q.actualBoundingBoxAscent||fs*.72)),dsc=Math.max(...ms.map(q=>q.actualBoundingBoxDescent||fs*.12)),gap=fs*.16,lh=asc+dsc+gap;
+  let y=(ch-(L.length*lh-gap))/2+asc;for(const l of L){x.fillText(l,cw/2,y);y+=lh}
+  const d=x.getImageData(0,0,cw,ch).data;
+  for(let ty=0;ty<gh;ty++)for(let tx=0;tx<gw;tx++){let sum=0;for(let yy=0;yy<R;yy++){let p=((ty*R+yy)*cw+tx*R)*4+3;for(let xx=0;xx<R;xx++,p+=4)sum+=d[p]}if(sum>=R*R*255*thr)m[(fy0+ty)*cols+fx0+tx]=1}
+  return m}
+function showTyped(){clearTimeout(typeT);typeT=setTimeout(()=>clearTyped(true),8000);
+  const was=cur===TXA||cur===TXB,slot=cur===TXA?TXB:TXA;INS[slot]=textMask(typed);
+  wave(slot,was?cx:(fx1+1)*tile,cy,was?260:420)}
+function clearTyped(resume){if(!typed)return;typed='';clearTimeout(typeT);if(resume&&(cur===TXA||cur===TXB)&&mode==='wall'&&!dotBusy)wave(shapeAt(pos),cx,cy,WAVE)}
+const KON=['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];let kp=0;
+document.addEventListener('keydown',e=>{
+  const tg=e.target,field=tg&&tg.closest&&tg.closest('input,textarea,select,[contenteditable]:not([contenteditable=false])');
+  if(TERM.open||field||e.ctrlKey||e.metaKey||e.altKey||e.isComposing)return;
+  const k=e.key.length===1?e.key.toLowerCase():e.key;
+  if(k==='`'){e.preventDefault();openTerm();return}
+  if(k==='Escape'&&!panel.hidden){closePanel(true);return}
+  if(mode==='snake'){snakeKey(e,k);return}
+  if(k===KON[kp]){kp++;if(kp>=2&&kp<=8)e.preventDefault();if(kp===KON.length){kp=0;e.preventDefault();startSnake();return}if(kp>8)return}else kp=k===KON[0]?1:0;
+  if(mode!=='wall'||dotBusy||!visible)return;
+  if(k==='Escape'&&typed){clearTyped(true);return}
+  if(k==='Backspace'&&typed){e.preventDefault();typed=[...typed].slice(0,-1).join('');typed.trim()?showTyped():clearTyped(true);return}
+  if(e.key.length===1&&(/[\p{L}\p{N}!?@#&*+=.:\-]/u.test(e.key)||(e.key===' '&&typed))){e.preventDefault();typed=[...typed+e.key].slice(-16).join('');showTyped();egg('type')}
+});
+
+/* secret 4: snake, played on the tiles; the food is the eighteen crafts */
+const DIRS={arrowup:[0,-1],arrowdown:[0,1],arrowleft:[-1,0],arrowright:[1,0],w:[0,-1],s:[0,1],a:[-1,0],d:[1,0]};
+function startSnake(){if(mode==='snake'||dotBusy||!ready)return;if(mode==='rain')endRain(true);clearTyped(false);closePanel();
+  mode='snake';clearTimeout(timer);hero.classList.add('game');egg('snake');snakeReset();kick();if(scrollY>2)scrollTo({top:0,behavior:RM.matches?'auto':'smooth'})}
+function snakeReset(){const mx=(fx0+fx1)>>1,my=(fy0+fy1)>>1,o=[];for(let g=1;g<NG;g++)o.splice(Math.random()*(o.length+1)|0,0,g);
+  sn={body:[{x:mx,y:my},{x:mx-1,y:my},{x:mx-2,y:my}],dir:{x:1,y:0},q:[],food:null,eaten:0,order:o,alive:true,won:false,started:false,next:0,speed:150,grow:0,dead:0,last:''};placeFood();snakeCap()}
+function snakeCap(){if(!sn)return;const t=T[lang],c=COARSE.matches;
+  if(sn.won)setCap(cur,t.snWin,c?t.snQuitT:t.snQuitK);
+  else if(!sn.alive)setCap(cur,tt(t.snOver,{n:sn.eaten}),c?t.snAgainT:t.snAgainK);
+  else if(!sn.started)setCap(cur,t.snB,c?t.snStartT:t.snStartK);
+  else if(sn.last)setCap(cur,tt(t.snAte,{name:A[sn.last-1][lang==='zh'?0:3]}),`${sn.eaten} / 18`);
+  else setCap(cur,t.snB,'0 / 18')}
+function placeFood(){const g=sn.order[sn.eaten];sn.food=null;if(!g)return;const free=[];
+  for(let y=fy0;y<=fy1;y++)for(let x=fx0;x<=fx1;x++)if(!sn.body.some(b=>b.x===x&&b.y===y))free.push({x,y});
+  if(free.length){const f=free[Math.random()*free.length|0];sn.food={x:f.x,y:f.y,g}}}
+function snakeKey(e,k){if(k==='Escape'){e.preventDefault();snakeEnd();return}const d=DIRS[k.toLowerCase()];if(!d)return;e.preventDefault();steer(d[0],d[1])}
+function steer(dx,dy){if(!sn)return;if(!sn.alive){if(performance.now()-sn.dead<600)return;snakeReset()}
+  if(!sn.started){if(dx===-sn.dir.x&&dy===-sn.dir.y)sn.body.reverse();sn.dir={x:dx,y:dy};sn.started=true;sn.next=performance.now()+60;snakeCap();kick();return}
+  const last=sn.q.length?sn.q[sn.q.length-1]:sn.dir;if((dx===-last.x&&dy===-last.y)||(dx===last.x&&dy===last.y))return;if(sn.q.length<3)sn.q.push({x:dx,y:dy})}
+function snakeStep(){const d=sn.q.length?sn.q.shift():sn.dir;sn.dir=d;const h=sn.body[0],nx=h.x+d.x,ny=h.y+d.y,tail=sn.grow>0?sn.body.length:sn.body.length-1;
+  if(nx<fx0||nx>fx1||ny<fy0||ny>fy1||sn.body.some((b,k)=>k<tail&&b.x===nx&&b.y===ny)){sn.alive=false;sn.dead=performance.now();snakeCap();return}
+  sn.body.unshift({x:nx,y:ny});
+  if(sn.food&&nx===sn.food.x&&ny===sn.food.y){sn.eaten++;sn.grow+=1;sn.last=sn.food.g;sn.speed=Math.max(80,sn.speed-4);
+    if(sn.eaten>=18){sn.won=true;sn.alive=false;sn.food=null}else placeFood();snakeCap()}
+  if(sn.grow>0)sn.grow--;else sn.body.pop()}
+function drawSnake(now){if(!sn)return false;
+  if(sn.alive&&sn.started){if(!visible)sn.next=now+sn.speed;else while(now>=sn.next&&sn.alive){snakeStep();sn.next+=sn.speed}}
+  for(let i=0;i<N;i++){const c=i%cols,r=i/cols|0,inB=c>=fx0&&c<=fx1&&r>=fy0&&r<=fy1;ctx.globalAlpha=(inB?C.out:C.calm*.8)*FA[r];ctx.drawImage(SPR[0][0],c*tile,r*tile,tile,tile)}
+  ctx.globalAlpha=.55;ctx.strokeStyle=C.g1;ctx.lineWidth=1.5;ctx.beginPath();const bx=fx0*tile-4,by=fy0*tile-4,bw=(fx1-fx0+1)*tile+8,bh=(fy1-fy0+1)*tile+8;ctx.roundRect?ctx.roundRect(bx,by,bw,bh,10):ctx.rect(bx,by,bw,bh);ctx.stroke();
+  if(sn.food){const s=tile*(1+.07*Math.sin(now/170)),x=sn.food.x*tile+tile/2,y=sn.food.y*tile+tile/2;ctx.globalAlpha=1;ctx.drawImage(SPR[sn.food.g][1],x-s/2,y-s/2,s,s)}
+  const blink=!sn.alive&&!sn.won&&now-sn.dead<900&&((now-sn.dead)/150|0)%2===0;
+  if(!blink)for(let k=sn.body.length-1;k>=0;k--){const b=sn.body[k],s=tile*(k===0?1.1:1);ctx.globalAlpha=k===0?1:Math.max(.5,1-k*.025);ctx.drawImage(SPR[0][1],b.x*tile+tile/2-s/2,b.y*tile+tile/2-s/2,s,s)}
+  ctx.globalAlpha=1;return visible}
+function snakeEnd(silent){if(mode!=='snake')return;mode='wall';sn=null;hero.classList.remove('game');FC.fill(BL);TC.fill(BL);ST.fill(0);cur=BL;if(!silent)wave(shapeAt(pos),cx,cy,WAVE)}
+let sw=null;
+hero.addEventListener('pointerdown',e=>{if(mode==='snake'&&e.pointerType!=='mouse')sw={x:e.clientX,y:e.clientY}});
+hero.addEventListener('pointermove',e=>{if(!sw||mode!=='snake')return;const dx=e.clientX-sw.x,dy=e.clientY-sw.y;if(Math.max(Math.abs(dx),Math.abs(dy))<22)return;Math.abs(dx)>Math.abs(dy)?steer(Math.sign(dx),0):steer(0,Math.sign(dy));sw={x:e.clientX,y:e.clientY}});
+
+/* secret 5: press and hold, and the eighteen crafts rain down */
+function startRain(hold){if(mode!=='wall'||dotBusy||!ready)return;clearTyped(false);closePanel();mode='rain';clearTimeout(timer);rainHold=true;
+  rn={last:performance.now(),timed:!hold,rel:0};rainCols();setCap(cur,T[lang].rainB,hold?T[lang].rainS:T[lang].rainS2);kick();
+  setTimeout(()=>{if(mode==='rain')egg('rain')},RM.matches?200:900);if(!hold)rn.rt=setTimeout(rainRelease,RM.matches?1500:5600)}
+function rainRelease(){if(mode==='rain'&&rainHold){rainHold=false;rn.rel=performance.now();kick()}}
+function rainCols(){if(rn)rn.c=Array.from({length:cols},()=>({y:Math.random()*rows*.9-rows*.6,v:.011+Math.random()*.02,L:6+(Math.random()*12|0),s:Math.random()*997|0}))}
+function drawRain(now){const dt=RM.matches?0:Math.min(50,now-rn.last),fk=rn.rel?Math.max(0,1-(now-rn.rel)/800):1;rn.last=now;let live=false;
+  for(let i=0;i<N;i++){const c=i%cols,r=i/cols|0;ctx.globalAlpha=C.calm*.8*FA[r];ctx.drawImage(SPR[0][0],c*tile,r*tile,tile,tile)}
+  for(let c=0;c<cols;c++){const k=rn.c[c];k.y+=k.v*dt;
+    if(k.y-k.L>=rows){if(rainHold&&!RM.matches){k.y=-Math.random()*8;k.v=.011+Math.random()*.02;k.L=6+(Math.random()*12|0)}else continue}
+    live=true;const hy=Math.floor(k.y);
+    for(let j=0;j<=k.L;j++){const r=hy-j;if(r<0||r>=rows)continue;const i=r*cols+c,g=(c*7+r*13+k.s+((now/(120+k.s%80))|0))%NG;let a=j===0?1:Math.pow(1-j/(k.L+1),1.5)*.95;if(CALM[i])a*=.22;ctx.globalAlpha=a*fk*FA[r];ctx.drawImage(SPR[g][j===0?1:0],c*tile,r*tile,tile,tile)}}
+  ctx.globalAlpha=1;if(!rainHold&&(fk<=0||!live)){endRain();return false}return true}
+function endRain(silent){if(mode!=='rain')return;mode='wall';clearTimeout(rn&&rn.rt);rn=null;rainHold=false;FC.fill(BL);TC.fill(BL);ST.fill(0);cur=BL;if(!silent)wave(shapeAt(pos),cx,0,WAVE)}
+cv.addEventListener('pointerdown',e=>{swallow=false;if(mode!=='wall'||dotBusy||e.button>0)return;const p={x:e.clientX,y:e.clientY};p.t=setTimeout(()=>{lp=null;swallow=true;startRain(true)},560);lp=p});
+addEventListener('pointermove',e=>{if(lp&&Math.hypot(e.clientX-lp.x,e.clientY-lp.y)>12){clearTimeout(lp.t);lp=null}},{passive:true});
+const lpEnd=()=>{sw=null;if(lp){clearTimeout(lp.t);lp=null}if(mode==='rain'&&rn&&!rn.timed)rainRelease()};
+addEventListener('pointerup',lpEnd);addEventListener('pointercancel',lpEnd);
+cv.addEventListener('contextmenu',e=>{if(mode==='rain'||lp)e.preventDefault()});
+
+/* secret 6: the dot of the i flies out of the logo, lands on the wall and draws the D */
+function flyDot(){if(mode!=='wall'||dotBusy||!ready)return;closePanel();clearTyped(false);egg('dot');pos=0;
+  if(RM.matches){wave(0,cx,cy,0);setCap(0,T[lang].capHand,T[lang].dotS);return}
+  dotBusy=true;clearTimeout(timer);const t0=performance.now();wave(BL,cx,cy,260);
+  const lk=$('.top .brand .lockup').getBoundingClientRect(),hr=hero.getBoundingClientRect(),sc=lk.height/248,gx=u=>cx-S/2+u/100*S,gy=v=>cy-S/2+v/100*S,g=G[0].s;
+  const P=[[gx(g[1][0]),gy(g[1][1]),gx(g[2][0]),gy(g[2][1]),g[2][4]/100*S]].concat(g.slice(2).map(t=>[gx(t[0]),gy(t[1]),gx(t[2]),gy(t[3]),t[4]/100*S]));
+  const Ls=P.map(p=>Math.hypot(p[2]-p[0],p[3]-p[1])),cum=[0];Ls.forEach(l=>cum.push(cum[cum.length-1]+l));
+  const a=dotA={from:{x:lk.left-hr.left+24*sc,y:lk.top-hr.top+24*sc,r:Math.max(3,22*sc)},to:{x:gx(g[1][0]),y:gy(g[1][1]),r:g[1][4]/100*S/2},P,Ls,cum,tot:cum[cum.length-1],tF:t0+480,dF:760,tC:t0+1330,dC:1500,trail:[]};
+  setTimeout(()=>root.classList.add('flying'),440);
+  setTimeout(()=>{for(let i=0;i<N;i++){FC[i]=BL;TC[i]=0;if(!INS[0][i]){ST[i]=0;continue}
+      const u=((i%cols+.5)*tile-(cx-S/2))/S*100,v=(((i/cols|0)+.5)*tile-(cy-S/2))/S*100;let bj=0,bd=1e9;
+      for(let j=0;j<g.length;j++){if(g[j][5])continue;const d=segd(u,v,g[j])-g[j][4]/2;if(d<bd){bd=d;bj=j}}
+      ST[i]=bj===0?t0+840+Math.max(0,Math.min(1,(88-v)/46))*300:bj===1?a.tF+a.dF-90:a.tC+(cum[bj-1]+segq(u,v,g[bj])*Ls[bj-1])/a.tot*a.dC-110}
+    cur=0;kick()},800);
+  setTimeout(()=>{root.classList.remove('flying');dotA=null;dotBusy=false;setCap(0,T[lang].capHand,T[lang].dotS);schedule()},1330+1500+380);
+  setCap(BL);kick()}
+function glow(x,y,r,al){const R=r*2.4,g=ctx.createRadialGradient(x,y,0,x,y,R);g.addColorStop(0,`rgba(255,247,226,${al})`);g.addColorStop(.36,`rgba(243,212,142,${al*.9})`);g.addColorStop(1,'rgba(217,178,107,0)');ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,R,0,7);ctx.fill()}
+function drawDot(now){const a=dotA;if(now<a.tF)return true;let x,y,r,al=1;
+  if(now<a.tF+a.dF){const p=eio((now-a.tF)/a.dF),mx=(a.from.x+a.to.x)/2,my=Math.min(a.from.y,a.to.y)-Math.min(160,H*.16);
+    x=(1-p)*(1-p)*a.from.x+2*(1-p)*p*mx+p*p*a.to.x;y=(1-p)*(1-p)*a.from.y+2*(1-p)*p*my+p*p*a.to.y;r=a.from.r+(a.to.r-a.from.r)*p}
+  else if(now<a.tC){x=a.to.x;y=a.to.y;r=a.to.r}
+  else{const p=Math.min(1,(now-a.tC)/a.dC),d=p*a.tot;let j=0;while(j<a.P.length-1&&a.cum[j+1]<d)j++;const q=a.Ls[j]?(d-a.cum[j])/a.Ls[j]:0,s=a.P[j];
+    x=s[0]+(s[2]-s[0])*q;y=s[1]+(s[3]-s[1])*q;r=Math.max(tile*.35,s[4]*.42);if(p>=1)al=Math.max(0,1-(now-a.tC-a.dC)/260)}
+  if(al<=0)return false;
+  a.trail.push({x,y,r});if(a.trail.length>16)a.trail.shift();
+  ctx.save();ctx.globalCompositeOperation='lighter';ctx.globalAlpha=1;
+  a.trail.forEach((p,k)=>{const f=(k+1)/a.trail.length;glow(p.x,p.y,p.r*(.45+.55*f),.3*f*al)});glow(x,y,r,al);ctx.restore();return true}
+function toHero(fn){const go=()=>setTimeout(fn,RM.matches?0:160);
+  if(scrollY>hero.offsetHeight*.3){scrollTo({top:0,behavior:RM.matches?'auto':'smooth'});const t0=performance.now();(function w(){if(scrollY<=2||performance.now()-t0>1600)go();else requestAnimationFrame(w)})()}else go()}
+/* a wall command always lands: wait out the flying dot or first layout, end the snake or the rain, then run it */
+function onWall(fn){toHero(()=>{const t0=performance.now();(function w(){if((!ready||dotBusy)&&performance.now()-t0<6000){setTimeout(w,80);return}
+  if(mode==='snake')snakeEnd(true);if(mode==='rain')endRain(true);closePanel();fn()})()})}
+document.querySelectorAll('a.brand').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();toHero(flyDot)}));
+
+/* the six secrets: count, panel, toast */
+let found=0;try{found=(+localStorage.getItem('dinamics-eggs')||0)&((1<<EK.length)-1)}catch(e){}
+const nFound=()=>EK.reduce((n,_,i)=>n+(found>>i&1),0);
+const pill=$('#pill'),panel=$('#eggPanel');
+function egg(id){const i=EK.indexOf(id);if(i<0||found>>i&1)return;found|=1<<i;try{localStorage.setItem('dinamics-eggs',String(found))}catch(e){}
+  const n=nFound(),t=T[lang];eggsUI(true);n===EK.length?toast(t.eggAll,true):toast(tt(t.eggFound,{n,name:EG[i][lang].n})+' '+tt(t.eggLeft,{k:EK.length-n}))}
+function eggsUI(bump){const n=nFound(),t=T[lang];$('#pillN').textContent=`${n}/${EK.length}`;pill.classList.toggle('all',n===EK.length);pill.setAttribute('aria-label',tt(t.pillAria,{n,k:EK.length}));
+  if(bump&&!RM.matches){pill.classList.remove('bump');void pill.offsetWidth;pill.classList.add('bump')}
+  $('#eggTitle').textContent=n===EK.length?t.eggTitleAll:tt(t.eggTitle,{k:EK.length});const ol=$('#eggList');ol.textContent='';
+  EG.forEach((e,i)=>{const ok=found>>i&1,li=document.createElement('li'),m=document.createElement('i'),b=document.createElement('b'),s=document.createElement('span');
+    li.className=ok?'ok':'';m.textContent=ok?'✓':'○';b.textContent=ok?e[lang].n:t.eggUnknown;s.textContent=ok?e[lang].d:e[lang].h;li.append(m,b,s);ol.append(li)});
+  $('#termOpen2').textContent=t.termOpen}
+function openPanel(){eggsUI();panel.hidden=false;pill.setAttribute('aria-expanded','true')}
+function closePanel(focus){if(panel.hidden)return;panel.hidden=true;pill.setAttribute('aria-expanded','false');if(focus)pill.focus()}
+pill.addEventListener('click',e=>{e.stopPropagation();panel.hidden?openPanel():closePanel()});
+document.addEventListener('click',e=>{if(!panel.hidden&&!e.target.closest('.eggs'))closePanel()});
+$('#termOpen2').addEventListener('click',()=>{closePanel();openTerm()});
+let toT=0;
+function toast(text,withMail){const el=$('#toast');el.innerHTML='<svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="5.8" r="3.3"/><path d="M6.6 8 5.5 13.6h5L9.4 8z"/></svg><span></span>';const sp=el.querySelector('span');sp.textContent=text;
+  if(withMail){const m=document.createElement('a');m.href='mailto:'+D.mail;m.textContent=D.mail;sp.append(m)}
+  el.classList.add('on');clearTimeout(toT);toT=setTimeout(()=>el.classList.remove('on'),withMail?9000:3800)}
+function stats(){$('#stat').textContent=tt(T[lang].stat,{kb:KB,n:(N||0).toLocaleString(lang==='zh'?'zh-CN':'en-US')})}
+
+/* secret 2: a terminal hidden behind the ` key */
+const TERM={open:false,hist:[],hi:0,prev:null},term=$('#term'),tout=$('#tout'),tin=$('#tinput');
+const CMDS=['help','ls','cat','say','qr','snake','rain','eggs','whoami','date','mail','clear','exit'],FILES=['crafts.txt','works.txt','contact.txt','secrets.txt'];
+let lastEcho=null;
+/* keep the newest answer in view from its first line: a long one (help, eggs) starts at its command, not at its tail */
+function pin(){const max=tout.scrollHeight-tout.clientHeight;tout.scrollTop=lastEcho&&lastEcho.isConnected?Math.min(max,lastEcho.offsetTop-10):max}
+function outGrid(text,cls){const d=document.createElement('div');d.className='tg'+(cls?' '+cls:'');
+  text.split('\n').forEach(l=>{const m=l.match(/^\s+(\S(?:.*?\S)?)\s{2,}(\S.*)$/),a=document.createElement('span');if(m){const b=document.createElement('span');a.textContent=m[1];b.textContent=m[2];d.append(a,b)}else{a.className='th';a.textContent=l;d.append(a)}});
+  tout.append(d);pin()}
+function out(text,cls){const d=document.createElement('div');if(cls)d.className=cls;d.textContent=text;tout.append(d);pin()}
+function echo(v){const d=document.createElement('div'),i=document.createElement('i');i.textContent=T[lang].term.prompt+' ';d.append(i,v);tout.append(d);lastEcho=d;pin()}
+function chips(){const bar=$('#tchips');bar.setAttribute('aria-label',T[lang].term.bar);bar.textContent='';T[lang].term.try.forEach(c=>{const b=document.createElement('button');b.type='button';b.textContent=c;
+  b.addEventListener('click',()=>{echo(c);TERM.hist.push(c);TERM.hi=TERM.hist.length;run(c);if(TERM.open&&!COARSE.matches)tin.focus({preventScroll:true})});bar.append(b)})}
+function openTerm(){closePanel();if(!TERM.open){TERM.prev=document.activeElement;TERM.open=true;term.hidden=false;document.documentElement.classList.add('term-open');requestAnimationFrame(()=>requestAnimationFrame(()=>term.classList.add('on')));if(!tout.childElementCount)out(T[lang].term.hello,'g');egg('term')}tin.focus({preventScroll:true})}
+function closeTerm(){if(!TERM.open)return;TERM.open=false;document.documentElement.classList.remove('term-open');term.classList.remove('on');setTimeout(()=>{if(!TERM.open)term.hidden=true},RM.matches?0:340);
+  const p=TERM.prev;(p&&p!==document.body&&document.contains(p)?p:$('#termBtn')).focus({preventScroll:true})}
+$('#termBtn').addEventListener('click',openTerm);$('#termX').addEventListener('click',closeTerm);
+$('#tform').addEventListener('submit',e=>{e.preventDefault();const v=tin.value.trim();tin.value='';echo(v);if(v){TERM.hist.push(v);TERM.hi=TERM.hist.length;run(v)}});
+tin.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){e.preventDefault();closeTerm();return}
+  if(e.key==='`'&&!tin.value){e.preventDefault();closeTerm();return}
+  if((e.key==='ArrowUp'||e.key==='ArrowDown')&&TERM.hist.length){e.preventDefault();TERM.hi=Math.max(0,Math.min(TERM.hist.length,TERM.hi+(e.key==='ArrowUp'?-1:1)));tin.value=TERM.hist[TERM.hi]||'';return}
+  if(e.key==='Tab'){e.preventDefault();const v=tin.value,m=v.match(/^(\S*)$/),f=v.match(/^cat\s+(\S*)$/),pool=m?CMDS:f?FILES:null,w=m?m[1]:f?f[1]:'';if(!pool)return;const c=pool.filter(x=>x.startsWith(w.toLowerCase()));
+    if(c.length===1)tin.value=m?c[0]+' ':'cat '+c[0];else if(c.length>1)out(c.join('   '),'d')}});
+function eggText(){const t=T[lang];return[tt(t.term.eggHead,{n:nFound(),k:EK.length}),...EG.map((e,i)=>found>>i&1?`✓ ${e[lang].n}`:`○ ${t.eggUnknown}  ${e[lang].h}`),t.term.eggFoot].join('\n')}
+function catFile(a){const t=T[lang].term,f=a.toLowerCase();
+  if(!f)return out(t.catUsage,'d');
+  if(f==='crafts.txt'){const o=lang==='zh'?0:3;return out(A.map((x,i)=>`${String(i+1).padStart(2,'0')}  ${x[o]}  ${x[o+1]} · ${T[lang].first} ${x[o+2]}`).join('\n'))}
+  if(f==='works.txt')return out(D.works.map((w,i)=>`${String(i+1).padStart(2,'0')}  ${w[lang].n}  ${w[lang].s}${w.url?'  '+w.url:''}`).join('\n'));
+  if(f==='contact.txt')return out(tt(t.contact,{m:D.mail}));
+  if(f==='secrets.txt')return out(tt(t.secrets,{n:nFound(),k:EK.length}),'g');
+  out(tt(t.nofile,{f:a}),'d')}
+function run(v){const t=T[lang].term,c=v.split(/\s+/)[0],arg=v.slice(c.length).trim(),k=c.toLowerCase();
+  switch(k){
+  case 'help':case '?':case '帮助':outGrid(t.help,'d');break;
+  case 'ls':case 'dir':out(FILES.join('   '));break;
+  case 'cat':case 'type':catFile(arg);break;
+  case 'say':case 'echo':if(!arg){out(t.sayUsage,'d');break}closeTerm();onWall(()=>{typed=[...arg].slice(-16).join('');showTyped();egg('type')});break;
+  case 'qr':closeTerm();onWall(()=>{clearTyped(false);pos=NG;if(cur===QR){FC.fill(BL);TC.fill(BL);ST.fill(0)}wave(QR,cx,cy,WAVE)});break;
+  case 'snake':closeTerm();onWall(startSnake);break;
+  case 'rain':case 'matrix':closeTerm();onWall(()=>startRain(false));break;
+  case 'eggs':if(arg.toLowerCase()==='reset'){found=0;try{localStorage.removeItem('dinamics-eggs')}catch(e){}eggsUI();out(t.reset,'g')}else out(eggText(),'d');break;
+  case 'whoami':out(tt(t.whoami,{w:screen.width,h:screen.height,tz:(Intl.DateTimeFormat().resolvedOptions().timeZone||'—'),l:navigator.language||'—'}));break;
+  case 'date':out(new Date().toLocaleString(lang==='zh'?'zh-CN':'en-GB',{dateStyle:'full',timeStyle:'medium'}));break;
+  case 'mail':case 'contact':out(t.mailing,'g');location.href='mailto:'+D.mail;break;
+  case 'clear':case 'cls':tout.textContent='';lastEcho=null;break;
+  case 'exit':case 'quit':closeTerm();break;
+  case 'sudo':out(t.sudo,'g');break;
+  case 'rm':out(t.rm,'d');break;
+  case 'hello':case 'hi':case '你好':out(t.hi,'g');break;
+  case 'dinamics':out(t.about,'g');break;
+  default:out(tt(t.unknown,{c}),'d')}}
+
+$('#copyMail').addEventListener('click',async e=>{const b=e.currentTarget;
+  try{await navigator.clipboard.writeText(D.mail);b.textContent=T[lang].copied}
+  catch(err){const r=document.createRange();r.selectNodeContents($('#mail'));const s=getSelection();s.removeAllRanges();s.addRange(r)}
+  setTimeout(()=>{b.textContent=T[lang].copy},1800)});
+try{console.log('%c Dinamics ','font:900 22px/2 Georgia,serif;color:#0A0A0B;background:linear-gradient(#F3D48E,#D9B26B 55%,#A47A36);border-radius:6px;padding:0 10px');console.log(T[lang].console)}catch(e){}
+window.dinamics=()=>{openTerm();return T[lang].consoleRet};
+
+setLang(lang);layout();
+FC.fill(-1);TC.fill(0);{const now=performance.now()+250,diag=Math.hypot(W,H);for(let i=0;i<N;i++)ST[i]=RM.matches?0:now+Math.hypot((i%cols)*tile+tile/2-cx,(i/cols|0)*tile+tile/2-cy)/diag*1300+Math.random()*140}
+kick();schedule();
+if(document.fonts)document.fonts.ready.then(()=>layout());
+}
+</script>
+</body>
+</html>

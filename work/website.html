@@ -44,7 +44,7 @@ const subs=[];window.DN={lang:l,subs,RM:matchMedia('(prefers-reduced-motion: red
 <h2 data-t="fl_h">只看 50 毫秒，你记住了什么？</h2>
 <p class="sub" data-t="fl_s">点一下，一个网页只在屏幕上停 50 毫秒。闪完说说你看到的是什么颜色。</p>
 <style>
-.fl{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:28px;align-items:stretch}
+.fl{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:stretch}
 .fl-screen{position:relative;aspect-ratio:16/10;border-radius:14px;overflow:hidden;border:1px solid var(--line);background:#050506}
 .fl-screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;visibility:hidden}
 .fl-screen img.on{visibility:visible}
@@ -63,12 +63,14 @@ const subs=[];window.DN={lang:l,subs,RM:matchMedia('(prefers-reduced-motion: red
 .fl-side{display:flex;flex-direction:column;gap:14px;padding:22px;border:1px solid var(--hair);border-radius:14px;background:var(--tile)}
 .fl-side h3{font-size:18px}
 .fl-rounds{display:flex;flex-direction:column;gap:10px;margin:4px 0 0;padding:0;list-style:none}
-.fl-rounds li{display:flex;justify-content:space-between;gap:10px;padding:10px 12px;border-radius:10px;background:#121213;color:var(--ink2);font-size:14px}
-.fl-rounds li b{color:var(--ink);font-weight:600}
+.fl-rounds li{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:4px 10px;padding:10px 12px;border-radius:10px;background:#121213;color:var(--ink2);font-size:14px}
+.fl-rounds li span{min-width:0}
+.fl-rounds li b{color:var(--ink);font-weight:600;white-space:nowrap;margin-left:auto}
 .fl-rounds li.ok b{color:var(--up)}
 .fl-rounds li.no b{color:var(--down)}
 .fl-ms{margin-top:auto;font-size:13.5px;color:var(--ink3)}
 @media (max-width:899px){.fl{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:599px){.fl-side{padding:16px}}
 </style>
 <div class="stage fl">
   <div class="fl-screen" id="flScreen">
@@ -90,11 +92,11 @@ const subs=[];window.DN={lang:l,subs,RM:matchMedia('(prefers-reduced-motion: red
 const S={zh:{go:'闪 50 毫秒',round:'第 {n} 轮，共 3 轮',opts:['黑底金字','深红底金字','白底蓝字'],
   sites:['Dinamics 官网','牌所 PHRAX','Dinamics 官网改版前'],ok:'答对了。',no:'其实是「{a}」。',
   why:'这一页只在屏幕上停了 {ms} 毫秒，你已经记住了它的样子。访客第一次打开你的网站，也是这么快就有了印象。',
-  next:'下一轮',again:'从头再玩',wait:'还没玩',done:'三轮做完：答对 {k} 个。',ms:'实测：上一轮显示了 {ms} 毫秒。'},
+  next:'下一轮',again:'从头再来',wait:'还没了解',done:'三轮做完：答对 {k} 个。',ms:'实测：上一轮显示了 {ms} 毫秒。'},
  en:{go:'Flash for 50 ms',round:'Round {n} of 3',opts:['Gold on black','Gold on deep red','Blue on white'],
   sites:['Dinamics','PHRAX','Dinamics before the redesign'],ok:'Right.',no:'It was "{a}".',
   why:'That page was on screen for {ms} ms and you already know what it looks like. First-time visitors to your site form their impression just as fast.',
-  next:'Next round',again:'Play again',wait:'Not played yet',done:'All three done: {k} right.',ms:'Measured: the last flash lasted {ms} ms.'}};
+  next:'Next round',again:'Start over',wait:'Not explored yet',done:'All three done: {k} right.',ms:'Measured: the last flash lasted {ms} ms.'}};
 const IM=['flA','flB','flC'].map(i=>document.getElementById(i)), $=i=>document.getElementById(i);
 const SW=[['#0A0A0B','#D9B26B'],['#4A0D0A','#F2C75C'],['#F4F6FC','#2142C8']];
 let r=0,res=[null,null,null],last=0,L='zh';

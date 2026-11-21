@@ -113,6 +113,18 @@ footer a{color:var(--ink2)}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 
+/* dark screens inside the demos keep light text whatever the page style is */
+.scr,.tr-pane,.ct-pane,.sc-pane,.fl-screen,.fl-rounds li,.ba .tag{--ink:#F2EDE3;--ink2:#A39D92;--ink3:#7A756C}
+.scr{background:#0C0C0D;color:var(--ink)}
+.tr-pane,.ct-pane,.sc-pane,.fl-screen{color:var(--ink)}
+
+/* a film plays in a phone */
+.wk.film{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr)}
+.wk.film .shot{padding:0;display:grid;place-items:center}
+.wk.film .phone{position:relative;right:auto;bottom:auto;width:min(320px,72vw);border-width:7px;border-radius:30px}
+.wk.film video{display:block;width:100%;height:auto;aspect-ratio:9/16;background:#000}
+@media (max-width:899px){.wk.film{grid-template-columns:minmax(0,1fr)}}
+
 /* the logo takes the style's colours, like on the home page */
 #lg stop:nth-child(1){stop-color:var(--l0)}#lg stop:nth-child(2){stop-color:var(--l1)}#lg stop:nth-child(3){stop-color:var(--l2)}
 

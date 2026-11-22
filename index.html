@@ -1009,7 +1009,7 @@ let festNow=(()=>{const d=new Date(),k=d.getFullYear()*10000+(d.getMonth()+1)*10
 function drawFest(){if(!FH||!festNow||!W)return;FH.render(festNow[0],{hero,root:document.documentElement,brand:$('.top .brand'),W,H,mob:W<900,fy:Math.floor(festNow[2]/10000)})}
 window.DNH=api=>{FH=api;drawFest()};
 document.addEventListener('dn-theme',()=>{if(penOn&&PEN)PEN.restyle(penCtx())});
-function festLoad(){if(document.getElementById('holjs'))return;const s=document.createElement('script');s.id='holjs';s.async=true;s.src='themes/holiday.js?v=30c2bd4632';document.head.append(s);document.addEventListener('dn-theme',()=>requestAnimationFrame(drawFest))}
+function festLoad(){if(document.getElementById('holjs'))return;const s=document.createElement('script');s.id='holjs';s.async=true;s.src='themes/holiday.js?v=b0f4640d0a';document.head.append(s);document.addEventListener('dn-theme',()=>requestAnimationFrame(drawFest))}
 /* the terminal can put any festival up now, to see it before its day */
 function festShow(id){const d=new Date(),k=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(),r=FEST.filter(f=>f[0]===id).sort((a,b)=>a[2]-b[2]);if(!r.length)return;
   festNow=r.find(f=>f[3]>=k)||r[r.length-1];if(FH)drawFest();else festLoad()}

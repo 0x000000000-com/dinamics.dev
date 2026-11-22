@@ -13,25 +13,131 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..800&family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="work.css?v=e52922e75b">
-<style>/* the craft film (2026-11-22): a button in the hero, the film in a dialog over the page */
-.filmbtn{display:inline-flex;align-items:center;gap:12px;min-height:52px;margin-top:22px;padding:0 18px 0 7px;border-radius:12px;border:1.5px solid rgba(var(--rgb),.55);background:transparent;color:var(--ink);font:600 15.5px/1.2 var(--sans);cursor:pointer;transition:border-color .2s,background-color .2s}
-.filmbtn:hover{border-color:rgba(var(--rgb),.95);background:rgba(var(--rgb),.08)}
-.fb-ico{display:grid;place-items:center;flex:none;width:38px;height:38px;border-radius:50%;background:var(--gold);box-shadow:0 8px 20px -10px rgba(var(--rgb),.9)}
-.fb-ico svg{width:13px;height:13px;margin-left:2px;fill:var(--on)}
-.fb-len{font:500 13px/1 var(--mono);color:var(--ink2);padding-left:12px;border-left:1px solid rgba(var(--rgb),.35)}
-.filmdlg{width:min(94vw,calc((100vh - 140px) * 16 / 9),1500px);max-width:none;max-height:none;padding:0;border:0;background:transparent;color:#F2EDE3;overflow:visible}
-.filmdlg::backdrop{background:rgba(4,4,6,.88);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
-.fd-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin:0 0 14px}
-.fd-t{margin:0;font:600 15px/1.3 var(--sans);color:rgba(242,237,227,.85)}
-.fd-x{display:grid;place-items:center;flex:none;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.06);color:#F2EDE3;cursor:pointer}
-.fd-x svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;fill:none}
-.fd-x:hover{background:rgba(255,255,255,.14)}
-.fd-x:focus-visible,.filmdlg video:focus-visible{outline:2px solid #D9B26B;outline-offset:3px}
-.filmdlg video{display:block;width:100%;height:auto;aspect-ratio:16/9;background:#000;border-radius:14px;box-shadow:0 40px 120px -30px #000,0 0 0 1px rgba(255,255,255,.08)}
-.filmdlg[open]{animation:fdin .3s ease-out}
-@keyframes fdin{from{opacity:0;transform:translateY(12px) scale(.985)}to{opacity:1;transform:none}}
-@media (max-width:599px){.filmdlg{width:calc(100vw - 24px)}}
-@media (prefers-reduced-motion:reduce){.filmdlg[open]{animation:none}}</style>
+<style>/* the film on the page (v2, 2026-11-22). DSJ 07:50: the film is shown, not hidden behind a button; it plays by itself with the sound on;
+   visitors can mute it, like it and leave a note. Colours come from the page style; inside the picture the colours stay light. */
+.fc{position:relative;margin:0;min-width:0}
+.fc-frame{position:relative;aspect-ratio:16/9;border-radius:16px;overflow:hidden;isolation:isolate;background:#000;border:1px solid rgba(var(--rgb),.36);
+  box-shadow:0 60px 110px -60px #000,0 34px 70px -50px rgba(var(--rgb),.45);--ink:#F2EDE3;--ink2:#C9C3B8;color:#F2EDE3}
+.fc-v{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:cover;background:#000}
+.fc-tap{position:absolute;inset:0;z-index:1;width:100%;height:100%;padding:0;border:0;background:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.fc-tap:focus-visible{outline:3px solid var(--co);outline-offset:-4px;border-radius:15px}
+
+/* paused: one big play button over a dimmed picture */
+.fc-big{position:absolute;inset:0;z-index:2;display:grid;place-items:center;pointer-events:none;background:radial-gradient(closest-side,rgba(0,0,0,.18),rgba(0,0,0,.46));opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
+.fc.is-paused .fc-big{opacity:1;visibility:visible}
+.fc-big i{display:grid;place-items:center;width:clamp(60px,7vw,84px);aspect-ratio:1;border-radius:50%;background:var(--gold);box-shadow:0 14px 44px -12px rgba(var(--rgb),.9)}
+.fc-big svg{width:36%;height:36%;margin-left:8%;fill:var(--on)}
+
+/* sound: when the browser starts the film muted, one clear button turns the sound on */
+.fc-sound{position:absolute;left:12px;top:12px;z-index:3;display:inline-flex;align-items:center;gap:9px;height:42px;padding:0 17px 0 12px;border:0;border-radius:999px;
+  background:rgba(8,8,10,.76);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1.5px rgba(var(--rgb),.9);
+  color:#F2EDE3;font:600 14.5px/1 var(--sans);cursor:pointer;opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .3s,transform .3s,visibility .3s}
+.fc.is-blocked .fc-sound{opacity:1;visibility:visible;transform:none}
+.fc-sound::after{content:"";position:absolute;inset:-1px;border-radius:inherit;border:1.5px solid rgba(var(--rgb),.95);pointer-events:none;animation:fcring 2s cubic-bezier(.2,.6,.4,1) infinite}
+@keyframes fcring{0%{transform:scale(1);opacity:.95}80%,100%{transform:scale(1.14,1.6);opacity:0}}
+.fc-sound svg{width:20px;height:20px;flex:none}
+.fc-sound:hover{background:rgba(24,21,16,.88)}
+
+/* where the film is: a thin line along the bottom, draggable */
+.fc-seek{position:absolute;left:0;right:0;bottom:-5px;z-index:3;width:100%;height:22px;margin:0;opacity:0;cursor:pointer}
+.fc-line{position:absolute;left:0;right:0;bottom:0;z-index:2;height:3px;background:rgba(255,255,255,.18);pointer-events:none;transition:height .15s}
+.fc-line i{display:block;width:100%;height:100%;transform-origin:left;transform:scaleX(var(--p,0));background:var(--co)}
+.fc-frame:hover .fc-line,.fc-seek:focus-visible+.fc-line{height:6px}
+.fc-seek:focus-visible+.fc-line{box-shadow:0 0 0 2px var(--co)}
+
+/* the end: what did you think? */
+.fc-end{position:absolute;inset:0;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(12px,2vw,22px);padding:16px;text-align:center;
+  background:rgba(6,6,8,.8);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s}
+.fc.is-ended .fc-end{opacity:1;visibility:visible}
+.fc-end p{margin:0;font:900 clamp(19px,2.3vw,30px)/1.3 var(--serif);color:#F2EDE3;text-wrap:balance}
+.fc-end div{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
+.fc-end .fc-pill{background:rgba(8,8,10,.5)}
+
+/* in full screen the frame fills the screen and gets its own close button */
+.fc-xfs{position:absolute;right:16px;top:16px;z-index:5;display:none!important;background:rgba(8,8,10,.6)!important}
+.fc-frame:fullscreen{width:100%;height:100%;aspect-ratio:auto;border:0;border-radius:0}
+.fc-frame:-webkit-full-screen{width:100%;height:100%;aspect-ratio:auto;border:0;border-radius:0}
+.fc-frame:fullscreen .fc-v{object-fit:contain}
+.fc-frame:-webkit-full-screen .fc-v{object-fit:contain}
+.fc-frame:fullscreen .fc-xfs{display:grid!important}
+.fc-frame:-webkit-full-screen .fc-xfs{display:grid!important}
+
+/* under the film: play, sound, full screen, time; like and leave a note */
+.fc-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
+.fc-ib{position:relative;display:grid;place-items:center;flex:none;width:42px;height:42px;padding:0;border-radius:50%;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;transition:border-color .2s,background-color .2s}
+.fc-ib:hover{border-color:var(--co);background:rgba(var(--rgb),.08)}
+.fc svg{fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fc svg .f{fill:currentColor;stroke:none}
+.fc-ib svg{width:19px;height:19px}
+.fc-play .pa,.fc.is-playing .fc-play .pl{display:none}
+.fc.is-playing .fc-play .pa{display:block}
+.fc-mute .sx,.fc.is-muted .fc-mute .so{display:none}
+.fc.is-muted .fc-mute .sx{display:block}
+.fc.is-muted .fc-mute{border-color:rgba(var(--rgb),.7);color:var(--co2)}
+.fc-time{margin-left:6px;font:500 13px/1 var(--mono);color:var(--ink2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.fc-act{display:flex;gap:8px;margin-left:auto}
+.fc-pill{position:relative;display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 17px 0 13px;border-radius:999px;border:1.5px solid rgba(var(--rgb),.55);background:transparent;color:var(--ink);font:600 14.5px/1 var(--sans);white-space:nowrap;cursor:pointer;transition:border-color .2s,background-color .2s,color .2s}
+.fc-pill:hover{border-color:var(--co);background:rgba(var(--rgb),.09)}
+.fc-pill svg{width:19px;height:19px;flex:none;overflow:visible}
+.fc-n{font-weight:700;font-variant-numeric:tabular-nums;color:var(--ink2)}
+.fc-n:empty{display:none}
+.fc-like[aria-pressed=true]{border-color:var(--co);color:var(--co2);background:rgba(var(--rgb),.13)}
+.fc-like[aria-pressed=true] svg path{fill:var(--co);stroke:var(--co)}
+.fc-like[aria-pressed=true] .fc-n{color:var(--co2)}
+.fc-like .b{position:absolute;left:22px;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:var(--co);pointer-events:none;animation:fcb .7s ease-out forwards}
+@keyframes fcb{from{transform:rotate(var(--a)) translateX(4px) scale(1);opacity:1}to{transform:rotate(var(--a)) translateX(26px) scale(.25);opacity:0}}
+.fc-like.pop svg{animation:fcpop .45s cubic-bezier(.3,1.7,.5,1)}
+@keyframes fcpop{0%{transform:scale(1)}40%{transform:scale(1.4)}100%{transform:scale(1)}}
+.fc-fbb[aria-expanded=true]{border-color:var(--co);background:rgba(var(--rgb),.11)}
+
+/* leave a note */
+.fc-fb{margin-top:14px;padding:clamp(16px,2vw,22px);border:1px solid var(--line);border-radius:14px;background:var(--tile)}
+.fc-fb[hidden]{display:none}
+.fc-fb-h{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.fc-fb-t{margin:0;font:900 19px/1.3 var(--serif)}
+.fc-x{display:grid;place-items:center;flex:none;width:38px;height:38px;padding:0;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--ink2);cursor:pointer}
+.fc-x svg{width:16px;height:16px}
+.fc-x:hover{color:var(--ink);border-color:var(--co)}
+.fc-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.fc-chip{min-height:38px;padding:8px 15px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink2);font:600 14px/1.2 var(--sans);cursor:pointer}
+.fc-chip:hover{border-color:var(--co);color:var(--ink)}
+.fc-chip[aria-pressed=true]{border-color:var(--co);color:var(--co2);background:rgba(var(--rgb),.13)}
+.fc-lab{display:block;margin-top:14px}
+.fc-lab span{display:block;margin-bottom:7px;font:600 14px/1.3 var(--sans);color:var(--ink2)}
+.fc-fb textarea,.fc-fb input[name=c]{display:block;width:100%;padding:12px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--sans)}
+.fc-fb textarea{min-height:92px;resize:vertical}
+.fc-fb textarea:focus,.fc-fb input[name=c]:focus{outline:none;border-color:var(--co);box-shadow:0 0 0 3px rgba(var(--rgb),.22)}
+.fc-fb ::placeholder{color:var(--ink3);opacity:1}
+.fc-hp{position:absolute!important;left:-9999px!important;width:1px;height:1px;opacity:0}
+.fc-send{display:flex;flex-wrap:wrap;align-items:center;gap:12px 16px;margin-top:16px}
+.fc-send .btn{height:46px}
+.fc-send .btn:disabled{opacity:.6;cursor:default}
+.fc-msg{margin:0;font-size:14.5px;line-height:1.5;color:var(--ink2)}
+.fc-msg:empty{display:none}
+.fc-msg.err{color:var(--down)}
+.fc-done{display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px;margin-top:12px}
+.fc-done[hidden],.fc-body[hidden]{display:none}
+.fc-ok{margin:0;font-size:16.5px;line-height:1.55;color:var(--ink)}
+.fc-done .btn{height:42px}
+
+@media (max-width:599px){
+  .fc-frame{border-radius:12px}
+  .fc-tap:focus-visible{border-radius:11px}
+  .fc-sound{left:8px;top:8px;height:36px;gap:7px;padding:0 13px 0 9px;font-size:13.5px}
+  .fc-sound svg{width:18px;height:18px}
+  .fc-time{display:none}
+  .fc-row{gap:7px;margin-top:12px}
+  .fc-ib{width:40px;height:40px}
+  .fc-act{gap:7px}
+  .fc-pill{height:40px;gap:7px;padding:0 14px 0 11px;font-size:14px}
+  .fc-end .fc-pill{height:38px}
+}
+@media (max-width:359px){.fc-full{display:none}}
+@media (prefers-reduced-motion:reduce){
+  .fc-sound::after{animation:none;opacity:0}
+  .fc-big,.fc-end,.fc-sound,.fc-line{transition:none}
+  .fc-like.pop svg{animation:none}
+}</style>
 <script>/* the style the visitor has on the home page: their pick this session, else where the turning is */(()=>{const S={"gold":[null,"#0A0A0B"],"sapphire":[null,"#050A1C"],"emerald":[null,"#03140F"],"ruby":[null,"#16040D"],"amethyst":[null,"#0D0617"],"flame":[null,"#140803"],"daylight":[null,"#F5F7FD"],"ivory":[null,"#FBF8F1"],"roman":["family=Cinzel:wght@700;900","#EFE9DD"],"egypt":["family=Cinzel+Decorative:wght@700;900","#0B1F55"],"song":["family=Ma+Shan+Zheng","#F1E9D8"],"deco":["family=Limelight&family=ZCOOL+XiaoWei","#0A3A2E"],"diner":["family=Pacifico&family=ZCOOL+KuaiLe","#FFF3DE"],"pop":["family=Bangers&family=ZCOOL+QingKe+HuangYou","#FFE600"],"disco":["family=Shrikhand&family=ZCOOL+QingKe+HuangYou","#FFF1DA"],"neon":["family=Audiowide&family=ZCOOL+QingKe+HuangYou","#14002E"],"y2k":["family=Bungee&family=ZCOOL+KuaiLe","#ECEFF8"],"cyber":["family=Orbitron:wght@700;900&family=ZCOOL+QingKe+HuangYou","#0A0A12"],"galaxy":["family=Michroma&family=Noto+Sans+SC:wght@300","#05040F"]};let id=null;try{const q=new URLSearchParams(location.search).get('theme');if(S[q])id=q;else{const m=document.cookie.match(/(?:^|;\s*)dnpick=([\w-]+)/);id=(m&&m[1])||sessionStorage.getItem('dinamics-style-pick');if(!S[id]){const b=JSON.parse(localStorage.getItem('dinamics-style-bag')||'null');id=b&&b.o&&b.o[b.i]}}}catch(e){}if(!S[id]||id==='gold')return;const d=document.documentElement;d.dataset.theme=id;const mc=document.querySelector('meta[name=theme-color]');if(mc)mc.content=S[id][1];if(S[id][0]){const l=document.createElement('link');l.rel='stylesheet';l.href='https://fonts.googleapis.com/css2?'+S[id][0]+'&display=swap';document.head.append(l)}})();</script>
 <script>(()=>{let l='zh';try{const q=new URLSearchParams(location.search).get('lang'),s=localStorage.getItem('dinamics-lang');l=q==='en'?'en':q==='zh'?'zh':s==='en'?'en':'zh'}catch(e){}
 const subs=[];window.DN={lang:l,subs,RM:matchMedia('(prefers-reduced-motion: reduce)'),on(f){subs.push(f);try{f(DN.lang)}catch(e){console.error(e)}}}})();</script>
@@ -52,32 +158,72 @@ const subs=[];window.DN={lang:l,subs,RM:matchMedia('(prefers-reduced-motion: red
     <h1 data-t="name">官网</h1>
     <p class="desc" data-t="desc">品牌官网、活动页、多语言网站</p>
     <p class="eta"><span data-t="first">首版</span><b data-t="eta">2–5 天</b></p>
-    <p class="wsh-lede" data-t="ws_lede">这四个网站都是我们做的，现在就在线上。点标签换着看。</p>
-    <button type="button" class="filmbtn" id="filmBtn" aria-haspopup="dialog"><span class="fb-ico" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M5.5 3.2v9.6L12.8 8z"/></svg></span><span data-t="film">看 1 分钟视频</span><span class="fb-len" aria-hidden="true">1:00</span></button>
   </div>
+  <figure class="fc" id="fc" aria-label="官网 · 1 分钟视频" data-fcl="fc_label">
+    <div class="fc-frame">
+      <video class="fc-v" src="website-film-zh.mp4" poster="website-film-zh.webp" data-l="zh" muted playsinline preload="metadata" width="1920" height="1080"></video>
+      <button type="button" class="fc-tap" aria-label="播放"></button>
+      <div class="fc-big" aria-hidden="true"><i><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M8 5.5v13l10.5-6.5z"/></svg></i></div>
+      <button type="button" class="fc-sound"><svg class="sx" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg><span data-fc="fc_snd">点一下开声音</span></button>
+      <input class="fc-seek" type="range" min="0" max="1000" step="1" value="0" aria-label="进度" data-fcl="fc_seek">
+      <div class="fc-line" aria-hidden="true"><i></i></div>
+      <div class="fc-end"><p data-fc="fc_endT">看完了，觉得怎么样？</p><div><button type="button" class="fc-pill fc-like" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S4.2 15.6 4.2 9.8A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.8 2.4c0 5.8-7.8 10.4-7.8 10.4z"/></svg><span class="fc-lt">赞</span><span class="fc-n"></span></button><button type="button" class="fc-pill fc-fbo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.2H11L6.5 19.3v-3.6h-2z"/><path d="M8.5 9.6h7M8.5 12.4h4.5"/></svg><span data-fc="fc_fb">留言</span></button><button type="button" class="fc-pill fc-again"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.2 13.2a7 7 0 1 0 1.9-6"/><path d="M6.6 3.6v4h4"/></svg><span data-fc="fc_again">再看一遍</span></button></div></div>
+      <button type="button" class="fc-ib fc-xfs" aria-label="退出全屏" data-fcl="fc_xfs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button>
+    </div>
+    <div class="fc-row">
+      <button type="button" class="fc-ib fc-play" aria-label="播放"><svg class="pl" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M8 5.5v13l10.5-6.5z"/></svg><svg class="pa" viewBox="0 0 24 24" aria-hidden="true"><path class="f" d="M7 5.5h3.4v13H7zM13.6 5.5H17v13h-3.4z"/></svg></button>
+      <button type="button" class="fc-ib fc-mute" aria-pressed="true" aria-label="开声音"><svg class="so" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9.3a4 4 0 0 1 0 5.4M18.2 6.8a7.6 7.6 0 0 1 0 10.4"/></svg><svg class="sx" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg></button>
+      <button type="button" class="fc-ib fc-full" aria-label="全屏" data-fcl="fc_full"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+      <span class="fc-time" aria-hidden="true">0:00 / 1:00</span>
+      <span class="fc-act"><button type="button" class="fc-pill fc-like" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S4.2 15.6 4.2 9.8A4.3 4.3 0 0 1 12 7.4a4.3 4.3 0 0 1 7.8 2.4c0 5.8-7.8 10.4-7.8 10.4z"/></svg><span class="fc-lt">赞</span><span class="fc-n"></span></button><button type="button" class="fc-pill fc-fbb" aria-expanded="false" aria-controls="fcFb"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 5.5h15v10.2H11L6.5 19.3v-3.6h-2z"/><path d="M8.5 9.6h7M8.5 12.4h4.5"/></svg><span data-fc="fc_fb">留言</span></button></span>
+    </div>
+    <form class="fc-fb" id="fcFb" hidden novalidate>
+      <div class="fc-fb-h"><p class="fc-fb-t" data-fc="fc_fbT">说说你的想法</p><button type="button" class="fc-x" aria-label="收起" data-fcl="fc_close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 6.5l11 11M17.5 6.5l-11 11"/></svg></button></div>
+      <div class="fc-body">
+        <div class="fc-chips" role="group" aria-label="快选" data-fcl="fc_pick"><button type="button" class="fc-chip" aria-pressed="false" data-k="1" data-fc="fc_c1">很喜欢</button><button type="button" class="fc-chip" aria-pressed="false" data-k="2" data-fc="fc_c2">想做一个这样的网站</button><button type="button" class="fc-chip" aria-pressed="false" data-k="3" data-fc="fc_c3">有问题想问</button></div>
+        <label class="fc-lab"><span data-fc="fc_msgL">想说的话</span><textarea name="m" rows="3" maxlength="1000" placeholder="想说什么都可以，也可以说说你想做什么。" data-fcp="fc_msgP"></textarea></label>
+        <label class="fc-lab"><span data-fc="fc_conL">怎么联系你（可不填）</span><input name="c" type="text" maxlength="120" autocomplete="email" placeholder="邮箱、WhatsApp 或 Telegram" data-fcp="fc_conP"></label>
+        <input class="fc-hp" name="_honey" type="text" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="fc-send"><button type="submit" class="btn fc-go" data-fc="fc_send">发送</button><p class="fc-msg" role="status" aria-live="polite"></p></div>
+      </div>
+      <div class="fc-done" hidden><p class="fc-ok" role="status"></p><button type="button" class="btn ghost fc-more" data-fc="fc_more">再写一条</button></div>
+    </form>
+  </figure>
+</section>
+<section class="band wsb" id="sites"><div class="wrap">
+<h2 data-t="ws_h">这四个网站，都是我们做的</h2>
+<p class="sub" data-t="ws_sub">现在都在线上。点任意一个，看它在电脑和手机上的样子。</p>
+<div class="ws-cards" role="tablist" data-tl="ws_tabs" aria-label="我们做的四个网站">
+  <button type="button" class="ws-card" role="tab" id="wsC0" aria-selected="true" aria-controls="wsView" data-i="0" style="--c:#D9B26B"><span class="th"><img src="shot-dinamics-d.webp" width="1440" height="900" alt="" loading="lazy"></span><b><i></i><span data-t="w_dinamics_n">Dinamics 官网</span></b><small>dinamics.dev</small><span class="pr"></span></button>
+  <button type="button" class="ws-card" role="tab" id="wsC1" aria-selected="false" aria-controls="wsView" tabindex="-1" data-i="1" style="--c:#C8372D"><span class="th"><img src="shot-phrax-d.webp" width="1440" height="900" alt="" loading="lazy"></span><b><i></i><span data-t="w_phrax_n">牌所 PHRAX</span></b><small>phrax.co</small><span class="pr"></span></button>
+  <button type="button" class="ws-card" role="tab" id="wsC2" aria-selected="false" aria-controls="wsView" tabindex="-1" data-i="2" style="--c:#3F6BEA"><span class="th"><img src="shot-zero-d.webp" width="1440" height="900" alt="" loading="lazy"></span><b><i></i><span data-t="w_zero_n">零九零</span></b><small>0x000000000.com</small><span class="pr"></span></button>
+  <button type="button" class="ws-card" role="tab" id="wsC3" aria-selected="false" aria-controls="wsView" tabindex="-1" data-i="3" style="--c:#FFE14D"><span class="th"><img src="shot-bdy-d.webp" width="1440" height="900" alt="" loading="lazy"></span><b><i></i><span data-t="w_bdy_n">不打烊 AI 工作站</span></b><small>budayangai.com</small><span class="pr"></span></button>
+</div>
+<div class="wsb-main">
   <figure class="wsh-stage">
     <div class="wsh-device">
     <div class="wsh-win">
-      <div class="wsh-tabs" role="tablist" data-tl="ws_tabs" aria-label="我们做的四个网站">
-        <button type="button" role="tab" id="wsT0" aria-selected="true" aria-controls="wsView" data-i="0"><i style="--c:#D9B26B"></i><span data-t="w_dinamics_n">Dinamics 官网</span></button>
-        <button type="button" role="tab" id="wsT1" aria-selected="false" aria-controls="wsView" tabindex="-1" data-i="1"><i style="--c:#C8372D"></i><span data-t="w_phrax_n">牌所 PHRAX</span></button>
-        <button type="button" role="tab" id="wsT2" aria-selected="false" aria-controls="wsView" tabindex="-1" data-i="2"><i style="--c:#3F6BEA"></i><span data-t="w_zero_n">零九零</span></button>
-        <button type="button" role="tab" id="wsT3" aria-selected="false" aria-controls="wsView" tabindex="-1" data-i="3"><i style="--c:#FFE14D"></i><span data-t="w_bdy_n">不打烊 AI 工作站</span></button>
+      <div class="wsh-tabs" aria-hidden="true">
+        <button type="button" tabindex="-1" class="on" data-i="0"><i style="--c:#D9B26B"></i><span data-t="w_dinamics_n">Dinamics 官网</span></button>
+        <button type="button" tabindex="-1" data-i="1"><i style="--c:#C8372D"></i><span data-t="w_phrax_n">牌所 PHRAX</span></button>
+        <button type="button" tabindex="-1" data-i="2"><i style="--c:#3F6BEA"></i><span data-t="w_zero_n">零九零</span></button>
+        <button type="button" tabindex="-1" data-i="3"><i style="--c:#FFE14D"></i><span data-t="w_bdy_n">不打烊 AI 工作站</span></button>
       </div>
       <div class="wsh-addr"><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="3.5" y="7" width="9" height="6.5" rx="1.5"/><path d="M5.5 7V5a2.5 2.5 0 0 1 5 0v2"/></svg><span id="wsHost">dinamics.dev</span></div>
-      <div class="wsh-view" id="wsView" role="tabpanel" aria-labelledby="wsT0">
-        <img class="on" src="shot-dinamics-d.webp" width="1440" height="900" alt="">
-        <img src="shot-phrax-d.webp" width="1440" height="900" alt="">
-        <img src="shot-zero-d.webp" width="1440" height="900" alt="">
-        <img src="shot-bdy-d.webp" width="1440" height="900" alt="">
+      <div class="wsh-view" id="wsView" role="tabpanel" aria-labelledby="wsC0">
+        <img class="on" src="shot-dinamics-d.webp" width="1440" height="900" alt="" loading="lazy">
+        <img src="shot-phrax-d.webp" width="1440" height="900" alt="" loading="lazy">
+        <img src="shot-zero-d.webp" width="1440" height="900" alt="" loading="lazy">
+        <img src="shot-bdy-d.webp" width="1440" height="900" alt="" loading="lazy">
       </div>
       <div class="wsh-prog"><i id="wsProg"></i></div>
     </div>
-    <div class="wsh-phone"><img class="on" src="shot-dinamics-m.webp" width="585" height="1266" alt=""><img src="shot-phrax-m.webp" width="585" height="1266" alt=""><img src="shot-zero-m.webp" width="585" height="1266" alt=""><img src="shot-bdy-m.webp" width="585" height="1266" alt=""></div>
+    <div class="wsh-phone"><img class="on" src="shot-dinamics-m.webp" width="585" height="1266" alt="" loading="lazy"><img src="shot-phrax-m.webp" width="585" height="1266" alt="" loading="lazy"><img src="shot-zero-m.webp" width="585" height="1266" alt="" loading="lazy"><img src="shot-bdy-m.webp" width="585" height="1266" alt="" loading="lazy"></div>
     </div>
-    <figcaption class="wsh-cap" id="wsCap" aria-live="polite"></figcaption>
   </figure>
-</section>
+  <div class="wsh-cap" id="wsCap" aria-live="off"></div>
+</div>
+</div></section>
 <section class="band" id="demo"><div class="wrap">
 <div class="ws-stat"><div class="big" data-t="big">50<small>毫秒</small></div><div class="ws-stat-t"><p data-t="sent">访客只要 50 毫秒，就对一个网页有了第一印象。</p><a class="src" href="https://www.nature.com/news/2006/060109/full/news060109-13.html" target="_blank" rel="noopener" data-t="src">Lindgaard 等人的研究，《自然》报道</a></div></div>
 <h2 data-t="fl_h">只看 50 毫秒，你记住了什么？</h2>
@@ -183,10 +329,26 @@ DN.on(l=>{L=l;draw();if(!$('flRes').hidden){const T=S[L];$('flNext').textContent
   </ol>
 </div></section>
 <style>
-/* 官网 hero: our three live sites in one browser, tabbed */
+/* 官网 hero (v2, 2026-11-22): the name on the left, the film playing on the right */
 .hero.wsh{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);align-items:center}
 @media (max-width:899px){.hero.wsh{grid-template-columns:minmax(0,1fr);align-items:start}}
-.wsh-lede{margin:26px 0 0;color:var(--ink2);max-width:26em;text-wrap:pretty}
+/* our four sites (DSJ 07:51: show that there are four): all four side by side, then the one picked in a browser and a phone */
+.wsb .sub{max-width:40em}
+.ws-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(10px,1.3vw,18px);margin-top:clamp(28px,3.4vw,44px)}
+.ws-card{position:relative;display:flex;flex-direction:column;align-items:stretch;padding:8px 8px 15px;border:1.5px solid var(--hair);border-radius:14px;background:var(--tile);color:var(--ink2);text-align:left;cursor:pointer;overflow:hidden;transition:border-color .25s,transform .25s,box-shadow .25s}
+.ws-card:hover{border-color:var(--line);transform:translateY(-2px)}
+.ws-card .th{display:block;aspect-ratio:16/10;border-radius:8px;overflow:hidden;background:#050506}
+.ws-card .th img{width:100%;height:100%;object-fit:cover;object-position:top}
+.ws-card b{display:flex;align-items:center;gap:8px;margin:13px 6px 0;font:700 15.5px/1.3 var(--sans);color:var(--ink)}
+.ws-card b i{flex:none;width:9px;height:9px;border-radius:50%;background:var(--c)}
+.ws-card small{display:block;margin:5px 6px 0 23px;font:500 13px/1.25 var(--sans);color:var(--ink3);overflow-wrap:anywhere}
+.ws-card[aria-selected=true]{border-color:var(--co);box-shadow:0 24px 46px -28px rgba(var(--rgb),.6)}
+.ws-card[aria-selected=true] b{color:var(--co2)}
+.ws-card .pr{position:absolute;left:0;right:0;bottom:0;height:3px;background:rgba(var(--rgb),.14);opacity:0}
+.ws-card[aria-selected=true] .pr{opacity:1}
+.ws-card .pr::after{content:"";position:absolute;inset:0;transform-origin:left;transform:scaleX(0);background:var(--co)}
+.ws-card.run .pr::after{animation:wsp 6s linear forwards}
+.wsb-main{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:clamp(32px,4.5vw,72px);align-items:center;margin-top:clamp(40px,5vw,68px)}
 .wsh-stage{margin:0}
 .wsh-device{position:relative;padding-right:6%}
 .wsh-win{position:relative;border-radius:14px;overflow:hidden;border:1px solid rgba(var(--rgb),.32);background:#0E0E10;box-shadow:0 60px 110px -60px #000}
@@ -195,7 +357,7 @@ DN.on(l=>{L=l;draw();if(!$('flRes').hidden){const T=S[L];$('flNext').textContent
 .wsh-tabs button{display:flex;align-items:center;gap:8px;min-width:0;max-width:220px;flex:0 1 auto;padding:9px 14px 10px;border:0;border-radius:10px 10px 0 0;background:transparent;color:#8F8A80;font:600 13px/1 var(--sans);white-space:nowrap;cursor:pointer}
 .wsh-tabs button span{overflow:hidden;text-overflow:ellipsis}
 .wsh-tabs button i{flex:none;width:9px;height:9px;border-radius:50%;background:var(--c)}
-.wsh-tabs button[aria-selected=true]{background:#0E0E10;color:#F2EDE3}
+.wsh-tabs button.on{background:#0E0E10;color:#F2EDE3}
 .wsh-tabs button:hover{color:#F2EDE3}
 .wsh-addr{display:flex;align-items:center;gap:8px;height:34px;margin:0;padding:0 14px;background:#0E0E10;border-bottom:1px solid rgba(255,255,255,.06);font:500 12.5px/1 var(--sans);color:#A39D92}
 .wsh-addr svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.5}
@@ -205,10 +367,10 @@ DN.on(l=>{L=l;draw();if(!$('flRes').hidden){const T=S[L];$('flNext').textContent
 .wsh-prog{height:2px;background:rgba(255,255,255,.06)}
 .wsh-prog i{display:block;height:100%;transform-origin:left;transform:scaleX(0);background:var(--co)}
 .wsh-prog i.run{animation:wsp 6s linear forwards}
-.wsh-stage:hover .wsh-prog i,.wsh-stage:focus-within .wsh-prog i{animation-play-state:paused}
+.wsb.hold .wsh-prog i,.wsb.hold .ws-card .pr::after{animation-play-state:paused}
 @keyframes wsp{to{transform:scaleX(1)}}
 .wsh-phone{position:absolute;right:0;bottom:-40px;width:23%;aspect-ratio:390/844;border-radius:20px;border:5px solid #1C1C1F;outline:1px solid rgba(var(--rgb),.3);overflow:hidden;background:#000;box-shadow:0 30px 60px -18px #000}
-.wsh-cap{margin-top:62px;padding-right:26%;min-height:9.5em}
+.wsh-cap{display:flex;flex-direction:column;align-items:flex-start;min-height:15em;justify-content:center}
 .wsh-cap h3{font-size:clamp(22px,2vw,28px);line-height:1.25}
 .wsh-cap p{margin:10px 0 0;color:var(--ink2);max-width:34em;text-wrap:pretty}
 .wsh-cap .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
@@ -236,8 +398,10 @@ DN.on(l=>{L=l;draw();if(!$('flRes').hidden){const T=S[L];$('flNext').textContent
 .ws-steps h3{margin-top:12px;font-size:24px;line-height:1.25}
 .ws-steps p{margin:10px 0 0;color:var(--ink2);max-width:22em;text-wrap:pretty}
 @media (max-width:899px){
+  .wsb-main{grid-template-columns:minmax(0,1fr)}
+  .ws-cards{grid-template-columns:repeat(2,minmax(0,1fr))}
   .wsh-device{padding-right:10%}
-  .wsh-cap{padding-right:0;min-height:0}
+  .wsh-cap{margin-top:62px;min-height:11.5em;justify-content:flex-start}
   .ws-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .ws-steps{grid-template-columns:minmax(0,1fr);gap:0}
   .ws-steps::before{left:7px;right:auto;top:0;bottom:0;width:1px;height:auto}
@@ -247,34 +411,45 @@ DN.on(l=>{L=l;draw();if(!$('flRes').hidden){const T=S[L];$('flNext').textContent
 @media (max-width:599px){
   .ws-stat{grid-template-columns:minmax(0,1fr);gap:14px}
   .ws-grid{grid-template-columns:minmax(0,1fr)}
+  .ws-card{padding:6px 6px 13px;border-radius:12px}
+  .ws-card b{margin:11px 4px 0;font-size:14.5px}
+  .ws-card small{margin:4px 4px 0 21px;font-size:12.5px}
   .wsh-phone{width:27%;bottom:-26px;border-width:4px;border-radius:14px}
   .wsh-cap{margin-top:46px}
   .wsh-tabs button{flex:none;max-width:none;padding:9px 11px 10px}
 }
-@media (prefers-reduced-motion:reduce){.wsh-prog{display:none}.wsh-view img,.wsh-phone img{transition:none}}
+@media (prefers-reduced-motion:reduce){.wsh-prog,.ws-card .pr{display:none}.wsh-view img,.wsh-phone img,.ws-card{transition:none}.ws-card:hover{transform:none}}
 </style>
 <script>
 (()=>{
-/* the hero: four of our sites in one browser; it turns to the next one every 6 s unless you are looking at it */
+/* our four sites (v2, 2026-11-22): the four cards are the tabs; the browser and the phone show the one picked.
+   It turns to the next one every 6 s, but holds while the pointer or the keyboard is on it, and while it is off screen. */
 const S=[{k:'dinamics',h:'dinamics.dev',u:'https://dinamics.dev',p:'https://pagespeed.web.dev/analysis/https-dinamics-dev/jbc66gexxk?form_factor=mobile'},
          {k:'phrax',h:'phrax.co',u:'https://phrax.co'},{k:'zero',h:'0x000000000.com',u:'https://0x000000000.com'},
          {k:'bdy',h:'budayangai.com',u:'https://budayangai.com'}];
-const $=i=>document.getElementById(i),tabs=[...document.querySelectorAll('.wsh-tabs [role=tab]')],
-  views=[...document.querySelectorAll('.wsh-view img')],phones=[...document.querySelectorAll('.wsh-phone img')],prog=$('wsProg');
-if(!tabs.length||!prog)return;
+const $=i=>document.getElementById(i),band=document.querySelector('.wsb'),cards=[...document.querySelectorAll('.ws-card')],btabs=[...document.querySelectorAll('.wsh-tabs button')],
+  views=[...document.querySelectorAll('.wsh-view img')],phones=[...document.querySelectorAll('.wsh-phone img')],prog=$('wsProg'),capEl=$('wsCap');
+if(!band||cards.length!==S.length||!prog)return;
 let cur=0,L=DN.lang;const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function cap(){if(!window.PAGE)return;/* the words arrive with the page's last script; work.js redraws once they do */const T=window.PAGE[L],s=S[cur],chips=[];for(let i=0;T[`w_${s.k}_c${i}`]!=null;i++)chips.push(`<span class="chip">${esc(T[`w_${s.k}_c${i}`])}</span>`);
   if(s.p&&T[`w_${s.k}_proof`])chips.push(`<a class="chip" href="${s.p}" target="_blank" rel="noopener">${esc(T[`w_${s.k}_proof`])}</a>`);
-  $('wsCap').innerHTML=`<h3>${esc(T[`w_${s.k}_n`])}</h3><p>${esc(T[`w_${s.k}_p`])}</p><div class="meta">${chips.join('')}</div><a class="go" href="${s.u}" target="_blank" rel="noopener">${esc(T.open.replace('{h}',s.h))}</a>`}
-function run(){prog.classList.remove('run');void prog.offsetWidth;if(!DN.RM.matches)prog.classList.add('run')}
-function show(i){cur=i;tabs.forEach((t,j)=>{t.setAttribute('aria-selected',String(j===i));t.tabIndex=j===i?0:-1});
+  capEl.innerHTML=`<h3>${esc(T[`w_${s.k}_n`])}</h3><p>${esc(T[`w_${s.k}_p`])}</p><div class="meta">${chips.join('')}</div><a class="go" href="${s.u}" target="_blank" rel="noopener">${esc(T.open.replace('{h}',s.h))}</a>`}
+function run(){prog.classList.remove('run');cards.forEach(c=>c.classList.remove('run'));void prog.offsetWidth;if(!DN.RM.matches){prog.classList.add('run');cards[cur].classList.add('run')}}
+function show(i,user){cur=i;cards.forEach((c,j)=>{c.setAttribute('aria-selected',String(j===i));c.tabIndex=j===i?0:-1});btabs.forEach((b,j)=>b.classList.toggle('on',j===i));
   views.forEach((v,j)=>v.classList.toggle('on',j===i));phones.forEach((v,j)=>v.classList.toggle('on',j===i));
-  $('wsView').setAttribute('aria-labelledby',tabs[i].id);const st=tabs[i].parentNode,tl=tabs[i].offsetLeft-10;if(st.scrollWidth>st.clientWidth)st.scrollTo({left:tl,behavior:DN.RM.matches?'auto':'smooth'});$('wsHost').textContent=S[i].h;cap();run()}
-prog.addEventListener('animationend',()=>show((cur+1)%S.length));
-tabs.forEach((t,i)=>{t.addEventListener('click',()=>show(i));
-  t.addEventListener('keydown',e=>{if(e.key!=='ArrowRight'&&e.key!=='ArrowLeft')return;e.preventDefault();const n=(i+(e.key==='ArrowRight'?1:S.length-1))%S.length;show(n);tabs[n].focus()})});
+  $('wsView').setAttribute('aria-labelledby',cards[i].id);const st=btabs[i]&&btabs[i].parentNode;if(st&&st.scrollWidth>st.clientWidth)st.scrollTo({left:btabs[i].offsetLeft-10,behavior:DN.RM.matches?'auto':'smooth'});
+  $('wsHost').textContent=S[i].h;capEl.setAttribute('aria-live',user?'polite':'off');cap();run()}
+prog.addEventListener('animationend',()=>show((cur+1)%S.length,false));
+cards.forEach((c,i)=>{c.addEventListener('click',()=>show(i,true));
+  c.addEventListener('keydown',e=>{const k=e.key,n=k==='Home'?0:k==='End'?S.length-1:k==='ArrowRight'||k==='ArrowDown'?(i+1)%S.length:k==='ArrowLeft'||k==='ArrowUp'?(i+S.length-1)%S.length:-1;
+    if(n<0)return;e.preventDefault();show(n,true);cards[n].focus()})});
+btabs.forEach((b,i)=>b.addEventListener('click',()=>show(i,true)));
+let hov=0,vis=false;const hold=()=>band.classList.toggle('hold',hov>0||!vis||band.contains(document.activeElement));
+[document.querySelector('.ws-cards'),document.querySelector('.wsh-stage')].forEach(el=>{el.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hov++;hold()}});el.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'){hov=Math.max(0,hov-1);hold()}})});
+band.addEventListener('focusin',hold);band.addEventListener('focusout',()=>setTimeout(hold,0));
+new IntersectionObserver(es=>{vis=es[es.length-1].isIntersecting;hold()},{threshold:.2}).observe(band);
 DN.on(l=>{L=l;cap()});
-show(0);
+show(0,false);
 })();
 </script>
 
@@ -287,15 +462,120 @@ show(0);
 </div></section>
 </main>
 <footer><a class="brand" href="/" aria-label="Dinamics"><svg class="lockup" viewBox="0 0 1483 248"><use href="#lk"/></svg></a><span data-t="foot">Dinamics 是 <a href="https://dsj.vc">DSJ Ventures</a> 投资的企业。</span><span>© 2026 Dinamics</span></footer>
-<dialog class="filmdlg" id="filmDlg" aria-label="官网 · 1 分钟视频"><div class="fd-head"><p class="fd-t" data-t="filmT">官网 · 1 分钟视频</p><button type="button" class="fd-x" id="filmX" aria-label="关闭"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button></div><video id="filmV" controls playsinline preload="none"></video></dialog>
-<script>window.PAGE={"zh":{"all":"十八般技术","talkBtn":"说说你要做的事","first":"首版","h2w":"我们做的，已经在线上","subw":"点进去就能用。","open":"打开 {h}","h2t":"你要做的事，说给我们听。","pt":"发一封邮件，说说你想做什么。","mailBtn":"写信给我们","h2m":"另外十七门","subm":"亮着的都能点进去；暗着的，正在做。","prev":"上一项","next":"下一项","foot":"Dinamics 是 <a href=\"https://dsj.vc\">DSJ Ventures</a> 投资的企业。","home":"回首页","title":"官网 · Dinamics","meta":"官网：品牌官网、活动页、多语言网站","name":"官网","desc":"品牌官网、活动页、多语言网站","eta":"2–5 天","big":"50<small>毫秒</small>","sent":"访客只要 50 毫秒，就对一个网页有了第一印象。","src":"Lindgaard 等人的研究，《自然》报道","num":"<b>01</b> / 18","c1":"官网","c2":"网页平台","c3":"手机 App","c4":"聊天机器人","c5":"Mini App","c6":"AI 智能体","c7":"自动化","c8":"数据看板","c9":"品牌 Logo","c10":"界面设计","c11":"游戏","c12":"商务文档","c13":"路演 PPT","c14":"交易系统","c15":"智能合约","c16":"视频内容","c17":"服务器与安全","c18":"硬件与网络","fl_h":"只看 50 毫秒，你记住了什么？","fl_s":"点一下，一个网页只在屏幕上停 50 毫秒。闪完说说你看到的是什么颜色。","fl_go":"闪 50 毫秒","fl_q":"刚才那一页，是什么颜色？","fl_side":"三轮，三个网页","ws_lede":"这四个网站都是我们做的，现在就在线上。点标签换着看。","ws_tabs":"我们做的四个网站","ws_get_h":"一个官网，从设计到上线，我们做这些","ws_g1_t":"照你的品牌设计","ws_g1_p":"从零画起，不套模板。颜色、字体、动画都跟着你的品牌走。","ws_g2_t":"手机上也快","ws_g2_p":"先做手机版，再做电脑版。我们自己的官网，Google 手机测速 97 分。","ws_g3_t":"多种语言","ws_g3_p":"中文、英文、泰文都做过，访客点一下就换。","ws_g4_t":"会动、能玩","ws_g4_p":"首屏动画、能玩的小互动，让访客愿意多留一会儿。","ws_g5_t":"一点就找到你","ws_g5_p":"邮件、WhatsApp、Telegram，按你常用的接上。","ws_g6_t":"上线我们来","ws_g6_p":"域名、https、托管都帮你接好，域名开好隐私保护。每一页的标题和描述都写好，搜索结果和聊天里的链接预览一看就懂。","ws_how_h":"从开口到上线","ws_s1_d":"第 1 天","ws_s1_t":"说给我们听","ws_s1_p":"你卖什么、给谁看、喜欢哪几个网站。文字和图片还没有也没关系，我们来写、来做。","ws_s2_d":"第 2–5 天","ws_s2_t":"首版上线","ws_s2_p":"给你一个真网址，手机、电脑都能打开看。","ws_s3_d":"之后","ws_s3_t":"照你的意见改","ws_s3_p":"你说哪里要改，我们照着改；以后要加页面、加语言，随时说。","w_dinamics_n":"Dinamics 官网","w_dinamics_p":"你现在逛的这个站。首屏是一面会翻牌的墙，藏了 6 个彩蛋；整页 162 KB，没有一个图片文件。","w_dinamics_open":"打开 dinamics.dev","w_dinamics_c0":"Google 手机测速 97 分","w_dinamics_c1":"首屏 2.1 秒","w_dinamics_proof":"看测速报告","w_phrax_n":"牌所 PHRAX","w_phrax_p":"泰国佛牌平台：查佛牌的来历、押牌借钱、卖牌，还有佛牌资讯。","w_phrax_open":"打开 phrax.co","w_phrax_c0":"泰文","w_phrax_c1":"网页平台","w_phrax_c2":"界面设计","w_zero_n":"零九零","w_zero_p":"靓号地址铸造：钥匙分两半，你那一半只在你自己的电脑上，平台拿不到你的私钥；首页免费查地址有没有被投毒。","w_zero_open":"打开 0x000000000.com","w_zero_c0":"智能合约","w_zero_c1":"服务器与安全","w_zero_c2":"网页平台","w_bdy_n":"不打烊 AI 工作站","w_bdy_p":"放在曼谷机房的独享 Mac mini，AI 智能体 24 小时不停；选配、报价、发给顾问下单，都在官网上一步做完，全部 USDT 结算。","w_bdy_open":"打开 budayangai.com","w_bdy_c0":"官网","w_bdy_c1":"品牌标志","w_bdy_c2":"宣传片","film":"看 1 分钟视频","filmX":"关闭","filmT":"官网 · 1 分钟视频"},"en":{"all":"Eighteen crafts","talkBtn":"Tell us what you're building","first":"First version","h2w":"What we've built, live now","subw":"Click through and use them.","open":"Open {h}","h2t":"Tell us what you're building.","pt":"Send us an email and tell us what you have in mind.","mailBtn":"Email us","h2m":"The other seventeen","subm":"The lit ones open; the dim ones are being built.","prev":"Previous","next":"Next","foot":"Dinamics is a <a href=\"https://dsj.vc\">DSJ Ventures</a> portfolio company.","home":"Home","title":"Websites · Dinamics","meta":"Websites: Brand sites, campaign pages, multilingual sites","name":"Websites","desc":"Brand sites, campaign pages, multilingual sites","eta":"2–5 days","big":"50<small>ms</small>","sent":"Visitors form a first impression of a web page in 50 milliseconds.","src":"Lindgaard et al., reported in Nature","num":"<b>01</b> / 18","c1":"Websites","c2":"Web platforms","c3":"Mobile apps","c4":"Chatbots","c5":"Mini Apps","c6":"AI agents","c7":"Automation","c8":"Data dashboards","c9":"Brand and logo","c10":"Interface design","c11":"Games","c12":"Business documents","c13":"Pitch decks","c14":"Trading systems","c15":"Smart contracts","c16":"Video","c17":"Servers and security","c18":"Hardware and networks","fl_h":"What do you remember after 50 ms?","fl_s":"Tap once and a web page stays on screen for 50 milliseconds. Then tell us what colour it was.","fl_go":"Flash for 50 ms","fl_q":"What colour was that page?","fl_side":"Three rounds, three pages","ws_lede":"We built all four of these sites, and they are live now. Use the tabs to switch.","ws_tabs":"Four sites we built","ws_get_h":"A website from us, design to launch","ws_g1_t":"Designed for your brand","ws_g1_p":"Drawn from scratch, never a template. Colour, type and motion all follow your brand.","ws_g2_t":"Fast on phones","ws_g2_p":"Phone first, then desktop. Our own site scores 97 on Google's mobile speed test.","ws_g3_t":"Several languages","ws_g3_p":"We have built sites in Chinese, English and Thai; visitors switch with one tap.","ws_g4_t":"It moves","ws_g4_p":"An opening animation and small things to play with, so visitors stay a little longer.","ws_g5_t":"Reach you in one tap","ws_g5_p":"Email, WhatsApp or Telegram, whichever you use.","ws_g6_t":"We put it live","ws_g6_p":"Domain, https and hosting set up for you, with domain privacy on. Every page gets its title and description, so search results and chat link previews read clearly.","ws_how_h":"From first message to launch","ws_s1_d":"Day 1","ws_s1_t":"Tell us","ws_s1_p":"What you sell, who it is for, which sites you like. No copy or photos yet? We write and make them.","ws_s2_d":"Days 2–5","ws_s2_t":"First version live","ws_s2_p":"You get a real web address to open on your phone and computer.","ws_s3_d":"After that","ws_s3_t":"Changes, your way","ws_s3_p":"Tell us what to change and we change it. More pages or languages later? Just ask.","w_dinamics_n":"Dinamics","w_dinamics_p":"The site you are on. The first screen is a wall of flipping tiles with 6 secrets in it; the whole page is 162 KB with no image files.","w_dinamics_open":"Open dinamics.dev","w_dinamics_c0":"Google mobile speed score 97","w_dinamics_c1":"First screen in 2.1 s","w_dinamics_proof":"See the speed report","w_phrax_n":"PHRAX","w_phrax_p":"A Thai amulet platform: check where an amulet comes from, pawn it, sell it, and keep up with amulet news.","w_phrax_open":"Open phrax.co","w_phrax_c0":"Thai","w_phrax_c1":"Web platform","w_phrax_c2":"Interface design","w_zero_n":"0x000000000","w_zero_p":"A vanity address foundry. The key is split in two and your half never leaves your own computer, so the platform never sees your private key. Free address-poisoning check on the home page.","w_zero_open":"Open 0x000000000.com","w_zero_c0":"Smart contracts","w_zero_c1":"Servers and security","w_zero_c2":"Web platform","w_bdy_n":"不打烊 AI Workstation","w_bdy_p":"Dedicated Mac minis in a Bangkok data centre that keep AI agents running around the clock. Pick a setup, get the price on the spot and send it to an advisor, all settled in USDT.","w_bdy_open":"Open budayangai.com","w_bdy_c0":"Website","w_bdy_c1":"Brand mark","w_bdy_c2":"Promo film","film":"Watch the 1-minute film","filmX":"Close","filmT":"Websites · the 1-minute film"},"g0":[[22,42,22,88,11,0],[22,17,22,17,13,0],[37,14,52,14,10,0],[52.0,14.0,63.4,15.8,11.5,0],[63.4,15.8,73.7,21.1,11.2,0],[73.7,21.1,81.9,29.3,10.7,0],[81.9,29.3,87.2,39.6,10.0,0],[87.2,39.6,89.0,51.0,9.1,0],[89.0,51.0,87.2,62.4,8.1,0],[87.2,62.4,81.9,72.7,6.9,0],[81.9,72.7,73.7,80.9,5.5,0],[73.7,80.9,63.4,86.2,4.0,0],[63.4,86.2,52.0,88.0,2.4,0],[52,88,36,88,1.5,0]],"g":[[18,24,82,24,8,0],[82,24,82,76,8,0],[82,76,18,76,8,0],[18,76,18,24,8,0],[18,40,82,40,8,0],[18,24,82,24,0,0],[82,24,82,76,0,0],[82,76,18,76,0,0],[18,76,18,24,0,0],[18,40,82,40,0,0],[18,24,82,24,0,0],[82,24,82,76,0,0],[82,76,18,76,0,0],[18,76,18,24,0,0]],"film":{"zh":["website-film-zh.mp4","website-film-zh.webp"],"en":["website-film-en.mp4","website-film-en.webp"]}};</script>
+<script>window.PAGE={"zh":{"all":"十八般技术","talkBtn":"说说你要做的事","first":"首版","h2w":"我们做的，已经在线上","subw":"点进去就能用。","open":"打开 {h}","h2t":"你要做的事，说给我们听。","pt":"发一封邮件，说说你想做什么。","mailBtn":"写信给我们","h2m":"另外十七门","subm":"亮着的都能点进去；暗着的，正在做。","prev":"上一项","next":"下一项","foot":"Dinamics 是 <a href=\"https://dsj.vc\">DSJ Ventures</a> 投资的企业。","home":"回首页","title":"官网 · Dinamics","meta":"官网：品牌官网、活动页、多语言网站","name":"官网","desc":"品牌官网、活动页、多语言网站","eta":"2–5 天","big":"50<small>毫秒</small>","sent":"访客只要 50 毫秒，就对一个网页有了第一印象。","src":"Lindgaard 等人的研究，《自然》报道","num":"<b>01</b> / 18","c1":"官网","c2":"网页平台","c3":"手机 App","c4":"聊天机器人","c5":"Mini App","c6":"AI 智能体","c7":"自动化","c8":"数据看板","c9":"品牌 Logo","c10":"界面设计","c11":"游戏","c12":"商务文档","c13":"路演 PPT","c14":"交易系统","c15":"智能合约","c16":"视频内容","c17":"服务器与安全","c18":"硬件与网络","fl_h":"只看 50 毫秒，你记住了什么？","fl_s":"点一下，一个网页只在屏幕上停 50 毫秒。闪完说说你看到的是什么颜色。","fl_go":"闪 50 毫秒","fl_q":"刚才那一页，是什么颜色？","fl_side":"三轮，三个网页","ws_tabs":"我们做的四个网站","ws_get_h":"一个官网，从设计到上线，我们做这些","ws_g1_t":"照你的品牌设计","ws_g1_p":"从零画起，不套模板。颜色、字体、动画都跟着你的品牌走。","ws_g2_t":"手机上也快","ws_g2_p":"先做手机版，再做电脑版。我们自己的官网，Google 手机测速 97 分。","ws_g3_t":"多种语言","ws_g3_p":"中文、英文、泰文都做过，访客点一下就换。","ws_g4_t":"会动、能玩","ws_g4_p":"首屏动画、能玩的小互动，让访客愿意多留一会儿。","ws_g5_t":"一点就找到你","ws_g5_p":"邮件、WhatsApp、Telegram，按你常用的接上。","ws_g6_t":"上线我们来","ws_g6_p":"域名、https、托管都帮你接好，域名开好隐私保护。每一页的标题和描述都写好，搜索结果和聊天里的链接预览一看就懂。","ws_how_h":"从开口到上线","ws_s1_d":"第 1 天","ws_s1_t":"说给我们听","ws_s1_p":"你卖什么、给谁看、喜欢哪几个网站。文字和图片还没有也没关系，我们来写、来做。","ws_s2_d":"第 2–5 天","ws_s2_t":"首版上线","ws_s2_p":"给你一个真网址，手机、电脑都能打开看。","ws_s3_d":"之后","ws_s3_t":"照你的意见改","ws_s3_p":"你说哪里要改，我们照着改；以后要加页面、加语言，随时说。","ws_h":"这四个网站，都是我们做的","ws_sub":"现在都在线上。点任意一个，看它在电脑和手机上的样子。","w_dinamics_n":"Dinamics 官网","w_dinamics_p":"你现在逛的这个站。首屏是一面会翻牌的墙，藏了 6 个彩蛋；页面本身 188 KB，首屏没有一个图片文件。","w_dinamics_open":"打开 dinamics.dev","w_dinamics_c0":"Google 手机测速 97 分","w_dinamics_c1":"首屏 2.1 秒","w_dinamics_proof":"看测速报告","w_phrax_n":"牌所 PHRAX","w_phrax_p":"泰国佛牌平台：查佛牌的来历、押牌借钱、卖牌，还有佛牌资讯。","w_phrax_open":"打开 phrax.co","w_phrax_c0":"泰文","w_phrax_c1":"网页平台","w_phrax_c2":"界面设计","w_zero_n":"零九零","w_zero_p":"靓号地址铸造：钥匙分两半，你那一半只在你自己的电脑上，平台拿不到你的私钥；首页免费查地址有没有被投毒。","w_zero_open":"打开 0x000000000.com","w_zero_c0":"智能合约","w_zero_c1":"服务器与安全","w_zero_c2":"网页平台","w_bdy_n":"不打烊 AI 工作站","w_bdy_p":"放在曼谷机房的独享 Mac mini，AI 智能体 24 小时不停；选配、报价、发给顾问下单，都在官网上一步做完，全部 USDT 结算。","w_bdy_open":"打开 budayangai.com","w_bdy_c0":"官网","w_bdy_c1":"品牌标志","w_bdy_c2":"宣传片"},"en":{"all":"Eighteen crafts","talkBtn":"Tell us what you're building","first":"First version","h2w":"What we've built, live now","subw":"Click through and use them.","open":"Open {h}","h2t":"Tell us what you're building.","pt":"Send us an email and tell us what you have in mind.","mailBtn":"Email us","h2m":"The other seventeen","subm":"The lit ones open; the dim ones are being built.","prev":"Previous","next":"Next","foot":"Dinamics is a <a href=\"https://dsj.vc\">DSJ Ventures</a> portfolio company.","home":"Home","title":"Websites · Dinamics","meta":"Websites: Brand sites, campaign pages, multilingual sites","name":"Websites","desc":"Brand sites, campaign pages, multilingual sites","eta":"2–5 days","big":"50<small>ms</small>","sent":"Visitors form a first impression of a web page in 50 milliseconds.","src":"Lindgaard et al., reported in Nature","num":"<b>01</b> / 18","c1":"Websites","c2":"Web platforms","c3":"Mobile apps","c4":"Chatbots","c5":"Mini Apps","c6":"AI agents","c7":"Automation","c8":"Data dashboards","c9":"Brand and logo","c10":"Interface design","c11":"Games","c12":"Business documents","c13":"Pitch decks","c14":"Trading systems","c15":"Smart contracts","c16":"Video","c17":"Servers and security","c18":"Hardware and networks","fl_h":"What do you remember after 50 ms?","fl_s":"Tap once and a web page stays on screen for 50 milliseconds. Then tell us what colour it was.","fl_go":"Flash for 50 ms","fl_q":"What colour was that page?","fl_side":"Three rounds, three pages","ws_tabs":"Four sites we built","ws_get_h":"A website from us, design to launch","ws_g1_t":"Designed for your brand","ws_g1_p":"Drawn from scratch, never a template. Colour, type and motion all follow your brand.","ws_g2_t":"Fast on phones","ws_g2_p":"Phone first, then desktop. Our own site scores 97 on Google's mobile speed test.","ws_g3_t":"Several languages","ws_g3_p":"We have built sites in Chinese, English and Thai; visitors switch with one tap.","ws_g4_t":"It moves","ws_g4_p":"An opening animation and small things to play with, so visitors stay a little longer.","ws_g5_t":"Reach you in one tap","ws_g5_p":"Email, WhatsApp or Telegram, whichever you use.","ws_g6_t":"We put it live","ws_g6_p":"Domain, https and hosting set up for you, with domain privacy on. Every page gets its title and description, so search results and chat link previews read clearly.","ws_how_h":"From first message to launch","ws_s1_d":"Day 1","ws_s1_t":"Tell us","ws_s1_p":"What you sell, who it is for, which sites you like. No copy or photos yet? We write and make them.","ws_s2_d":"Days 2–5","ws_s2_t":"First version live","ws_s2_p":"You get a real web address to open on your phone and computer.","ws_s3_d":"After that","ws_s3_t":"Changes, your way","ws_s3_p":"Tell us what to change and we change it. More pages or languages later? Just ask.","ws_h":"We built all four of these sites","ws_sub":"All four are live. Pick one to see it on a computer and on a phone.","w_dinamics_n":"Dinamics","w_dinamics_p":"The site you are on. The first screen is a wall of flipping tiles with 6 secrets in it; the page itself is 188 KB, and the first screen has no image files.","w_dinamics_open":"Open dinamics.dev","w_dinamics_c0":"Google mobile speed score 97","w_dinamics_c1":"First screen in 2.1 s","w_dinamics_proof":"See the speed report","w_phrax_n":"PHRAX","w_phrax_p":"A Thai amulet platform: check where an amulet comes from, pawn it, sell it, and keep up with amulet news.","w_phrax_open":"Open phrax.co","w_phrax_c0":"Thai","w_phrax_c1":"Web platform","w_phrax_c2":"Interface design","w_zero_n":"0x000000000","w_zero_p":"A vanity address foundry. The key is split in two and your half never leaves your own computer, so the platform never sees your private key. Free address-poisoning check on the home page.","w_zero_open":"Open 0x000000000.com","w_zero_c0":"Smart contracts","w_zero_c1":"Servers and security","w_zero_c2":"Web platform","w_bdy_n":"不打烊 AI Workstation","w_bdy_p":"Dedicated Mac minis in a Bangkok data centre that keep AI agents running around the clock. Pick a setup, get the price on the spot and send it to an advisor, all settled in USDT.","w_bdy_open":"Open budayangai.com","w_bdy_c0":"Website","w_bdy_c1":"Brand mark","w_bdy_c2":"Promo film"},"g0":[[22,42,22,88,11,0],[22,17,22,17,13,0],[37,14,52,14,10,0],[52.0,14.0,63.4,15.8,11.5,0],[63.4,15.8,73.7,21.1,11.2,0],[73.7,21.1,81.9,29.3,10.7,0],[81.9,29.3,87.2,39.6,10.0,0],[87.2,39.6,89.0,51.0,9.1,0],[89.0,51.0,87.2,62.4,8.1,0],[87.2,62.4,81.9,72.7,6.9,0],[81.9,72.7,73.7,80.9,5.5,0],[73.7,80.9,63.4,86.2,4.0,0],[63.4,86.2,52.0,88.0,2.4,0],[52,88,36,88,1.5,0]],"g":[[18,24,82,24,8,0],[82,24,82,76,8,0],[82,76,18,76,8,0],[18,76,18,24,8,0],[18,40,82,40,8,0],[18,24,82,24,0,0],[82,24,82,76,0,0],[82,76,18,76,0,0],[18,76,18,24,0,0],[18,40,82,40,0,0],[18,24,82,24,0,0],[82,24,82,76,0,0],[82,76,18,76,0,0],[18,76,18,24,0,0]]};</script>
 <script src="work.js?v=79395d29ca"></script>
-<script>/* the film: a button in the hero opens it over the page, in the page's language */(()=>{const $=s=>document.querySelector(s),P=window.PAGE,DN=window.DN,FB=$('#filmBtn');if(!FB||!P||!P.film||!DN)return;
-const FD=$('#filmDlg'),FV=$('#filmV'),FX=$('#filmX');
-const open=play=>{const l=DN.lang,f=P.film[l];if(FV.dataset.l!==l){FV.src=f[0];FV.poster=f[1];FV.dataset.l=l}if(!FD.open)FD.showModal();if(play){const p=FV.play();if(p)p.catch(()=>{})}};
-FB.addEventListener('click',()=>open(true));FX.addEventListener('click',()=>FD.close());
-FD.addEventListener('click',e=>{if(e.target===FD)FD.close()});FD.addEventListener('close',()=>FV.pause());
-DN.on(l=>{FX.setAttribute('aria-label',P[l].filmX);FD.setAttribute('aria-label',P[l].filmT)});
-if(location.hash==='#film')setTimeout(()=>open(false),0)})();</script>
+<script>window.FC=Object.assign({"id":"website","name":"官网 · 1 分钟视频","len":60,"src":{"zh":["website-film-zh.mp4","website-film-zh.webp"],"en":["website-film-en.mp4","website-film-en.webp"]},"words":{"zh":{"fc_play":"播放","fc_pause":"暂停","fc_mute":"静音","fc_unmute":"开声音","fc_full":"全屏","fc_xfs":"退出全屏","fc_seek":"进度","fc_snd":"点一下开声音","fc_like":"赞","fc_liked":"已赞","fc_likes":"{n} 人赞过","fc_fb":"留言","fc_endT":"看完了，觉得怎么样？","fc_again":"再看一遍","fc_fbT":"说说你的想法","fc_close":"收起","fc_pick":"快选","fc_c1":"很喜欢","fc_c3":"有问题想问","fc_msgL":"想说的话","fc_msgP":"想说什么都可以，也可以说说你想做什么。","fc_conL":"怎么联系你（可不填）","fc_conP":"邮箱、WhatsApp 或 Telegram","fc_send":"发送","fc_sending":"发送中…","fc_ok":"收到了，谢谢你。每一条我们都会看。","fc_okc":"收到了，谢谢你。我们会尽快回复你。","fc_more":"再写一条","fc_err":"没发出去，可能是网络断了。再点一次「发送」试试。","fc_empty":"写一句话，或者点上面一个。","fc_prev":"这是预览页，留言不会发出。","fc_c2":"想做一个这样的网站","fc_label":"官网 · 1 分钟视频"},"en":{"fc_play":"Play","fc_pause":"Pause","fc_mute":"Mute","fc_unmute":"Sound on","fc_full":"Full screen","fc_xfs":"Exit full screen","fc_seek":"Position","fc_snd":"Tap for sound","fc_like":"Like","fc_liked":"Liked","fc_likes":"{n} likes","fc_fb":"Feedback","fc_endT":"That was the film. What did you think?","fc_again":"Watch again","fc_fbT":"Tell us what you think","fc_close":"Close","fc_pick":"Quick picks","fc_c1":"Love it","fc_c3":"I have a question","fc_msgL":"Your note","fc_msgP":"Anything at all, or tell us what you want to build.","fc_conL":"How to reach you (optional)","fc_conP":"Email, WhatsApp or Telegram","fc_send":"Send","fc_sending":"Sending…","fc_ok":"Got it, thank you. We read every note.","fc_okc":"Got it, thank you. We'll get back to you soon.","fc_more":"Write another","fc_err":"That didn't send. Check your connection and press Send again.","fc_empty":"Write a line, or pick one above.","fc_prev":"This is a preview, so nothing is sent.","fc_c2":"I want a site like this","fc_label":"Websites · the 1-minute film"}}},{lang:()=>DN.lang,on:f=>DN.on(f)});</script>
+<script>/* the film on the page (v2, 2026-11-22). DSJ 07:50: 「视频不要这样放，要显示出来…增加可以点赞和接受反馈。而且要自动播放，默认音乐打开，以后可以选择静音。」
+ It starts by itself once half of it is on screen, with the sound on. Browsers refuse sound until the visitor has touched the page;
+ then it plays muted with a 'tap for sound' button, and the visitor's first tap or key anywhere on the page turns the sound on.
+ A visitor who mutes it stays muted (remembered). Likes: a public counter, one per browser. Notes: emailed to contact@dinamics.dev.
+ Likes and notes only leave the page on dinamics.dev. Config: window.FC = {id, name, len, src:{zh:[mp4,poster],en:[...]}, words:{zh,en}, lang(), on(fn)}. */
+(()=>{const C=window.FC,R=document.getElementById('fc');if(!C||!R)return;
+const q=s=>R.querySelector(s),qa=s=>[...R.querySelectorAll(s)],V=q('.fc-v'),F=q('.fc-frame'),SEEK=q('.fc-seek'),TIME=q('.fc-time'),FB=q('.fc-fb'),
+  RM=matchMedia('(prefers-reduced-motion: reduce)'),SAVE=!!(navigator.connection&&navigator.connection.saveData),
+  LIVE=/(^|\.)dinamics\.dev$/.test(location.hostname)||!!window.DN_TEST,
+  S={g(k){try{return localStorage.getItem(k)}catch(e){return null}},s(k,v){try{localStorage.setItem(k,v)}catch(e){}}},
+  T=()=>C.words[C.lang()]||C.words.zh,fmt=s=>{s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+let armed=!C.lazy,want=S.g('dn-film-sound')!=='off',blocked=false,uP=false,aP=false,ended=false,seen=false,started=false,pending=false,ate=0,raf=0;
+const dur=()=>isFinite(V.duration)&&V.duration>0?V.duration:(C.len||60);
+function cls(){const pl=!V.paused&&!V.ended,t=T();
+  R.classList.toggle('is-playing',pl);R.classList.toggle('is-paused',started&&!pl&&!ended&&!pending);R.classList.toggle('is-ended',ended);
+  R.classList.toggle('is-muted',V.muted);R.classList.toggle('is-blocked',want&&V.muted&&pl);
+  const lp=pl?t.fc_pause:t.fc_play;[q('.fc-play'),q('.fc-tap')].forEach(b=>{b.setAttribute('aria-label',lp);b.title=lp});
+  const mb=q('.fc-mute'),lm=V.muted?t.fc_unmute:t.fc_mute;mb.setAttribute('aria-label',lm);mb.title=lm;mb.setAttribute('aria-pressed',String(V.muted))}
+/* play: with sound if the visitor wants it and the browser allows it; else muted (and 'tap for sound' shows) */
+function play(){arm();ended=false;pending=true;V.muted=!(want&&!blocked);
+  const go=()=>{try{return Promise.resolve(V.play())}catch(e){return Promise.reject(e)}},done=()=>{pending=false;cls()};
+  go().then(done,e=>{if(e&&e.name==='NotAllowedError'&&!V.muted){blocked=true;V.muted=true;return go().then(done,done)}done()});cls()}
+function arm(){if(armed)return;armed=true;setSrc(C.lang())}
+function start(){arm();started=true;if(RM.matches||SAVE){cls();return}play()}
+/* the visitor's first tap or key anywhere: the sound comes on (unless they chose mute) */
+const EV=['pointerdown','pointerup','touchend','keydown','click'];
+function G(e){if(!e.isTrusted||(e.type==='pointerdown'&&e.pointerType!=='mouse'))return;const ua=navigator.userActivation;if(ua&&!ua.isActive)return;
+  const t=e.target;if(t&&t.closest&&t.closest('.fc-mute'))return off();
+  if(want&&V.muted){const was=!V.paused;blocked=false;V.muted=false;if(was&&t&&F.contains(t))ate=Date.now();
+    if(was)setTimeout(()=>{if(V.paused&&!uP&&!ended)V.play().catch(()=>{})},0);cls()}
+  off()}
+function off(){EV.forEach(k=>document.removeEventListener(k,G,true))}
+EV.forEach(k=>document.addEventListener(k,G,true));
+function toggle(){if(ended){again();return}if(V.paused){uP=false;aP=false;play()}else{uP=true;V.pause()}}
+function again(){ended=false;uP=false;try{V.currentTime=0}catch(e){}play()}
+q('.fc-tap').addEventListener('click',()=>{if(Date.now()-ate<1500){ate=0;return}toggle()});
+q('.fc-play').addEventListener('click',toggle);
+qa('.fc-again').forEach(b=>b.addEventListener('click',again));
+q('.fc-mute').addEventListener('click',()=>{if(V.muted){want=true;blocked=false;V.muted=false;S.s('dn-film-sound','on')}else{want=false;V.muted=true;S.s('dn-film-sound','off')}cls()});
+q('.fc-sound').addEventListener('click',()=>{want=true;blocked=false;V.muted=false;S.s('dn-film-sound','on');ate=0;if(V.paused&&!ended){uP=false;play()}cls()});
+/* full screen: the frame (with its buttons); iPhone has only the video's own full screen */
+const fsEl=()=>document.fullscreenElement||document.webkitFullscreenElement,fsExit=()=>{const x=document.exitFullscreen||document.webkitExitFullscreen;if(x){const p=x.call(document);if(p&&p.catch)p.catch(()=>{})}};
+q('.fc-full').addEventListener('click',()=>{if(fsEl()){fsExit();return}const rq=F.requestFullscreen||F.webkitRequestFullscreen;
+  if(rq){const p=rq.call(F);if(p&&p.catch)p.catch(()=>{})}else if(V.webkitEnterFullscreen)V.webkitEnterFullscreen()});
+q('.fc-xfs').addEventListener('click',fsExit);
+/* where the film is */
+function tick(){const d=dur(),t=V.currentTime||0;R.style.setProperty('--p',Math.min(1,t/d).toFixed(4));if(document.activeElement!==SEEK)SEEK.value=Math.round(t/d*1000);
+  const s=fmt(t)+' / '+fmt(d);if(TIME.textContent!==s)TIME.textContent=s;SEEK.setAttribute('aria-valuetext',s)}
+function loop(){tick();raf=V.paused?0:requestAnimationFrame(loop)}
+V.addEventListener('play',()=>{cls();if(!raf)raf=requestAnimationFrame(loop)});
+['pause','volumechange','playing','waiting'].forEach(k=>V.addEventListener(k,()=>{cls();tick()}));
+V.addEventListener('loadedmetadata',tick);V.addEventListener('timeupdate',()=>{if(!raf)tick()});
+V.addEventListener('ended',()=>{ended=true;cls();if(fsEl()===F)fsExit()});
+SEEK.addEventListener('input',()=>{const d=dur();try{V.currentTime=SEEK.value/1000*d}catch(e){}if(ended&&V.currentTime<d-.3)ended=false;tick();cls()});
+/* on screen or not; this tab or another */
+new IntersectionObserver(es=>{for(const e of es){const r=e.intersectionRatio;
+  if(r>=.5&&!seen){seen=true;if(!started)start();else if(aP&&!uP&&!ended&&!document.hidden){aP=false;play()}}
+  else if(r<.25&&seen){seen=false;if(!V.paused){aP=true;V.pause()}}}},{threshold:[0,.25,.5,.75,1]}).observe(F);
+document.addEventListener('visibilitychange',()=>{if(document.hidden){if(!V.paused){aP=true;V.pause()}}else if(aP&&seen&&!uP&&!ended){aP=false;play()}});
+/* the language: the other film from the same second */
+function setSrc(l){if(!armed)return;const f=C.src[l]||C.src.zh,B=C.base||'';if(!f||V.dataset.l===l)return;const t=V.currentTime||0,was=!V.paused&&!V.ended;
+  V.dataset.l=l;V.poster=B+f[1];V.src=B+f[0];
+  if(t>.3)V.addEventListener('loadedmetadata',()=>{try{V.currentTime=Math.min(t,dur()-.4)}catch(e){}tick()},{once:true});
+  if(was)play();else tick()}
+function words(){const t=T();qa('[data-fc]').forEach(e=>{const v=t[e.dataset.fc];if(v!=null)e.textContent=v});
+  [R,...qa('[data-fcl]')].filter(e=>e.dataset.fcl).forEach(e=>{const v=t[e.dataset.fcl];if(v!=null){e.setAttribute('aria-label',v);if(e.tagName==='BUTTON')e.title=v}});
+  qa('[data-fcp]').forEach(e=>{const v=t[e.dataset.fcp];if(v!=null)e.placeholder=v});
+  const d=q('.fc-done');if(!d.hidden)d.querySelector('.fc-ok').textContent=d.dataset.c?t.fc_okc:t.fc_ok;
+  const sb=q('.fc-go');if(!sb.disabled)sb.textContent=t.fc_send}
+/* like: one per browser; the number is the counter's, never made up */
+const LK='dn-liked-'+C.id,API='https://abacus.jasoncameron.dev',PATH='/dinamics.dev/film-'+C.id;let liked=S.g(LK)==='1',n=null;
+function drawLike(){const t=T(),lab=liked?t.fc_liked:t.fc_like,num=n>0?n.toLocaleString(C.lang()==='zh'?'zh-CN':'en-US'):'';
+  qa('.fc-like').forEach(b=>{b.setAttribute('aria-pressed',String(liked));b.querySelector('.fc-lt').textContent=lab;b.querySelector('.fc-n').textContent=num;
+    const al=num?lab+' · '+t.fc_likes.replace('{n}',num):lab;b.setAttribute('aria-label',al);b.title=al})}
+function burst(b){if(RM.matches)return;b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop');
+  for(let i=0;i<8;i++){const s=document.createElement('i');s.className='b';s.setAttribute('aria-hidden','true');s.style.setProperty('--a',(i*45+Math.random()*16-8).toFixed(1)+'deg');b.append(s);setTimeout(()=>s.remove(),800)}}
+function like(b){burst(b);if(liked)return;liked=true;S.s(LK,'1');if(n!=null)n++;drawLike();
+  if(LIVE)fetch(API+'/hit'+PATH).then(r=>r.ok?r.json():null).then(j=>{if(j&&typeof j.value==='number'){n=j.value;drawLike()}}).catch(()=>{})}
+qa('.fc-like').forEach(b=>b.addEventListener('click',()=>like(b)));
+if(LIVE)fetch(API+'/get'+PATH).then(r=>r.status===404?{value:0}:r.ok?r.json():null).then(j=>{if(j&&typeof j.value==='number'){n=Math.max(j.value,n||0);drawLike()}}).catch(()=>{});
+/* leave a note: emailed to us */
+const fbb=q('.fc-fbb'),FS='https://formsubmit.co/ajax/'+(C.mail||'contact@dinamics.dev');
+function openFb(){FB.hidden=false;fbb.setAttribute('aria-expanded','true');
+  setTimeout(()=>{FB.scrollIntoView({block:'nearest',behavior:RM.matches?'auto':'smooth'});const d=q('.fc-done');(d.hidden?FB.elements.m:d.querySelector('.fc-more')).focus({preventScroll:true})},40)}
+function closeFb(){FB.hidden=true;fbb.setAttribute('aria-expanded','false');fbb.focus({preventScroll:true})}
+fbb.addEventListener('click',()=>FB.hidden?openFb():closeFb());
+qa('.fc-fbo').forEach(b=>b.addEventListener('click',openFb));
+q('.fc-x').addEventListener('click',closeFb);
+FB.addEventListener('keydown',e=>{if(e.key==='Escape')closeFb()});
+qa('.fc-chip').forEach(b=>b.addEventListener('click',()=>b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'))));
+let sending=false;
+FB.addEventListener('submit',e=>{e.preventDefault();if(sending)return;const t=T(),el=FB.elements,m=el.m.value.trim(),c=el.c.value.trim(),msg=q('.fc-msg'),
+  zh=C.words.zh,picks=qa('.fc-chip[aria-pressed=true]').map(b=>zh['fc_c'+b.dataset.k]);
+  msg.className='fc-msg';msg.textContent='';
+  if(el._honey&&el._honey.value)return;
+  if(!m&&!picks.length){msg.textContent=t.fc_empty;msg.classList.add('err');el.m.focus();return}
+  if(!LIVE){msg.textContent=t.fc_prev;return}
+  sending=true;const sb=q('.fc-go');sb.disabled=true;sb.textContent=t.fc_sending;
+  const body={_subject:'Dinamics · '+C.name+' · 收到一条留言',_template:'table',_captcha:'false','视频':C.name,'页面':location.href.split('#')[0],
+    '语言':C.lang()==='zh'?'中文':'英文','快选':picks.join('、')||'—','留言':m||'—','联系方式':c||'—'};
+  if(/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(c))body._replyto=c;
+  fetch(FS,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(body)})
+    .then(r=>r.ok?r.json():Promise.reject(r.status)).then(()=>{const d=q('.fc-done');FB.reset();qa('.fc-chip').forEach(b=>b.setAttribute('aria-pressed','false'));
+      q('.fc-body').hidden=true;d.hidden=false;d.dataset.c=c?'1':'';d.querySelector('.fc-ok').textContent=c?T().fc_okc:T().fc_ok;d.querySelector('.fc-more').focus({preventScroll:true})})
+    .catch(()=>{msg.textContent=T().fc_err;msg.classList.add('err')})
+    .finally(()=>{sending=false;sb.disabled=false;sb.textContent=T().fc_send})});
+q('.fc-more').addEventListener('click',()=>{q('.fc-done').hidden=true;q('.fc-body').hidden=false;FB.elements.m.focus()});
+if(!armed){const lz=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){lz.disconnect();arm()}},{rootMargin:'120px 0px'});lz.observe(F)}
+/* keys pressed inside the film stay inside (the home page reads keys for its wall) */
+R.addEventListener('keydown',e=>e.stopPropagation());
+C.on(l=>{setSrc(l);words();drawLike();cls()});
+tick();cls()})();</script>
 </body>
 </html>

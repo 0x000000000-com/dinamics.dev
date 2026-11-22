@@ -40,5 +40,23 @@
       }, 380);
     }
   }
+  /* prices: written in US dollars; another currency is shown at the day's rate, the price itself stays in US dollars */
+  const sel = $('#prc-cur');
+  let FX = null; try { FX = JSON.parse($('#fx').textContent) } catch (e) {}
+  if (sel && FX) {
+    const SYM = { USD: 'US$', MYR: 'RM', SGD: 'S$', THB: '฿', IDR: 'Rp', PHP: '₱', CNY: 'CN¥', HKD: 'HK$', JPY: 'JP¥', KRW: '₩', AUD: 'A$', EUR: '€', GBP: '£' };
+    const nice = x => { const s = x < 1e3 ? 10 : x < 1e4 ? 50 : x < 1e5 ? 100 : x < 1e6 ? 1000 : x < 1e7 ? 1e4 : 1e5; return Math.round(x / s) * s; };
+    let cur = 'USD'; try { cur = localStorage.getItem('dinamics-cur') || 'USD' } catch (e) {}
+    const draw = () => {
+      if (cur !== 'USD' && !FX.rates[cur]) cur = 'USD';
+      $$('.amt[data-usd]').forEach(e => { const u = +e.dataset.usd; e.textContent = cur === 'USD' ? 'US$' + u.toLocaleString('en-US') : '≈ ' + SYM[cur] + nice(u * FX.rates[cur]).toLocaleString('en-US'); });
+      sel.value = cur; const d = $('#prc-date'); if (d) d.textContent = FX.date;
+      document.documentElement.dataset.cur = cur;
+    };
+    sel.addEventListener('change', () => { cur = sel.value; try { localStorage.setItem('dinamics-cur', cur) } catch (e) {} draw(); });
+    subs.push(draw);
+    fetch('https://api.frankfurter.dev/v1/latest?base=USD&symbols=' + Object.keys(FX.rates).join(','), { cache: 'no-store' })
+      .then(r => r.ok ? r.json() : null).then(j => { if (j && j.rates && j.date) { FX = { date: j.date, rates: Object.assign({}, FX.rates, j.rates) }; draw(); } }).catch(() => {});
+  }
   apply(lang);
 })();

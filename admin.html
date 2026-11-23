@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://dinamics-desk.ds-jasonn.workers.dev; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201024%201024%22%20role%3D%22img%22%20aria-label%3D%22Dinamics%22%3E%3Ctitle%3EDinamics%3C/title%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22gi%22%20gradientUnits%3D%22userSpaceOnUse%22%20x1%3D%220%22%20y1%3D%22225.3%22%20x2%3D%220%22%20y2%3D%22798.7%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23F3D48E%22/%3E%3Cstop%20offset%3D%22.55%22%20stop-color%3D%22%23D9B26B%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%239C7430%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221024%22%20height%3D%221024%22%20rx%3D%22229%22%20fill%3D%22%230A0A0B%22/%3E%3Crect%20x%3D%224%22%20y%3D%224%22%20width%3D%221016%22%20height%3D%221016%22%20rx%3D%22225%22%20fill%3D%22none%22%20stroke%3D%22%23D9B26B%22%20stroke-opacity%3D%22.28%22%20stroke-width%3D%226%22/%3E%3Cpolygon%20points%3D%22371.99%2C225.28%20376.57%2C225.28%20381.15%2C225.28%20385.74%2C225.28%20390.32%2C225.28%20394.91%2C225.28%20399.49%2C225.28%20404.08%2C225.28%20408.66%2C225.28%20413.25%2C225.28%20417.83%2C225.28%20422.42%2C225.28%20427.00%2C225.28%20431.59%2C225.28%20436.17%2C225.28%20440.76%2C225.28%20445.34%2C225.28%20449.93%2C225.28%20454.51%2C225.28%20459.10%2C225.28%20463.68%2C225.28%20468.27%2C225.28%20472.85%2C225.28%20477.44%2C225.28%20482.02%2C225.28%20486.61%2C225.28%20491.19%2C225.28%20495.78%2C225.28%20500.36%2C225.28%20504.95%2C225.28%20510.28%2C225.32%20515.78%2C225.45%20521.28%2C225.70%20526.77%2C226.05%20532.25%2C226.50%20537.72%2C227.06%20543.19%2C227.73%20548.63%2C228.50%20554.07%2C229.37%20559.48%2C230.35%20564.87%2C231.43%20570.25%2C232.62%20575.60%2C233.91%20580.92%2C235.30%20586.21%2C236.79%20591.48%2C238.38%20596.71%2C240.08%20601.91%2C241.87%20607.08%2C243.77%20612.21%2C245.76%20617.30%2C247.85%20622.35%2C250.04%20627.35%2C252.33%20632.31%2C254.71%20637.22%2C257.18%20642.09%2C259.75%20646.90%2C262.41%20651.67%2C265.17%20656.38%2C268.01%20661.03%2C270.94%20665.63%2C273.97%20670.17%2C277.08%20674.64%2C280.28%20679.06%2C283.56%20683.41%2C286.92%20687.70%2C290.37%20691.91%2C293.91%20696.06%2C297.52%20700.15%2C301.21%20704.15%2C304.98%20708.09%2C308.82%20711.95%2C312.74%20715.74%2C316.73%20719.45%2C320.80%20723.07%2C324.93%20726.62%2C329.13%20730.09%2C333.41%20733.48%2C337.74%20736.78%2C342.14%20740.00%2C346.61%20743.13%2C351.13%20746.17%2C355.72%20749.12%2C360.36%20751.99%2C365.05%20754.76%2C369.80%20757.45%2C374.61%20760.04%2C379.46%20762.53%2C384.36%20764.93%2C389.31%20767.24%2C394.31%20769.45%2C399.35%20771.56%2C404.43%20773.58%2C409.55%20775.49%2C414.70%20777.31%2C419.90%20779.03%2C425.12%20780.65%2C430.38%20782.16%2C435.67%20783.58%2C440.99%20784.89%2C446.33%20786.10%2C451.70%20787.20%2C457.09%20788.20%2C462.50%20789.10%2C467.93%20789.89%2C473.37%20790.58%2C478.83%20791.17%2C484.30%20791.65%2C489.78%20792.02%2C495.27%20792.29%2C500.77%20792.45%2C506.27%20792.51%2C511.77%20792.46%2C517.27%20792.31%2C522.77%20792.05%2C528.26%20791.68%2C533.75%20791.21%2C539.24%20790.64%2C544.71%20789.96%2C550.17%20789.17%2C555.61%20788.28%2C561.04%20787.29%2C566.45%20786.19%2C571.84%20784.99%2C577.21%20783.69%2C582.56%20782.28%2C587.88%20780.78%2C593.17%20779.17%2C598.43%20777.46%2C603.66%20775.65%2C608.86%20773.74%2C614.02%20771.74%2C619.14%20769.63%2C624.22%20767.43%2C629.27%20765.13%2C634.26%20762.74%2C639.22%20760.25%2C644.13%20757.67%2C648.98%20754.99%2C653.79%20752.23%2C658.55%20749.37%2C663.25%20746.42%2C667.89%20743.39%2C672.48%20740.26%2C677.01%20737.05%2C681.48%20733.76%2C685.89%20730.38%2C690.23%20726.92%2C694.51%20723.38%2C698.72%20719.75%2C702.86%20716.05%2C706.93%20712.27%2C710.93%20708.42%2C714.85%20704.49%2C718.70%20700.49%2C722.48%20696.41%2C726.17%20692.27%2C729.79%20688.05%2C733.33%20683.77%2C736.79%20679.43%2C740.16%20675.02%2C743.45%20670.55%2C746.66%20666.01%2C749.77%20661.42%2C752.80%20656.77%2C755.75%20652.07%2C758.60%20647.31%2C761.36%20642.50%2C764.03%20637.64%2C766.61%20632.73%2C769.09%20627.77%2C771.48%20622.77%2C773.77%20617.73%2C775.97%20612.64%2C778.07%20607.52%2C780.07%20602.35%2C781.97%20597.15%2C783.77%20591.92%2C785.48%20586.66%2C787.08%20581.37%2C788.58%20576.05%2C789.98%20570.70%2C791.28%20565.33%2C792.47%20559.94%2C793.56%20554.52%2C794.55%20549.09%2C795.43%20543.65%2C796.21%20538.19%2C796.88%20532.71%2C797.45%20527.23%2C797.92%20521.74%2C798.28%20516.25%2C798.53%20510.75%2C798.68%20505.33%2C798.72%20500.75%2C798.72%20496.17%2C798.72%20491.58%2C798.72%20487.00%2C798.72%20482.41%2C798.72%20477.83%2C798.72%20473.24%2C798.72%20468.66%2C798.72%20464.07%2C798.72%20459.49%2C798.72%20454.90%2C798.72%20450.32%2C798.72%20445.73%2C798.72%20441.15%2C798.72%20436.56%2C798.72%20431.98%2C798.72%20427.39%2C798.72%20422.81%2C798.72%20418.22%2C798.72%20413.64%2C798.72%20409.05%2C798.72%20404.47%2C798.72%20399.88%2C798.72%20395.30%2C798.72%20390.71%2C798.72%20386.13%2C798.72%20381.54%2C798.72%20381.54%2C798.72%20386.13%2C797.94%20390.71%2C797.16%20395.30%2C796.39%20399.88%2C795.61%20404.47%2C794.85%20409.05%2C794.08%20413.64%2C793.32%20418.22%2C792.56%20422.81%2C791.80%20427.39%2C791.04%20431.98%2C790.29%20436.56%2C789.54%20441.15%2C788.80%20445.73%2C788.05%20450.32%2C787.31%20454.90%2C786.57%20459.49%2C785.84%20464.07%2C785.11%20468.66%2C784.38%20473.24%2C783.65%20477.83%2C782.93%20482.41%2C782.21%20487.00%2C781.49%20491.58%2C780.78%20496.17%2C780.07%20500.75%2C779.36%20505.33%2C778.65%20510.39%2C777.91%20515.46%2C777.07%20520.51%2C776.14%20525.52%2C775.12%20530.50%2C774.00%20535.45%2C772.80%20540.36%2C771.50%20545.23%2C770.12%20550.06%2C768.64%20554.84%2C767.08%20559.59%2C765.44%20564.29%2C763.70%20568.95%2C761.89%20573.55%2C759.99%20578.11%2C758.01%20582.62%2C755.95%20587.08%2C753.81%20591.49%2C751.59%20595.84%2C749.29%20600.13%2C746.92%20604.37%2C744.47%20608.55%2C741.95%20612.67%2C739.36%20616.74%2C736.70%20620.74%2C733.97%20624.67%2C731.17%20628.55%2C728.31%20632.36%2C725.37%20636.10%2C722.38%20639.78%2C719.32%20643.39%2C716.20%20646.93%2C713.03%20650.41%2C709.79%20653.81%2C706.50%20657.14%2C703.15%20660.40%2C699.75%20663.59%2C696.30%20666.70%2C692.79%20669.74%2C689.24%20672.70%2C685.64%20675.59%2C681.99%20678.41%2C678.30%20681.14%2C674.56%20683.80%2C670.79%20686.38%2C666.97%20688.88%2C663.11%20691.31%2C659.22%20693.65%2C655.29%20695.91%2C651.33%20698.10%2C647.34%20700.20%2C643.31%20702.22%2C639.26%20704.17%2C635.18%20706.03%2C631.07%20707.81%2C626.94%20709.50%2C622.79%20711.12%2C618.61%20712.65%2C614.42%20714.10%2C610.21%20715.47%2C605.98%20716.75%2C601.73%20717.95%2C597.47%20719.07%2C593.20%20720.11%2C588.92%20721.07%2C584.63%20721.94%2C580.34%20722.73%2C576.04%20723.43%2C571.73%20724.06%2C567.42%20724.60%2C563.11%20725.07%2C558.80%20725.45%2C554.49%20725.74%2C550.19%20725.96%2C545.88%20726.10%2C541.59%20726.16%2C537.30%20726.13%2C533.03%20726.03%2C528.76%20725.85%2C524.50%20725.59%2C520.26%20725.25%2C516.03%20724.83%2C511.82%20724.34%2C507.63%20723.77%2C503.45%20723.12%2C499.30%20722.39%2C495.16%20721.60%2C491.05%20720.72%2C486.97%20719.78%2C482.91%20718.76%2C478.87%20717.66%2C474.86%20716.50%2C470.89%20715.26%2C466.94%20713.96%2C463.02%20712.58%2C459.14%20711.13%2C455.29%20709.62%2C451.47%20708.04%2C447.70%20706.39%2C443.95%20704.68%2C440.25%20702.90%2C436.59%20701.06%2C432.97%20699.15%2C429.38%20697.18%2C425.85%20695.15%2C422.35%20693.06%2C418.90%20690.91%2C415.50%20688.71%2C412.14%20686.44%2C408.83%20684.12%2C405.56%20681.74%2C402.35%20679.31%2C399.19%20676.82%2C396.07%20674.28%2C393.01%20671.69%2C390.01%20669.05%2C387.05%20666.36%2C384.15%20663.62%2C381.30%20660.84%2C378.51%20658.00%2C375.78%20655.13%2C373.10%20652.20%2C370.49%20649.24%2C367.93%20646.23%2C365.42%20643.19%2C362.98%20640.10%2C360.60%20636.98%2C358.28%20633.81%2C356.02%20630.62%2C353.82%20627.38%2C351.69%20624.12%2C349.61%20620.82%2C347.60%20617.49%2C345.66%20614.13%2C343.78%20610.74%2C341.96%20607.32%2C340.21%20603.87%2C338.52%20600.40%2C336.90%20596.91%2C335.34%20593.39%2C333.85%20589.85%2C332.43%20586.29%2C331.07%20582.71%2C329.78%20579.11%2C328.56%20575.50%2C327.41%20571.86%2C326.32%20568.22%2C325.30%20564.56%2C324.35%20560.88%2C323.46%20557.20%2C322.65%20553.51%2C321.90%20549.80%2C321.22%20546.09%2C320.61%20542.38%2C320.06%20538.65%2C319.59%20534.93%2C319.18%20531.20%2C318.84%20527.47%2C318.57%20523.74%2C318.37%20520.00%2C318.23%20516.27%2C318.16%20512.55%2C318.16%20508.82%2C318.23%20504.95%2C318.36%20500.36%2C318.52%20495.78%2C318.66%20491.19%2C318.81%20486.61%2C318.95%20482.02%2C319.08%20477.44%2C319.21%20472.85%2C319.34%20468.27%2C319.46%20463.68%2C319.58%20459.10%2C319.69%20454.51%2C319.80%20449.93%2C319.90%20445.34%2C320.00%20440.76%2C320.09%20436.17%2C320.18%20431.59%2C320.27%20427.00%2C320.34%20422.42%2C320.42%20417.83%2C320.49%20413.25%2C320.55%20408.66%2C320.61%20404.08%2C320.66%20399.49%2C320.71%20394.91%2C320.75%20390.32%2C320.78%20385.74%2C320.81%20381.15%2C320.83%20376.57%2C320.85%20371.99%2C320.85%22%20fill%3D%22url%28%23gi%29%22/%3E%3Cpolygon%20points%3D%22242.96%2C392.53%20338.53%2C392.53%20338.53%2C798.72%20242.96%2C798.72%22%20fill%3D%22url%28%23gi%29%22/%3E%3Ccircle%20cx%3D%22290.75%22%20cy%3D%22273.07%22%20r%3D%2252.57%22%20fill%3D%22url%28%23gi%29%22/%3E%3C/svg%3E%0A">
+<title>Dinamics 后台</title>
+<style>
+:root{--bg:#0A0A0B;--card:#121214;--ink:#F2EDE3;--ink2:#A39D92;--ink3:#77726A;--co:#D9B26B;--co2:#F3D48E;--line:rgba(217,178,107,.22);--hair:rgba(217,178,107,.12);--ok:#45C08F;--no:#E8735F;
+  --sans:"Archivo","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",system-ui,sans-serif;--mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+header{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;padding:12px max(3vw,14px);background:rgba(10,10,11,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--hair)}
+header b{font-size:17px;letter-spacing:.02em;color:var(--co2)}
+nav{display:flex;flex-wrap:wrap;gap:6px}
+nav button,.chips button{border:1px solid var(--line);background:none;color:var(--ink2);border-radius:999px;padding:7px 13px;font:600 14px/1 var(--sans);cursor:pointer}
+nav button[aria-pressed=true],.chips button[aria-pressed=true]{background:var(--co);color:#0A0A0B;border-color:var(--co)}
+nav button .n{margin-left:6px;font-size:12px;opacity:.75}
+main{max-width:1200px;margin:0 auto;padding:18px max(3vw,14px) 80px}
+h2{font-size:20px;margin:6px 0 14px}
+h3{font-size:16px;margin:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
+.card{border:1px solid var(--hair);background:var(--card);border-radius:14px;padding:14px 16px;margin:0 0 12px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.sp{flex:1}
+.muted{color:var(--ink2)}.small{font-size:13px}.mono{font-family:var(--mono);font-size:13px}
+.tag{display:inline-block;padding:3px 9px;border-radius:999px;border:1px solid var(--line);font:600 12.5px/1.3 var(--sans);color:var(--co2)}
+.tag.ok{color:var(--ok);border-color:rgba(69,192,143,.35)}.tag.no{color:var(--no);border-color:rgba(232,115,95,.35)}.tag.dim{color:var(--ink3)}
+button.b,a.b{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:36px;padding:0 13px;border-radius:9px;border:1px solid var(--line);background:none;color:var(--ink);font:600 14px/1 var(--sans);cursor:pointer;text-decoration:none}
+button.b.main{background:var(--co);border-color:var(--co);color:#0A0A0B}
+button.b:disabled{opacity:.45;cursor:default}
+button.b:hover:not(:disabled),a.b:hover{border-color:var(--co)}
+input,select,textarea{background:#0E0E10;color:var(--ink);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font:500 14px/1.3 var(--sans)}
+textarea{width:100%;min-height:70px}
+label{display:inline-flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--ink2)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.pr{margin-top:12px;border:1px dashed var(--line);border-radius:12px;padding:12px}
+.pr dl{display:grid;grid-template-columns:auto 1fr auto;gap:8px 12px;margin:10px 0 0;align-items:start}
+.pr dt{color:var(--ink2);font-size:13px;white-space:nowrap}.pr dd{margin:0;word-break:break-word}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--hair);vertical-align:top}
+th{color:var(--ink2);font-weight:600;font-size:13px}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:#1C1A16;border:1px solid var(--co);color:var(--ink);padding:10px 16px;border-radius:10px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9;max-width:90vw}
+#toast.on{opacity:1}
+[hidden]{display:none!important}
+.login{max-width:440px;margin:10vh auto;text-align:center}
+.login input{width:100%;margin:10px 0 0}
+.login .face{width:100%;min-height:52px;font-size:16px;margin-top:20px}
+.login .alt{margin-top:22px;padding-top:18px;border-top:1px solid var(--hair);text-align:left}
+.login .err{color:var(--no);min-height:1.4em;margin:12px 0 0}
+.login .ico{width:56px;height:56px;margin:0 auto 6px;color:var(--co2)}
+.steps{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+.steps span{font-size:12px;padding:2px 8px;border-radius:6px;background:#19181A;color:var(--ink3)}
+.steps span.on{background:rgba(217,178,107,.16);color:var(--co2)}
+@media (max-width:640px){.pr dl{grid-template-columns:1fr auto}.pr dt{grid-column:1/-1}}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+</head>
+<body>
+<header><b>Dinamics 后台</b><nav id="tabs"></nav><span class="sp"></span><span id="who" class="small muted"></span><button class="b" id="reload" type="button">刷新</button></header>
+<main id="main"><p class="muted">载入中…</p></main>
+<div id="toast" role="status" aria-live="polite"></div>
+<script>window.DESK_API="https://dinamics-desk.ds-jasonn.workers.dev";</script>
+<script>
+(() => {
+  if (window.top !== window.self) { document.body.textContent = ''; return; }   // 不许被别的网页框进去
+  const API = String(window.DESK_API || '').replace(/\/$/, '');
+  const SESS = 'dn-admin-session', IDLE = 10 * 60000;
+  // 一键部署打开时网址带着管理钥匙（#k=…）：只用来登记第一张脸或第一个密码，只留在这个分页里，不存进浏览器
+  let enrollKey = '', key = '';
+  try {
+    localStorage.removeItem('dn-admin-key');
+    const m = /[#&]k=([\w-]{20,})/.exec(location.hash);
+    if (m) { sessionStorage.setItem('dn-enroll-key', m[1]); history.replaceState(null, '', location.pathname); }
+    enrollKey = sessionStorage.getItem('dn-enroll-key') || ''; key = localStorage.getItem(SESS) || '';
+  } catch (e) {}
+  const $ = s => document.querySelector(s);
+  const T = { request: '待定价', quoted: '待客户同意', accepted: '待付定金', building: '开工中', finished: '待付尾款', paid: '待交付上线', live: '已交付', cancelled: '已取消', expired: '报价单过期' };
+  const LT = { active: '保护中', won: '已成交', lost: '没成', void: '无效', expired: '过期' };
+  const TIER = { agent: '代理 25%', area: '区代理 40%', state: '州总代理 50%' };
+  const STAGE = { first: '刚接触', needs: '已了解需求', quoted: '已发报价', deciding: '等老板拍板' };
+  const ERR = { admin: '钥匙不对，重新输入', state: '这一步现在不能做', not_accepted: '客户还没同意报价单', not_finished: '先点「完工」，再收尾款', total: '金额不对', days: '大约多久要填中英文',
+    date: '日期不对', received: '到账金额不对', settled: '这笔佣金已经结算，不能撤回', month: '只能结已经过完的月份', agent: '找不到这个代理', amount: '金额不对', note: '写一句说明',
+    quote_taken: '报价单号已经用过', quote_no: '报价单号格式是 DN-2026-001', client_email: '客户邮箱不对', client: '要客户联系人', name: '要中英文名称', lead: '找不到这个报备', lead_state: '这个报备已经不在保护期', ext: '没有待批的延长', server: '服务器出错' };
+  let S = null, tab = 'orders', filt = 'open';
+  const toast = t => { const e = $('#toast'); e.textContent = t; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove('on'), 2600); };
+  // swap content: lists flattened, empty parts dropped (replaceChildren alone would print "null")
+  const put = (el, ...kids) => el.replaceChildren(...kids.flat(9).filter(k => k != null && k !== false));
+  function h(tag, attrs, ...kids) {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) { if (v == null || v === false) continue; if (k.startsWith('on')) e.addEventListener(k.slice(2), v); else if (k === 'cls') e.className = v; else if (k === 'html') e.innerHTML = v; else e.setAttribute(k, v === true ? '' : v); }   // html: only our own fixed strings
+    for (const k of kids.flat()) if (k != null && k !== false) e.append(k instanceof Node ? k : String(k));
+    return e;
+  }
+  async function api(path, data) {
+    const r = await fetch(API + path, { method: data ? 'POST' : 'GET', headers: { authorization: 'Bearer ' + key, ...(data ? { 'content-type': 'application/json' } : {}) }, body: data ? JSON.stringify(data) : undefined });
+    const j = await r.json().catch(() => ({ error: 'server' }));
+    if (r.status === 401) { lock('登录已经过期，请重新扫脸。'); throw new Error('admin'); }
+    pinged = Date.now();
+    if (!r.ok) { toast(ERR[j.error] || ('没做成：' + j.error)); throw new Error(j.error); }
+    return j;
+  }
+  const copy = async t => { try { await navigator.clipboard.writeText(t); toast('已复制'); } catch (e) { prompt('复制这段：', t); } };
+  const today = () => S ? S.today : new Date().toISOString().slice(0, 10);
+  const dateIn = () => h('input', { type: 'date', value: today(), 'aria-label': '日期' });
+  async function act(path, data, msg) { await api('/api/admin/' + path, data); toast(msg || '好了'); await load(); }
+
+  // ---------- 登录：先扫脸，扫不进用密码；10 分钟没动就锁上 ----------
+  const b64u = b => btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const unb64u = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4)), c => c.charCodeAt(0));
+  const canFace = !!(window.PublicKeyCredential && navigator.credentials);
+  const AUTH_ERR = { face: '认不出来：这台设备没登记过，或者扫的不是登记的那张脸。', not_verified: '设备没有确认是你本人，请再扫一次。', locked: '密码错太多次，15 分钟后再试（扫脸照样能进）。',
+    no_password: '还没设密码，请用扫脸。', challenge: '等太久了，请再试一次。', slow_down: '试太多次了，过一会儿再试。', exists: '这台设备已经登记过了。', last: '这是最后一张脸、又没有密码，删了就进不来。' };
+  async function authApi(path, data, token) {
+    const r = await fetch(API + '/api/auth/' + path, { method: data ? 'POST' : 'GET', headers: { ...(token ? { authorization: 'Bearer ' + token } : {}), ...(data ? { 'content-type': 'application/json' } : {}) }, body: data ? JSON.stringify(data) : undefined });
+    const j = await r.json().catch(() => ({ error: 'server' }));
+    if (!r.ok) { const e = new Error(j.error || 'server'); e.j = j; throw e; }
+    return j;
+  }
+  const why = e => e && e.name === 'NotAllowedError' ? '没扫成（取消了或超时）。再试一次，或者用密码。' : e && e.name === 'InvalidStateError' ? AUTH_ERR.exists
+    : e && e.message === 'password' ? `密码不对${e.j && e.j.left ? `，还可以试 ${e.j.left} 次` : ''}。` : (e && AUTH_ERR[e.message]) || '没成功，请再试一次。';
+  const device = () => { const u = navigator.userAgent; return [/iPhone|iPad/.test(u) ? 'iPhone' : /Android/.test(u) ? 'Android' : /Windows/.test(u) ? 'Windows' : /Mac/.test(u) ? 'Mac' : '设备', /Edg\//.test(u) ? 'Edge' : /CriOS|Chrome\//.test(u) ? 'Chrome' : /Safari\//.test(u) ? 'Safari' : ''].filter(Boolean).join(' · '); };
+  async function faceCreate(token) {
+    const o = await authApi('register/options', {}, token);
+    const c = await navigator.credentials.create({ publicKey: { ...o, challenge: unb64u(o.challenge), user: { ...o.user, id: unb64u(o.user.id) }, excludeCredentials: o.excludeCredentials.map(x => ({ ...x, id: unb64u(x.id) })) } });
+    const r = c.response;
+    return authApi('register', { id: c.id, alg: r.getPublicKeyAlgorithm(), publicKey: b64u(r.getPublicKey()), authenticatorData: b64u(r.getAuthenticatorData()), clientDataJSON: b64u(r.clientDataJSON), name: device() }, token);
+  }
+  async function faceGet() {
+    const o = await authApi('login/options', {});
+    const a = await navigator.credentials.get({ publicKey: { challenge: unb64u(o.challenge), rpId: o.rpId, timeout: o.timeout, userVerification: 'required', allowCredentials: o.allowCredentials.map(x => ({ ...x, id: unb64u(x.id) })) } });
+    const r = a.response;
+    return authApi('login', { id: a.id, authenticatorData: b64u(r.authenticatorData), clientDataJSON: b64u(r.clientDataJSON), signature: b64u(r.signature) });
+  }
+  function signedIn(t) {
+    key = t; try { localStorage.setItem(SESS, t); } catch (e) {}
+    if (enrollKey) { enrollKey = ''; try { sessionStorage.removeItem('dn-enroll-key'); } catch (e) {} }
+    active = pinged = Date.now(); load();
+  }
+  const FACE_ICON = '<svg class="ico" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 16V10a4 4 0 0 1 4-4h6M32 6h6a4 4 0 0 1 4 4v6M42 32v6a4 4 0 0 1-4 4h-6M16 42h-6a4 4 0 0 1-4-4v-6"/><path d="M17 18v3M31 18v3M24 19v8h-2M18 32c3.5 3 8.5 3 12 0"/></svg>';
+  function pwForm(label, onOk, two) {
+    const p1 = h('input', { type: 'password', autocomplete: two ? 'new-password' : 'current-password', placeholder: two ? '设一个密码（至少 8 位）' : '密码', 'aria-label': '密码', style: 'width:100%;margin-top:8px' });
+    const p2 = two ? h('input', { type: 'password', autocomplete: 'new-password', placeholder: '再输入一次', 'aria-label': '再输入一次密码', style: 'width:100%;margin-top:8px' }) : null;
+    const err = h('p', { cls: 'err', role: 'alert' }), btn = h('button', { cls: 'b main', type: 'button', style: 'width:100%;margin-top:12px' }, label);
+    const go = async () => {
+      err.textContent = '';
+      if (two && p1.value.length < 8) return void (err.textContent = '密码至少 8 位。');
+      if (two && p1.value !== p2.value) return void (err.textContent = '两次输入的不一样。');
+      btn.disabled = true; try { await onOk(p1.value); } catch (e) { err.textContent = why(e); } btn.disabled = false;
+    };
+    btn.addEventListener('click', go);
+    for (const i of [p1, p2].filter(Boolean)) i.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+    return h('div', {}, p1, p2, btn, err);
+  }
+  async function login(note) {
+    S = null; $('#tabs').replaceChildren(); $('#who').textContent = '';
+    const box = h('div', { cls: 'login' }, h('h2', {}, 'Dinamics 后台'), h('p', { cls: 'muted' }, '载入中…'));
+    $('#main').replaceChildren(box);
+    let st; try { st = await authApi('status'); } catch (e) { put(box, h('h2', {}, 'Dinamics 后台'), h('p', { cls: 'err' }, '连不上后台，过一会儿再刷新。')); return; }
+    const err = h('p', { cls: 'err', role: 'alert' }, note || '');
+    if (!st.faces && !st.password) {   // 第一次：用一键部署带来的钥匙登记
+      if (!enrollKey) { put(box, h('h2', {}, 'Dinamics 后台'), h('p', { cls: 'muted' }, '还没有登记你的脸。请在你的电脑上双击「一键部署.bat」，它会打开这一页让你登记。')); return; }
+      const faceBtn = h('button', { cls: 'b main face', type: 'button', onclick: async () => {
+        err.textContent = ''; faceBtn.disabled = true;
+        try { const r = await faceCreate(enrollKey); enrollKey = ''; key = r.token; afterFirstFace(r.token); } catch (e) { err.textContent = why(e); } faceBtn.disabled = false;
+      } }, '登记我的脸');
+      put(box, h('div', { html: FACE_ICON }), h('h2', {}, '第一次：登记你的脸'), h('p', { cls: 'muted' }, '以后打开这一页都要扫脸。电脑有 Windows Hello 就直接扫；没有的话，在弹出的窗口选「手机」，用手机扫屏幕上的二维码，在手机上扫脸。'),
+        canFace ? faceBtn : h('p', { cls: 'err' }, '这个浏览器不能扫脸，请先设密码。'), err,
+        h('div', { cls: 'alt' }, h('p', { cls: 'small muted', style: 'margin:0' }, '扫脸登记不了？先设一个密码（以后再加脸）：'), pwForm('设好密码，进入', async pw => { const r = await authApi('password/set', { password: pw }, enrollKey); signedIn(r.token); }, true)));
+      return;
+    }
+    const pw = st.password ? h('div', { cls: 'alt', hidden: st.faces > 0 }, h('p', { cls: 'small muted', style: 'margin:0' }, '用密码进入：'), pwForm('进入', async v => { const r = await authApi('password/login', { password: v }); signedIn(r.token); })) : null;
+    const faceBtn = h('button', { cls: 'b main face', type: 'button', onclick: async () => {
+      err.textContent = ''; faceBtn.disabled = true;
+      try { const r = await faceGet(); signedIn(r.token); } catch (e) { err.textContent = why(e); if (pw) pw.hidden = false; } faceBtn.disabled = false;
+    } }, '扫脸进入');
+    put(box, h('div', { html: FACE_ICON }), h('h2', {}, 'Dinamics 后台'), h('p', { cls: 'muted' }, '10 分钟没有动作会自动锁上。'),
+      st.faces && canFace ? faceBtn : null, err, pw,
+      st.faces && st.password ? h('p', { cls: 'small', style: 'margin-top:16px' }, h('a', { href: '#', style: 'color:var(--ink2)', onclick: e => { e.preventDefault(); pw.hidden = !pw.hidden; } }, '扫不进？用密码')) : null);
+  }
+  function afterFirstFace(t) {   // 第一张脸登记好了：顺便设备用密码（扫不进时用）
+    try { sessionStorage.removeItem('dn-enroll-key'); } catch (e) {}
+    $('#main').replaceChildren(h('div', { cls: 'login' }, h('h2', {}, '脸登记好了'), h('p', { cls: 'muted' }, '再设一个备用密码：扫不进的时候用。'),
+      pwForm('设好了', async pw => { await authApi('password/set', { password: pw }, t); toast('密码设好了'); signedIn(t); }, true),
+      h('p', { style: 'margin-top:14px' }, h('button', { cls: 'b', type: 'button', onclick: () => signedIn(t) }, '以后再设'))));
+  }
+  // 10 分钟没动就锁：画面上的资料清掉，后台那次登录也作废
+  let active = Date.now(), pinged = Date.now(), locked = false;
+  function lock(note) {
+    if (locked) return; locked = true;
+    const t = key; key = ''; S = null;
+    try { localStorage.removeItem(SESS); } catch (e) {}
+    if (t) fetch(API + '/api/auth/logout', { method: 'POST', headers: { authorization: 'Bearer ' + t }, keepalive: true }).catch(() => {});
+    login(note || '');
+  }
+  for (const ev of ['pointerdown', 'pointermove', 'keydown', 'wheel', 'touchstart', 'scroll']) addEventListener(ev, () => { active = Date.now(); }, { passive: true, capture: true });
+  setInterval(() => {
+    if (!key) return;
+    const now = Date.now();
+    if (now - active >= IDLE) return lock('10 分钟没有动作，已经锁上了。请重新扫脸。');
+    if (active > pinged && now - pinged > 60000) { pinged = now; authApi('ping', {}, key).catch(e => { if (e.message === 'admin') lock('登录已经过期，请重新扫脸。'); }); }
+  }, 5000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && key && Date.now() - active >= IDLE) lock('10 分钟没有动作，已经锁上了。请重新扫脸。'); });
+  addEventListener('storage', e => { if (e.key === SESS && !e.newValue && key) lock('在别的分页锁上了。'); });
+
+  async function load() {
+    if (!key) return login();
+    locked = false;
+    try { S = await api('/api/admin/state'); } catch (e) { return; }
+    draw();
+  }
+
+  function draw() {
+    const open = S.deals.filter(d => !['live', 'cancelled', 'expired'].includes(d.state)).length;
+    const asks = S.leads.filter(l => l.ext === 'asked').length;
+    const unpaid = S.settlements.filter(s => !s.paid).length;
+    const tabs = [['orders', '订单', open], ['agents', '代理', S.agents.length], ['leads', '报备', asks ? asks + ' 待批' : S.leads.length], ['money', '佣金', unpaid ? unpaid + ' 待付' : ''], ['log', '记录', ''], ['me', '登录', '']];
+    $('#tabs').replaceChildren(...tabs.map(([k, t, n]) => h('button', { type: 'button', 'aria-pressed': String(tab === k), onclick: () => { tab = k; draw(); } }, t, n !== '' ? h('span', { cls: 'n' }, n) : null)));
+    $('#who').textContent = '今天 ' + S.today;
+    ({ orders, agents, leads, money, log, me })[tab]();
+  }
+
+  // ---------- 订单 ----------
+  function payreqCard(d, i) {
+    const p = i.payreq; if (!p) return null;
+    const line = (k, v) => [h('dt', {}, k), h('dd', {}, v), h('button', { cls: 'b', type: 'button', onclick: () => copy(v) }, '复制')];
+    const dt = dateIn(), got = h('input', { inputmode: 'decimal', value: i.amount.replace(/,/g, ''), size: 9, 'aria-label': '到账金额 US$' });
+    const can = i.n === 1 ? !['request', 'quoted', 'expired', 'cancelled'].includes(d.state) : ['finished', 'paid', 'live'].includes(d.state);
+    return h('div', { cls: 'pr' },
+      h('div', { cls: 'row' }, h('h3', {}, `${i.name} 付款请求 · US$${i.amount}`), h('span', { cls: 'tag' + (i.status === 'sent' ? ' ok' : '') }, i.status === 'sent' ? `已发出 ${i.sent} · ${i.due} 到期` : '还没发'),
+        !can ? h('span', { cls: 'small muted' }, i.n === 1 ? '客户同意以后才发' : '点「完工」以后才发') : null),
+      h('p', { cls: 'small muted', style: 'margin:6px 0 0' }, 'Payoneer → 獲得付款 → 收款請求 → 標準請求。照下面填：'),
+      h('dl', {}, line('收件人', p.to), line('邮箱', p.email), line('金额', p.amount + ' USD'), line('到期日', p.due), line('说明', p.text), line('另一种语言', p.text_other), line('附件', p.attach)),
+      h('div', { cls: 'row', style: 'margin-top:10px' },
+        i.status === 'planned' ? h('button', { cls: 'b', type: 'button', disabled: !can, onclick: () => act('instalment', { deal_id: d.id, n: i.n, action: 'sent', date: dt.value }, '记下已发出') }, '已发出') : h('button', { cls: 'b', type: 'button', onclick: () => act('instalment', { deal_id: d.id, n: i.n, action: 'unsend' }, '已撤回') }, '撤回「已发出」'),
+        dt, h('label', {}, '到账 US$', got),
+        h('button', { cls: 'b main', type: 'button', disabled: !can, onclick: () => act('instalment', { deal_id: d.id, n: i.n, action: 'paid', date: dt.value, received: got.value }, i.n === 1 && i.of > 1 ? '定金到账，开工' : '已记到账') }, '已到账')));
+  }
+  function orderCard(d) {
+    const st = h('span', { cls: 'tag' + (d.state === 'live' ? ' ok' : ['cancelled', 'expired'].includes(d.state) ? ' no' : '') }, T[d.state] || d.state);
+    const flow = ['quoted', 'accepted', 'building', 'finished', 'paid', 'live'], at = flow.indexOf(d.state);
+    const kids = [
+      h('div', { cls: 'row' }, h('h3', {}, `${d.no} · ${d.name_zh}`), st, d.source === 'admin' ? h('span', { cls: 'tag dim' }, '线下') : null, h('span', { cls: 'sp' }),
+        h('b', {}, d.total ? 'US$' + d.total : '待定价'), d.agent ? h('span', { cls: 'tag' }, '代理 ' + d.agent) : d.agent_hint ? h('span', { cls: 'tag dim' }, '填了 ' + d.agent_hint) : null),
+      h('p', { cls: 'small', style: 'margin:6px 0 0' }, [d.client_company, d.client_contact, d.client_email, d.client_phone, d.client_country].filter(Boolean).join(' · ')),
+      h('p', { cls: 'small muted', style: 'margin:2px 0 0' }, `下单 ${d.created}` + (d.valid_until && ['quoted', 'expired'].includes(d.state) ? ` · 报价单有效到 ${d.valid_until}` : '') + (d.accepted ? ` · 同意：${d.accepted}` : '') +
+        (d.show_work == null ? '' : d.show_work ? ' · 同意展示作品' : ' · 不同意展示作品') + (d.days_zh ? ` · ${d.days_zh}` : '')),
+      d.client_note ? h('p', { style: 'margin:8px 0 0;white-space:pre-wrap' }, d.client_note) : null,
+      at >= 0 ? h('div', { cls: 'steps' }, ['报价单', '同意', '开工', '完工', '付清', '交付'].map((t, k) => h('span', { cls: k <= at ? 'on' : '' }, t))) : null,
+    ];
+    if (['request', 'quoted', 'expired'].includes(d.state)) {
+      const tot = h('input', { inputmode: 'decimal', placeholder: 'US$', value: d.total.replace(/,/g, ''), size: 9 }), dz = h('input', { placeholder: '大约 4 周', value: d.days_zh }), de = h('input', { placeholder: 'About 4 weeks', value: d.days_en });
+      kids.push(h('div', { cls: 'row', style: 'margin-top:10px' }, h('label', {}, '价格 US$', tot), h('label', {}, '大约多久（中文）', dz), h('label', {}, '英文', de),
+        h('button', { cls: 'b main', type: 'button', onclick: () => act('order', { id: d.id, action: 'price', total: tot.value, days_zh: dz.value, days_en: de.value }, '报价单好了，发链接给客户') }, d.state === 'request' ? '出报价单' : '改价、重新出')));
+    }
+    if (d.source === 'web') kids.push(h('div', { cls: 'row', style: 'margin-top:10px' }, h('button', { cls: 'b', type: 'button', onclick: async e => {
+        const btn = e.currentTarget, r = await api('/api/admin/order', { id: d.id, action: 'peek' }), link = `https://dinamics.dev/quote#${r.no}.${r.token}`;
+        const old = btn.parentNode.querySelector('.peek'); if (old) old.remove();
+        btn.after(h('span', { cls: 'peek row' }, h('a', { cls: 'b main', href: link, target: '_blank', rel: 'noopener' }, '打开（30 分钟内有效）'), h('span', { cls: 'small muted' }, '客户看到的就是这一页；要附 PDF，打开后点「存成 PDF」。客户的链接不变。')));
+      } }, '看客户的报价单')));
+    if (['request', 'quoted', 'expired', 'accepted', 'building', 'finished', 'paid'].includes(d.state) && d.source === 'web')
+      kids.push(h('div', { cls: 'row', style: 'margin-top:10px' }, h('button', { cls: 'b', type: 'button', onclick: async e => {
+        const btn = e.currentTarget;
+        if (!confirm('生成新的客户链接？旧链接从现在起打不开。')) return;
+        const r = await api('/api/admin/order', { id: d.id, action: 'link' }); const link = `https://dinamics.dev/quote#${r.no}.${r.token}`;
+        const box = h('div', { cls: 'pr' }, h('p', { cls: 'small muted', style: 'margin:0' }, '新链接（旧链接从现在起打不开）：'), h('p', { cls: 'mono', style: 'word-break:break-all' }, link),
+          h('div', { cls: 'row' }, h('button', { cls: 'b', type: 'button', onclick: () => copy(link) }, '复制'),
+            d.client_phone ? h('a', { cls: 'b', href: 'https://wa.me/' + d.client_phone.replace(/\D/g, '') + '?text=' + encodeURIComponent((d.client_lang === 'en' ? 'Your Dinamics quote: ' : '您的 Dinamics 报价单：') + link), target: '_blank', rel: 'noopener' }, 'WhatsApp 发给客户') : null,
+            h('a', { cls: 'b', href: 'mailto:' + d.client_email + '?subject=' + encodeURIComponent('Dinamics ' + r.no) + '&body=' + encodeURIComponent(link) }, '邮件发给客户')));
+        btn.parentNode.after(box); toast('新链接已生成');
+      } }, '给客户的报价单链接')));
+    for (const i of d.instalments) if (i.status !== 'paid' && (i.n === 1 || ['finished', 'paid'].includes(d.state)) && !['request', 'quoted', 'expired', 'cancelled'].includes(d.state)) kids.push(payreqCard(d, i));
+    const paid = d.instalments.filter(i => i.status === 'paid');
+    if (paid.length) kids.push(h('p', { cls: 'small', style: 'margin:10px 0 0' }, '已到账：' + paid.map(i => `${i.name} US$${i.received}（${i.paid}）`).join('；'),
+      ' ', h('button', { cls: 'b', type: 'button', onclick: () => { const i = paid.at(-1); if (confirm(`撤回「${i.name}已到账」？`)) act('instalment', { deal_id: d.id, n: i.n, action: 'unpay' }, '已撤回'); } }, '撤回最后一笔')));
+    const dt = dateIn(), tail = h('div', { cls: 'row', style: 'margin-top:10px' });
+    if (d.state === 'building') tail.append(dt, h('button', { cls: 'b main', type: 'button', onclick: () => act('order', { id: d.id, action: 'finish', date: dt.value }, '记下完工：去发尾款付款请求') }, '完工了，要尾款'));
+    if (d.state === 'paid') tail.append(dt, h('button', { cls: 'b main', type: 'button', onclick: () => act('order', { id: d.id, action: 'deliver', date: dt.value }, '已交付上线') }, '已交付上线'));
+    if (!['live', 'cancelled'].includes(d.state)) tail.append(h('button', { cls: 'b', type: 'button', onclick: () => { const n = prompt('取消的原因（会记下来）：'); if (n !== null) act('order', { id: d.id, action: 'cancel', note: n }, '已取消'); } }, '取消这单'));
+    if (paid.length) tail.append(h('button', { cls: 'b', type: 'button', onclick: () => { const a = prompt('退款金额 US$（代理佣金会按比例在下次结算扣回）：'); if (a) act('refund', { deal_id: d.id, amount: a, note: '' }, '已记退款'); } }, '退款'));
+    tail.append(h('button', { cls: 'b', type: 'button', onclick: () => { const n = prompt('备注：', d.note); if (n !== null) act('order', { id: d.id, action: 'note', note: n }); } }, d.note ? '备注：' + d.note : '加备注'));
+    kids.push(tail);
+    return h('div', { cls: 'card' }, kids);
+  }
+  function orders() {
+    const F = { open: d => !['live', 'cancelled', 'expired'].includes(d.state), all: () => true, ...Object.fromEntries(Object.keys(T).map(k => [k, d => d.state === k])) };
+    const names = { open: '进行中', all: '全部', ...T };
+    const list = S.deals.filter(F[filt] || F.open);
+    $('#main').replaceChildren(
+      h('div', { cls: 'chips' }, Object.keys(names).map(k => h('button', { type: 'button', 'aria-pressed': String(filt === k), onclick: () => { filt = k; draw(); } }, names[k], ' ', S.deals.filter(F[k]).length))),
+      ...(list.length ? list.map(orderCard) : [h('p', { cls: 'muted' }, '这里还没有订单。客户在官网点「下单」，就会出现在这里。')]),
+      offlineForm());
+  }
+  function offlineForm() {
+    const f = {}; const I = (k, ph, attrs = {}) => (f[k] = h('input', { placeholder: ph, ...attrs }));
+    const plan = h('select', {}, h('option', { value: 'deposit' }, '定金 50% + 尾款 50%'), h('option', { value: 'full' }, '一次付清（年费、小改、源代码费）'));
+    const lang = h('select', {}, h('option', { value: 'zh' }, '中文客人'), h('option', { value: 'en' }, '英文客人'));
+    const signed = dateIn();
+    return h('details', { cls: 'card' }, h('summary', {}, h('b', {}, '加一单线下签好的（年费、小改、源代码费也在这里加）')),
+      h('div', { cls: 'grid', style: 'margin-top:12px' },
+        h('label', {}, '名称（中文）', I('name_zh', '标准官网 / 官网年费 / 源代码费')), h('label', {}, '名称（英文）', I('name_en', 'Standard website')),
+        h('label', {}, '金额 US$', I('total', '1600', { inputmode: 'decimal' })), h('label', {}, '怎么付', plan),
+        h('label', {}, '大约多久（中文）', I('days_zh', '大约 5 天')), h('label', {}, '大约多久（英文）', I('days_en', 'About 5 days')),
+        h('label', {}, '客户联系人', I('client_contact', '')), h('label', {}, '客户邮箱', I('client_email', '', { type: 'email' })),
+        h('label', {}, '客户公司', I('client_company', '')), h('label', {}, '客户电话', I('client_phone', '')), h('label', {}, '语言', lang),
+        h('label', {}, '签的日期', signed), h('label', {}, '报备编号（有就填）', I('lead_id', '', { inputmode: 'numeric' })), h('label', {}, '或代理编号', I('agent_code', 'A1001')),
+        h('label', {}, '报价单号（空着就自动排）', I('quote_no', 'DN-2026-…'))),
+      h('div', { cls: 'row', style: 'margin-top:12px' }, h('button', { cls: 'b main', type: 'button', onclick: () => {
+        const data = Object.fromEntries(Object.entries(f).map(([k, e]) => [k, e.value.trim()])); data.plan = plan.value; data.client_lang = lang.value; data.signed = signed.value;
+        if (!data.lead_id) delete data.lead_id; act('deal', data, '已加上：去发付款请求');
+      } }, '加上')));
+  }
+
+  // ---------- 代理 ----------
+  function agents() {
+    const rows = S.agents.map(a => {
+      const tier = h('select', { 'aria-label': '等级' }, Object.entries(TIER).map(([k, t]) => h('option', { value: k, selected: a.tier === k }, t)));
+      const st = h('select', { 'aria-label': '状态' }, h('option', { value: 'active', selected: a.status === 'active' }, '合作中'), h('option', { value: 'ended', selected: a.status === 'ended' }, '已退出'));
+      const payout = h('input', { value: a.payout || '', placeholder: '佣金付到哪里（只写方式）', 'aria-label': '佣金付到哪里' });
+      const company = h('input', { value: a.company || '', placeholder: '公司（州总代理）', 'aria-label': '公司' });
+      return h('div', { cls: 'card' },
+        h('div', { cls: 'row' }, h('h3', {}, `${a.code} · ${a.name}`), h('span', { cls: 'tag' + (a.status === 'ended' ? ' no' : '') }, a.status === 'ended' ? '已退出' : TIER[a.tier]), h('span', { cls: 'sp' }),
+          h('span', { cls: 'small muted' }, `保护中的报备 ${a.active_leads} · 未结佣金 US$${a.unsettled}`)),
+        h('p', { cls: 'small', style: 'margin:6px 0 0' }, [a.phone, a.email, a.place, '加入 ' + a.since].filter(Boolean).join(' · ')),
+        h('div', { cls: 'row', style: 'margin-top:10px' }, tier, st, company, payout,
+          h('button', { cls: 'b main', type: 'button', onclick: () => {
+            if (st.value === 'ended' && a.status !== 'ended' && !confirm('设成已退出：他保护期内的报备会作废，以后到账的单不再算佣金。确定？')) return;
+            act('agent', { id: a.id, tier: tier.value, status: st.value, payout: payout.value, company: company.value }, '已保存');
+          } }, '保存'),
+          h('button', { cls: 'b', type: 'button', onclick: async e => {
+            const btn = e.currentTarget;
+            if (!confirm('给他一个新的专属链接？旧链接马上失效。')) return;
+            const r = await api('/api/admin/agent/token', { id: a.id }); const link = 'https://dinamics.dev/partners#t=' + r.token;
+            btn.after(h('span', { cls: 'mono', style: 'word-break:break-all' }, ' ' + link + ' '), h('button', { cls: 'b', type: 'button', onclick: () => copy(link) }, '复制'));
+          } }, '新的专属链接')));
+    });
+    $('#main').replaceChildren(h('div', { cls: 'row', style: 'margin-bottom:12px' }, h('h2', {}, '代理'), h('span', { cls: 'sp' }), csv('agents', '导出名单')), ...(rows.length ? rows : [h('p', { cls: 'muted' }, '还没有人报名。代理页：https://dinamics.dev/partners')]));
+  }
+
+  // ---------- 报备 ----------
+  let lf = 'all';
+  function leads() {
+    const F = { all: () => true, asked: l => l.ext === 'asked', active: l => l.state === 'active', won: l => l.state === 'won', expired: l => l.state === 'expired', other: l => ['lost', 'void'].includes(l.state) };
+    const names = { all: '全部', asked: '申请延长', active: '保护中', won: '已成交', expired: '过期', other: '没成 / 无效' };
+    const list = S.leads.filter(F[lf]);
+    $('#main').replaceChildren(
+      h('div', { cls: 'row', style: 'margin-bottom:8px' }, h('h2', {}, '报备'), h('span', { cls: 'sp' }), csv('leads', '导出报备')),
+      h('div', { cls: 'chips' }, Object.keys(names).map(k => h('button', { type: 'button', 'aria-pressed': String(lf === k), onclick: () => { lf = k; draw(); } }, names[k], ' ', S.leads.filter(F[k]).length))),
+      ...(list.length ? list.map(l => h('div', { cls: 'card' },
+        h('div', { cls: 'row' }, h('h3', {}, `#${l.id} ${l.company}`), h('span', { cls: 'tag' + (l.state === 'won' ? ' ok' : ['void', 'lost', 'expired'].includes(l.state) ? ' no' : '') }, LT[l.state] + (l.state === 'active' ? ` · 还剩 ${l.days_left} 天` : '')),
+          h('span', { cls: 'sp' }), h('span', { cls: 'tag' }, l.agent)),
+        h('p', { cls: 'small', style: 'margin:6px 0 0' }, [l.contact, l.phone, l.email, l.region, STAGE[l.stage]].filter(Boolean).join(' · ')),
+        h('p', { style: 'margin:6px 0 0' }, l.need),
+        h('p', { cls: 'small muted', style: 'margin:4px 0 0' }, `报备 ${l.created} · 保护到 ${l.expires}` + (l.note ? ' · ' + l.note : '')),
+        l.ext === 'asked' ? h('div', { cls: 'pr' }, h('p', { style: 'margin:0' }, '申请延长 30 天：' + l.ext_note), h('div', { cls: 'row', style: 'margin-top:8px' },
+          h('button', { cls: 'b main', type: 'button', onclick: () => act('lead', { id: l.id, ext: 'grant' }, '已延长 30 天') }, '批准延长'),
+          h('button', { cls: 'b', type: 'button', onclick: () => act('lead', { id: l.id, ext: 'deny' }, '已拒绝') }, '不批'))) : null,
+        l.state === 'active' ? h('div', { cls: 'row', style: 'margin-top:8px' },
+          h('button', { cls: 'b', type: 'button', onclick: () => act('lead', { id: l.id, status: 'lost' }, '标为没成') }, '没成'),
+          h('button', { cls: 'b', type: 'button', onclick: () => { const n = prompt('为什么无效（编造、抢别人的客人……）：'); if (n) act('lead', { id: l.id, status: 'void', note: n }, '已作废'); } }, '无效')) : null))
+        : [h('p', { cls: 'muted' }, '这里没有。')]));
+  }
+
+  // ---------- 佣金 ----------
+  function money() {
+    const last = (() => { const [y, m] = S.month.split('-').map(Number); const d = new Date(Date.UTC(y, m - 2, 1)); return d.toISOString().slice(0, 7); })();
+    const mi = h('input', { type: 'month', value: last, max: last, 'aria-label': '结哪个月' });
+    const open = S.commissions.filter(c => !c.settled);
+    const a1 = h('input', { placeholder: 'A1001', size: 8, 'aria-label': '代理编号' }), a2 = h('input', { placeholder: '-50 或 120', inputmode: 'decimal', size: 9, 'aria-label': '金额' }),
+      a3 = h('input', { placeholder: '说明：折扣自己出 / 本地服务费 5% …', 'aria-label': '说明' }), a4 = h('input', { placeholder: '报价单号（选填）', size: 13, 'aria-label': '报价单号' });
+    $('#main').replaceChildren(
+      h('div', { cls: 'row', style: 'margin-bottom:10px' }, h('h2', {}, '佣金'), h('span', { cls: 'sp' }), csv('commissions', '导出佣金明细'), csv('orders', '导出订单')),
+      h('div', { cls: 'card' }, h('p', { style: 'margin:0 0 8px' }, '每月 1 日结上个月到账的单，15 日前付到代理登记的账户。'),
+        h('div', { cls: 'row' }, mi, h('button', { cls: 'b main', type: 'button', onclick: () => act('settle', { month: mi.value }, '结算单已生成') }, '结算这个月'))),
+      h('h3', { style: 'margin:18px 0 8px' }, '结算单'),
+      S.settlements.length ? h('table', {}, h('tr', {}, h('th', {}, '月份'), h('th', {}, '代理'), h('th', { cls: 'num' }, 'US$'), h('th', {}, '付了吗'), h('th', {})),
+        S.settlements.map(s => { const d = dateIn(), ref = h('input', { placeholder: '付款编号（选填）', size: 14 });
+          return h('tr', {}, h('td', {}, s.month), h('td', {}, s.agent), h('td', { cls: 'num' }, s.amount), h('td', {}, s.paid ? `已付 ${s.paid} ${s.ref}` : '未付'),
+            h('td', {}, s.paid ? '' : h('div', { cls: 'row' }, d, ref, h('button', { cls: 'b', type: 'button', onclick: () => act('settlement/paid', { id: s.id, date: d.value, ref: ref.value }, '记下已付') }, '已付')))); }))
+        : h('p', { cls: 'muted' }, '还没有结算单。'),
+      h('h3', { style: 'margin:22px 0 8px' }, `还没结算的（${open.length}）`),
+      open.length ? h('table', {}, h('tr', {}, h('th', {}, '月份'), h('th', {}, '代理'), h('th', {}, '说明'), h('th', { cls: 'num' }, '基数'), h('th', { cls: 'num' }, '%'), h('th', { cls: 'num' }, '佣金')),
+        open.map(c => h('tr', {}, h('td', {}, c.month), h('td', {}, c.agent), h('td', {}, c.note || c.kind), h('td', { cls: 'num' }, c.base), h('td', { cls: 'num' }, c.rate || ''), h('td', { cls: 'num' }, c.amount))))
+        : h('p', { cls: 'muted' }, '没有。'),
+      h('div', { cls: 'card', style: 'margin-top:18px' }, h('h3', {}, '加一笔调整'), h('p', { cls: 'small muted', style: 'margin:4px 0 8px' }, '代理给客人的折扣从他佣金里扣、外地成交给本地团队的 5%、其他手工调整。负数是扣。'),
+        h('div', { cls: 'row' }, a1, a2, a3, a4, h('button', { cls: 'b main', type: 'button', onclick: () => act('adjust', { agent_code: a1.value, amount: a2.value, note: a3.value, quote_no: a4.value }, '已加上') }, '加上'))));
+  }
+
+  function log() {
+    $('#main').replaceChildren(h('h2', {}, '记录（最近 200 条）'), h('table', {}, h('tr', {}, h('th', {}, '时间'), h('th', {}, '谁'), h('th', {}, '做了什么'), h('th', {}, '')),
+      S.log.map(x => h('tr', {}, h('td', { cls: 'mono' }, x.at), h('td', {}, x.who), h('td', {}, x.what), h('td', { cls: 'mono' }, x.ref)))));
+  }
+  // ---------- 登录：哪几台设备能扫脸进来、密码、马上锁上 ----------
+  async function me() {
+    const box = h('div', {}, h('p', { cls: 'muted' }, '载入中…')); $('#main').replaceChildren(box);
+    let f; try { f = await authApi('faces', null, key); } catch (e) { if (e.message === 'admin') return lock('登录已经过期，请重新扫脸。'); put(box, h('p', { cls: 'muted' }, '没载入成功，点「刷新」再试。')); return; }
+    const err = h('p', { cls: 'small', style: 'color:var(--no);margin:8px 0 0' });
+    put(box, 
+      h('div', { cls: 'row', style: 'margin-bottom:10px' }, h('h2', {}, '能扫脸进来的设备'), h('span', { cls: 'sp' }), h('button', { cls: 'b', type: 'button', onclick: () => lock('已经锁上。') }, '马上锁上')),
+      ...f.faces.map(x => h('div', { cls: 'card row' }, h('b', {}, x.name || '设备'), h('span', { cls: 'small muted' }, `登记 ${x.created}` + (x.used ? ` · 上次用 ${x.used}` : '')), h('span', { cls: 'sp' }),
+        h('button', { cls: 'b', type: 'button', onclick: async () => { if (!confirm(`删掉「${x.name || '设备'}」？删了以后这台设备不能再扫脸进来。`)) return; try { await authApi('faces/delete', { id: x.id }, key); toast('删掉了'); me(); } catch (e) { err.textContent = why(e); } } }, '删掉'))),
+      h('div', { cls: 'card' }, h('p', { style: 'margin:0 0 10px' }, '加一台设备（例如你的手机）：在那台设备上打开 dinamics.dev/admin、先扫脸或用密码进来，再按这个按钮；也可以在这里按，在弹出的窗口选「手机」扫二维码。'),
+        canFace ? h('button', { cls: 'b main', type: 'button', onclick: async () => { err.textContent = ''; try { await faceCreate(key); toast('登记好了'); me(); } catch (e) { err.textContent = why(e); } } }, '登记这台设备 / 手机') : h('p', { cls: 'small muted' }, '这个浏览器不能扫脸。'), err),
+      h('h2', { style: 'margin-top:22px' }, f.password ? '改密码' : '设一个备用密码'),
+      h('div', { cls: 'card', style: 'max-width:420px' }, pwForm(f.password ? '改好了' : '设好了', async pw => { await authApi('password/set', { password: pw }, key); toast('密码设好了'); me(); }, true)),
+      h('p', { cls: 'small muted' }, '10 分钟没有动作会自动锁上；手机或电脑丢了，在你的电脑上双击「重新登记我的脸.bat」，所有设备和密码作废、重新登记。'));
+  }
+  function csv(what, t) {
+    return h('button', { cls: 'b', type: 'button', onclick: async () => {
+      const r = await fetch(API + '/api/admin/export?what=' + what, { headers: { authorization: 'Bearer ' + key } }); if (r.status === 401) return lock('登录已经过期，请重新扫脸。'); if (!r.ok) return toast('导出失败');
+      const u = URL.createObjectURL(await r.blob()), a = h('a', { href: u, download: `dinamics-${what}-${S.today}.csv` }); document.body.append(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(u), 4000);
+    } }, t);
+  }
+  $('#reload').addEventListener('click', load);
+  load();
+})();
+</script>
+</body>
+</html>

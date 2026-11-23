@@ -139,15 +139,21 @@ footer a{color:var(--ink2)}
 .prc-bar select{height:42px;padding:0 36px 0 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:600 15px/1 var(--sans);cursor:pointer}
 .prc-fx{flex-basis:100%;margin:0;font-size:13.5px;color:var(--ink3)}
 .prc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:28px}
-.prc-c{min-width:0;padding:24px 22px 22px;border:1px solid var(--line);border-radius:16px;background:var(--wash)}
+.prc-c{min-width:0;padding:24px 22px 22px;border:1px solid var(--line);border-radius:16px;background:var(--wash);display:flex;flex-direction:column}
 .prc-c h3{font-size:21px;line-height:1.25}
 .prc-p{margin:14px 0 0;font:700 clamp(28px,3vw,38px)/1.1 var(--sans);color:var(--co);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .prc-p span{font-size:.5em;font-weight:600;color:var(--ink2)}
 .prc-w{margin:10px 0 0;font:600 14px/1.4 var(--sans);color:var(--ink2)}
-.prc-c ul{margin:16px 0 0;padding:16px 0 0;border-top:1px solid var(--hair);list-style:none;display:grid;gap:9px}
+.prc-c ul{margin:16px 0 0;padding:16px 0 0;border-top:1px solid var(--hair);list-style:none;display:grid;gap:9px;flex:1;align-content:start}
 .prc-c li{position:relative;padding-left:18px;font-size:15px;line-height:1.5;color:var(--ink)}
 .prc-c li::before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;border-radius:2px;background:var(--co)}
-.prc-year{margin:22px 0 0;font-size:16px;color:var(--ink)}
+.prc-order{display:inline-flex;align-items:center;justify-content:center;align-self:flex-start;min-height:44px;margin-top:20px;padding:0 20px;border-radius:11px;background:var(--gold);color:var(--on);font:700 15px/1 var(--sans);text-decoration:none;box-shadow:0 10px 30px -14px rgba(var(--rgb),.55)}
+.prc-order:hover{filter:brightness(1.06)}
+.prc-order.ghost{background:none;color:var(--ink);border:1.5px solid var(--line);box-shadow:none}
+.prc-order.ghost:hover{border-color:var(--co);filter:none}
+.prc-order:focus-visible,.prc-cta:focus-visible{outline:2px solid var(--co2);outline-offset:3px}
+.prc-flow{margin:22px 0 0;font-size:16px;color:var(--ink);max-width:46em}
+.prc-year{margin:10px 0 0;font-size:16px;color:var(--ink)}
 .prc-year .amt{color:var(--co)}
 .prc-ex{margin:8px 0 0;font-size:14px;color:var(--ink3)}
 .prc-cta{display:inline-flex;align-items:center;height:46px;margin-top:22px;padding:0 20px;border-radius:11px;background:var(--gold);color:var(--on);font:700 15px/1 var(--sans);text-decoration:none}

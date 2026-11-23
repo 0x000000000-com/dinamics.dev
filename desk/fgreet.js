@@ -1,10 +1,10 @@
-/* Dinamics · free festival greetings: seven festivals, two pictures each, your greeting, shop name and logo, square or tall, saved as a picture. Nothing is uploaded. */
+/* Dinamics · free festival greetings: 27 festivals from around the world, your greeting, shop name and logo, square or tall, saved as a picture. Nothing is uploaded. */
 (() => {
   const { $, h, put, t, tf, toast, store } = window.Desk, DN = window.DN, F = window.Free, D = window.DESK || {};
   const form = $('#gr-form'), out = $('#gr-out');
-  const FEST = ['cny', 'raya', 'diwali', 'songkran', 'midautumn', 'xmas', 'newyear'];
+  const FEST = Object.keys(D.fests || {}), SHOW = 8;   // every festival on the calendar; the next eight are shown first
   const ZOD = [['鼠', 'Rat'], ['牛', 'Ox'], ['虎', 'Tiger'], ['兔', 'Rabbit'], ['龙', 'Dragon'], ['蛇', 'Snake'], ['马', 'Horse'], ['羊', 'Goat'], ['猴', 'Monkey'], ['鸡', 'Rooster'], ['狗', 'Dog'], ['猪', 'Pig']];
-  const LN = { zh: '中文', en: 'English', ms: 'Bahasa Melayu', th: 'ไทย', ta: 'தமிழ்' };
+  const LN = { zh: '中文', en: 'English', ms: 'Bahasa Melayu', th: 'ไทย', ta: 'தமிழ்', hi: 'हिन्दी', fa: 'فارسی', ar: 'العربية', he: 'עברית', es: 'Español', ga: 'Gaeilge' };
   // the next date of each festival (from the same calendar as the home page), and how far away it is
   const today = (() => { const d = new Date(); return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate(); })();
   const toDate = n => new Date(Math.floor(n / 10000), Math.floor(n / 100) % 100 - 1, n % 100);
@@ -22,6 +22,26 @@
       midautumn: { zh: ['中秋节快乐', '花好月圆 · 人月两团圆'], en: ['Happy Mid-Autumn Festival', 'May your family be together under the full moon'] },
       xmas: { en: ['Merry Christmas', 'and a Happy New Year'], zh: ['圣诞快乐', '平安喜乐 · 万事顺遂'] },
       newyear: { zh: ['新年快乐', `${yearOf('newyear')}，一切顺利`], en: ['Happy New Year', `All the best for ${yearOf('newyear')}`], ms: ['Selamat Tahun Baru', `Semoga ${yearOf('newyear')} lebih baik`] },
+      valentine: { zh: ['情人节快乐', '有你在，每天都是好日子'], en: ['Happy Valentine’s Day', 'Every day is better with you'] },
+      womensday: { zh: ['妇女节快乐', '致每一位了不起的她'], en: ['Happy Women’s Day', 'To every remarkable woman'] },
+      stpatricks: { en: ['Happy St. Patrick’s Day', 'May the luck of the Irish be with you'], ga: ['Lá Fhéile Pádraig Sona Duit', ''], zh: ['圣帕特里克节快乐', '好运常伴你左右'] },
+      holi: { en: ['Happy Holi', 'May your life be filled with colours of joy'], hi: ['होली की हार्दिक शुभकामनाएँ', ''], zh: ['洒红节快乐', '愿生活处处都是好颜色'] },
+      nowruz: { en: ['Happy Nowruz', 'Wishing you a fresh start this spring'], fa: ['نوروز مبارک', ''], zh: ['诺鲁孜节快乐', '春回大地 · 万象更新'] },
+      easter: { en: ['Happy Easter', 'Wishing you joy, hope and spring sunshine'], zh: ['复活节快乐', '愿春天的喜乐与你同在'] },
+      ramadan: { ms: ['Salam Ramadan', 'Selamat menyambut bulan Ramadan'], en: ['Ramadan Kareem', 'Wishing you a blessed and peaceful month'], ar: ['رمضان كريم', ''], zh: ['斋戒月平安', '愿这个月充满祝福与安宁'] },
+      labourday: { zh: ['劳动节快乐', '致敬每一份努力'], en: ['Happy Labour Day', 'Thank you for every bit of hard work'], ms: ['Selamat Hari Pekerja', 'Terima kasih atas usaha anda'] },
+      mothersday: { zh: ['母亲节快乐', '谢谢您，妈妈'], en: ['Happy Mother’s Day', 'Thank you for everything, Mum'], ms: ['Selamat Hari Ibu', 'Terima kasih, ibu'] },
+      vesak: { en: ['Happy Wesak Day', 'May peace and kindness light your way'], ms: ['Selamat Hari Wesak', ''], zh: ['卫塞节快乐', '愿慈悲与平安照亮你'] },
+      fathersday: { zh: ['父亲节快乐', '谢谢您，爸爸'], en: ['Happy Father’s Day', 'Thank you for everything, Dad'], ms: ['Selamat Hari Bapa', 'Terima kasih, ayah'] },
+      duanwu: { zh: ['端午安康', '粽香情浓 · 平安喜乐'], en: ['Happy Dragon Boat Festival', 'Wishing you health and good fortune'] },
+      eidadha: { ms: ['Selamat Hari Raya Aidiladha', 'Salam Aidiladha'], en: ['Eid al-Adha Mubarak', 'Wishing you and your family peace and blessings'], ar: ['عيد أضحى مبارك', ''], zh: ['哈芝节快乐', '祝你和家人平安吉祥'] },
+      qixi: { zh: ['七夕快乐', '愿有情人终成眷属'], en: ['Happy Qixi Festival', 'For the one who lights up your stars'] },
+      halloween: { en: ['Happy Halloween', 'Trick or treat!'], zh: ['万圣节快乐', '不给糖就捣蛋！'] },
+      dayofdead: { es: ['Feliz Día de Muertos', 'Recordamos con amor'], en: ['Day of the Dead', 'Remembering with love'], zh: ['亡灵节', '用爱与回忆点亮今夜'] },
+      thanksgiving: { en: ['Happy Thanksgiving', 'Grateful for you, today and every day'], zh: ['感恩节快乐', '感谢有你，一路同行'] },
+      shopping: { zh: ['11.11 购物节', '好物好价 · 就等你来'], en: ['11.11 Sale', 'Great deals are waiting for you'], ms: ['Jualan 11.11', 'Tawaran hebat menanti anda'] },
+      hanukkah: { en: ['Happy Hanukkah', 'Wishing you eight nights of light'], he: ['חנוכה שמח', ''], zh: ['光明节快乐', '愿光明与喜乐常伴'] },
+      lantern: { zh: ['元宵节快乐', '月圆人团圆 · 花灯照前程'], en: ['Happy Lantern Festival', 'Wishing you a bright and happy year'] },
     }[f];
   }
   const saved = store.get('dn-free-greet', {});
@@ -30,7 +50,8 @@
   if (S.pic !== 0 && S.pic !== 1) S.pic = 0;
   let logo = null; if (saved.logo) { const im = new Image(); im.onload = () => { logo = { img: im, url: saved.logo }; draw(); }; im.src = saved.logo; }
   const langsOf = f => Object.keys(presets(f));
-  const defLang = f => { const ls = langsOf(f); return ls.includes(DN.lang) && !(f === 'raya' || f === 'songkran') ? DN.lang : ls[0]; };
+  const LOCAL = ['raya', 'songkran', 'ramadan', 'eidadha'];   // greeted in their own language first, whatever the page language
+  const defLang = f => { const ls = langsOf(f); return ls.includes(DN.lang) && !LOCAL.includes(f) ? DN.lang : ls[0]; };
   const lines = () => { const p = presets(S.fest)[S.glang] || ['', '']; return [S.l1 ?? p[0], S.l2 ?? p[1]]; };
   const keep = () => store.set('dn-free-greet', { fest: S.fest, size: S.size, shop: S.shop, extra: S.extra, pic: S.pic, logo: logo ? logo.url : null });
 
@@ -45,6 +66,34 @@
     xmas: { ink: ['#FFFFFF', '#F9E8BC', '#DDB86E'], sub: '#F4F7F2', shade: 'rgba(8,16,34,.85)', veil: '10,18,40', va: .48, base: ['#2A2A55', '#0B1020'] },
     newyear: { ink: ['#FFFFFF', '#FFE49A', '#F2B13F'], sub: '#EEE8FF', shade: 'rgba(8,0,26,.85)', veil: '10,2,32', va: .45, base: ['#1C0F45', '#05030F'] },
   };
+  // the other festivals: deep words for light pictures, bright words for dark ones; [deep ink], [bright ink], dark veil, light veil
+  const V = (deep, light, tint, paper) => ({
+    dk: { ink: deep, sub: deep[2], shade: 'rgba(255,255,255,.95)', veil: paper, va: .62, base: [deep[0], deep[2]] },
+    lt: { ink: light, sub: light[0] === '#FFFFFF' ? '#FFF6EC' : light[0], shade: `rgba(${tint},.85)`, veil: tint, va: .5, base: [deep[0], deep[2]] } });
+  Object.assign(LOOK, {
+    valentine: V(['#C2185B', '#9A1046', '#650A2E'], ['#FFFFFF', '#FFD9E4', '#F7A8C0'], '80,8,34', '255,246,248'),
+    womensday: V(['#8E3BA8', '#6C2A85', '#4A1A5E'], ['#FFFFFF', '#F1DEFA', '#D7AEEB'], '52,16,66', '255,249,253'),
+    stpatricks: V(['#1E8040', '#156030', '#0C3F1F'], ['#FFFFFF', '#E2F6D3', '#B3E08C'], '8,44,20', '250,255,246'),
+    holi: V(['#D81B72', '#A3157A', '#6A1272'], ['#FFFFFF', '#FFE2F1', '#FFAFD3'], '74,10,62', '255,250,245'),
+    nowruz: V(['#0F7B76', '#0B5D5C', '#073E40'], ['#FFFFFF', '#DCF5EF', '#A6DCCD'], '4,42,46', '252,255,248'),
+    easter: V(['#8C52B0', '#6C3D8E', '#4A2866'], ['#FFFFFF', '#F1E6FF', '#D4BBF2'], '50,26,72', '255,252,246'),
+    ramadan: V(['#0F6470', '#0A4C56', '#06333B'], ['#FFF8DC', '#F4D888', '#CFA54A'], '2,24,34', '250,252,246'),
+    labourday: V(['#C0501E', '#963B13', '#652509'], ['#FFFFFF', '#FFE5C4', '#FFBE76'], '74,26,4', '255,250,240'),
+    mothersday: V(['#C2457A', '#99325F', '#68203F'], ['#FFFFFF', '#FFE2EC', '#F6B3CA'], '72,16,42', '255,250,248'),
+    vesak: V(['#1F5287', '#173F69', '#0E2947'], ['#FFFDF2', '#FBE6A8', '#E7C25E'], '6,18,42', '250,252,255'),
+    fathersday: V(['#24467A', '#1A345C', '#10213D'], ['#FFFFFF', '#E3ECF8', '#B5C9E6'], '14,24,42', '255,251,244'),
+    duanwu: V(['#1E7A57', '#155B41', '#0C3B2A'], ['#FFFFFF', '#DFF3E7', '#A6D8BD'], '6,42,30', '252,255,246'),
+    eidadha: V(['#0F7350', '#0A573C', '#053826'], ['#FFF8DC', '#F4D888', '#CFA54A'], '2,34,22', '255,251,242'),
+    qixi: V(['#33408A', '#262F6A', '#191F48'], ['#FFFFFF', '#F7DCE8', '#EAA9C3'], '10,14,42', '250,250,255'),
+    halloween: V(['#5A2580', '#431B61', '#2C1042'], ['#FFF3E0', '#FFC46B', '#F28A1C'], '26,8,42', '255,248,240'),
+    dayofdead: V(['#A3236C', '#7E1A53', '#541038'], ['#FFFFFF', '#FFD9A6', '#FF9F43'], '44,10,32', '255,248,240'),
+    thanksgiving: V(['#9A4215', '#76320F', '#4F2008'], ['#FFFFFF', '#FFE3C0', '#F6B067'], '62,22,4', '255,248,238'),
+    shopping: V(['#B3132A', '#8C0E21', '#5E0916'], ['#FFFBEA', '#FFE08A', '#E7B43C'], '52,4,10', '255,248,246'),
+    hanukkah: V(['#1F4AA8', '#173A85', '#0F275C'], ['#FFFFFF', '#DCE8FF', '#A8C3F5'], '8,18,52', '248,251,255'),
+    lantern: V(['#B3141E', '#8C0E16', '#5E070D'], ['#FFF4CF', '#F8CF63', '#D8981F'], '74,4,8', '255,248,240'),
+  });
+  // which look: a festival with two looks picks by how light the picture is behind the words (bright words while it is still coming)
+  const lookOf = (art, ok) => { const L = LOOK[S.fest] || LOOK.newyear; return L.dk ? (ok && art && art.l >= 0.55 ? L.dk : L.lt) : L; };
   const ARTS = D.art || {};   // { cny: { sq: [{ f, z: [top, bottom] }, …], st: […] }, … }
   const artOf = () => { const l = ((ARTS[S.fest] || {})[S.size] || []); return l[S.pic % Math.max(1, l.length)] || null; };
   const IMG = {};
@@ -72,9 +121,9 @@
     return { z: small * 0.6, ls: best.ls };
   }
   function paint(art) {
-    const W = 1080, H = S.size === 'st' ? 1920 : 1080, tall = H > W, A = LOOK[S.fest];
+    const W = 1080, H = S.size === 'st' ? 1920 : 1080, tall = H > W;
     const cv = document.createElement('canvas'); cv.width = W; cv.height = H; const c = cv.getContext('2d');
-    const rec = art && IMG[art.f];
+    const rec = art && IMG[art.f], A = lookOf(art, rec && rec.ok);
     if (rec && rec.ok) c.drawImage(rec.im, 0, 0, W, H);
     else { c.fillStyle = lg(c, 0, 0, 0, H, [[0, A.base[0]], [1, A.base[1]]]); c.fillRect(0, 0, W, H); }
     const zone = (art && art.z) || [tall ? 0.36 : 0.3, tall ? 0.64 : 0.62];
@@ -133,14 +182,22 @@
   const fld = (k, el, opt) => h('label', { cls: 'fld' }, h('span', {}, t(k), opt ? h('i', {}, ' ' + t('opt')) : null), el);
   function input(get, set, attrs = {}) { const el = h(attrs.tag || 'input', { ...attrs, tag: null }); el.value = get() ?? ''; el.addEventListener('input', () => { set(el.value); changed(); }); return el; }
   function festLabel(f) { const n = nextOf(f); if (!n) return t('fe_' + f); const d = daysTo(n); return [t('fe_' + f), h('small', {}, d === 0 ? t('today_fest') : tf('in_days', { n: d }))]; }
+  let allF = false;
+  function festButtons() {
+    const sorted = [...FEST].sort((a, b) => (nextOf(a) || 99999999) - (nextOf(b) || 99999999));
+    const shown = allF ? sorted : sorted.slice(0, SHOW).concat(sorted.indexOf(S.fest) >= SHOW ? [S.fest] : []);
+    return h('div', { cls: 'fr-fests', role: 'group' },
+      shown.map(f => h('button', { type: 'button', 'aria-pressed': String(f === S.fest), onclick: () => { S.fest = f; S.glang = null; S.l1 = S.l2 = null; keep(); drawForm(); changed(true); } }, festLabel(f))),
+      sorted.length > SHOW ? h('button', { type: 'button', cls: 'fr-more', 'aria-expanded': String(allF), onclick: () => { allF = !allF; drawForm(); } },
+        allF ? t('fest_less') : tf('fest_all', { n: sorted.length })) : null);
+  }
   function drawForm() {
     if (!S.glang || !langsOf(S.fest).includes(S.glang)) S.glang = defLang(S.fest);
     const [l1, l2] = lines();
     const file = h('input', { type: 'file', accept: 'image/*', hidden: true, onchange: async () => {
       try { logo = await F.readImage(file.files[0], 480); keep(); drawForm(); changed(); } catch (e) { toast(t(e.message === 'size' ? 'e_img_size' : e.message === 'type' ? 'e_img_type' : 'e_img_read')); } file.value = ''; } });
     put(form,
-      h('div', { cls: 'fld' }, h('span', {}, t('f_fest')), h('div', { cls: 'fr-fests', role: 'group' },
-        [...FEST].sort((a, b) => (nextOf(a) || 99999999) - (nextOf(b) || 99999999)).map(f => h('button', { type: 'button', 'aria-pressed': String(f === S.fest), onclick: () => { S.fest = f; S.glang = null; S.l1 = S.l2 = null; keep(); drawForm(); changed(true); } }, festLabel(f))))),
+      h('div', { cls: 'fld' }, h('span', {}, t('f_fest')), festButtons()),
       h('div', { cls: 'fld' }, h('span', {}, t('f_glang')), tabs(langsOf(S.fest).map(l => [l, LN[l]]), S.glang, v => { S.glang = v; S.l1 = S.l2 = null; drawForm(); changed(true); })),
       fld('f_line1', input(() => l1, v => S.l1 = v, { maxlength: 40 })),
       fld('f_line2', input(() => l2, v => S.l2 = v, { maxlength: 70 }), true),

@@ -10,6 +10,8 @@
 .ec-back{transform:rotateY(180deg);display:grid;justify-items:center;align-content:center;gap:16px;text-align:center}
 .ec-top{position:relative;display:flex;justify-content:space-between;align-items:center}
 .ec-mono{width:62px;height:62px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(180deg,var(--g0),var(--g1) 55%,var(--g2));color:var(--con);font-weight:800;font-size:24px;letter-spacing:.02em;box-shadow:0 10px 30px -10px var(--cc)}
+.ec-mono.ec-logo{background:#fff;padding:7px}
+.ec-mono.ec-logo img{width:100%;height:100%;object-fit:contain;display:block}
 .ec-dots{display:flex;gap:5px;align-items:center}
 .ec-dots i{width:6px;height:6px;border-radius:9px;opacity:.45;transition:width .5s,opacity .5s}
 .ec-dots i.ec-on{width:18px;opacity:1}

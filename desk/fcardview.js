@@ -1,4 +1,4 @@
-/* Dinamics · the free e-card itself: its details live in the link (#…), it goes through eight colours by itself, one tap saves the contact.
+/* Dinamics · the free e-card itself: its details live in the link (#…), its logo (if it has one) on the desk, it goes through eight colours by itself, one tap saves the contact.
    Used by the builder (dinamics.dev/free/card) and by the card page that people open (dinamics.dev/free/c#…). */
 (() => {
   const ST = (window.DESK && window.DESK.styles) || window.ECARD_STYLES || [];
@@ -9,7 +9,7 @@
           scan: 'Scan to open this e-card', made: 'Free e-card · made by Dinamics', mine: 'Make your own', copied: 'Link copied', bad: 'This card\u2019s link is incomplete and can\u2019t be opened.', make: 'Make a free e-card', style: 'Colour' },
   };
   // ---- the link: the details as short JSON, then base64url ----
-  const KEYS = ['n', 't', 'c', 'p', 'w', 'e', 's', 'a', 'l', 'y'];
+  const KEYS = ['n', 't', 'c', 'p', 'w', 'e', 's', 'a', 'l', 'y', 'g'];   // g: the logo's id on the desk
   function encode(d) {
     const o = {}; for (const k of KEYS) if (d[k] != null && String(d[k]).trim()) o[k] = String(d[k]).trim();
     const b = new TextEncoder().encode(JSON.stringify(o)); let s = '';
@@ -21,8 +21,18 @@
       const s = atob(String(str).replace(/-/g, '+').replace(/_/g, '/')), b = Uint8Array.from(s, c => c.charCodeAt(0));
       const o = JSON.parse(new TextDecoder().decode(b)); if (!o || typeof o.n !== 'string' || !o.n.trim()) return null;
       const d = {}; for (const k of KEYS) if (typeof o[k] === 'string') d[k] = o[k].slice(0, 300);
+      if (d.g && !/^[a-f0-9]{20}$/.test(d.g)) delete d.g;
       return d;
     } catch (e) { return null; }
+  }
+  // the logo: kept on the desk by its id; drawn on the card, in the picture and in the contact file
+  const API = () => String(window.ECARD_API || (window.DESK && window.DESK.api) || '').replace(/\/$/, '');
+  const logoUrl = id => (id && API() ? API() + '/api/free/logo/' + id : '');
+  const LOGOS = {};
+  function logoImg(id, ms = 5000) {
+    const u = logoUrl(id); if (!u) return Promise.resolve(null);
+    if (!LOGOS[u]) LOGOS[u] = new Promise(res => { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => res(im); im.onerror = () => { delete LOGOS[u]; res(null); }; im.src = u; });
+    return Promise.race([LOGOS[u], new Promise(r => setTimeout(() => r(null), ms))]);
   }
   const digits = s => String(s || '').replace(/[^\d+]/g, '').replace(/(?!^)\+/g, '');
   const waNum = s => String(s || '').replace(/\D/g, '');
@@ -30,14 +40,24 @@
   const siteShow = s => siteHref(s).replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '');
   const initials = n => { const w = String(n).trim().split(/\s+/); if (/[\u3400-\u9FFF]/.test(n)) return [...n.replace(/\s/g, '')].slice(0, 2).join(''); return (w.length > 1 ? w[0][0] + w[w.length - 1][0] : w[0].slice(0, 2)).toUpperCase(); };
   // ---- the contact file (vCard 3.0) ----
-  function vcf(d) {
+  function vcf(d, photo) {
     const e = s => String(s).replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/([,;])/g, '\\$1');
     const L = ['BEGIN:VCARD', 'VERSION:3.0', `N:${e(d.n)};;;;`, `FN:${e(d.n)}`];
     if (d.c) L.push(`ORG:${e(d.c)}`); if (d.t) L.push(`TITLE:${e(d.t)}`);
     if (d.p) L.push(`TEL;TYPE=CELL,VOICE:${digits(d.p)}`);
     if (d.w && waNum(d.w) !== waNum(d.p)) L.push(`TEL;TYPE=CELL:+${waNum(d.w)}`);
     if (d.e) L.push(`EMAIL;TYPE=INTERNET:${e(d.e)}`); if (siteHref(d.s)) L.push(`URL:${siteHref(d.s)}`); if (d.a) L.push(`ADR;TYPE=WORK:;;${e(d.a)};;;;`);
+    if (photo) L.push(('PHOTO;ENCODING=b;TYPE=PNG:' + photo).replace(/(.{74})(?=.)/g, '$1\r\n '));   // folded at 75 characters, as vCard asks
     L.push('END:VCARD'); return L.join('\r\n') + '\r\n';
+  }
+  // the contact file with the logo as the contact's picture (a white square, the logo in the middle)
+  async function vcfReady(d) {
+    const im = d.g ? await logoImg(d.g) : null; if (!im) return vcf(d);
+    try {
+      const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, 256, 256);
+      const k = Math.min(208 / im.naturalWidth, 208 / im.naturalHeight), w = im.naturalWidth * k, h = im.naturalHeight * k; x.drawImage(im, (256 - w) / 2, (256 - h) / 2, w, h);
+      return vcf(d, c.toDataURL('image/png').split(',')[1]);
+    } catch (e) { return vcf(d); }
   }
   const styleOf = id => ST.find(s => s.id === id);
   const vars = s => `--cb:${s.bg};--cw:${s.wash};--ci:${s.ink};--ci2:${s.ink2};--cc:${s.co};--cc2:${s.co2};--con:${s.on};--g0:${s.l[0]};--g1:${s.l[1]};--g2:${s.l[2]}`;
@@ -46,6 +66,11 @@
     const T = W[lang || d.l || 'zh'] || W.zh, mk = (tag, cls, txt) => { const x = document.createElement(tag); if (cls) x.className = cls; if (txt != null) x.textContent = txt; return x; };
     const card = mk('div', 'ec'), inner = mk('div', 'ec-in'), front = mk('div', 'ec-face ec-front'), back = mk('div', 'ec-face ec-back');
     const top = mk('div', 'ec-top'), mono = mk('div', 'ec-mono', initials(d.n)), dots = mk('div', 'ec-dots');
+    if (d.g && logoUrl(d.g)) {   // a logo: shown on white in place of the initials; if it cannot be fetched, the initials come back
+      const im = mk('img'); im.alt = ''; im.crossOrigin = 'anonymous'; im.src = logoUrl(d.g);
+      im.onerror = () => { mono.className = 'ec-mono'; mono.textContent = initials(d.n); };
+      mono.className = 'ec-mono ec-logo'; mono.textContent = ''; mono.append(im);
+    }
     top.append(mono, dots);
     const name = mk('h1', 'ec-name', d.n), role = mk('p', 'ec-role', [d.t, d.c].filter(Boolean).join(' · '));
     const rows = mk('dl', 'ec-rows');
@@ -77,7 +102,7 @@
     return card;
   }
   // ---- the same card as one picture (1080 × 1350) with its QR code, for WhatsApp status or printing ----
-  function picture(d, url, s, lang) {
+  function picture(d, url, s, lang, logo) {
     s = s || ST[0]; const T = W[lang || d.l || 'zh'] || W.zh, Wd = 1080, Hd = 1350, cv = document.createElement('canvas'); cv.width = Wd; cv.height = Hd;
     const c = cv.getContext('2d'), SANS = '-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif';
     c.fillStyle = s.bg; c.fillRect(0, 0, Wd, Hd);
@@ -86,8 +111,9 @@
     c.fillStyle = s.wash; c.strokeStyle = s.co + '66'; c.lineWidth = 3; c.beginPath(); c.roundRect ? c.roundRect(x0, y0, cw, ch, 44) : c.rect(x0, y0, cw, ch); c.fill(); c.stroke();
     // monogram
     const g = c.createLinearGradient(0, y0 + 70, 0, y0 + 190); g.addColorStop(0, s.l[0]); g.addColorStop(0.55, s.l[1]); g.addColorStop(1, s.l[2]);
-    c.fillStyle = g; c.beginPath(); c.roundRect ? c.roundRect(x0 + 70, y0 + 70, 120, 120, 30) : c.rect(x0 + 70, y0 + 70, 120, 120); c.fill();
-    c.fillStyle = s.on; c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = `800 ${/[\u3400-\u9FFF]/.test(d.n) ? 46 : 52}px ${SANS}`; c.fillText(initials(d.n), x0 + 130, y0 + 133);
+    c.fillStyle = logo ? '#fff' : g; c.beginPath(); c.roundRect ? c.roundRect(x0 + 70, y0 + 70, 120, 120, 30) : c.rect(x0 + 70, y0 + 70, 120, 120); c.fill();
+    if (logo) { const k = Math.min(96 / logo.naturalWidth, 96 / logo.naturalHeight), w = logo.naturalWidth * k, h = logo.naturalHeight * k; c.drawImage(logo, x0 + 130 - w / 2, y0 + 130 - h / 2, w, h); }
+    else { c.fillStyle = s.on; c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = `800 ${/[\u3400-\u9FFF]/.test(d.n) ? 46 : 52}px ${SANS}`; c.fillText(initials(d.n), x0 + 130, y0 + 133); }
     // name, title
     c.textAlign = 'left'; c.textBaseline = 'alphabetic';
     const SERIF = '"Noto Serif SC","Songti SC","STSong","SimSun",serif';
@@ -111,6 +137,10 @@
     return cv;
   }
   // the name is drawn in the display face: make sure it has loaded first
-  async function pictureReady(d, url, s, lang) { try { await Promise.race([document.fonts.load('900 92px "Noto Serif SC"', d.n), new Promise(r => setTimeout(r, 2500))]); } catch (e) {} return picture(d, url, s, lang); }
-  window.ECard = { encode, decode, el, vcf, picture, pictureReady, vars, W, siteHref, waNum, digits, styles: ST };
+  async function pictureReady(d, url, s, lang) {
+    const lp = d.g ? logoImg(d.g) : Promise.resolve(null);
+    try { await Promise.race([document.fonts.load('900 92px "Noto Serif SC"', d.n), new Promise(r => setTimeout(r, 2500))]); } catch (e) {}
+    return picture(d, url, s, lang, await lp);
+  }
+  window.ECard = { encode, decode, el, vcf, vcfReady, picture, pictureReady, vars, W, siteHref, waNum, digits, logoUrl, styles: ST };
 })();

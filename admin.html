@@ -59,6 +59,8 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
 .steps span.on{background:rgba(217,178,107,.16);color:var(--co2)}
 @media (max-width:640px){.pr dl{grid-template-columns:1fr auto}.pr dt{grid-column:1/-1}}
 @media (prefers-reduced-motion:reduce){#toast{transition:none}}
+/* a phone zooms the whole page in when a field under 16 px is tapped, and stays zoomed: then the right side is cut off (DSJ 11-23 17:01). Fields are 16 px on touch screens. */
+@media (pointer:coarse){input,select,textarea{font-size:16px}}
 </style>
 </head>
 <body>

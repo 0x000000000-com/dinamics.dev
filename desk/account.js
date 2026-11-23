@@ -75,7 +75,7 @@
   }
   function signUp() {
     const err = h('p', { cls: 'err', role: 'alert' });
-    const cSel = h('select', { name: 'country', autocomplete: 'country' }, h('option', { value: '' }, t('pick_country')), D.countries.map(([c, zh, en]) => h('option', { value: c }, DN.lang === 'zh' ? zh : en)));
+    const cSel = h('select', { name: 'country', autocomplete: 'country' }, h('option', { value: '' }, t('pick_country')), D.countries.map(([c, zh, en]) => h('option', { value: c }, Desk.cname(c, zh, en))));
     const [p1, p2] = pwInputs();
     const pwBox = h('div', { cls: 'two' }, field('a_pw', p1), field('a_pw2', p2));
     const f = h('form', { cls: 'dk-form', novalidate: true },
@@ -136,11 +136,11 @@
   // ---------- signed in ----------
   const DS = { request: 'a_ds_request', quoted: 'a_ds_quoted', accepted: 'a_ds_accepted', building: 'a_ds_building', finished: 'a_ds_finished', paid: 'a_ds_paid', live: 'a_ds_live', cancelled: 'a_ds_cancelled', expired: 'a_ds_expired' };
   function dealRow(q) {
-    const name = q.name[DN.lang] || q.name.zh;
+    const name = Desk.pick(q.name);
     return h('div', { cls: 'rowc' },
       h('div', { cls: 'top2' }, h('h3', {}, `${q.no} · ${name}`), h('span', { cls: 'chip' + (q.state === 'live' ? ' ok' : ['cancelled', 'expired'].includes(q.state) ? ' bad' : '') }, t(DS[q.state] || q.state)),
         q.total ? h('span', { cls: 'note' }, 'US$' + q.total) : null),
-      q.instalments.length ? h('ul', { cls: 'dk-pays' }, q.instalments.map(i => h('li', {}, h('b', {}, i.name[DN.lang] || i.name.zh), h('span', {}, 'US$' + i.amount),
+      q.instalments.length ? h('ul', { cls: 'dk-pays' }, q.instalments.map(i => h('li', {}, h('b', {}, Desk.pick(i.name)), h('span', {}, 'US$' + i.amount),
         h('span', {}, i.status === 'paid' ? tf('a_paid_on', { d: i.paid }) : i.status === 'sent' ? tf('a_sent_due', { d: i.due }) : t('a_not_yet')),
         i.receipt ? h('a', { href: `/quote?receipt=${encodeURIComponent(i.receipt.no)}#${q.no}` }, tf('a_receipt', { no: i.receipt.no })) : null))) : null,
       h('div', { cls: 'tools', style: 'margin-top:12px' }, h('a', { cls: 'btn ghost', href: '/quote#' + q.no, style: 'height:40px' }, t('a_open'))));

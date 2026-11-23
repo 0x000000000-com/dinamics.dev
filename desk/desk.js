@@ -19,6 +19,17 @@
   const put = (el, ...kids) => el.replaceChildren(...kids.flat(9).filter(k => k != null && k !== false));
   const t = k => { const T = (window.PAGE || {})[DN.lang] || {}; return T[k] ?? k; };
   const tf = (k, o) => t(k).replace(/\{(\w+)\}/g, (_, n) => o[n] ?? '');
+  // data the server keeps in Chinese and English ({zh, en}): Malay pages show the English (2026-11-23)
+  // words the server keeps only in Chinese and English (package names, what is included, payment parts) come in Malay from the page's own list
+  const MSX = D.msx || {};
+  const pick = o => {
+    if (o == null) return ''; if (typeof o !== 'object' || Array.isArray(o)) return o;
+    if (o[DN.lang] != null) return o[DN.lang]; if (DN.lang === 'zh') return o.zh ?? '';
+    const e = o.en ?? o.zh ?? ''; return DN.lang === 'ms' ? (Array.isArray(e) ? e.map(x => MSX[x] || x) : MSX[e] || e) : e;
+  };
+  // country names: in Malay from the browser's own list when it has one
+  let RN = null; try { RN = new Intl.DisplayNames(['ms'], { type: 'region' }); } catch (e) {}
+  const cname = (c, zh, en) => DN.lang === 'zh' ? zh : DN.lang === 'ms' && RN && /^[A-Z]{2}$/.test(c) ? (RN.of(c) || en) : en;
   function toast(msg) {
     let e = $('#toast'); if (!e) { e = h('div', { id: 'toast', role: 'status', 'aria-live': 'polite' }); document.body.append(e); }
     e.textContent = msg; e.classList.add('on'); clearTimeout(toast.t); toast.t = setTimeout(() => e.classList.remove('on'), 2600);
@@ -57,7 +68,7 @@
     const rSel = h('select', { id: 'f-region', name: 'region' }), rTxt = h('input', { id: 'f-region-text', name: 'region_text', autocomplete: 'address-level1', maxlength: 60 });
     const rWrap = h('label', { cls: 'fld', for: 'f-region' }, h('span', { 'data-k': 'f_region' }), rSel, rTxt);
     function fillC() {
-      const v = cSel.value; put(cSel, h('option', { value: '' }, t('pick_country')), ...R.countries.map(([c, zh, en]) => h('option', { value: c }, lang() === 'zh' ? zh : en)), h('option', { value: 'XX' }, t('other_country')));
+      const v = cSel.value; put(cSel, h('option', { value: '' }, t('pick_country')), ...R.countries.map(([c, zh, en]) => h('option', { value: c }, cname(c, zh, en))), h('option', { value: 'XX' }, t('other_country')));
       cSel.value = v || '';
     }
     function fillR() {
@@ -84,5 +95,5 @@
     }
     return '';
   }
-  window.Desk = { $, h, put, t, tf, toast, copy, api, store, ref, notify, placePicker, mark };
+  window.Desk = { $, h, put, t, tf, pick, cname, toast, copy, api, store, ref, notify, placePicker, mark };
 })();

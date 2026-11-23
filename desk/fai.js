@@ -33,7 +33,7 @@
   const fld = (k, name, attrs = {}, opt = false) => h('label', { cls: 'fld' }, h('span', {}, t(k), opt ? h('i', {}, ' ' + t('opt')) : null), h(attrs.tag || 'input', { name, ...attrs, tag: null }));
   function drawForm() {
     const keepV = {}; form.querySelectorAll('[name]').forEach(e => { keepV[e.name] = e.type === 'checkbox' ? e.checked : e.value; });
-    const ctry = h('select', { name: 'country' }, h('option', { value: '' }, t('pick_country')), (D.countries || []).map(([c, zh, en]) => h('option', { value: c }, DN.lang === 'zh' ? zh : en)), h('option', { value: 'XX' }, t('other_country')));
+    const ctry = h('select', { name: 'country' }, h('option', { value: '' }, t('pick_country')), (D.countries || []).map(([c, zh, en]) => h('option', { value: c }, Desk.cname(c, zh, en))), h('option', { value: 'XX' }, t('other_country')));
     put(form,
       h('div', { cls: 'two' }, fld('f_biz', 'business', { maxlength: 120, autocomplete: 'organization', required: true }), fld('f_kind', 'kind', { maxlength: 200, placeholder: t('kind_ph') }, true)),
       h('div', { cls: 'two' }, fld('f_who', 'contact', { maxlength: 80, autocomplete: 'name', required: true }), fld('f_wa3', 'phone', { type: 'tel', inputmode: 'tel', maxlength: 40, autocomplete: 'tel', placeholder: t('wa3_ph'), required: true })),

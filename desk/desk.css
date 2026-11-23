@@ -123,3 +123,6 @@ details.faq p{margin:10px 0 0;color:var(--ink2)}
   .dk-price{color:#111!important;-webkit-text-fill-color:#111;background:none}
   .track li{color:#444!important;background:#fff!important;border-color:#bbb!important}
 }
+
+/* phones: a heading's keep-together part may wrap when a language makes it longer than the screen (2026-11-23) */
+@media (max-width:599px){h1 .nw{white-space:normal}}

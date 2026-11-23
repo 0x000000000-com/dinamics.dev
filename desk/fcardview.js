@@ -7,6 +7,8 @@
           scan: '扫一扫，打开这张电子名片', made: '免费电子名片 · Dinamics 做的', mine: '我也要做一张', copied: '链接已复制', bad: '这张名片的链接不完整，打不开。', make: '免费做一张电子名片', style: '颜色' },
     en: { wa: 'WhatsApp', tel: 'Phone', mail: 'Email', site: 'Website', addr: 'Address', save: 'Save contact', call: 'Call', qr: 'QR code', front: 'Front', share: 'Share', other: '中',
           scan: 'Scan to open this e-card', made: 'Free e-card · made by Dinamics', mine: 'Make your own', copied: 'Link copied', bad: 'This card\u2019s link is incomplete and can\u2019t be opened.', make: 'Make a free e-card', style: 'Colour' },
+    ms: { wa: 'WhatsApp', tel: 'Telefon', mail: 'E-mel', site: 'Laman web', addr: 'Alamat', save: 'Simpan kenalan', call: 'Hubungi', qr: 'Kod QR', front: 'Depan', share: 'Kongsi', other: 'EN',
+          scan: 'Imbas untuk membuka kad nama digital ini', made: 'Kad nama digital percuma · dibuat oleh Dinamics', mine: 'Buat kad anda sendiri', copied: 'Pautan disalin', bad: 'Pautan kad ini tidak lengkap dan tidak dapat dibuka.', make: 'Buat kad nama digital percuma', style: 'Warna' },
   };
   // ---- the link: the details as short JSON, then base64url ----
   const KEYS = ['n', 't', 'c', 'p', 'w', 'e', 's', 'a', 'l', 'y', 'g'];   // g: the logo's id on the desk
@@ -88,7 +90,7 @@
     function paint(swap) {
       const s = list[i]; card.setAttribute('style', vars(s)); card.dataset.style = s.id;
       if (swap) { card.classList.remove('ec-swap'); void card.offsetWidth; card.classList.add('ec-swap'); }
-      sname.textContent = s[lang || d.l || 'zh'] || s.zh; [...dots.children].forEach((b, k) => b.classList.toggle('ec-on', k === i));
+      sname.textContent = s[lang || d.l || 'zh'] || s.en || s.zh; [...dots.children].forEach((b, k) => b.classList.toggle('ec-on', k === i));
       if (onStyle) onStyle(s);
     }
     const auto = !d.y || d.y === 'auto' || !styleOf(d.y);

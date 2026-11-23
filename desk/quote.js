@@ -6,7 +6,7 @@
   const no = m && m[1], token = m && m[2];
   let Q = null, busy = false, RC = 0;   // RC: the payment whose receipt is open (0 = the quote)
   const want = new URLSearchParams(location.search).get('receipt') || '';
-  const L = () => DN.lang, tr = o => (o ? o[L()] || o.zh : '');
+  const L = () => DN.lang, tr = o => Desk.pick(o);
   const money = s => 'US$' + s;
   const link = () => `https://dinamics.dev/quote#${no}.${token}`;
 
@@ -15,7 +15,7 @@
     put(root, h('h1', {}, t('q_title')), h('p', { cls: 'lede' }, t('no_quote')),
       store.get('dn-client', '') ? h('p', { style: 'margin-top:16px' }, h('a', { cls: 'btn ghost', href: '/account' }, t('q_acct'))) : null,
       list.length ? h('div', { cls: 'rows' }, h('h2', { style: 'margin-top:24px' }, t('my_quotes')), list.map(q => h('a', { cls: 'rowc', href: `/quote#${q.no}.${q.token}`, style: 'display:block;text-decoration:none;color:inherit', onclick: () => setTimeout(() => location.reload(), 0) },
-        h('div', { cls: 'top2' }, h('h3', {}, q.no), h('span', { cls: 'chip' }, L() === 'zh' ? q.name : q.name_en || q.name))))) : null,
+        h('div', { cls: 'top2' }, h('h3', {}, q.no), h('span', { cls: 'chip' }, L() === 'zh' ? q.name : (L() === 'ms' && q.name_ms) || q.name_en || q.name))))) : null,
       h('p', { style: 'margin-top:24px' }, h('a', { cls: 'btn', href: '/order' }, t('to_order'))));
   }
 
@@ -68,7 +68,7 @@
     if (!Q) return;
     const ri = RC && Q.instalments.find(x => x.n === RC && x.receipt); if (ri) return receipt(Q, ri);
     document.title = t('title');
-    const q = Q, items = q.items[L()] || q.items.zh;
+    const q = Q, items = Desk.pick(q.items);
     const kids = [
       h('p', { cls: 'num' }, t('q_title')),
       h('h1', { style: 'margin-top:12px' }, tr(q.name)),
@@ -148,8 +148,8 @@
     Q = r;
     const list = store.get('dn-quotes', []);
     if (!Q.peek && token && !list.some(x => x.no === no)) { list.unshift({ no, token, name: Q.name.zh, name_en: Q.name.en, t: Date.now() }); store.set('dn-quotes', list.slice(0, 20)); }
-    if (!new URLSearchParams(location.search).get('lang') && !localStorage.getItem('dinamics-lang') && Q.lang === 'en' && DN.lang !== 'en') {
-      const en = document.querySelector('.lang button[data-l=en]'); if (en) en.click();
+    if (!new URLSearchParams(location.search).get('lang') && !localStorage.getItem('dinamics-lang') && Q.lang && Q.lang !== 'zh' && DN.lang !== Q.lang) {   // the quote opens in the language it was ordered in
+      const b = document.querySelector(`.lang button[data-l=${Q.lang}]`); if (b) b.click();
     }
     const w = want && Q.instalments.find(x => x.receipt && x.receipt.no === want); if (w) RC = w.n;   // opened from the account: straight to that receipt
     draw();

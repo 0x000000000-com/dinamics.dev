@@ -57,6 +57,31 @@
       mixed: ['Mixed content', 'Pictures and scripts all load over https.', '', '{v} pictures or scripts still load over http://, so browsers block them or warn.', 'Change those addresses to https://.'],
       version: ['Software version shown', 'The server doesn’t show its software version.', 'The server shows its software version ({v}), which makes known holes easier to find.', '', 'Turn off the version number in your server settings.'],
     },
+    ms: {
+      ttfb: ['Masa tindak balas', 'Dijawab dalam {v} ms. Pantas.', 'Mengambil {v} ms untuk menjawab. Agak perlahan.', 'Mengambil {v} ms untuk menjawab. Terlalu perlahan: pelanggan akan sangka laman ini rosak.', 'Pindah ke hos yang lebih pantas, atau guna CDN (seperti Cloudflare) supaya laman dihantar dari tempat yang dekat dengan pelanggan anda.'],
+      weight: ['Saiz halaman utama', 'Fail halaman utama {v} KB. Ringan.', 'Fail halaman utama {v} KB. Agak berat untuk rangkaian telefon.', 'Fail halaman utama {v} KB. Terlalu berat.', 'Alihkan blok kod dan data yang besar keluar dari halaman, dan jangan letak gambar di dalam fail halaman itu sendiri.'],
+      compress: ['Pemampatan', 'Dimampatkan ({v}), jadi ia sampai dengan pantas.', '', 'Tidak dimampatkan: halaman yang sama mengambil masa beberapa kali ganda lebih lama untuk dihantar.', 'Hidupkan pemampatan gzip atau Brotli pada hos anda.'],
+      blocking: ['Skrip yang melambatkan halaman', 'Tiada skrip yang melambatkan halaman.', '{v} skrip membuat halaman muncul lebih lambat.', '{v} skrip melambatkan halaman.', 'Tambah defer atau async pada skrip ini supaya halaman muncul dahulu.'],
+      redirects: ['Ubah hala', 'Terus dibuka, tanpa ubah hala tambahan.', 'Ia mengubah hala {v} kali sebelum sampai ke halaman utama.', 'Ia mengubah hala {v} kali sebelum sampai ke halaman utama, membuang masa.', 'Jadikan alamat terus ke halaman akhir, contohnya versi https://.'],
+      viewport: ['Susun atur telefon', 'Ia ada tetapan telefon, jadi susun aturnya muat dengan skrin.', 'Ia ada tetapan telefon, tetapi ditulis dengan salah: telefon mungkin memaparkan halaman komputer yang dikecilkan.', 'Tiada tetapan telefon: telefon memaparkan halaman komputer yang dikecilkan dengan tulisan terlalu kecil untuk dibaca.', 'Tambah tetapan viewport dan susun atur untuk telefon.'],
+      icon: ['Ikon laman', 'Ia ada ikon, dipaparkan pada tab pelayar dan skrin utama telefon.', '', 'Tiada ikon: tab pelayar menunjukkan ruang kosong.', 'Tambah favicon dan apple-touch-icon.'],
+      lang: ['Bahasa halaman', 'Halaman menyatakan bahasanya ({v}), jadi penterjemah dan pembaca skrin tahu apa yang perlu dilakukan.', '', 'Halaman tidak menyatakan bahasanya.', 'Tetapkan lang pada tag html, cth. ms atau en.'],
+      title: ['Tajuk', 'Tajuk: {v}', 'Tajuk “{v}” terlalu panjang atau terlalu pendek untuk dipaparkan dengan baik di Google.', 'Tiada tajuk: Google tidak tahu nama halaman ini.', 'Tulis tajuk 10 hingga 70 aksara dengan nama dan perkhidmatan utama anda.'],
+      desc: ['Perihalan carian', 'Ia ada perihalan carian ({v} aksara) yang boleh dipaparkan oleh Google.', 'Ia ada perihalan carian, tetapi panjangnya ({v} aksara) kurang sesuai.', 'Tiada perihalan carian: Google akan memilih mana-mana teks daripada halaman.', 'Tulis 50 hingga 160 aksara tentang siapa anda, apa yang anda lakukan dan di mana.'],
+      h1: ['Tajuk utama', 'Satu tajuk utama. Struktur yang jelas.', '{v} tajuk utama: Google tidak tahu yang mana paling penting.', 'Tiada tajuk utama (h1).', 'Kekalkan satu h1 bagi setiap halaman, dengan ayat yang paling penting.'],
+      alt: ['Perihalan gambar', 'Setiap gambar ada perihalan teks.', '{v} gambar tiada perihalan teks.', '{v} gambar tiada perihalan teks, jadi Google tidak dapat memahaminya.', 'Beri setiap gambar teks alt.'],
+      canonical: ['Alamat utama', 'Ia menamakan alamat utamanya.', '', 'Ia tidak menamakan alamat utamanya, jadi satu halaman mungkin dikira sebagai beberapa halaman.', 'Tambah pautan canonical.'],
+      indexable: ['Terbuka kepada Google', 'Google dibenarkan menyenaraikannya.', '', 'Halaman ini memberitahu Google supaya tidak menyenaraikannya, jadi tiada siapa boleh menemuinya melalui carian.', 'Buang tetapan noindex.'],
+      share: ['Pratonton kongsi', 'Apabila dikongsi di WhatsApp atau Facebook, ia memaparkan tajuk dan gambar.', 'Apabila dikongsi, ia hanya memaparkan tajuk atau hanya gambar.', 'Apabila dikongsi di WhatsApp atau Facebook, ia tidak memaparkan tajuk dan gambar.', 'Tambah og:title dan og:image.'],
+      schema: ['Data berstruktur', 'Ia ada data berstruktur, jadi Google boleh membaca nama, alamat anda dan sebagainya.', '', 'Tiada data berstruktur.', 'Tambah JSON-LD (cth. LocalBusiness) supaya Google boleh memaparkan lebih banyak tentang anda.'],
+      https: ['https', 'Menggunakan https, jadi apa yang ditaip pelanggan dihantar secara disulitkan.', '', 'Tiada https: pelayar menandakannya “Tidak selamat”.', 'Pasang sijil SSL (banyak hos menyediakannya secara percuma) dan guna https di mana-mana.'],
+      to_https: ['Menghantar http ke https', 'Menaip http:// membawa orang ke https://.', 'Kami tidak dapat memastikan sama ada http:// pergi ke https://.', 'http:// tidak pergi ke https://, jadi pelanggan mungkin kekal pada versi yang tidak disulitkan.', 'Tetapkan hos anda supaya mengubah hala http ke https.'],
+      hsts: ['HSTS', 'Ia ada HSTS, jadi pelayar hanya menggunakan sambungan yang disulitkan mulai sekarang.', '', 'Tiada HSTS.', 'Tambah pengepala Strict-Transport-Security.'],
+      frame: ['Perlindungan bingkai', 'Laman lain tidak boleh menyelitkan laman anda ke dalam laman mereka secara senyap.', '', 'Laman lain boleh menyelitkan laman anda ke dalam laman mereka dan memperdaya pelanggan supaya mengklik.', 'Tambah X-Frame-Options atau frame-ancestors.'],
+      nosniff: ['Perlindungan jenis fail', 'Ia ada perlindungan nosniff.', '', 'Tiada perlindungan nosniff: pelayar mungkin menganggap fail sebagai jenis lain.', 'Tambah X-Content-Type-Options: nosniff.'],
+      mixed: ['Kandungan bercampur', 'Gambar dan skrip semuanya dimuatkan melalui https.', '', '{v} gambar atau skrip masih dimuatkan melalui http://, jadi pelayar menyekat atau memberi amaran.', 'Tukar alamat itu kepada https://.'],
+      version: ['Versi perisian dipaparkan', 'Pelayan tidak memaparkan versi perisiannya.', 'Pelayan memaparkan versi perisiannya ({v}), yang memudahkan lubang yang diketahui ditemui.', '', 'Matikan nombor versi dalam tetapan pelayan anda.'],
+    },
   };
   const text = (c, i) => {
     const row = (CK[DN.lang] || CK.zh)[c.id] || [c.id, '', '', '', ''];
@@ -82,7 +107,7 @@
         : e === 'redirect_blocked' ? t('e_redirect') : e === 'too_many_redirects' ? t('e_redirects') : e === 'not_html' ? t('e_not_html') : /^http_\d+$/.test(e) ? tf('e_http', { code: e.slice(5) }) : t('e_server');
       input.focus(); return;
     }
-    last = r; history.replaceState(null, '', '?url=' + encodeURIComponent(nice(r.url)) + (DN.lang === 'en' ? '&lang=en' : ''));
+    last = r; history.replaceState(null, '', '?url=' + encodeURIComponent(nice(r.url)) + (DN.lang !== 'zh' ? '&lang=' + DN.lang : ''));
     draw(true); speed(r.url);
   }
 
@@ -101,7 +126,7 @@
         todo.length ? h('ul', { cls: 'fr-checks' }, todo.map(item)) : null,
         fine.length ? h('details', { cls: 'fr-fine', open: !todo.length }, h('summary', {}, tf('good_n', { n: fine.length })), h('ul', { cls: 'fr-checks' }, fine.map(item))) : null);
     });
-    const when = new Date().toLocaleString(DN.lang === 'en' ? 'en-GB' : 'zh-CN', { dateStyle: 'medium', timeStyle: 'short' });
+    const when = new Date().toLocaleString({ en: 'en-GB', ms: 'ms-MY' }[DN.lang] || 'zh-CN', { dateStyle: 'medium', timeStyle: 'short' });
     put(out,
       h('div', { cls: 'fr-rhead' }, h('h2', {}, t('r_for')), h('p', {}, h('a', { href: r.url, target: '_blank', rel: 'noopener nofollow' }, nice(r.url))), h('p', { cls: 'note' }, r.cached ? t('r_cached') : tf('r_at', { t: when }))),
       h('div', { cls: 'fr-score' }, h('div', { cls: 'fr-ringwrap' }, ring, h('span', {}, t('r_total'))), h('div', {}, h('p', { cls: 'fr-verdict' }, t('v_' + (b === 'warn' ? 'ok' : b))), cats)),

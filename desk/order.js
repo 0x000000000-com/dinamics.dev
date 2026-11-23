@@ -8,10 +8,10 @@
   const cSel = form.elements.country;
   function fillCountries() {
     const v = cSel.value;
-    put(cSel, h('option', { value: '' }, t('pick_country')), ...D.countries.map(([c, zh, en]) => h('option', { value: c }, DN.lang === 'zh' ? zh : en)), h('option', { value: 'XX' }, t('other_country')));
+    put(cSel, h('option', { value: '' }, t('pick_country')), ...D.countries.map(([c, zh, en]) => h('option', { value: c }, Desk.cname(c, zh, en))), h('option', { value: 'XX' }, t('other_country')));
     cSel.value = v;
   }
-  function price(p) { return [p.frm && DN.lang === 'en' ? t('from_pre') : '', money(p.usd), p.frm && DN.lang === 'zh' ? h('small', {}, t('from_suf')) : null]; }
+  function price(p) { return [p.frm && DN.lang !== 'zh' ? t('from_pre') : '', money(p.usd), p.frm && DN.lang === 'zh' ? h('small', {}, t('from_suf')) : null]; }
   function draw() {
     const L = DN.lang; fillCountries();
     if (!pkg) {
@@ -73,10 +73,10 @@
       err.textContent = ['contact', 'email', 'phone', 'note'].includes(r.error) ? mark(form, { [r.error]: t(k) }) : t(k);
       return;
     }
-    const mine = store.get('dn-quotes', []).filter(q => q.no !== r.no); mine.unshift({ no: r.no, token: r.token, name: pkg.zh.name, name_en: pkg.en.name, t: Date.now() }); store.set('dn-quotes', mine.slice(0, 20));
+    const mine = store.get('dn-quotes', []).filter(q => q.no !== r.no); mine.unshift({ no: r.no, token: r.token, name: pkg.zh.name, name_en: pkg.en.name, name_ms: pkg.ms && pkg.ms.name, t: Date.now() }); store.set('dn-quotes', mine.slice(0, 20));
     notify(`新订单 ${r.no} · ${pkg.zh.name} · ${pkg.frm ? '说需求，待定价' : money(pkg.usd)}`,
       { '报价单': r.no, '配套': pkg.zh.name, '金额': pkg.frm ? '待定价' : money(pkg.usd), '联系人': body.contact, '公司': body.company, '邮箱': body.email, 'WhatsApp / 电话': body.phone,
-        '国家': body.country, '需求': body.note, '代理编号': body.agent, '语言': body.lang === 'en' ? '英文' : '中文', '后台': 'https://dinamics.dev/admin' }, body.email);
+        '国家': body.country, '需求': body.note, '代理编号': body.agent, '语言': { en: '英文', ms: '马来文' }[body.lang] || '中文', '后台': 'https://dinamics.dev/admin' }, body.email);
     location.href = '/quote#' + r.no + '.' + r.token;
   });
 })();

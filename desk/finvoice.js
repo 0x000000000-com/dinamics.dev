@@ -12,18 +12,21 @@
     en: { QT: 'QUOTATION', INV: 'INVOICE', RC: 'RECEIPT', no: 'No.', date: 'Date', until_QT: 'Valid until', until_INV: 'Due by', method: 'Paid by', to_QT: 'To', to_INV: 'Bill to', to_RC: 'Received from',
           desc: 'Description', qty: 'Qty', price: 'Unit price', amt: 'Amount', sub: 'Subtotal', disc: 'Discount', total: 'Total', total_RC: 'Amount received', notes: 'Notes', bank: 'Payment details', sign: 'Authorised signature', reg: 'Reg. no.', paid: 'PAID',
           made: 'Made with Dinamics free tools · dinamics.dev/free' },
+    ms: { QT: 'SEBUT HARGA', INV: 'INVOIS', RC: 'RESIT', no: 'No.', date: 'Tarikh', until_QT: 'Sah sehingga', until_INV: 'Tarikh akhir bayaran', method: 'Kaedah bayaran', to_QT: 'Kepada', to_INV: 'Bil kepada', to_RC: 'Diterima daripada',
+          desc: 'Perihal', qty: 'Kuantiti', price: 'Harga seunit', amt: 'Jumlah', sub: 'Jumlah kecil', disc: 'Diskaun', total: 'Jumlah besar', total_RC: 'Jumlah diterima', notes: 'Nota', bank: 'Butiran pembayaran', sign: 'Tandatangan yang diberi kuasa', reg: 'No. pendaftaran', paid: 'DIBAYAR',
+          made: 'Dibuat dengan alat percuma Dinamics · dinamics.dev/free' },
   };
   const day = (d = new Date()) => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
   const plus = n => { const d = new Date(); d.setDate(d.getDate() + n); return day(d); };
   const blank = () => ({ buyer: { name: '', addr: '' }, items: [{ d: '', q: '1', p: '' }], date: day(), until: plus(14), method: '', noEdited: false });
-  const S = Object.assign({ type: 'QT', dl: 'zh', cur: 'MYR', seller: { name: '', reg: '', addr: '', phone: '', email: '' }, disc: '', tax: '', taxName: '', notes: '', bank: '', sign: false, logo: null, seq: { QT: 1, INV: 1, RC: 1 }, no: '' }, blank(), store.get('dn-free-inv', {}));
+  const S = Object.assign({ type: 'QT', dl: DN.lang === 'ms' ? 'ms' : 'zh', cur: 'MYR', seller: { name: '', reg: '', addr: '', phone: '', email: '' }, disc: '', tax: '', taxName: '', notes: '', bank: '', sign: false, logo: null, seq: { QT: 1, INV: 1, RC: 1 }, no: '' }, blank(), store.get('dn-free-inv', {}));
   if (!PRE[S.type]) S.type = 'QT';
   let logoImg = null;
   if (S.logo) { const im = new Image(); im.onload = () => { logoImg = im; render(); }; im.src = S.logo; }
   const numOf = () => `${PRE[S.type]}-${new Date().getFullYear()}-${String(S.seq[S.type] || 1).padStart(4, '0')}`;
   if (!S.noEdited || !S.no) S.no = numOf();
   const keep = () => { try { store.set('dn-free-inv', S); } catch (e) {} };
-  const L = (k) => { const z = DL.zh[k], e = DL.en[k]; return S.dl === 'zh' ? z : S.dl === 'en' ? e : `${z} ${e}`; };
+  const L = (k) => { const z = DL.zh[k], e = DL.en[k]; return S.dl === 'zh' ? z : S.dl === 'en' ? e : S.dl === 'ms' ? DL.ms[k] : `${z} ${e}`; };
   const cur = () => CUR.find(c => c[0] === S.cur) || CUR[0];
   const num = v => { const x = parseFloat(String(v).replace(/[^\d.-]/g, '')); return isFinite(x) ? x : 0; };
   const money = v => { const [, sym, dp] = cur(); const r = Math.round(v * 10 ** dp) / 10 ** dp; return (r < 0 ? '-' : '') + sym + ' ' + Math.abs(r).toLocaleString('en-US', { minimumFractionDigits: dp, maximumFractionDigits: dp }); };
@@ -33,8 +36,8 @@
     const sub = rows.reduce((a, i) => a + num(i.q || 1) * num(i.p), 0), disc = Math.min(num(S.disc), sub), rate = num(S.tax), tax = (sub - disc) * rate / 100;
     return { rows, sub, disc, rate, tax, total: sub - disc + tax };
   }
-  const taxLabel = r => `${S.taxName.trim() || (S.dl === 'en' ? 'Tax' : S.dl === 'zh' ? '税' : '税 Tax')} ${qtyStr(r)}%`;
-  const fmtDate = s => { if (!s) return ''; const [y, m, d] = s.split('-'); return S.dl === 'zh' ? `${y}年${+m}月${+d}日` : `${+d} ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][m - 1]} ${y}`; };
+  const taxLabel = r => `${S.taxName.trim() || (S.dl === 'en' ? 'Tax' : S.dl === 'zh' ? '税' : S.dl === 'ms' ? 'Cukai' : '税 Tax')} ${qtyStr(r)}%`;
+  const fmtDate = s => { if (!s) return ''; const [y, m, d] = s.split('-'); return S.dl === 'zh' ? `${y}年${+m}月${+d}日` : S.dl === 'ms' ? `${+d} ${['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov', 'Dis'][m - 1]} ${y}` : `${+d} ${['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][m - 1]} ${y}`; };
   function meta() {
     const m = [[L('no'), S.no], [L('date'), fmtDate(S.date)]];
     if (S.type !== 'RC' && S.until) m.push([L('until_' + S.type), fmtDate(S.until)]);
@@ -62,7 +65,7 @@
       S.notes.trim() ? h('div', { cls: 'fr-note' }, h('p', { cls: 'fr-plbl' }, L('notes')), h('p', {}, ...lines(S.notes.trim()))) : null,
       S.bank.trim() && S.type !== 'RC' ? h('div', { cls: 'fr-note' }, h('p', { cls: 'fr-plbl' }, L('bank')), h('p', {}, ...lines(S.bank.trim()))) : null,
       S.sign ? h('div', { cls: 'fr-sign' }, h('span', {}, L('sign'))) : null,
-      h('p', { cls: 'fr-made' }, DL[S.dl === 'en' ? 'en' : 'zh'].made));
+      h('p', { cls: 'fr-made' }, DL[{ en: 'en', ms: 'ms' }[S.dl] || 'zh'].made));
   }
 
   // ---- the same document drawn as a picture (A4 at 150 dpi), for sending on WhatsApp ----
@@ -132,7 +135,7 @@
     }
     if (S.sign) { y += 70; line(R - 380, y, R, y, 2, '#14161a'); txt(L('sign'), R - 190, y + 34, f(400, 19), '#5b616b', 'center'); y += 60; }
     const H = Math.max(1754, y + M + 40);
-    txt(DL[S.dl === 'en' ? 'en' : 'zh'].made, W / 2, H - 52, f(400, 17), '#9aa0a8', 'center');
+    txt(DL[{ en: 'en', ms: 'ms' }[S.dl] || 'zh'].made, W / 2, H - 52, f(400, 17), '#9aa0a8', 'center');
     const cv = document.createElement('canvas'); cv.width = W; cv.height = H;
     const c = cv.getContext('2d'); c.fillStyle = '#fff'; c.fillRect(0, 0, W, H); c.textBaseline = 'alphabetic';
     ops.forEach(o => { c.save(); o(c); c.restore(); });
@@ -161,7 +164,7 @@
     const methods = h('datalist', { id: 'iv-methods' }, t('m_list').split('|').map(m => h('option', { value: m })));
     put(form,
       tabs([['QT', 'ty_QT'], ['INV', 'ty_INV'], ['RC', 'ty_RC']], S.type, v => { S.type = v; if (!S.noEdited) S.no = numOf(); drawForm(); changed(); }),
-      h('div', { cls: 'two' }, h('div', { cls: 'fld' }, h('span', {}, t('f_doclang')), tabs([['zh', 'dl_zh'], ['en', 'dl_en'], ['both', 'dl_both']], S.dl, v => { S.dl = v; drawForm(); changed(); })), fld('f_cur', curSel)),
+      h('div', { cls: 'two' }, h('div', { cls: 'fld' }, h('span', {}, t('f_doclang')), tabs([['zh', 'dl_zh'], ['en', 'dl_en'], ['ms', 'dl_ms'], ['both', 'dl_both']], S.dl, v => { S.dl = v; drawForm(); changed(); })), fld('f_cur', curSel)),
       sec('sec_from'),
       h('div', { cls: 'fld' }, h('span', {}, t('logo'), h('i', {}, ' ' + t('opt'))),
         h('div', { cls: 'fr-row' }, S.logo ? h('img', { cls: 'fr-thumb', src: S.logo, alt: '' }) : null,

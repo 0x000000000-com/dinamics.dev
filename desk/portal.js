@@ -89,9 +89,9 @@
     return row;
   }
   function dealRow(d) {
-    return h('div', { cls: 'rowc' }, h('div', { cls: 'top2' }, h('h3', {}, `${d.quote} · ${d.name[DN.lang] || d.name.zh}`), h('span', { cls: 'chip' + (d.state === 'live' ? ' ok' : '') }, t(DS[d.state] || d.state)), h('span', { cls: 'note' }, d.total ? 'US$' + d.total : '')),
+    return h('div', { cls: 'rowc' }, h('div', { cls: 'top2' }, h('h3', {}, `${d.quote} · ${Desk.pick(d.name)}`), h('span', { cls: 'chip' + (d.state === 'live' ? ' ok' : '') }, t(DS[d.state] || d.state)), h('span', { cls: 'note' }, d.total ? 'US$' + d.total : '')),
       h('p', {}, d.client),
-      d.instalments.length ? h('ul', { cls: 'dk-pays' }, d.instalments.map(i => h('li', {}, h('b', {}, i.name[DN.lang] || i.name.zh), h('span', {}, 'US$' + i.amount),
+      d.instalments.length ? h('ul', { cls: 'dk-pays' }, d.instalments.map(i => h('li', {}, h('b', {}, Desk.pick(i.name)), h('span', {}, 'US$' + i.amount),
         h('span', {}, i.status === 'paid' ? tf('paid_on', { d: i.paid }) : t('not_paid')), i.commission ? h('span', { cls: 'cut' }, tf('your_cut', { a: 'US$' + i.commission })) : null))) : null);
   }
   function draw() {
@@ -103,7 +103,7 @@
     put(root, 
       h('p', { cls: 'num' }, t('desk_h')),
       h('h1', { style: 'margin-top:12px' }, a.code),
-      h('p', { cls: 'lede' }, [a.name, t(TIER[a.tier]), a.place ? a.place[DN.lang] || a.place.zh : a.region_text, tf('since', { d: a.since })].filter(Boolean).join(' · ')),
+      h('p', { cls: 'lede' }, [a.name, t(TIER[a.tier]), a.place ? Desk.pick(a.place) : a.region_text, tf('since', { d: a.since })].filter(Boolean).join(' · ')),
       a.status === 'ended' ? h('p', { cls: 'dk-msg bad', style: 'margin-top:16px' }, t('ended_note')) : null,
       safe(),
       h('div', { cls: 'stats' },
@@ -120,7 +120,7 @@
       h('h2', {}, t('my_money')), h('p', { cls: 'note' }, t('money_rule')),
       M.months.length ? h('div', { cls: 'rows' }, M.months.map(mo => { const s = M.settlements.find(x => x.month === mo.month);
         return h('div', { cls: 'rowc' }, h('div', { cls: 'top2' }, h('h3', {}, mo.month), h('span', { cls: 'chip' + (s && s.paid ? ' ok' : '') }, s ? (s.paid ? tf('set_paid', { d: s.paid }) : t('set_due')) : t('set_open')), h('b', {}, 'US$' + mo.earned)),
-          h('p', {}, mo.lines.map(l => `${(l.label && (l.label[DN.lang] || l.label.zh)) || l.note} ${l.rate ? l.rate + '%' : ''} US$${l.amount}`.replace(/\s+/g, ' ')).join(' · '))); })) : h('p', { cls: 'note' }, t('none_money')),
+          h('p', {}, mo.lines.map(l => `${(l.label && Desk.pick(l.label)) || l.note} ${l.rate ? l.rate + '%' : ''} US$${l.amount}`.replace(/\s+/g, ' ')).join(' · '))); })) : h('p', { cls: 'note' }, t('none_money')),
       h('h2', {}, t('share_h')), h('p', { cls: 'note' }, t('share_p')),
       ...share(a.code).map(([k, u]) => h('div', { cls: 'rowc', style: 'margin-top:10px' }, h('div', { cls: 'top2' }, h('h3', {}, t(k)), h('button', { cls: 'btn ghost', type: 'button', style: 'height:38px', onclick: () => copy(u) }, t('copy'))), h('p', { cls: 'linkbox' }, u))),
       ...moveTo(),

@@ -3,7 +3,7 @@
 (() => {
   const { $, h, put, t, copy, toast, store } = window.Desk, DN = window.DN, F = window.Free, E = window.ECard, API = (window.DESK || {}).api || '';
   const form = $('#cd-form'), out = $('#cd-out');
-  const S = { n: '', t: '', c: '', w: '', p: '', e: '', s: '', a: '', g: '', gurl: '', l: DN.lang === 'en' ? 'en' : 'zh', y: 'auto', ...store.get('dn-free-card', {}) };
+  const S = { n: '', t: '', c: '', w: '', p: '', e: '', s: '', a: '', g: '', gurl: '', l: ['en', 'ms'].includes(DN.lang) ? DN.lang : 'zh', y: 'auto', ...store.get('dn-free-card', {}) };
   let card = null, timer = 0, busy = false;
   const keep = () => store.set('dn-free-card', S);
   const data = () => { const { gurl, ...d } = S; return { ...d, y: S.y === 'auto' ? '' : S.y }; };
@@ -52,11 +52,11 @@
       fld('f_email', 'e', { type: 'email', maxlength: 100, autocomplete: 'email' }),
       fld('f_site', 's', { type: 'text', inputmode: 'url', autocapitalize: 'off', spellcheck: 'false', maxlength: 100, placeholder: 'yourshop.com' }),
       fld('f_addr', 'a', { tag: 'textarea', rows: 2, maxlength: 160 }),
-      h('div', { cls: 'fld' }, h('span', {}, t('f_clang')), tabs([['zh', '中文'], ['en', 'English']], S.l, v => { S.l = v; drawForm(); changed(true); })),
+      h('div', { cls: 'fld' }, h('span', {}, t('f_clang')), tabs([['zh', '中文'], ['en', 'English'], ['ms', 'Bahasa Melayu']], S.l, v => { S.l = v; drawForm(); changed(true); })),
       h('div', { cls: 'fld' }, h('span', {}, t('f_style')), h('div', { cls: 'fr-swatches', role: 'group' },
         h('button', { type: 'button', cls: 'fr-swatch fr-auto', 'aria-pressed': String(S.y === 'auto'), title: t('style_auto'), 'aria-label': t('style_auto'), onclick: () => { S.y = 'auto'; drawForm(); changed(true); } }),
-        E.styles.map(s => h('button', { type: 'button', cls: 'fr-swatch', style: `background:linear-gradient(135deg,${s.bg} 50%,${s.co} 50%)`, title: s[DN.lang] || s.zh, 'aria-label': s[DN.lang] || s.zh, 'aria-pressed': String(S.y === s.id), onclick: () => { S.y = s.id; drawForm(); changed(true); } }))),
-        h('p', { cls: 'fr-hint' }, S.y === 'auto' ? t('style_auto') : (E.styles.find(s => s.id === S.y) || {})[DN.lang] || '')));
+        E.styles.map(s => h('button', { type: 'button', cls: 'fr-swatch', style: `background:linear-gradient(135deg,${s.bg} 50%,${s.co} 50%)`, title: Desk.pick(s), 'aria-label': Desk.pick(s), 'aria-pressed': String(S.y === s.id), onclick: () => { S.y = s.id; drawForm(); changed(true); } }))),
+        h('p', { cls: 'fr-hint' }, S.y === 'auto' ? t('style_auto') : Desk.pick(E.styles.find(s => s.id === S.y) || {}))));
   }
   function changed(now) { clearTimeout(timer); timer = setTimeout(() => { keep(); render(); }, now ? 0 : 160); }
   function render() {
@@ -65,11 +65,11 @@
     const bad = problem();
     const d = data(), url = link();
     const stage = h('div', { cls: 'fr-cardstage' });
-    card = E.el(bad && !S.n.trim() ? { ...d, n: DN.lang === 'en' ? 'Your name' : '你的名字' } : d, { lang: S.l, url, onStyle: st => { stage.style.background = `radial-gradient(120% 80% at 85% 0%, ${st.co}38, transparent 62%), ${st.bg}`; } });
+    card = E.el(bad && !S.n.trim() ? { ...d, n: { en: 'Your name', ms: 'Nama anda' }[DN.lang] || '你的名字' } : d, { lang: S.l, url, onStyle: st => { stage.style.background = `radial-gradient(120% 80% at 85% 0%, ${st.co}38, transparent 62%), ${st.bg}`; } });
     stage.append(card);
     const flip = h('button', { type: 'button', cls: 'fr-link', onclick: () => { card.flip(!card.classList.contains('ec-flipped')); } }, E.W[S.l].qr + ' / ' + E.W[S.l].front);
     if (bad) {
-      const el = form.querySelector(`[name="${bad[0]}"]`); const typed = Object.values(S).some(v => v && v !== 'zh' && v !== 'en' && v !== 'auto');
+      const el = form.querySelector(`[name="${bad[0]}"]`); const typed = Object.values(S).some(v => v && v !== 'zh' && v !== 'en' && v !== 'ms' && v !== 'auto');
       if (typed && el && (el.value.trim() || bad[1] !== 'e_name')) el.closest('.fld').setAttribute('aria-invalid', 'true');
       put(out, stage, h('p', { cls: typed ? 'dk-msg bad' : 'fr-hint' }, t(typed ? bad[1] : 'lede')));
       return;

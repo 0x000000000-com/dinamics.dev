@@ -403,7 +403,7 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
   }
 
   // ---------- 免费工具：多少人在用、AI 客服试用申请、最近体检的网站 ----------
-  const FT = [['check', '网站体检'], ['card', '电子名片'], ['invoice', '收据 / 报价单'], ['qr', '二维码 + WhatsApp'], ['greeting', '节日祝福图'], ['ai', 'AI 客服试用']];
+  const FT = [['check', '网站体检'], ['card', '电子名片'], ['invoice', '收据 / 报价单'], ['qr', '扫码牌'], ['greeting', '节日祝福图'], ['ai', 'AI 客服试用']];
   const AI_ST = { new: '新申请', contacted: '联系了', done: '开通了', no: '不做' };
   const aiText = a => a.lang === 'en'
     ? `This is Dinamics (WhatsApp ${WA}). Hi ${a.contact}, thanks for applying for the free AI customer service trial for ${a.business}. When is a good time to set it up together? It takes about 15 minutes.`
@@ -416,7 +416,7 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
       h('tbody', {}, FT.map(([k, n]) => h('tr', {}, h('td', {}, n), h('td', {}, cell(k, S.today)), h('td', {}, cell(k, days(7))), h('td', {}, cell(k, days(30)))))));
     $('#main').replaceChildren(
       h('div', { cls: 'row', style: 'margin-bottom:8px' }, h('h2', {}, '免费工具'), h('span', { cls: 'sp' }), h('a', { cls: 'b', href: 'https://dinamics.dev/free', target: '_blank', rel: 'noopener' }, '打开 dinamics.dev/free')),
-      h('p', { cls: 'small muted', style: 'margin:0 0 10px' }, '每格是「打开 / 用了 / 点了下单」的次数（不记是谁）。用了：体检出了结果、名片或图片下载了、收据打印了、二维码下载了、交了试用申请。'),
+      h('p', { cls: 'small muted', style: 'margin:0 0 10px' }, '每格是「打开 / 用了 / 点了下单」的次数（不记是谁）。用了：体检出了结果、名片或图片下载了、收据打印了、扫码牌下载了、交了试用申请。'),
       h('div', { cls: 'card', style: 'overflow-x:auto' }, table),
       h('div', { cls: 'row', style: 'margin:22px 0 8px' }, h('h2', {}, 'AI 客服试用申请'), h('span', { cls: 'sp' }), csv('free_ai', '导出申请')),
       ...(S.free.ai.length ? S.free.ai.map(a => {

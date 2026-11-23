@@ -218,10 +218,10 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
     const open = S.deals.filter(d => !['live', 'cancelled', 'expired'].includes(d.state)).length;
     const asks = S.leads.filter(l => l.ext === 'asked').length;
     const unpaid = S.settlements.filter(s => !s.paid).length;
-    const tabs = [['orders', '订单', open], ['agents', '代理', S.agents.length], ['leads', '报备', asks ? asks + ' 待批' : S.leads.length], ['money', '佣金', unpaid ? unpaid + ' 待付' : ''], ['log', '记录', ''], ['me', '登录', '']];
-    $('#tabs').replaceChildren(...tabs.map(([k, t, n]) => h('button', { type: 'button', 'aria-pressed': String(tab === k), onclick: () => { tab = k; draw(); } }, t, n !== '' ? h('span', { cls: 'n' }, n) : null)));
+    const tabs = [['orders', '订单', open], ['clients', '客户', S.clients.length], ['agents', '代理', S.agents.length], ['leads', '报备', asks ? asks + ' 待批' : S.leads.length], ['money', '佣金', unpaid ? unpaid + ' 待付' : ''], ['log', '记录', ''], ['me', '登录', '']];
+    $('#tabs').replaceChildren(...tabs.map(([k, t, n]) => h('button', { type: 'button', 'aria-pressed': String(tab === k), onclick: () => { tab = k; load(); } }, t, n !== '' ? h('span', { cls: 'n' }, n) : null)));   // 换一页就拿一次最新的，拿到再画
     $('#who').textContent = '今天 ' + S.today;
-    ({ orders, agents, leads, money, log, me })[tab]();
+    ({ orders, clients, agents, leads, money, log, me })[tab]();
   }
 
   // ---------- 订单 ----------
@@ -274,6 +274,10 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
         btn.parentNode.after(box); toast('新链接已生成');
       } }, '给客户的报价单链接')));
     for (const i of d.instalments) if (i.status !== 'paid' && (i.n === 1 || ['finished', 'paid'].includes(d.state)) && !['request', 'quoted', 'expired', 'cancelled'].includes(d.state)) kids.push(payreqCard(d, i));
+    const rc = d.instalments.filter(i => i.receipt);   // 到账就有收据：客户在报价单和账号里看得到、存成 PDF
+    if (rc.length) kids.push(h('p', { cls: 'small muted', style: 'margin:8px 0 0' }, '收据：' + rc.map(i => `${i.receipt}（${i.name} US$${i.received || i.amount}，${i.paid}）`).join('；')));
+    const vo = S.receipts.filter(r => r.deal === d.id && r.void);   // 撤回到账的收据：作废，编号不再用（导出的收据清单里也有）
+    if (vo.length) kids.push(h('p', { cls: 'small muted', style: 'margin:4px 0 0' }, '作废的收据：' + vo.map(r => `${r.no}（${r.day} 收款，${r.void} 撤回）`).join('；')));
     const paid = d.instalments.filter(i => i.status === 'paid');
     if (paid.length) kids.push(h('p', { cls: 'small', style: 'margin:10px 0 0' }, '已到账：' + paid.map(i => `${i.name} US$${i.received}（${i.paid}）`).join('；'),
       ' ', h('button', { cls: 'b', type: 'button', onclick: () => { const i = paid.at(-1); if (confirm(`撤回「${i.name}已到账」？`)) act('instalment', { deal_id: d.id, n: i.n, action: 'unpay' }, '已撤回'); } }, '撤回最后一笔')));
@@ -293,7 +297,17 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
     $('#main').replaceChildren(
       h('div', { cls: 'chips' }, Object.keys(names).map(k => h('button', { type: 'button', 'aria-pressed': String(filt === k), onclick: () => { filt = k; draw(); } }, names[k], ' ', S.deals.filter(F[k]).length))),
       ...(list.length ? list.map(orderCard) : [h('p', { cls: 'muted' }, '这里还没有订单。客户在官网点「下单」，就会出现在这里。')]),
-      offlineForm());
+      offlineForm(), sellerForm());
+  }
+  // 收据抬头：客户收据上的「卖方」（SSM 登记好以后，把登记的名字和号码填进来）
+  function sellerForm() {
+    const v = S.seller, I = (k, ph, size) => h('input', { value: v[k] || '', placeholder: ph, size, 'aria-label': ph });
+    const f = { name: I('name', '名字或登记的商号', 28), reg: I('reg', 'SSM 登记号码（选填）', 22), address: I('address', '地址（选填）', 40), email: I('email', '邮箱', 24), phone: I('phone', '电话（选填）', 16), pay_via: I('pay_via', '收款方式，例如 Payoneer', 18) };
+    return h('details', { cls: 'card', style: 'margin-top:18px' }, h('summary', { style: 'cursor:pointer;font-weight:700' }, `收据抬头：${[v.name, v.reg].filter(Boolean).join(' · ')}（点开改）`),
+      h('p', { cls: 'small muted' }, '客户每付一笔，系统就出一张有编号的收据（R-年份-0001 起），收据上的卖方写这里的资料。报税时导出收据清单：发过的每一张都在，撤回到账的标着作废。'),
+      h('div', { cls: 'row', style: 'margin-top:8px' }, csv('receipts', '导出收据清单')),
+      h('div', { cls: 'grid', style: 'margin-top:10px' }, Object.values(f).map(x => h('label', {}, x.getAttribute('aria-label'), x))),
+      h('div', { cls: 'row', style: 'margin-top:12px' }, h('button', { cls: 'b main', type: 'button', onclick: () => act('settings', Object.fromEntries(Object.entries(f).map(([k, x]) => [k, x.value.trim()])), '收据抬头存好了') }, '保存')));
   }
   function offlineForm() {
     const f = {}; const I = (k, ph, attrs = {}) => (f[k] = h('input', { placeholder: ph, ...attrs }));
@@ -307,7 +321,7 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
         h('label', {}, '大约多久（中文）', I('days_zh', '大约 5 天')), h('label', {}, '大约多久（英文）', I('days_en', 'About 5 days')),
         h('label', {}, '客户联系人', I('client_contact', '')), h('label', {}, '客户邮箱', I('client_email', '', { type: 'email' })),
         h('label', {}, '客户公司', I('client_company', '')), h('label', {}, '客户电话', I('client_phone', '')), h('label', {}, '语言', lang),
-        h('label', {}, '签的日期', signed), h('label', {}, '报备编号（有就填）', I('lead_id', '', { inputmode: 'numeric' })), h('label', {}, '或代理编号', I('agent_code', 'A1001')),
+        h('label', {}, '签的日期', signed), h('label', {}, '报备编号（有就填）', I('lead_id', '', { inputmode: 'numeric' })), h('label', {}, '或代理编号', I('agent_code', 'MY1001')),
         h('label', {}, '报价单号（空着就自动排）', I('quote_no', 'DN-2026-…'))),
       h('div', { cls: 'row', style: 'margin-top:12px' }, h('button', { cls: 'b main', type: 'button', onclick: () => {
         const data = Object.fromEntries(Object.entries(f).map(([k, e]) => [k, e.value.trim()])); data.plan = plan.value; data.client_lang = lang.value; data.signed = signed.value;
@@ -350,6 +364,42 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
     $('#main').replaceChildren(h('div', { cls: 'row', style: 'margin-bottom:12px' }, h('h2', {}, '代理'), h('span', { cls: 'sp' }), csv('agents', '导出名单')), ...(rows.length ? rows : [h('p', { cls: 'muted' }, '还没有人报名。代理页：https://dinamics.dev/partners')]));
   }
 
+  // ---------- 客户账号 ----------
+  const VIA = { lead: '代理报备过', link: '点代理链接来的', self: '自己注册', admin: '你改过' };
+  const resetText = (c, link) => c.lang === 'en'
+    ? `This message is from Dinamics (WhatsApp ${WA}).\nSet up your Dinamics sign-in again: ${link}\nThe link works once, within 24 hours.\nCheck: the link starts with https://dinamics.dev/. Dinamics never asks you for money, passwords or codes.`
+    : `这条消息来自 Dinamics（WhatsApp ${WA}）。\n重设你的 Dinamics 账号登录：${link}\n24 小时内有效，只能用一次。\n核对：链接是 https://dinamics.dev/ 开头。Dinamics 不会向你要钱、密码或验证码。`;
+  let cq = '';
+  function clients() {
+    const q = cq.trim().toLowerCase(), list = S.clients.filter(c => !q || [c.name, c.company, c.email, c.phone, c.agent].join(' ').toLowerCase().includes(q));
+    const find = h('input', { value: cq, placeholder: '找名字、公司、电话、邮箱、代理编号', 'aria-label': '找客户', style: 'min-width:min(320px,100%)', oninput: e => { cq = e.target.value; const at = e.target.selectionStart; clients(); const f = $('#main input'); f.focus(); f.setSelectionRange(at, at); } });
+    $('#main').replaceChildren(
+      h('div', { cls: 'row', style: 'margin-bottom:8px' }, h('h2', {}, '客户账号'), h('span', { cls: 'sp' }), csv('clients', '导出客户')),
+      h('p', { cls: 'small muted', style: 'margin:0 0 12px' }, '客户自己在 dinamics.dev/account 注册。归属在注册那一刻定：报备过的代理 > 点代理链接来的 > Dinamics 自己；之后只有这里能改。'),
+      h('div', { cls: 'row', style: 'margin-bottom:12px' }, find),
+      ...(list.length ? list.map(c => {
+        const code = h('input', { value: c.agent, placeholder: 'MY1001（空着 = Dinamics）', size: 16, 'aria-label': '归哪个代理' });
+        return h('div', { cls: 'card' },
+          h('div', { cls: 'row' }, h('h3', {}, [c.name, c.company].filter(Boolean).join(' · ')), h('span', { cls: 'tag' + (c.agent ? '' : ' ok') }, c.agent ? '代理 ' + c.agent : 'Dinamics 自己'),
+            h('span', { cls: 'small muted' }, VIA[c.via] || c.via), h('span', { cls: 'sp' }), h('span', { cls: 'small muted' }, `订单 ${c.orders}`)),
+          h('p', { cls: 'small', style: 'margin:6px 0 0' }, [c.phone, c.email, c.country, '注册 ' + c.since, c.login ? '上次登录 ' + c.login : ''].filter(Boolean).join(' · ')),
+          h('div', { cls: 'row', style: 'margin-top:10px' }, code,
+            h('button', { cls: 'b', type: 'button', onclick: () => {
+              const to = code.value.trim().toUpperCase(); if (to === c.agent) return;
+              if (!confirm(`把 ${c.name} 改成归「${to || 'Dinamics 自己'}」？以后的单按新的归属算佣金。`)) return;
+              act('client', { id: c.id, agent_code: to }, '归属改好了');
+            } }, '改归属'),
+            h('button', { cls: 'b', type: 'button', onclick: async e => {
+              const btn = e.currentTarget;
+              if (!confirm('给他一条重设登录的链接？24 小时内有效、只能用一次；他以前登记的扫脸和密码都会作废。\n\n先打电话或视频，确认找你的是他本人。')) return;
+              const r = await api('/api/admin/client/reset', { id: c.id }); const link = 'https://dinamics.dev/account#r=' + r.token, msg = resetText(c, link);
+              btn.after(h('span', { cls: 'mono', style: 'word-break:break-all' }, ' ' + link + ' '), h('button', { cls: 'b', type: 'button', onclick: () => copy(msg) }, '复制发给他的话'),
+                c.phone ? h('a', { cls: 'b', href: 'https://wa.me/' + c.phone.replace(/\D/g, '') + '?text=' + encodeURIComponent(msg), target: '_blank', rel: 'noopener' }, 'WhatsApp 发给他') : null,
+                h('span', { cls: 'small muted' }, '用 WhatsApp ' + WA + ' 发。'));
+            } }, '重设登录')));
+      }) : [h('p', { cls: 'muted' }, S.clients.length ? '找不到。' : '还没有客户注册。客户账号页：https://dinamics.dev/account')]));
+  }
+
   // ---------- 报备 ----------
   let lf = 'all';
   function leads() {
@@ -379,10 +429,10 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
     const last = (() => { const [y, m] = S.month.split('-').map(Number); const d = new Date(Date.UTC(y, m - 2, 1)); return d.toISOString().slice(0, 7); })();
     const mi = h('input', { type: 'month', value: last, max: last, 'aria-label': '结哪个月' });
     const open = S.commissions.filter(c => !c.settled);
-    const a1 = h('input', { placeholder: 'A1001', size: 8, 'aria-label': '代理编号' }), a2 = h('input', { placeholder: '-50 或 120', inputmode: 'decimal', size: 9, 'aria-label': '金额' }),
+    const a1 = h('input', { placeholder: 'MY1001', size: 8, 'aria-label': '代理编号' }), a2 = h('input', { placeholder: '-50 或 120', inputmode: 'decimal', size: 9, 'aria-label': '金额' }),
       a3 = h('input', { placeholder: '说明：折扣自己出 / 本地服务费 5% …', 'aria-label': '说明' }), a4 = h('input', { placeholder: '报价单号（选填）', size: 13, 'aria-label': '报价单号' });
     $('#main').replaceChildren(
-      h('div', { cls: 'row', style: 'margin-bottom:10px' }, h('h2', {}, '佣金'), h('span', { cls: 'sp' }), csv('commissions', '导出佣金明细'), csv('orders', '导出订单')),
+      h('div', { cls: 'row', style: 'margin-bottom:10px' }, h('h2', {}, '佣金'), h('span', { cls: 'sp' }), csv('commissions', '导出佣金明细'), csv('orders', '导出订单'), csv('receipts', '导出收据清单')),
       h('div', { cls: 'card' }, h('p', { style: 'margin:0 0 8px' }, '每月 1 日结上个月到账的单，15 日前付到代理登记的账户。'),
         h('div', { cls: 'row' }, mi, h('button', { cls: 'b main', type: 'button', onclick: () => act('settle', { month: mi.value }, '结算单已生成') }, '结算这个月'))),
       h('h3', { style: 'margin:18px 0 8px' }, '结算单'),

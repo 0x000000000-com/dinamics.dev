@@ -121,7 +121,7 @@ html.scn-on .orn{display:block;position:absolute;right:0;top:-46px;width:clamp(1
    DSJ 21:10「这个十八门的圈感觉还差了点意思」: once the film plays, the ring fills as it goes. A craft the film has told stays lit after it
    leaves the gold line, a line of light runs round the frame from the gold line back to the first craft with sparks flowing along it, each
    new craft arrives with a ring of light, and when all eighteen have been told one light runs once round the whole frame.
-   「做个箭头让用户尝试点一点这个十八门的圈」: until a visitor has used the ring once, an arrow above it says to tap a craft, and the craft under
+   「做个箭头让用户尝试点一点这个十八门的圈」: until a visitor has used the ring three times (DSJ 11-24 「调整至少点过三次才消失」), an arrow above it says to tap a craft, and the craft under
    the arrow pulses now and then. */
 .orbit{--op:84px;--oi:56px;--fw:clamp(420px,calc((100svh - 330px) * 16 / 9),820px);position:relative;box-sizing:border-box;width:min(100%,calc(var(--fw) + 2 * var(--op)));margin:0 auto;padding:var(--op)}
 .orbit .fc{margin:0;max-width:none}
@@ -601,8 +601,9 @@ const lines=s=>s.map(t=>`<line x1="${t[0]}" y1="${t[1]}" x2="${t[2]}" y2="${t[3]
    clicking a mark takes the film to that craft; clicking the one on the gold line opens its page. On a phone the two sides run off the screen:
    the top row goes right, the bottom row goes left.
    Once the film plays the ring fills as it goes (DSJ 21:10): a craft it has passed stays lit, the frame lights from the gold line back to the
-   first craft with sparks running along it, and after the eighteenth a light runs once round. Until the visitor has used the ring once, an
-   arrow above the top row says to tap a craft and the craft under it pulses every few seconds; the first tap, click or step puts it away for good. */
+   first craft with sparks running along it, and after the eighteenth a light runs once round. Until the visitor has used the ring three times, an
+   arrow above the top row says to tap a craft and the craft under it pulses every few seconds; the third tap, click or step puts it away for good
+   (DSJ 11-24 「调整至少点过三次才消失」; the browser keeps the count, so a visitor who tapped once before the change has two to go). */
 let oRender=()=>{};function renderWall(){oRender()}
 {const dial=$('#dial'), orail=$('#orail'), dpanel=$('#dpanel'), dsee=$('#dsee'), ohint=$('#ohint'), OMQ=matchMedia('(max-width:699px)');
 const FLAND=[[7, "website"], [13, "platform"], [19, "app"], [25, "brand"], [31, "ui"], [41, "chatbot"], [45, "miniapp"], [49, "agents"], [53, "automation"], [57, "dashboards"], [64, "games"], [69, "trading"], [75, "contracts"], [81, "security"], [87, "infra"], [93, "documents"], [96, "pitch"], [104, "video"]].map(([t,k])=>[t,WK.indexOf(k)]).filter(x=>x[1]>=0).sort((a,b)=>a[0]-b[0]);
@@ -615,7 +616,7 @@ function vFilm(t){const n=TJ.length;if(!n)return 0;if(t<TJ[0])return -.75+.25*Ma
   let j=n-1;while(j>0&&t<TJ[j])j--;const e=j<n-1?TJ[j+1]:OUT;return t<e?j-.5+(t-TJ[j])/(e-TJ[j]):j+.5+(t-e)*DRIFT}
 const slotAt=t=>{let j=0;for(let k=0;k<TJ.length;k++)if(t>=TJ[k]-.08)j=k;return j};
 let GM=null, arts=[], vD=-.75, vDrift=-.75, vPrev=-.75, tw=null, mode='drift', cur=FORD[0], gHold=0, held=0, fz=0, thaw=false, dVis=false, raf=0, last=0, fPlayed=false, seen=false;
-let TRK=null, PS=[], told=-2, fin=0, nudgeAt=0, HT=null, hintOn=false, tried=false, hx=null, hk=-1, hLast=0;try{tried=localStorage.getItem('dn-ring-tried')==='1'}catch(e){}
+let TRK=null, PS=[], told=-2, fin=0, nudgeAt=0, HT=null, hintOn=false, tried=false, uses=0, hx=null, hk=-1, hLast=0;const RING_N=3;try{uses=Math.min(RING_N,parseInt(localStorage.getItem('dn-ring-tried'),10)||0);tried=uses>=RING_N}catch(e){}
 /* the frame: a rounded rectangle half the padding outside the film and its row of buttons; on a phone its sides sit off the screen */
 function geo(){const fr=dial.querySelector('.fc-frame,.ofill');if(!fr)return;const o=dial.getBoundingClientRect(),a=fr.getBoundingClientRect(),
     rw=dial.querySelector('.fc-row'),b=rw?rw.getBoundingClientRect():a,g=(parseFloat(getComputedStyle(dial).paddingTop)||80)/2;
@@ -662,7 +663,7 @@ function aim(now){const {X0,X1,Y0,rc}=GM;let b=-1,bd=1e9;
 function placeHint(){if(!GM||!ohint||!arts.length)return;const {X0,Y0,rc,sw}=GM,W=dial.clientWidth,tw=ohint.querySelector('p').offsetWidth,r=arts[0].offsetWidth/2,
   tx=Math.max(X0+rc+r,Math.min(X0+rc+sw*(OMQ.matches?.46:.74),W-tw-60)),ty=Y0-r-9;ohint.style.translate=tx.toFixed(1)+'px '+ty.toFixed(1)+'px';HT=[tx,Y0]}
 function showHint(){if(tried||!ohint)return;placeHint();hx=null;hLast=0;if(GM&&TRK&&TRK.hp)aim(performance.now());ohint.classList.add('on');hintOn=true;nudgeAt=performance.now()+1500}
-function markTried(){if(tried)return;tried=true;hintOn=false;try{localStorage.setItem('dn-ring-tried','1')}catch(e){}if(ohint)ohint.classList.remove('on')}
+function markTried(){if(tried)return;uses++;try{localStorage.setItem('dn-ring-tried',String(uses))}catch(e){}if(uses<RING_N)return;tried=true;hintOn=false;if(ohint)ohint.classList.remove('on')}
 function setCur(i){if(i===cur)return;cur=i;arts.forEach(a=>a.classList.toggle('on',+a.dataset.i===i));
   dpanel.querySelectorAll('.dp').forEach(n=>n.classList.toggle('on',+n.dataset.i===i));dsee.href=WB+WK[i]}
 oRender=()=>{const o=LO[lang],t=T[lang];
@@ -1227,7 +1228,7 @@ let festNow=(()=>{const d=new Date(),k=d.getFullYear()*10000+(d.getMonth()+1)*10
 function drawFest(){if(!FH||!festNow||!W)return;FH.render(festNow[0],{hero,root:document.documentElement,brand:$('.top .brand'),W,H,mob:W<900,fy:Math.floor(festNow[2]/10000)})}
 window.DNH=api=>{FH=api;drawFest()};
 document.addEventListener('dn-theme',()=>{if(penOn&&PEN)PEN.restyle(penCtx())});
-function festLoad(){if(document.getElementById('holjs'))return;const s=document.createElement('script');s.id='holjs';s.async=true;s.src='themes/holiday.js?v=2138a63016';document.head.append(s);document.addEventListener('dn-theme',()=>requestAnimationFrame(drawFest))}
+function festLoad(){if(document.getElementById('holjs'))return;const s=document.createElement('script');s.id='holjs';s.async=true;s.src='themes/holiday.js?v=195fbf8c2e';document.head.append(s);document.addEventListener('dn-theme',()=>requestAnimationFrame(drawFest))}
 /* the terminal can put any festival up now, to see it before its day */
 function festShow(id){const d=new Date(),k=d.getFullYear()*10000+(d.getMonth()+1)*100+d.getDate(),r=FEST.filter(f=>f[0]===id).sort((a,b)=>a[2]-b[2]);if(!r.length)return;
   festNow=r.find(f=>f[3]>=k)||r[r.length-1];if(FH)drawFest();else festLoad()}

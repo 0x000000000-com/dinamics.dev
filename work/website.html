@@ -429,7 +429,7 @@ DN.on(l=>{L=l;draw();if(!$('flRes').hidden){const T=S[L];$('flNext').textContent
 (()=>{
 /* our four sites (v2, 2026-11-22): the four cards are the tabs; the browser and the phone show the one picked.
    It turns to the next one every 6 s, but holds while the pointer or the keyboard is on it, and while it is off screen. */
-const S=[{k:'dinamics',h:'dinamics.dev',u:'https://dinamics.dev',p:'https://pagespeed.web.dev/analysis/https-dinamics-dev/5o9719whoa?form_factor=mobile'},
+const S=[{k:'dinamics',h:'dinamics.dev',u:'https://dinamics.dev',p:'https://pagespeed.web.dev/analysis/https-dinamics-dev/w9d9uku118?form_factor=mobile'},
          {k:'phrax',h:'phrax.co',u:'https://phrax.co'},{k:'zero',h:'0x000000000.com',u:'https://0x000000000.com'},
          {k:'bdy',h:'budayangai.com',u:'https://budayangai.com'}];
 const $=i=>document.getElementById(i),band=document.querySelector('.wsb'),cards=[...document.querySelectorAll('.ws-card')],btabs=[...document.querySelectorAll('.wsh-tabs button')],
@@ -549,7 +549,9 @@ function burst(b){if(RM.matches)return;b.classList.remove('pop');void b.offsetWi
 function like(b){burst(b);if(liked)return;liked=true;S.s(LK,'1');if(n!=null)n++;drawLike();
   if(LIVE)fetch(API+'/hit'+PATH).then(r=>r.ok?r.json():null).then(j=>{if(j&&typeof j.value==='number'){n=j.value;drawLike()}}).catch(()=>{})}
 qa('.fc-like').forEach(b=>b.addEventListener('click',()=>like(b)));
-if(LIVE)fetch(API+'/get'+PATH).then(r=>r.status===404?{value:0}:r.ok?r.json():null).then(j=>{if(j&&typeof j.value==='number'){n=Math.max(j.value,n||0);drawLike()}}).catch(()=>{});
+/* the count is asked for only once the film comes near: the page does not call the counter service before anyone scrolls there (11-23: it timed out once during a speed test) */
+const getN=()=>{if(LIVE)fetch(API+'/get'+PATH).then(r=>r.status===404?{value:0}:r.ok?r.json():null).then(j=>{if(j&&typeof j.value==='number'){n=Math.max(j.value,n||0);drawLike()}}).catch(()=>{})};
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();getN()}},{rootMargin:'120px 0px'});io.observe(R)}else getN();
 /* leave a note: emailed to us */
 const fbb=q('.fc-fbb'),FS='https://formsubmit.co/ajax/'+(C.mail||'contact@dinamics.dev');
 function openFb(){FB.hidden=false;fbb.setAttribute('aria-expanded','true');

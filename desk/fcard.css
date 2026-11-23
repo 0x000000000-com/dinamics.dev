@@ -1,0 +1,32 @@
+/* Dinamics · the free e-card (used on dinamics.dev/free/card and on the card page itself). Every class starts with ec */
+.ec{--cb:#0A0A0B;--cw:#16140F;--ci:#F2EDE3;--ci2:#A39D92;--cc:#D9B26B;--cc2:#F3D48E;--con:#0A0A0B;--g0:#F3D48E;--g1:#D9B26B;--g2:#A47A36;
+  width:min(100%,400px);perspective:1600px;color:var(--ci);font-family:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;text-align:left}
+.ec-in{position:relative;display:grid;transition:transform .85s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.ec-flipped .ec-in{transform:rotateY(180deg)}
+.ec-face{grid-area:1/1;position:relative;overflow:hidden;border-radius:28px;border:1px solid color-mix(in srgb,var(--cc) 42%,transparent);background-color:var(--cw);padding:26px 26px 22px;
+  -webkit-backface-visibility:hidden;backface-visibility:hidden;box-shadow:0 34px 90px -34px color-mix(in srgb,var(--cc) 55%,transparent);transition:background-color .9s,border-color .9s,color .9s,box-shadow .9s}
+.ec-front::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-radial-gradient(circle at 104% -6%,color-mix(in srgb,var(--cc) 22%,transparent) 0 1.5px,transparent 1.5px 23px);
+  -webkit-mask:radial-gradient(130% 70% at 100% 0,#000 20%,transparent 72%);mask:radial-gradient(130% 70% at 100% 0,#000 20%,transparent 72%)}
+.ec-back{transform:rotateY(180deg);display:grid;justify-items:center;align-content:center;gap:16px;text-align:center}
+.ec-top{position:relative;display:flex;justify-content:space-between;align-items:center}
+.ec-mono{width:62px;height:62px;border-radius:18px;display:grid;place-items:center;background:linear-gradient(180deg,var(--g0),var(--g1) 55%,var(--g2));color:var(--con);font-weight:800;font-size:24px;letter-spacing:.02em;box-shadow:0 10px 30px -10px var(--cc)}
+.ec-dots{display:flex;gap:5px;align-items:center}
+.ec-dots i{width:6px;height:6px;border-radius:9px;opacity:.45;transition:width .5s,opacity .5s}
+.ec-dots i.ec-on{width:18px;opacity:1}
+.ec-gap{height:clamp(54px,14vw,92px)}
+.ec-name{position:relative;margin:0;font-family:"Noto Serif SC","Songti SC","STSong","SimSun",serif;font-size:clamp(38px,11vw,54px);line-height:1.08;font-weight:900;letter-spacing:0;background:linear-gradient(180deg,var(--g0),var(--g1) 60%,var(--g2));-webkit-background-clip:text;background-clip:text;color:transparent;overflow-wrap:anywhere}
+.ec-role{position:relative;margin:10px 0 0;font-size:17px;font-weight:600;color:var(--ci)}
+.ec-hr{border:0;border-top:1px solid color-mix(in srgb,var(--cc) 30%,transparent);margin:20px 0 14px}
+.ec-rows{display:grid;grid-template-columns:auto minmax(0,1fr);gap:11px 18px;margin:0;align-items:baseline}
+.ec-rows dt{color:var(--ci2);font-size:13.5px}
+.ec-rows dd{margin:0;font-size:16px;font-weight:600;overflow-wrap:anywhere}
+.ec-rows a{color:inherit;text-decoration:none}
+.ec-rows a:hover{color:var(--cc2)}
+.ec-style{margin:18px 0 0;color:var(--cc);font-size:13.5px;font-weight:700}
+.ec-swap .ec-mono,.ec-swap .ec-name{animation:ec-swap .9s ease}
+@keyframes ec-swap{0%{filter:brightness(1)}35%{filter:brightness(1.55) saturate(1.2)}100%{filter:brightness(1)}}
+.ec-bname{margin:0;font-size:22px;font-weight:800;color:var(--ci)}
+.ec-qr{width:min(74%,240px);padding:14px;border-radius:20px;background:#fff}
+.ec-qr svg{display:block;width:100%;height:auto}
+.ec-scan{margin:0;color:var(--ci2);font-size:14.5px}
+@media (prefers-reduced-motion:reduce){.ec-in,.ec-face,.ec-dots i{transition:none}.ec-swap .ec-mono,.ec-swap .ec-name{animation:none}}

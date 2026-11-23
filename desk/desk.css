@@ -11,14 +11,14 @@
 .dk-panel{border:1px solid var(--line);border-radius:18px;background:var(--wash);padding:clamp(20px,3vw,30px)}
 .dk-price{font:800 clamp(40px,5vw,64px)/1 var(--sans);font-stretch:118%;background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent;font-variant-numeric:tabular-nums;margin:18px 0 0}
 .dk-price small{font-size:.36em;font-stretch:100%;margin-left:.2em}
-.dk-when{display:inline-flex;margin-top:14px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;font:600 14px/1 var(--sans);color:var(--co)}
+.dk-when{display:inline-flex;margin-top:14px;padding:8px 14px;border:1px solid var(--line);border-radius:999px;font:600 14px/1 var(--sans);color:var(--cot)}
 .dk-list{list-style:none;margin:20px 0 0;padding:18px 0 0;border-top:1px solid var(--hair);display:grid;gap:9px}
 .dk-list li{position:relative;padding-left:18px;line-height:1.5}
 .dk-list li::before{content:"";position:absolute;left:2px;top:.62em;width:7px;height:7px;border-radius:2px;background:var(--co)}
 .dk-steps{list-style:none;counter-reset:s;margin:22px 0 0;padding:0;display:grid;gap:12px}
 /* a step is one flowing paragraph (it may start with a bold word); the number sits in the margin */
 .dk-steps li{counter-increment:s;position:relative;padding:3px 0 0 46px;min-height:32px;line-height:1.55}
-.dk-steps li::before{content:counter(s);position:absolute;left:0;top:0;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);font:700 14px/1 var(--sans);color:var(--co);font-variant-numeric:tabular-nums}
+.dk-steps li::before{content:counter(s);position:absolute;left:0;top:0;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);font:700 14px/1 var(--sans);color:var(--cot);font-variant-numeric:tabular-nums}
 .dk-steps b{color:var(--ink)}
 /* forms */
 .dk-form{display:grid;gap:16px}
@@ -55,8 +55,8 @@
 .qs ul.terms b{color:var(--ink)}
 .track{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
 .track li{padding:8px 12px;border:1px solid var(--hair);border-radius:999px;font:600 13.5px/1 var(--sans);color:var(--ink3)}
-.track li.done{color:var(--co2);border-color:var(--line);background:color-mix(in srgb,var(--co) 10%,transparent)}
-.track li.now{color:var(--on);background:var(--co);border-color:var(--co)}
+.track li.done{color:var(--cot2);border-color:var(--line);background:color-mix(in srgb,var(--co) 10%,transparent)}
+.track li.now{color:var(--onco);background:var(--co);border-color:var(--co)}
 .tools{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
 /* how to tell our messages from a scammer's; the QR code a new phone scans */
 .dk-safe{margin-top:18px;padding:14px 18px;border:1px solid color-mix(in srgb,var(--co) 45%,transparent);border-left:4px solid var(--co);border-radius:12px;background:var(--wash)}
@@ -64,7 +64,7 @@
 .dk-safe ul{margin:8px 0 0;padding-left:18px;display:grid;gap:6px;font-size:14.5px;line-height:1.55;color:var(--ink2);overflow-wrap:anywhere}
 .dk-safe b{color:var(--ink);white-space:nowrap}
 .dk-pre{font-size:14px;color:var(--ink2)}.dk-pre b{color:var(--ink);white-space:nowrap}
-.dk-rc{margin-left:8px;padding:0;border:0;background:none;color:var(--co2);font:600 14px/1.3 var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.dk-rc{margin-left:8px;padding:0;border:0;background:none;color:var(--cot2);font:600 14px/1.3 var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 .dk-receipt{max-width:760px}.dk-rc-logo{height:30px;margin:2px 0 22px}.dk-rc-logo svg{height:100%;width:auto;display:block}.dk-receipt .top2{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
 .dk-qr{display:inline-block;margin-top:14px;padding:6px;border-radius:14px;background:#fff;max-width:100%}
 .dk-qr svg{display:block;max-width:100%;height:auto}
@@ -82,7 +82,7 @@
 .dk-pays{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:6px}
 .dk-pays li{display:flex;flex-wrap:wrap;gap:2px 14px;font-size:14.5px;color:var(--ink2);line-height:1.5}
 .dk-pays li b{color:var(--ink)}
-.dk-pays li .cut{color:var(--co2);font-weight:600}
+.dk-pays li .cut{color:var(--cot2);font-weight:600}
 .chip.bad{color:var(--down);border-color:color-mix(in srgb,var(--down) 45%,transparent)}
 /* partner desk */
 .tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:22px}
@@ -98,13 +98,13 @@
 .rowc p{margin:6px 0 0;color:var(--ink2);font-size:14.5px;line-height:1.5}
 .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:20px}
 .stat2{border:1px solid var(--hair);border-radius:14px;padding:14px 16px}
-.stat2 b{display:block;font:800 30px/1.1 var(--sans);font-stretch:115%;color:var(--co2);font-variant-numeric:tabular-nums}
+.stat2 b{display:block;font:800 30px/1.1 var(--sans);font-stretch:115%;color:var(--cot2);font-variant-numeric:tabular-nums}
 .stat2 span{font-size:13.5px;color:var(--ink2)}
 .linkbox{margin-top:12px;padding:12px 14px;border:1px dashed var(--line);border-radius:12px;font:500 14px/1.45 var(--mono);overflow-wrap:anywhere;color:var(--ink)}
 details.faq{border-top:1px solid var(--hair);padding:14px 0}
 details.faq summary{cursor:pointer;font-weight:600;list-style:none}
 details.faq summary::-webkit-details-marker{display:none}
-details.faq summary::after{content:"+";float:right;color:var(--co)}
+details.faq summary::after{content:"+";float:right;color:var(--cot)}
 details.faq[open] summary::after{content:"–"}
 details.faq p{margin:10px 0 0;color:var(--ink2)}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--wash);border:1px solid var(--co);color:var(--ink);padding:10px 16px;border-radius:10px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9;max-width:90vw}

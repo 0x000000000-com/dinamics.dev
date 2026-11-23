@@ -7,18 +7,18 @@
 
   function apply(l) {
     lang = l; DN.lang = l; const T = P[l];
-    document.documentElement.lang = l === 'zh' ? 'zh-CN' : 'en';
+    document.documentElement.lang = l === 'zh' ? 'zh-CN' : l;
     document.title = T.title;
     const md = $('meta[name="description"]'); if (md) md.setAttribute('content', T.meta);
     $$('[data-t]').forEach(e => { const v = T[e.dataset.t]; if (v != null) e.innerHTML = v });
     $$('[data-tl]').forEach(e => { const v = T[e.dataset.tl]; if (v != null) { e.setAttribute('aria-label', v); e.setAttribute('title', v) } });
     $$('.lang button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.l === l)));
+    const ls = $('.lsel'); if (ls) ls.value = l;
     subs.forEach(f => { try { f(l) } catch (e) { console.error(e) } });
   }
-  $$('.lang button').forEach(b => b.addEventListener('click', () => {
-    try { localStorage.setItem('dinamics-lang', b.dataset.l) } catch (e) {}
-    apply(b.dataset.l);
-  }));
+  const pick = l => { try { localStorage.setItem('dinamics-lang', l) } catch (e) {} apply(l); };
+  $$('.lang button').forEach(b => b.addEventListener('click', () => pick(b.dataset.l)));
+  const ls = $('.lsel'); if (ls) ls.addEventListener('change', () => pick(ls.value));   /* phones: one menu, 16px so iOS does not zoom */
 
   /* the sign: starts as the Dinamics mark, becomes this craft's sign (the same move as on the home page wall) */
   const g = $('.hero .glyph');

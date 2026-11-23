@@ -39,6 +39,19 @@
     $('#s1').textContent = pkg.frm ? t('s1_frm') : t('s1');
   }
   DN.on(draw);
+  // signed in: fill in the details and say the order goes into the account; signed out: offer to sign in first
+  const acct = $('#acct-note'); let me = null;
+  function acctNote() {
+    const here = encodeURIComponent(location.pathname + location.search);
+    put(acct, me ? [tf('o_acct_in', { name: me.name }), ' ', h('a', { href: '/account' }, t('o_acct_mine'))] : [t('o_acct_out'), ' ', h('a', { href: '/account?next=' + here }, t('o_acct_go'))]);
+  }
+  DN.on(acctNote); acctNote();
+  if (store.get('dn-client', '')) api('/api/client/me').then(r => {
+    if (!r.ok) { if (r.status === 401) store.del('dn-client'); return; }
+    me = r.client; acctNote();
+    const fill = (n, v) => { const el = form.elements[n]; if (el && !el.value && v) el.value = v; };
+    fill('contact', me.name); fill('company', me.company); fill('email', me.email); fill('phone', me.phone); fill('country', me.country);
+  });
   const ERR = { contact: 'e_contact', email: 'e_email', phone: 'e_phone', note: 'e_note', pkg: 'e_pkg', slow_down: 'e_slow', network: 'e_net' };
   form.addEventListener('submit', async e => {
     e.preventDefault(); err.textContent = '';

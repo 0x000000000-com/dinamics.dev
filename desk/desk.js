@@ -29,6 +29,7 @@
   }
   async function api(path, { method = 'GET', body, token } = {}) {
     const headers = {}; if (body) headers['content-type'] = 'application/json'; if (token) headers.authorization = 'Bearer ' + token;
+    const me = store.get('dn-client', ''); if (me) headers['x-dn-client'] = me;   // a signed-in client (account page)
     let r; try { r = await fetch(D.api + path, { method, headers, body: body ? JSON.stringify(body) : undefined, cache: 'no-store' }); }
     catch (e) { return { ok: false, status: 0, error: 'network' }; }
     let j = {}; try { j = await r.json(); } catch (e) {}
@@ -39,8 +40,8 @@
     set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
     del(k) { try { localStorage.removeItem(k); } catch (e) {} },
   };
-  // an agent's code from a shared link (?a=A1001) is remembered for 90 days and filled into an order
-  try { const a = new URLSearchParams(location.search).get('a'); if (/^A\d{4,6}$/i.test(a || '')) store.set('dn-ref', { a: a.toUpperCase(), t: Date.now() }); } catch (e) {}
+  // an agent's code from a shared link (?a=MY1001) is remembered for 90 days and filled into an order
+  try { const a = new URLSearchParams(location.search).get('a'); if (/^[A-Z]{1,2}\d{4,6}$/i.test(a || '')) store.set('dn-ref', { a: a.toUpperCase(), t: Date.now() }); } catch (e) {}
   const ref = () => { const r = store.get('dn-ref', null); return r && Date.now() - r.t < 90 * 864e5 ? r.a : ''; };
   // a short note to Dinamics' inbox (only from the real site, never from previews or tests)
   function notify(subject, fields, replyto) {

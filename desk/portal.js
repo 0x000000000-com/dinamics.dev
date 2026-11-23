@@ -28,7 +28,7 @@
     const box = h('div', { cls: 'rowc dk-move' });
     if (!showQR) put(box, h('p', { style: 'margin:0' }, t('move_p')), h('div', { cls: 'tools', style: 'margin-top:12px' }, h('button', { cls: 'btn', type: 'button', onclick: () => { showQR = true; draw(); } }, t('move_btn'))));
     else {
-      const qr = h('div', { cls: 'dk-qr', role: 'img', 'aria-label': t('move_h') }); qr.innerHTML = window.QR.svg(LINK());
+      const qr = h('div', { cls: 'dk-qr', role: 'img', 'aria-label': t('move_h') }); qr.innerHTML = window.QR.svg(LINK(), { fit: Math.min(240, Math.max(150, (root.clientWidth || 300) - 60)) });   // the desk is on screen; the new box is not yet
       put(box, h('p', { style: 'margin:0' }, t('move_p')), qr, h('p', { cls: 'dk-msg bad', style: 'margin-top:14px' }, t('move_warn')),
         h('div', { cls: 'tools' }, h('button', { cls: 'btn ghost', type: 'button', onclick: () => copy(LINK()) }, t('ok_copy')),
           h('a', { cls: 'btn ghost', href: 'https://wa.me/?text=' + encodeURIComponent(tf('ok_wa_text', { code: M.agent.code, link: LINK() })), target: '_blank', rel: 'noopener' }, t('ok_wa')),
@@ -65,7 +65,7 @@
       b.disabled = false;
       if (r.ok) { note = h('p', { cls: 'dk-msg good' }, tf('l_ok', { c: body.company, d: r.lead.expires })); await load(); return; }
       err.textContent = r.error === 'taken' ? (r.won ? t('e_taken_won') : tf('e_lead_taken', { d: r.until })) : r.error === 'mine' ? t('e_mine')
-        : r.error === 'phone' ? t('e_phone') : r.error === 'email' ? t('e_email') : r.error === 'ended' ? t('e_ended') : r.error === 'slow_down' ? t('e_slow') : r.error === 'network' ? t('e_net') : t('e_server');
+        : r.error === 'direct' ? t('e_direct') : r.error === 'phone' ? t('e_phone') : r.error === 'email' ? t('e_email') : r.error === 'ended' ? t('e_ended') : r.error === 'slow_down' ? t('e_slow') : r.error === 'network' ? t('e_net') : t('e_server');
     });
     return f;
   }
@@ -110,8 +110,12 @@
         h('div', { cls: 'stat2' }, h('b', {}, active), h('span', {}, t('st_active'))), h('div', { cls: 'stat2' }, h('b', {}, won), h('span', {}, t('st_won'))),
         h('div', { cls: 'stat2' }, h('b', {}, 'US$' + (thisMonth ? thisMonth.earned : '0.00')), h('span', {}, t('st_month'))),
         h('div', { cls: 'stat2' }, h('b', {}, 'US$' + (owed.length ? owed.map(s => Number(s.amount.replace(/,/g, ''))).reduce((x, y) => x + y, 0).toLocaleString('en-US', { minimumFractionDigits: 2 }) : '0.00')), h('span', {}, t('st_owed')))),
-      a.status === 'active' ? [h('h2', {}, t('l_h')), h('p', { cls: 'note' }, t('l_rule')), note, h('div', { cls: 'dk-panel', style: 'margin-top:14px' }, leadForm())] : null,
+      a.status === 'active' ? [h('h2', {}, t('l_h')), h('p', { cls: 'note' }, t('l_rule')), h('p', { cls: 'note', style: 'margin-top:4px' }, t('l_acct')), note, h('div', { cls: 'dk-panel', style: 'margin-top:14px' }, leadForm())] : null,
       h('h2', {}, tf('my_leads', { n: M.leads.length })), M.leads.length ? h('div', { cls: 'rows' }, M.leads.map(leadRow)) : h('p', { cls: 'note' }, t('none_yet')),
+      h('h2', {}, tf('my_clients', { n: (M.clients || []).length })), h('p', { cls: 'note' }, t('clients_p')),
+      (M.clients || []).length ? h('div', { cls: 'rows' }, M.clients.map(c => h('div', { cls: 'rowc' }, h('div', { cls: 'top2' }, h('h3', {}, [c.name, c.company].filter(Boolean).join(' · ')),
+        h('span', { cls: 'chip' }, t({ lead: 'via_lead', link: 'via_link', admin: 'via_admin' }[c.via] || 'via_admin'))),
+        h('p', {}, [c.phone, c.email].filter(Boolean).join(' · ')), h('p', { cls: 'note' }, tf('cl_line', { d: c.since, n: c.orders }))))) : h('p', { cls: 'note' }, t('none_clients')),
       h('h2', {}, tf('my_deals', { n: M.deals.length })), M.deals.length ? h('div', { cls: 'rows' }, M.deals.map(dealRow)) : h('p', { cls: 'note' }, t('none_deals')),
       h('h2', {}, t('my_money')), h('p', { cls: 'note' }, t('money_rule')),
       M.months.length ? h('div', { cls: 'rows' }, M.months.map(mo => { const s = M.settlements.find(x => x.month === mo.month);

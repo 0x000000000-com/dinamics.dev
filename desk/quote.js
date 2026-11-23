@@ -1,10 +1,11 @@
 /* Dinamics · the quote: read it, accept it, follow the order from deposit to go-live. */
 (() => {
-  const { $, h, put, t, tf, api, store, copy, notify, mark } = window.Desk, DN = window.DN, D = window.DESK;
+  const { $, h, put, t, tf, api, store, copy, notify, mark, toast } = window.Desk, DN = window.DN, D = window.DESK;
   const root = $('#quote');
-  const m = /^#(DN-\d{4}-\d{3,})\.([\w-]{20,})$/.exec(location.hash || '');
+  const m = /^#(DN-\d{4}-\d{3,})(?:\.([\w-]{20,}))?$/.exec(location.hash || '');
   const no = m && m[1], token = m && m[2];
-  let Q = null, busy = false;
+  let Q = null, busy = false, RC = 0;   // RC: the payment whose receipt is open (0 = the quote)
+  const want = new URLSearchParams(location.search).get('receipt') || '';
   const L = () => DN.lang, tr = o => (o ? o[L()] || o.zh : '');
   const money = s => 'US$' + s;
   const link = () => `https://dinamics.dev/quote#${no}.${token}`;
@@ -12,6 +13,7 @@
   function mine() {
     const list = store.get('dn-quotes', []);
     put(root, h('h1', {}, t('q_title')), h('p', { cls: 'lede' }, t('no_quote')),
+      store.get('dn-client', '') ? h('p', { style: 'margin-top:16px' }, h('a', { cls: 'btn ghost', href: '/account' }, t('q_acct'))) : null,
       list.length ? h('div', { cls: 'rows' }, h('h2', { style: 'margin-top:24px' }, t('my_quotes')), list.map(q => h('a', { cls: 'rowc', href: `/quote#${q.no}.${q.token}`, style: 'display:block;text-decoration:none;color:inherit', onclick: () => setTimeout(() => location.reload(), 0) },
         h('div', { cls: 'top2' }, h('h3', {}, q.no), h('span', { cls: 'chip' }, L() === 'zh' ? q.name : q.name_en || q.name))))) : null,
       h('p', { style: 'margin-top:24px' }, h('a', { cls: 'btn', href: '/order' }, t('to_order'))));
@@ -28,7 +30,8 @@
     return key ? h('p', { cls: 'dk-msg' + (['expired', 'cancelled'].includes(q.state) ? ' bad' : q.state === 'live' ? ' good' : '') }, t(key)) : null;
   }
   function payRow(i) {
-    const st = i.status === 'paid' ? h('span', { cls: 'chip ok' }, tf('is_paid', { d: i.paid })) : i.status === 'sent' ? h('span', { cls: 'chip' }, tf('is_sent', { d: i.due })) : h('span', { cls: 'chip dim' }, t('is_planned'));
+    const st = i.status === 'paid' ? [h('span', { cls: 'chip ok' }, tf('is_paid', { d: i.paid })), i.receipt && !Q.peek ? h('button', { cls: 'dk-rc', type: 'button', onclick: () => openReceipt(i.n) }, tf('rc_btn', { no: i.receipt.no })) : null]
+      : i.status === 'sent' ? h('span', { cls: 'chip' }, tf('is_sent', { d: i.due })) : h('span', { cls: 'chip dim' }, t('is_planned'));
     return h('tr', {}, h('td', { 'data-l': t('th_part') }, h('b', {}, tr(i.name))), h('td', { 'data-l': t('th_when') }, tr(i.stage)), h('td', { cls: 'n', 'data-l': t('th_share') }, i.pct + '%'),
       h('td', { cls: 'n', 'data-l': t('th_amount') }, i.amount), h('td', { 'data-l': t('th_status') }, st));
   }
@@ -37,15 +40,48 @@
     return h('ul', { cls: 'terms' }, ['tm_start', 'tm_rev', 'tm_acc', 'tm_live', 'tm_own', 'tm_show', 'tm_conf', 'tm_cancel', 'tm_excl'].map(k => h('li', { html: tf(k, { fee }) })));
   }
 
+  // a receipt for one payment: printable, both languages, the seller as Dinamics has set it
+  function openReceipt(n) { RC = n; draw(); window.scrollTo(0, 0); }
+  function receipt(q, i) {
+    const S = q.seller || {}, r = i.receipt, lines = a => a.filter(Boolean).flatMap((x, k) => k ? [h('br'), x] : [x]);
+    document.title = `${t('rc_title')} ${r.no} · Dinamics`;
+    const mark = document.querySelector('.top .brand .lockup');   // the Dinamics logo at the top of the receipt: on screen, printed and in the PDF (the page header is not printed)
+    put(root,
+      h('div', { cls: 'qs dk-receipt' },
+        h('section', {}, mark ? h('div', { cls: 'dk-rc-logo', role: 'img', 'aria-label': 'Dinamics' }, mark.cloneNode(true)) : null,
+          h('div', { cls: 'top2' }, h('h1', { style: 'margin:0;font-size:clamp(30px,4vw,44px)' }, t('rc_title')), h('span', { cls: 'chip ok' }, t('rc_paid'))),
+          h('dl', { style: 'margin-top:16px' },
+            h('dt', {}, t('rc_no')), h('dd', {}, h('b', {}, r.no)), h('dt', {}, t('rc_date')), h('dd', {}, r.day),
+            h('dt', {}, t('rc_from')), h('dd', {}, lines([S.name, S.reg ? tf('rc_reg', { reg: S.reg }) : '', S.address, [S.email, S.phone].filter(Boolean).join(' · ')])),
+            h('dt', {}, t('rc_to')), h('dd', {}, lines([[q.client.company, q.client.contact].filter(Boolean).join(' · '), [q.client.email, q.client.phone].filter(Boolean).join(' · ')])))),
+        h('section', {}, h('table', {}, h('thead', {}, h('tr', {}, h('th', {}, t('rc_item')), h('th', { cls: 'n' }, t('rc_amount')))),
+          h('tbody', {}, h('tr', {}, h('td', {}, tf('rc_line', { no: q.no, name: tr(q.name), part: `${tr(i.name)} ${i.pct}%` })), h('td', { cls: 'n' }, money(r.amount)))),
+          h('tfoot', {}, h('tr', {}, h('td', {}, t('rc_total')), h('td', { cls: 'n' }, money(r.amount)))))),
+        h('section', {}, h('dl', {}, h('dt', {}, t('rc_via')), h('dd', {}, S.pay_via || ''), h('dt', {}, t('rc_status')), h('dd', {}, t('rc_paid_long'))),
+          h('p', { cls: 'note', style: 'margin:14px 0 0' }, t('rc_note')))),
+      h('div', { cls: 'tools noprint' }, h('button', { cls: 'btn', type: 'button', onclick: () => window.print() }, t('rc_print')),
+        h('button', { cls: 'btn ghost', type: 'button', onclick: () => { RC = 0; if (want) history.replaceState(null, '', location.pathname + location.hash); draw(); } }, t('rc_back'))));
+  }
+
   function draw() {
     if (!no) return mine();
     if (!Q) return;
+    const ri = RC && Q.instalments.find(x => x.n === RC && x.receipt); if (ri) return receipt(Q, ri);
+    document.title = t('title');
     const q = Q, items = q.items[L()] || q.items.zh;
     const kids = [
       h('p', { cls: 'num' }, t('q_title')),
       h('h1', { style: 'margin-top:12px' }, tr(q.name)),
       q.total ? h('p', { cls: 'dk-price' }, money(q.total)) : null,
       track(q.state === 'request' ? 'quoted' : q.state), q.peek ? h('p', { cls: 'dk-msg', style: 'margin-top:14px' }, t('peek_note')) : stateNote(q),
+      q.account === 'can' && token ? h('div', { cls: 'dk-msg dk-claim', style: 'margin-top:14px' }, h('p', { style: 'margin:0' }, t('q_claim_p')),
+        h('button', { cls: 'btn', type: 'button', style: 'margin-top:10px', onclick: async e => {
+          const b = e.currentTarget; b.disabled = true;
+          const r = await api('/api/client/claim', { method: 'POST', body: { no, token } });
+          b.disabled = false;
+          if (r.ok) { Q.account = 'mine'; toast(t('q_claimed')); draw(); } else toast(r.error === 'taken' ? t('q_claim_taken') : t('e_server'));
+        } }, t('q_claim'))) : null,
+      q.account === 'mine' ? h('p', { cls: 'note', style: 'margin-top:12px' }, t('q_in_acct'), ' ', h('a', { href: '/account' }, t('q_acct'))) : null,
     ];
     const sheet = h('div', { cls: 'qs' },
       h('section', {}, h('dl', {},
@@ -69,10 +105,10 @@
     if (q.state === 'quoted' && !q.peek) kids.push(acceptBox(q));
     if (q.accepted) kids.push(h('p', { cls: 'note', style: 'margin-top:14px' }, tf('accepted_line', { d: q.accepted.day, name: q.accepted.name, show: t(q.accepted.show_work ? 'show_yes' : 'show_no') })));
     kids.push(h('div', { cls: 'tools' },
-      q.peek ? null : h('button', { cls: 'btn ghost', type: 'button', onclick: () => copy(link()) }, t('copy_link')),
-      q.peek ? null : h('a', { cls: 'btn ghost', href: 'https://wa.me/?text=' + encodeURIComponent(`Dinamics ${q.no}: ${link()}`), target: '_blank', rel: 'noopener' }, t('wa_self')),
+      q.peek || !token ? null : h('button', { cls: 'btn ghost', type: 'button', onclick: () => copy(link()) }, t('copy_link')),
+      q.peek || !token ? null : h('a', { cls: 'btn ghost', href: 'https://wa.me/?text=' + encodeURIComponent(`Dinamics ${q.no}: ${link()}`), target: '_blank', rel: 'noopener' }, t('wa_self')),
       h('button', { cls: 'btn ghost', type: 'button', onclick: () => window.print() }, t('print'))),
-      q.peek ? null : h('p', { cls: 'note noprint' }, t('keep_note')));
+      q.peek || !token ? null : h('p', { cls: 'note noprint' }, t('keep_note')));
     put(root, kids);
   }
 
@@ -107,13 +143,15 @@
     if (!no) return draw();
     put(root, h('p', { cls: 'lede' }, t('loading')));
     const r = await api('/api/quote?no=' + encodeURIComponent(no), { token });
-    if (!r.ok) { put(root, h('h1', {}, t('q_title')), h('p', { cls: 'dk-msg bad', style: 'margin-top:20px' }, r.error === 'network' ? t('e_net') : t('e_notfound'))); return; }
+    if (!r.ok) { put(root, h('h1', {}, t('q_title')), h('p', { cls: 'dk-msg bad', style: 'margin-top:20px' }, r.error === 'network' ? t('e_net') : !token && !store.get('dn-client', '') ? t('q_need_in') : t('e_notfound')),
+      !token && !store.get('dn-client', '') ? h('p', { style: 'margin-top:16px' }, h('a', { cls: 'btn', href: '/account?next=' + encodeURIComponent('/quote#' + no) }, t('q_sign_in'))) : null); return; }
     Q = r;
     const list = store.get('dn-quotes', []);
-    if (!Q.peek && !list.some(x => x.no === no)) { list.unshift({ no, token, name: Q.name.zh, name_en: Q.name.en, t: Date.now() }); store.set('dn-quotes', list.slice(0, 20)); }
+    if (!Q.peek && token && !list.some(x => x.no === no)) { list.unshift({ no, token, name: Q.name.zh, name_en: Q.name.en, t: Date.now() }); store.set('dn-quotes', list.slice(0, 20)); }
     if (!new URLSearchParams(location.search).get('lang') && !localStorage.getItem('dinamics-lang') && Q.lang === 'en' && DN.lang !== 'en') {
       const en = document.querySelector('.lang button[data-l=en]'); if (en) en.click();
     }
+    const w = want && Q.instalments.find(x => x.receipt && x.receipt.no === want); if (w) RC = w.n;   // opened from the account: straight to that receipt
     draw();
   }
   DN.on(() => draw());

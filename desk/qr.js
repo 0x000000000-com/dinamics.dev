@@ -84,10 +84,11 @@
     flip(best); format(best);
     return M;
   }
-  function svg(text, { quiet = 4, dark = '#000', light = '#fff' } = {}) {
+  function svg(text, { quiet = 4, dark = '#000', light = '#fff', fit = 0 } = {}) {
     const M = matrix(text), w = M.length + quiet * 2; let d = '';
     M.forEach((row, y) => row.forEach((c, x) => { if (c) d += `M${x + quiet} ${y + quiet}h1v1h-1z`; }));
-    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${w}" shape-rendering="crispEdges" aria-hidden="true"><rect width="${w}" height="${w}" fill="${light}"/><path d="${d}" fill="${dark}"/></svg>`;
+    const px = fit ? Math.max(2, Math.floor(fit / w)) * w : 0;   // fit: largest whole number of pixels per module within that many pixels
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${w}"${px ? ` width="${px}" height="${px}"` : ''} shape-rendering="crispEdges" aria-hidden="true"><rect width="${w}" height="${w}" fill="${light}"/><path d="${d}" fill="${dark}"/></svg>`;
   }
   window.QR = { matrix, svg };
 })();

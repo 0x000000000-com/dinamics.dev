@@ -64,8 +64,10 @@
 .dk-safe ul{margin:8px 0 0;padding-left:18px;display:grid;gap:6px;font-size:14.5px;line-height:1.55;color:var(--ink2);overflow-wrap:anywhere}
 .dk-safe b{color:var(--ink);white-space:nowrap}
 .dk-pre{font-size:14px;color:var(--ink2)}.dk-pre b{color:var(--ink);white-space:nowrap}
-.dk-qr{width:min(250px,100%);aspect-ratio:1;margin-top:14px;padding:6px;border-radius:14px;background:#fff}
-.dk-qr svg{display:block;width:100%;height:100%}
+.dk-rc{margin-left:8px;padding:0;border:0;background:none;color:var(--co2);font:600 14px/1.3 var(--sans);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.dk-receipt{max-width:760px}.dk-rc-logo{height:30px;margin:2px 0 22px}.dk-rc-logo svg{height:100%;width:auto;display:block}.dk-receipt .top2{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
+.dk-qr{display:inline-block;margin-top:14px;padding:6px;border-radius:14px;background:#fff;max-width:100%}
+.dk-qr svg{display:block;max-width:100%;height:auto}
 .tools .btn{height:44px}
 .chip.ok{color:var(--up);border-color:color-mix(in srgb,var(--up) 45%,transparent)}
 /* the payment table on a phone: one block per payment, each value with its label */

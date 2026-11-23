@@ -285,7 +285,9 @@ function burst(b){if(RM.matches)return;b.classList.remove('pop');void b.offsetWi
 function like(b){burst(b);if(liked)return;liked=true;S.s(LK,'1');if(n!=null)n++;drawLike();
   if(LIVE)fetch(API+'/hit'+PATH).then(r=>r.ok?r.json():null).then(j=>{if(j&&typeof j.value==='number'){n=j.value;drawLike()}}).catch(()=>{})}
 qa('.fc-like').forEach(b=>b.addEventListener('click',()=>like(b)));
-if(LIVE)fetch(API+'/get'+PATH).then(r=>r.status===404?{value:0}:r.ok?r.json():null).then(j=>{if(j&&typeof j.value==='number'){n=Math.max(j.value,n||0);drawLike()}}).catch(()=>{});
+/* the count is asked for only once the film comes near: the page does not call the counter service before anyone scrolls there (11-23: it timed out once during a speed test) */
+const getN=()=>{if(LIVE)fetch(API+'/get'+PATH).then(r=>r.status===404?{value:0}:r.ok?r.json():null).then(j=>{if(j&&typeof j.value==='number'){n=Math.max(j.value,n||0);drawLike()}}).catch(()=>{})};
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();getN()}},{rootMargin:'120px 0px'});io.observe(R)}else getN();
 /* leave a note: emailed to us */
 const fbb=q('.fc-fbb'),FS='https://formsubmit.co/ajax/'+(C.mail||'contact@dinamics.dev');
 function openFb(){FB.hidden=false;fbb.setAttribute('aria-expanded','true');

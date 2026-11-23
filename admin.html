@@ -273,7 +273,7 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
         const r = await api('/api/admin/order', { id: d.id, action: 'link' }); const link = `https://dinamics.dev/quote#${r.no}.${r.token}`;
         const box = h('div', { cls: 'pr' }, h('p', { cls: 'small muted', style: 'margin:0' }, '新链接（旧链接从现在起打不开）：'), h('p', { cls: 'mono', style: 'word-break:break-all' }, link),
           h('div', { cls: 'row' }, h('button', { cls: 'b', type: 'button', onclick: () => copy(link) }, '复制'),
-            d.client_phone ? h('a', { cls: 'b', href: 'https://wa.me/' + d.client_phone.replace(/\D/g, '') + '?text=' + encodeURIComponent((d.client_lang === 'en' ? 'Your Dinamics quote: ' : '您的 Dinamics 报价单：') + link), target: '_blank', rel: 'noopener' }, 'WhatsApp 发给客户') : null,
+            d.client_phone ? h('a', { cls: 'b', href: 'https://wa.me/' + d.client_phone.replace(/\D/g, '') + '?text=' + encodeURIComponent((['en', 'ms'].includes(d.client_lang) ? 'Your Dinamics quote: ' : '您的 Dinamics 报价单：') + link), target: '_blank', rel: 'noopener' }, 'WhatsApp 发给客户') : null,
             h('a', { cls: 'b', href: 'mailto:' + d.client_email + '?subject=' + encodeURIComponent('Dinamics ' + r.no) + '&body=' + encodeURIComponent(link) }, '邮件发给客户')));
         btn.parentNode.after(box); toast('新链接已生成');
       } }, '给客户的报价单链接')));
@@ -316,7 +316,7 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
   function offlineForm() {
     const f = {}; const I = (k, ph, attrs = {}) => (f[k] = h('input', { placeholder: ph, ...attrs }));
     const plan = h('select', {}, h('option', { value: 'deposit' }, '定金 50% + 尾款 50%'), h('option', { value: 'full' }, '一次付清（年费、小改、源代码费）'));
-    const lang = h('select', {}, h('option', { value: 'zh' }, '中文客人'), h('option', { value: 'en' }, '英文客人'));
+    const lang = h('select', {}, h('option', { value: 'zh' }, '中文客人'), h('option', { value: 'en' }, '英文客人'), h('option', { value: 'ms' }, '马来文客人'));
     const signed = dateIn();
     return h('details', { cls: 'card' }, h('summary', {}, h('b', {}, '加一单线下签好的（年费、小改、源代码费也在这里加）')),
       h('div', { cls: 'grid', style: 'margin-top:12px' },
@@ -336,7 +336,7 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
   // ---------- 代理 ----------
   // the message that goes with a new link: who it is from and how to check the address, in the agent's language
   const WA = '+1 332 250 8964';
-  const relinkText = (a, link) => a.lang === 'en'
+  const relinkText = (a, link) => ['en', 'ms'].includes(a.lang)
     ? `This message is from Dinamics (WhatsApp ${WA}).\nYour new personal link: ${link}\nThe old link no longer works.\nCheck: the link starts with https://dinamics.dev/ (dinamics.dev followed straight away by a slash "/"). Dinamics never asks you for money, passwords or codes.`
     : `这条消息来自 Dinamics（WhatsApp ${WA}）。\n你的新专属链接：${link}\n旧链接已经作废。\n核对：链接是 https://dinamics.dev/ 开头，dinamics.dev 后面紧跟着斜杠「/」。Dinamics 不会向你要钱、密码或验证码。`;
   function agents() {
@@ -370,7 +370,7 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
 
   // ---------- 客户账号 ----------
   const VIA = { lead: '代理报备过', link: '点代理链接来的', self: '自己注册', admin: '你改过' };
-  const resetText = (c, link) => c.lang === 'en'
+  const resetText = (c, link) => ['en', 'ms'].includes(c.lang)
     ? `This message is from Dinamics (WhatsApp ${WA}).\nSet up your Dinamics sign-in again: ${link}\nThe link works once, within 24 hours.\nCheck: the link starts with https://dinamics.dev/. Dinamics never asks you for money, passwords or codes.`
     : `这条消息来自 Dinamics（WhatsApp ${WA}）。\n重设你的 Dinamics 账号登录：${link}\n24 小时内有效，只能用一次。\n核对：链接是 https://dinamics.dev/ 开头。Dinamics 不会向你要钱、密码或验证码。`;
   let cq = '';
@@ -407,7 +407,7 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
   // ---------- 免费工具：多少人在用、AI 客服试用申请、最近体检的网站 ----------
   const FT = [['check', '网站体检'], ['card', '电子名片'], ['invoice', '收据 / 报价单'], ['qr', '扫码牌'], ['greeting', '节日祝福图'], ['ai', 'AI 客服试用']];
   const AI_ST = { new: '新申请', contacted: '联系了', done: '开通了', no: '不做' };
-  const aiText = a => a.lang === 'en'
+  const aiText = a => ['en', 'ms'].includes(a.lang)
     ? `This is Dinamics (WhatsApp ${WA}). Hi ${a.contact}, thanks for applying for the free AI customer service trial for ${a.business}. When is a good time to set it up together? It takes about 15 minutes.`
     : `这条消息来自 Dinamics（WhatsApp ${WA}）。${a.contact} 你好，收到你帮「${a.business}」申请的 AI 客服免费试用。什么时候方便？我们帮你一起开通，大约 15 分钟。`;
   function free() {

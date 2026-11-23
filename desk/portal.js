@@ -1,18 +1,26 @@
-/* Dinamics · partner desk: register a client, follow your clients, deals and commission. */
+/* Dinamics · partner desk on /partners: an agent who opens the page with their own link (#t=…) sees their clients, deals and commission instead of the program. */
 (() => {
   const { $, h, put, t, tf, api, store, copy, mark } = window.Desk, DN = window.DN;
-  const root = $('#desk');
-  const m = /[#&]t=([\w-]{20,})/.exec(location.hash || '');
-  if (m) { store.set('dn-partner', m[1]); history.replaceState(null, '', location.pathname); }
-  const token = store.get('dn-partner', '');
-  let M = null, note = null;
+  const root = $('#desk'), prog = $('#program'), cta = document.querySelector('.top .btn');
+  let token = '', M = null, note = null;
+  // the agent's own link carries the key after # (it never reaches any server log); it is kept on this device
+  function enter() {
+    const m = /[#&]t=([\w-]{20,})/.exec(location.hash || '');
+    if (m) { store.set('dn-partner', m[1]); history.replaceState(null, '', location.pathname); M = null; }
+    token = store.get('dn-partner', '');
+    root.hidden = !token; prog.hidden = !!token; if (cta) cta.hidden = !!token;
+    if (token) { window.scrollTo(0, 0); load(); }
+  }
+  function leave(msg) {
+    store.del('dn-partner'); token = ''; M = null;
+    root.hidden = true; prog.hidden = false; if (cta) cta.hidden = false;
+    put($('#desk-note'), msg ? h('p', { cls: 'dk-msg bad', style: 'margin-bottom:24px' }, msg) : null);
+    document.title = t('title'); window.scrollTo(0, 0);
+  }
   const TIER = { agent: 'tier_agent', area: 'tier_area', state: 'tier_state' };
   const LS = { active: 'ls_active', won: 'ls_won', expired: 'ls_expired', lost: 'ls_lost', void: 'ls_void' };
   const DS = { quoted: 'ds_quoted', accepted: 'ds_accepted', building: 'ds_building', finished: 'ds_finished', paid: 'ds_paid', live: 'ds_live', cancelled: 'ds_cancelled', expired: 'ds_expired', request: 'ds_request' };
 
-  function noKey() {
-    put(root, h('h1', {}, t('desk_h')), h('p', { cls: 'lede' }, t('need_link')), h('p', { style: 'margin-top:22px' }, h('a', { cls: 'btn', href: '/partners' }, t('to_join'))));
-  }
   function leadForm() {
     const err = h('p', { cls: 'err', role: 'alert' });
     const f = h('form', { cls: 'dk-form', novalidate: true },
@@ -39,7 +47,7 @@
       const r = await api('/api/leads', { method: 'POST', token, body });
       b.disabled = false;
       if (r.ok) { note = h('p', { cls: 'dk-msg good' }, tf('l_ok', { c: body.company, d: r.lead.expires })); await load(); return; }
-      err.textContent = r.error === 'taken' ? (r.won ? t('e_taken_won') : tf('e_taken', { d: r.until })) : r.error === 'mine' ? t('e_mine')
+      err.textContent = r.error === 'taken' ? (r.won ? t('e_taken_won') : tf('e_lead_taken', { d: r.until })) : r.error === 'mine' ? t('e_mine')
         : r.error === 'phone' ? t('e_phone') : r.error === 'email' ? t('e_email') : r.error === 'ended' ? t('e_ended') : r.error === 'slow_down' ? t('e_slow') : r.error === 'network' ? t('e_net') : t('e_server');
     });
     return f;
@@ -70,8 +78,8 @@
         h('span', {}, i.status === 'paid' ? tf('paid_on', { d: i.paid }) : t('not_paid')), i.commission ? h('span', { cls: 'cut' }, tf('your_cut', { a: 'US$' + i.commission })) : null))) : null);
   }
   function draw() {
-    if (!token) return noKey();
-    if (!M) return;
+    if (!token || !M) return;
+    document.title = t('desk_title');
     const a = M.agent, active = M.leads.filter(l => l.state === 'active').length, won = M.leads.filter(l => l.state === 'won').length;
     const thisMonth = M.months.find(x => x.month === M.today.slice(0, 7)), owed = M.settlements.filter(s => !s.paid);
     const share = code => [['share_site', `https://dinamics.dev/work/website?a=${code}#price`], ['share_platform', `https://dinamics.dev/work/platform?a=${code}#price`]];
@@ -93,16 +101,17 @@
           h('p', {}, mo.lines.map(l => `${(l.label && (l.label[DN.lang] || l.label.zh)) || l.note} ${l.rate ? l.rate + '%' : ''} US$${l.amount}`.replace(/\s+/g, ' ')).join(' · '))); })) : h('p', { cls: 'note' }, t('none_money')),
       h('h2', {}, t('share_h')), h('p', { cls: 'note' }, t('share_p')),
       ...share(a.code).map(([k, u]) => h('div', { cls: 'rowc', style: 'margin-top:10px' }, h('div', { cls: 'top2' }, h('h3', {}, t(k)), h('button', { cls: 'btn ghost', type: 'button', style: 'height:38px', onclick: () => copy(u) }, t('copy'))), h('p', { cls: 'linkbox' }, u))),
-      h('p', { style: 'margin-top:34px' }, h('button', { cls: 'btn ghost', type: 'button', onclick: () => { store.del('dn-partner'); location.href = '/partners'; } }, t('logout'))));
+      h('p', { style: 'margin-top:34px' }, h('button', { cls: 'btn ghost', type: 'button', onclick: () => leave('') }, t('logout'))));
   }
   async function load() {
-    if (!token) return draw();
+    if (!token) return;
     if (!M) put(root, h('p', { cls: 'lede' }, t('loading')));
     const r = await api('/api/me', { token });
-    if (!r.ok) { if (r.status === 401) { store.del('dn-partner'); put(root, h('h1', {}, t('desk_h')), h('p', { cls: 'dk-msg bad', style: 'margin-top:18px' }, t('bad_link'))); return; }
+    if (!r.ok) { if (r.status === 401) return leave(t('bad_link'));
       put(root, h('h1', {}, t('desk_h')), h('p', { cls: 'dk-msg bad', style: 'margin-top:18px' }, r.error === 'network' ? t('e_net') : t('e_server'))); return; }
     M = r; draw();
   }
   DN.on(() => draw());
-  load();
+  addEventListener('hashchange', enter);
+  enter();
 })();

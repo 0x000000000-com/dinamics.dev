@@ -97,7 +97,7 @@
       if (!r.ok) { err.textContent = r.error === 'state' ? tf('e_state', { s: t({ expired: 'state_expired', request: 'state_request', cancelled: 'state_cancelled' }[r.state] || (r.state ? 'state_accepted' : 'state_x')) }) : r.error === 'network' ? t('e_net') : t('e_server'); return; }
       Q = r.quote;
       notify(`客户已同意 ${q.no} · ${q.name.zh} · ${money(q.total)} · 去发定金付款请求`, { '报价单': q.no, '配套': q.name.zh, '金额': money(q.total), '定金': money(q.instalments[0].amount),
-        '签名': name, '客户': [q.client.company, q.client.contact].filter(Boolean).join(' · '), '邮箱': q.client.email, '电话': q.client.phone, '展示作品': form.elements.show.value === 'yes' ? '同意' : '不同意', '后台': D.api + '/admin' }, q.client.email);
+        '签名': name, '客户': [q.client.company, q.client.contact].filter(Boolean).join(' · '), '邮箱': q.client.email, '电话': q.client.phone, '展示作品': form.elements.show.value === 'yes' ? '同意' : '不同意', '后台': 'https://dinamics.dev/admin' }, q.client.email);
       draw(); window.scrollTo({ top: 0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
     });
     return form;

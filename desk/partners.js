@@ -5,9 +5,11 @@
   const place = placePicker(D.regions);
   put($('#place'), h('label', { cls: 'fld', for: 'f-country' }, h('span', { 'data-k': 'f_country' }), place.country), place.regionWrap);
   DN.on(() => { const s = $('[data-k=f_country]'); if (s) s.textContent = t('f_country'); });
-  const ERR = { name: 'e_name', phone: 'e_phone', email: 'e_email', region: 'e_region', agree: 'e_agree', phone_taken: 'e_taken', slow_down: 'e_slow', network: 'e_net' };
+  // 「我已经是代理」: the desk opens with each agent's own link
+  $('#have').addEventListener('click', () => { const n = $('#have-note'); n.hidden = !n.hidden; });
+  const ERR = { name: 'e_name', phone: 'e_phone', email: 'e_email', region: 'e_region', agree: 'e_agree', phone_taken: 'e_joined', slow_down: 'e_slow', network: 'e_net' };
   function showDone(code, token) {
-    const portal = `https://dinamics.dev/partners/portal#t=${token}`;
+    const portal = `https://dinamics.dev/partners#t=${token}`;
     form.hidden = true; done.hidden = false;
     put(done, 
       h('h3', {}, t('ok_h')),
@@ -16,7 +18,7 @@
       h('div', { cls: 'tools' },
         h('button', { cls: 'btn', type: 'button', onclick: () => copy(portal) }, t('ok_copy')),
         h('a', { cls: 'btn ghost', href: 'https://wa.me/?text=' + encodeURIComponent(tf('ok_wa_text', { code, link: portal })), target: '_blank', rel: 'noopener' }, t('ok_wa')),
-        h('a', { cls: 'btn ghost', href: '/partners/portal#t=' + token }, t('ok_open'))),
+        h('a', { cls: 'btn ghost', href: '#t=' + token }, t('ok_open'))),
       h('p', { cls: 'note', style: 'margin-top:14px' }, t('ok_keep')));
   }
   form.addEventListener('submit', async e => {
@@ -36,7 +38,7 @@
     btn.disabled = false; btn.textContent = t('join_btn');
     if (!r.ok) { const k = ERR[r.error] || 'e_server'; err.textContent = ['name', 'phone', 'email'].includes(r.error) ? mark(form, { [r.error]: t(k) }) : t(k); return; }
     store.set('dn-partner', r.token);
-    notify(`新代理报名 ${r.code} · ${body.name}`, { '代理编号': r.code, '名字': body.name, '电话': body.phone, '邮箱': body.email, '地区': [body.country, body.region, body.region_text].filter(Boolean).join(' · '), '语言': body.lang === 'en' ? '英文' : '中文', '后台': D.api + '/admin' }, body.email || undefined);
+    notify(`新代理报名 ${r.code} · ${body.name}`, { '代理编号': r.code, '名字': body.name, '电话': body.phone, '邮箱': body.email, '地区': [body.country, body.region, body.region_text].filter(Boolean).join(' · '), '语言': body.lang === 'en' ? '英文' : '中文', '后台': 'https://dinamics.dev/admin' }, body.email || undefined);
     showDone(r.code, r.token);
   });
 })();

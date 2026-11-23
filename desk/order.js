@@ -63,7 +63,7 @@
     const mine = store.get('dn-quotes', []).filter(q => q.no !== r.no); mine.unshift({ no: r.no, token: r.token, name: pkg.zh.name, name_en: pkg.en.name, t: Date.now() }); store.set('dn-quotes', mine.slice(0, 20));
     notify(`新订单 ${r.no} · ${pkg.zh.name} · ${pkg.frm ? '说需求，待定价' : money(pkg.usd)}`,
       { '报价单': r.no, '配套': pkg.zh.name, '金额': pkg.frm ? '待定价' : money(pkg.usd), '联系人': body.contact, '公司': body.company, '邮箱': body.email, 'WhatsApp / 电话': body.phone,
-        '国家': body.country, '需求': body.note, '代理编号': body.agent, '语言': body.lang === 'en' ? '英文' : '中文', '后台': D.api + '/admin' }, body.email);
+        '国家': body.country, '需求': body.note, '代理编号': body.agent, '语言': body.lang === 'en' ? '英文' : '中文', '后台': 'https://dinamics.dev/admin' }, body.email);
     location.href = '/quote#' + r.no + '.' + r.token;
   });
 })();

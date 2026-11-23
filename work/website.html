@@ -318,7 +318,7 @@ DN.on(l=>{L=l;draw();if(!$('flRes').hidden){const T=S[L];$('flNext').textContent
   <p class="prc-ex" data-t="pr_ex">不含第三方费用：收款手续费、短信、广告投放。不含源代码；要源代码，另付项目价的 50%（最少 US$800）。</p>
   <a class="prc-cta" href="mailto:contact@dinamics.dev" data-t="pr_cta">跟我们说你要做什么</a>
   <script type="application/json" id="fx">{"date":"2026-11-20","rates":{"MYR":4.1125,"SGD":1.2884,"THB":33.905,"IDR":18263,"PHP":63.777,"CNY":6.6777,"HKD":7.8389,"JPY":158.64,"KRW":1339.44,"AUD":1.5002,"EUR":0.90992,"GBP":0.76192}}</script>
-  <script>/* an agent's shared link (?a=A1001): remember the code for the order page */try{const a=new URLSearchParams(location.search).get('a');if(/^A\d{4,6}$/i.test(a||''))localStorage.setItem('dn-ref',JSON.stringify({a:a.toUpperCase(),t:Date.now()}))}catch(e){}</script>
+  <script>/* an agent's shared link (?a=MY1001): remember the code for the order page */try{const a=new URLSearchParams(location.search).get('a');if(/^[A-Z]{1,2}\d{4,6}$/i.test(a||''))localStorage.setItem('dn-ref',JSON.stringify({a:a.toUpperCase(),t:Date.now()}))}catch(e){}</script>
 </div></section>
 
 <section class="band ws-get"><div class="wrap">

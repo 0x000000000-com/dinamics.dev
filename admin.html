@@ -19,6 +19,7 @@ nav{display:flex;flex-wrap:wrap;gap:6px}
 nav button,.chips button{border:1px solid var(--line);background:none;color:var(--ink2);border-radius:999px;padding:7px 13px;font:600 14px/1 var(--sans);cursor:pointer}
 nav button[aria-pressed=true],.chips button[aria-pressed=true]{background:var(--co);color:#0A0A0B;border-color:var(--co)}
 nav button .n{margin-left:6px;font-size:12px;opacity:.75}
+.tbl{width:100%;border-collapse:collapse;font-size:14px}.tbl th,.tbl td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line);white-space:nowrap}.tbl th{color:var(--ink2);font-weight:600}.tbl td a{color:inherit}
 main{max-width:1200px;margin:0 auto;padding:18px max(3vw,14px) 80px}
 h2{font-size:20px;margin:6px 0 14px}
 h3{font-size:16px;margin:0}
@@ -218,10 +219,11 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
     const open = S.deals.filter(d => !['live', 'cancelled', 'expired'].includes(d.state)).length;
     const asks = S.leads.filter(l => l.ext === 'asked').length;
     const unpaid = S.settlements.filter(s => !s.paid).length;
-    const tabs = [['orders', '订单', open], ['clients', '客户', S.clients.length], ['agents', '代理', S.agents.length], ['leads', '报备', asks ? asks + ' 待批' : S.leads.length], ['money', '佣金', unpaid ? unpaid + ' 待付' : ''], ['log', '记录', ''], ['me', '登录', '']];
+    const newAi = S.free.ai.filter(a => a.status === 'new').length;
+    const tabs = [['orders', '订单', open], ['clients', '客户', S.clients.length], ['free', '免费工具', newAi ? newAi + ' 新申请' : ''], ['agents', '代理', S.agents.length], ['leads', '报备', asks ? asks + ' 待批' : S.leads.length], ['money', '佣金', unpaid ? unpaid + ' 待付' : ''], ['log', '记录', ''], ['me', '登录', '']];
     $('#tabs').replaceChildren(...tabs.map(([k, t, n]) => h('button', { type: 'button', 'aria-pressed': String(tab === k), onclick: () => { tab = k; load(); } }, t, n !== '' ? h('span', { cls: 'n' }, n) : null)));   // 换一页就拿一次最新的，拿到再画
     $('#who').textContent = '今天 ' + S.today;
-    ({ orders, clients, agents, leads, money, log, me })[tab]();
+    ({ orders, clients, free, agents, leads, money, log, me })[tab]();
   }
 
   // ---------- 订单 ----------
@@ -398,6 +400,41 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
                 h('span', { cls: 'small muted' }, '用 WhatsApp ' + WA + ' 发。'));
             } }, '重设登录')));
       }) : [h('p', { cls: 'muted' }, S.clients.length ? '找不到。' : '还没有客户注册。客户账号页：https://dinamics.dev/account')]));
+  }
+
+  // ---------- 免费工具：多少人在用、AI 客服试用申请、最近体检的网站 ----------
+  const FT = [['check', '网站体检'], ['card', '电子名片'], ['invoice', '收据 / 报价单'], ['qr', '二维码 + WhatsApp'], ['greeting', '节日祝福图'], ['ai', 'AI 客服试用']];
+  const AI_ST = { new: '新申请', contacted: '联系了', done: '开通了', no: '不做' };
+  const aiText = a => a.lang === 'en'
+    ? `This is Dinamics (WhatsApp ${WA}). Hi ${a.contact}, thanks for applying for the free AI customer service trial for ${a.business}. When is a good time to set it up together? It takes about 15 minutes.`
+    : `这条消息来自 Dinamics（WhatsApp ${WA}）。${a.contact} 你好，收到你帮「${a.business}」申请的 AI 客服免费试用。什么时候方便？我们帮你一起开通，大约 15 分钟。`;
+  function free() {
+    const U = S.free.uses, days = n => { const t = new Date(S.today + 'T12:00:00Z'); t.setUTCDate(t.getUTCDate() - n + 1); return t.toISOString().slice(0, 10); };
+    const sum = (tool, ev, from) => U.filter(u => u.tool === tool && u.ev === ev && u.day >= from).reduce((x, u) => x + u.n, 0);
+    const cell = (tool, from) => `${sum(tool, 'open', from)} / ${sum(tool, 'use', from)} / ${sum(tool, 'order', from)}`;
+    const table = h('table', { cls: 'tbl' }, h('thead', {}, h('tr', {}, h('th', {}, '工具'), h('th', {}, '今天'), h('th', {}, '7 天'), h('th', {}, '30 天'))),
+      h('tbody', {}, FT.map(([k, n]) => h('tr', {}, h('td', {}, n), h('td', {}, cell(k, S.today)), h('td', {}, cell(k, days(7))), h('td', {}, cell(k, days(30)))))));
+    $('#main').replaceChildren(
+      h('div', { cls: 'row', style: 'margin-bottom:8px' }, h('h2', {}, '免费工具'), h('span', { cls: 'sp' }), h('a', { cls: 'b', href: 'https://dinamics.dev/free', target: '_blank', rel: 'noopener' }, '打开 dinamics.dev/free')),
+      h('p', { cls: 'small muted', style: 'margin:0 0 10px' }, '每格是「打开 / 用了 / 点了下单」的次数（不记是谁）。用了：体检出了结果、名片或图片下载了、收据打印了、二维码下载了、交了试用申请。'),
+      h('div', { cls: 'card', style: 'overflow-x:auto' }, table),
+      h('div', { cls: 'row', style: 'margin:22px 0 8px' }, h('h2', {}, 'AI 客服试用申请'), h('span', { cls: 'sp' }), csv('free_ai', '导出申请')),
+      ...(S.free.ai.length ? S.free.ai.map(a => {
+        const msg = aiText(a);
+        return h('div', { cls: 'card' },
+          h('div', { cls: 'row' }, h('h3', {}, a.business), h('span', { cls: 'tag' + (a.status === 'new' ? ' ok' : '') }, AI_ST[a.status] || a.status), h('span', { cls: 'sp' }), h('span', { cls: 'small muted' }, a.created)),
+          h('p', { cls: 'small', style: 'margin:6px 0 0' }, [a.kind, a.contact, a.phone, a.email, a.country, '想接在 ' + ({ whatsapp: 'WhatsApp', telegram: 'Telegram', website: '网站', other: '别的地方' }[a.channel] || a.channel)].filter(Boolean).join(' · ')),
+          a.note ? h('p', { cls: 'small muted', style: 'margin:4px 0 0' }, a.note) : null,
+          h('div', { cls: 'row', style: 'margin-top:10px' },
+            h('a', { cls: 'b main', href: 'https://wa.me/' + a.phone.replace(/\D/g, '') + '?text=' + encodeURIComponent(msg), target: '_blank', rel: 'noopener' }, 'WhatsApp 联系他'),
+            h('button', { cls: 'b', type: 'button', onclick: () => copy(msg) }, '复制要发的话'),
+            ...Object.entries(AI_ST).filter(([k]) => k !== a.status).map(([k, n]) => h('button', { cls: 'b', type: 'button', onclick: () => act('free/ai', { id: a.id, status: k }, '改成「' + n + '」') }, '改成「' + n + '」'))));
+      }) : [h('p', { cls: 'muted' }, '还没有人申请。试用页：https://dinamics.dev/free/ai')]),
+      h('div', { cls: 'row', style: 'margin:22px 0 8px' }, h('h2', {}, '最近体检的网站'), h('span', { cls: 'sp' }), csv('free_checks', '导出')),
+      h('p', { cls: 'small muted', style: 'margin:0 0 10px' }, '分数低的网站，就是要改版、要做新官网的客人。'),
+      S.free.checks.length ? h('div', { cls: 'card', style: 'overflow-x:auto' }, h('table', { cls: 'tbl' }, h('thead', {}, h('tr', {}, h('th', {}, '最近一次'), h('th', {}, '网址'), h('th', {}, '总分'), h('th', {}, 'Google 手机测速'), h('th', {}, '测过'))),
+        h('tbody', {}, S.free.checks.map(c => h('tr', {}, h('td', {}, c.at), h('td', {}, h('a', { href: c.url, target: '_blank', rel: 'noopener nofollow' }, c.url.replace(/^https?:\/\//, ''))), h('td', {}, String(c.score)), h('td', {}, c.psi == null ? '—' : String(c.psi)), h('td', {}, c.n + ' 次'))))))
+        : h('p', { cls: 'muted' }, '还没有人体检。'));
   }
 
   // ---------- 报备 ----------

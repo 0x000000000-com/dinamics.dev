@@ -12,13 +12,30 @@
     if (token) { window.scrollTo(0, 0); load(); }
   }
   function leave(msg) {
-    store.del('dn-partner'); token = ''; M = null;
+    store.del('dn-partner'); token = ''; M = null; showQR = false;
     root.hidden = true; prog.hidden = false; if (cta) cta.hidden = false;
     put($('#desk-note'), msg ? h('p', { cls: 'dk-msg bad', style: 'margin-bottom:24px' }, msg) : null);
     document.title = t('title'); window.scrollTo(0, 0);
   }
   const TIER = { agent: 'tier_agent', area: 'tier_area', state: 'tier_state' };
   const LS = { active: 'ls_active', won: 'ls_won', expired: 'ls_expired', lost: 'ls_lost', void: 'ls_void' };
+  const LINK = () => `https://dinamics.dev/partners#t=${token}`;
+  const safe = () => h('div', { cls: 'dk-safe', role: 'note' }, h('h3', {}, t('safe_h')),
+    h('ul', {}, h('li', { html: t('safe_1') }), h('li', { html: t('safe_url') }), h('li', { html: t('safe_2') }), h('li', { html: t('safe_4') }), h('li', { html: t('safe_3') })));
+  // moving to a new phone: the new phone scans this phone's screen, so no link has to be sent anywhere
+  let showQR = false;
+  function moveTo() {
+    const box = h('div', { cls: 'rowc dk-move' });
+    if (!showQR) put(box, h('p', { style: 'margin:0' }, t('move_p')), h('div', { cls: 'tools', style: 'margin-top:12px' }, h('button', { cls: 'btn', type: 'button', onclick: () => { showQR = true; draw(); } }, t('move_btn'))));
+    else {
+      const qr = h('div', { cls: 'dk-qr', role: 'img', 'aria-label': t('move_h') }); qr.innerHTML = window.QR.svg(LINK());
+      put(box, h('p', { style: 'margin:0' }, t('move_p')), qr, h('p', { cls: 'dk-msg bad', style: 'margin-top:14px' }, t('move_warn')),
+        h('div', { cls: 'tools' }, h('button', { cls: 'btn ghost', type: 'button', onclick: () => copy(LINK()) }, t('ok_copy')),
+          h('a', { cls: 'btn ghost', href: 'https://wa.me/?text=' + encodeURIComponent(tf('ok_wa_text', { code: M.agent.code, link: LINK() })), target: '_blank', rel: 'noopener' }, t('ok_wa')),
+          h('button', { cls: 'btn ghost', type: 'button', onclick: () => { showQR = false; draw(); } }, t('move_hide'))));
+    }
+    return [h('h2', {}, t('move_h')), box, h('p', { cls: 'note', style: 'margin-top:10px' }, t('move_lost'))];
+  }
   const DS = { quoted: 'ds_quoted', accepted: 'ds_accepted', building: 'ds_building', finished: 'ds_finished', paid: 'ds_paid', live: 'ds_live', cancelled: 'ds_cancelled', expired: 'ds_expired', request: 'ds_request' };
 
   function leadForm() {
@@ -88,6 +105,7 @@
       h('h1', { style: 'margin-top:12px' }, a.code),
       h('p', { cls: 'lede' }, [a.name, t(TIER[a.tier]), a.place ? a.place[DN.lang] || a.place.zh : a.region_text, tf('since', { d: a.since })].filter(Boolean).join(' · ')),
       a.status === 'ended' ? h('p', { cls: 'dk-msg bad', style: 'margin-top:16px' }, t('ended_note')) : null,
+      safe(),
       h('div', { cls: 'stats' },
         h('div', { cls: 'stat2' }, h('b', {}, active), h('span', {}, t('st_active'))), h('div', { cls: 'stat2' }, h('b', {}, won), h('span', {}, t('st_won'))),
         h('div', { cls: 'stat2' }, h('b', {}, 'US$' + (thisMonth ? thisMonth.earned : '0.00')), h('span', {}, t('st_month'))),
@@ -101,6 +119,7 @@
           h('p', {}, mo.lines.map(l => `${(l.label && (l.label[DN.lang] || l.label.zh)) || l.note} ${l.rate ? l.rate + '%' : ''} US$${l.amount}`.replace(/\s+/g, ' ')).join(' · '))); })) : h('p', { cls: 'note' }, t('none_money')),
       h('h2', {}, t('share_h')), h('p', { cls: 'note' }, t('share_p')),
       ...share(a.code).map(([k, u]) => h('div', { cls: 'rowc', style: 'margin-top:10px' }, h('div', { cls: 'top2' }, h('h3', {}, t(k)), h('button', { cls: 'btn ghost', type: 'button', style: 'height:38px', onclick: () => copy(u) }, t('copy'))), h('p', { cls: 'linkbox' }, u))),
+      ...moveTo(),
       h('p', { style: 'margin-top:34px' }, h('button', { cls: 'btn ghost', type: 'button', onclick: () => leave('') }, t('logout'))));
   }
   async function load() {

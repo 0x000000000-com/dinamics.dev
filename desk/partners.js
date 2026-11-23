@@ -8,9 +8,14 @@
   // 「我已经是代理」: the desk opens with each agent's own link
   $('#have').addEventListener('click', () => { const n = $('#have-note'); n.hidden = !n.hidden; });
   const ERR = { name: 'e_name', phone: 'e_phone', email: 'e_email', region: 'e_region', agree: 'e_agree', phone_taken: 'e_joined', slow_down: 'e_slow', network: 'e_net' };
+  // how to tell our messages and links from a scammer's, shown before and after the first link
+  const safe = () => h('div', { cls: 'dk-safe', role: 'note' }, h('h3', {}, t('safe_h')),
+    h('ul', {}, h('li', { html: t('safe_1') }), h('li', { html: t('safe_url') }), h('li', { html: t('safe_2') }), h('li', { html: t('safe_3') })));
+  let last = null;
+  DN.on(() => { if (last) showDone(...last); });
   function showDone(code, token) {
     const portal = `https://dinamics.dev/partners#t=${token}`;
-    form.hidden = true; done.hidden = false;
+    last = [code, token]; form.hidden = true; done.hidden = false;
     put(done, 
       h('h3', {}, t('ok_h')),
       h('p', { cls: 'dk-price', style: 'font-size:clamp(40px,6vw,64px)' }, code),
@@ -19,7 +24,7 @@
         h('button', { cls: 'btn', type: 'button', onclick: () => copy(portal) }, t('ok_copy')),
         h('a', { cls: 'btn ghost', href: 'https://wa.me/?text=' + encodeURIComponent(tf('ok_wa_text', { code, link: portal })), target: '_blank', rel: 'noopener' }, t('ok_wa')),
         h('a', { cls: 'btn ghost', href: '#t=' + token }, t('ok_open'))),
-      h('p', { cls: 'note', style: 'margin-top:14px' }, t('ok_keep')));
+      h('p', { cls: 'note', style: 'margin-top:14px' }, t('ok_keep')), safe());
   }
   form.addEventListener('submit', async e => {
     e.preventDefault(); err.textContent = '';

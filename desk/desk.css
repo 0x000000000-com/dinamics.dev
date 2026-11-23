@@ -58,6 +58,14 @@
 .track li.done{color:var(--co2);border-color:var(--line);background:color-mix(in srgb,var(--co) 10%,transparent)}
 .track li.now{color:var(--on);background:var(--co);border-color:var(--co)}
 .tools{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+/* how to tell our messages from a scammer's; the QR code a new phone scans */
+.dk-safe{margin-top:18px;padding:14px 18px;border:1px solid color-mix(in srgb,var(--co) 45%,transparent);border-left:4px solid var(--co);border-radius:12px;background:var(--wash)}
+.dk-safe h3{margin:0;font-size:16px;line-height:1.3}
+.dk-safe ul{margin:8px 0 0;padding-left:18px;display:grid;gap:6px;font-size:14.5px;line-height:1.55;color:var(--ink2);overflow-wrap:anywhere}
+.dk-safe b{color:var(--ink);white-space:nowrap}
+.dk-pre{font-size:14px;color:var(--ink2)}.dk-pre b{color:var(--ink);white-space:nowrap}
+.dk-qr{width:min(250px,100%);aspect-ratio:1;margin-top:14px;padding:6px;border-radius:14px;background:#fff}
+.dk-qr svg{display:block;width:100%;height:100%}
 .tools .btn{height:44px}
 .chip.ok{color:var(--up);border-color:color-mix(in srgb,var(--up) 45%,transparent)}
 /* the payment table on a phone: one block per payment, each value with its label */

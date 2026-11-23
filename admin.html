@@ -316,6 +316,11 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
   }
 
   // ---------- 代理 ----------
+  // the message that goes with a new link: who it is from and how to check the address, in the agent's language
+  const WA = '+1 332 250 8964';
+  const relinkText = (a, link) => a.lang === 'en'
+    ? `This message is from Dinamics (WhatsApp ${WA}).\nYour new personal link: ${link}\nThe old link no longer works.\nCheck: the link starts with https://dinamics.dev/ (dinamics.dev followed straight away by a slash "/"). Dinamics never asks you for money, passwords or codes.`
+    : `这条消息来自 Dinamics（WhatsApp ${WA}）。\n你的新专属链接：${link}\n旧链接已经作废。\n核对：链接是 https://dinamics.dev/ 开头，dinamics.dev 后面紧跟着斜杠「/」。Dinamics 不会向你要钱、密码或验证码。`;
   function agents() {
     const rows = S.agents.map(a => {
       const tier = h('select', { 'aria-label': '等级' }, Object.entries(TIER).map(([k, t]) => h('option', { value: k, selected: a.tier === k }, t)));
@@ -329,13 +334,17 @@ th{color:var(--ink2);font-weight:600;font-size:13px}
         h('div', { cls: 'row', style: 'margin-top:10px' }, tier, st, company, payout,
           h('button', { cls: 'b main', type: 'button', onclick: () => {
             if (st.value === 'ended' && a.status !== 'ended' && !confirm('设成已退出：他保护期内的报备会作废，以后到账的单不再算佣金。确定？')) return;
+            if (payout.value.trim() !== (a.payout || '').trim() && a.payout && !confirm('改佣金收款账户：先打电话或视频，确认找你改的是他本人（骗子会冒充代理）。确定改？')) return;
             act('agent', { id: a.id, tier: tier.value, status: st.value, payout: payout.value, company: company.value }, '已保存');
           } }, '保存'),
           h('button', { cls: 'b', type: 'button', onclick: async e => {
             const btn = e.currentTarget;
-            if (!confirm('给他一个新的专属链接？旧链接马上失效。')) return;
-            const r = await api('/api/admin/agent/token', { id: a.id }); const link = 'https://dinamics.dev/partners#t=' + r.token;
-            btn.after(h('span', { cls: 'mono', style: 'word-break:break-all' }, ' ' + link + ' '), h('button', { cls: 'b', type: 'button', onclick: () => copy(link) }, '复制'));
+            if (!confirm('给他一个新的专属链接？旧链接马上失效。\n\n先打电话或视频，确认找你的是他本人。')) return;
+            const r = await api('/api/admin/agent/token', { id: a.id }); const link = 'https://dinamics.dev/partners#t=' + r.token, msg = relinkText(a, link);
+            btn.after(h('span', { cls: 'mono', style: 'word-break:break-all' }, ' ' + link + ' '), h('button', { cls: 'b', type: 'button', onclick: () => copy(link) }, '复制'),
+              h('button', { cls: 'b', type: 'button', onclick: () => copy(msg) }, '复制发给他的话'),
+              a.phone ? h('a', { cls: 'b', href: 'https://wa.me/' + a.phone.replace(/\D/g, '') + '?text=' + encodeURIComponent(msg), target: '_blank', rel: 'noopener' }, 'WhatsApp 发给他') : null,
+              h('span', { cls: 'small muted' }, '用 WhatsApp ' + WA + ' 发：代理页上写着我们只用这个号码发链接。'));
           } }, '新的专属链接')));
     });
     $('#main').replaceChildren(h('div', { cls: 'row', style: 'margin-bottom:12px' }, h('h2', {}, '代理'), h('span', { cls: 'sp' }), csv('agents', '导出名单')), ...(rows.length ? rows : [h('p', { cls: 'muted' }, '还没有人报名。代理页：https://dinamics.dev/partners')]));

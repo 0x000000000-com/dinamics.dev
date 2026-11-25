@@ -82,22 +82,33 @@ const HDR = (() => {
 })();
 const K = HDR.K;
 
+// shaders compile in the background (KHR_parallel_shader_compile): nothing here waits for the driver; the first frame is drawn only once every program reports done
+const PSC = gl.getExtension('KHR_parallel_shader_compile');
+const PROGS = [];
+let BOOT = 0, BK = 0, BOOTP = null;   // 0: shaders compiling, 1: painting the galaxy map, 2: running
 function prog(vs, fs) {
-  const mk = (t, s) => { const sh = gl.createShader(t); gl.shaderSource(sh, s); gl.compileShader(sh); if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sh) + '\n' + s.split('\n').slice(0, 4).join('\n')); return sh; };
-  const p = gl.createProgram(); gl.attachShader(p, mk(gl.VERTEX_SHADER, PREC + vs)); gl.attachShader(p, mk(gl.FRAGMENT_SHADER, PREC + fs)); gl.linkProgram(p);
-  if (!gl.getProgramParameter(p, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(p));
-  const u = {}, a = {};
+  const mk = (t, s) => { const sh = gl.createShader(t); gl.shaderSource(sh, s); gl.compileShader(sh); return sh; };
+  const p = gl.createProgram(), v = mk(gl.VERTEX_SHADER, PREC + vs), f = mk(gl.FRAGMENT_SHADER, PREC + fs);
+  gl.attachShader(p, v); gl.attachShader(p, f); gl.linkProgram(p);
+  const P = { p, v, f, u: null, a: null, head: fs.split('\n').slice(0, 3).join('\n') };
+  PROGS.push(P); return P;
+}
+const done = P => !!P.u || !PSC || gl.getProgramParameter(P.p, PSC.COMPLETION_STATUS_KHR);
+function fin(P) {
+  if (P.u) return P;
+  if (!gl.getProgramParameter(P.p, gl.LINK_STATUS)) throw new Error((gl.getShaderInfoLog(P.v) || '') + (gl.getShaderInfoLog(P.f) || '') + (gl.getProgramInfoLog(P.p) || '') + '\n' + P.head);
+  const p = P.p, u = {}, a = {};
   for (let i = 0; i < gl.getProgramParameter(p, gl.ACTIVE_UNIFORMS); i++) { const n = gl.getActiveUniform(p, i).name.replace(/\[0\]$/, ''); u[n] = gl.getUniformLocation(p, n); }
   for (let i = 0; i < gl.getProgramParameter(p, gl.ACTIVE_ATTRIBUTES); i++) { const n = gl.getActiveAttrib(p, i).name; a[n] = gl.getAttribLocation(p, n); }
-  return { p, u, a };
+  P.u = u; P.a = a; return P;
 }
 function buf(data, kind = gl.ARRAY_BUFFER) { const b = gl.createBuffer(); gl.bindBuffer(kind, b); gl.bufferData(kind, data, gl.STATIC_DRAW); return b; }
 let ATTR = [];
 function attr(P, name, b, size, stride = 0, off = 0) {
-  const l = P.a[name]; if (l === undefined || l < 0) return;
+  const l = fin(P).a[name]; if (l === undefined || l < 0) return;
   gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.enableVertexAttribArray(l); gl.vertexAttribPointer(l, size, gl.FLOAT, false, stride * 4, off * 4); ATTR.push(l);
 }
-function use(P) { ATTR.forEach(l => gl.disableVertexAttribArray(l)); ATTR = []; gl.useProgram(P.p); return P.u; }
+function use(P) { fin(P); ATTR.forEach(l => gl.disableVertexAttribArray(l)); ATTR = []; gl.useProgram(P.p); return P.u; }
 function tex2d(w, h, type = gl.UNSIGNED_BYTE, filter = gl.LINEAR, data = null) {
   const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, filter); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, filter === gl.NEAREST ? gl.NEAREST : gl.LINEAR);
@@ -254,18 +265,30 @@ void main(){
   float dust = dd*(lane + 0.22*smoothstep(0.48, 0.82, nf)*nr);
   gl_FragColor = vec4(sqrt(clamp(E/6.0, 0.0, 1.0)), sqrt(clamp(dust/2.5, 0.0, 1.0)));
 }`);
+// the map is painted a band at a time over the first frames, so no single GPU job is long
+const MAPB = { band: 0, n: 8, F: null };
 {
   const T = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, T);
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, GMAP, GMAP, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
-  const F = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, F); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, T, 0);
-  gl.viewport(0, 0, GMAP, GMAP); const u = use(GBAKE); attr(GBAKE, 'q', TRI, 2);
+  MAPB.F = gl.createFramebuffer(); gl.bindFramebuffer(gl.FRAMEBUFFER, MAPB.F); gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, T, 0);
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  G.map = T;
+}
+function bakeMap() {
+  if (MAPB.band >= MAPB.n) return true;
+  const h = GMAP / MAPB.n, y0 = MAPB.band * h;
+  gl.bindFramebuffer(gl.FRAMEBUFFER, MAPB.F); gl.viewport(0, 0, GMAP, GMAP); gl.disable(gl.BLEND); gl.disable(gl.DEPTH_TEST);
+  gl.enable(gl.SCISSOR_TEST); gl.scissor(0, y0, GMAP, h);
+  const u = use(GBAKE); attr(GBAKE, 'q', TRI, 2);
   gl.uniform1f(u.RC, RC); gl.uniform1f(u.RG, RG); gl.uniform1f(u.RF, RF); gl.uniform1f(u.E1, E1); gl.uniform1f(u.E2, E2); gl.uniform1f(u.OFF, OFF); gl.uniform1f(u.EXT, GEXTM);
   gl.drawArrays(gl.TRIANGLES, 0, 3);
-  gl.bindFramebuffer(gl.FRAMEBUFFER, null); gl.deleteFramebuffer(F);
-  gl.bindTexture(gl.TEXTURE_2D, T); gl.generateMipmap(gl.TEXTURE_2D);
-  G.map = T;
+  gl.disable(gl.SCISSOR_TEST); gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  if (++MAPB.band < MAPB.n) return false;
+  gl.deleteFramebuffer(MAPB.F); MAPB.F = null;
+  gl.bindTexture(gl.TEXTURE_2D, G.map); gl.generateMipmap(gl.TEXTURE_2D);
+  return true;
 }
 {
   const r = rnd(20261125);
@@ -1040,13 +1063,14 @@ void main(){
       vec3 col = pow(texture2D(pot, vec2(uv.x, 1.0 - uv.y), 1.5).rgb, vec3(2.2)) + vec3(0.014, 0.013, 0.012);
       float edge = smoothstep(0.0, 0.05, uv.x)*smoothstep(1.0, 0.95, uv.x)*smoothstep(0.0, 0.05, uv.y)*smoothstep(1.0, 0.95, uv.y);
       float n1 = vn(p*0.5 + vec3(0.0, t*0.05, t*0.08)), n2 = vn(p*1.6 - vec3(t*0.07, 0.0, 0.0));
-      float haze = 0.08 + 2.2*pow(n1*n2, 2.2);
+      float haze = 0.07 + 0.55*pow(n1*n2, 2.0);
       float spread = 1.0/(dot(s, s)*0.0035 + 0.35);
-      acc += col*edge*haze*spread*dt;
+      float near = smoothstep(ZS + 0.6, ZS + 7.5, p.z);   // the air just in front of the screen stays clear, so the picture is not fogged
+      acc += col*edge*haze*spread*near*dt;
       tt += dt;
     }
   }
-  gl_FragColor = vec4(acc*beam*0.17*expo*K, 1.0);
+  gl_FragColor = vec4(acc*beam*0.11*expo*K, 1.0);
 }`);
 let CD = null;
 const CD_SRC = () => prog(`attribute vec4 p; uniform mat4 vp; uniform vec3 O; uniform float t, ps, SW, YB, YT, ZS, beam; uniform sampler2D pot; varying vec3 vc;
@@ -1071,6 +1095,14 @@ function cinePrep() {
   if (CG || !CI || CI.failed) return;
   try { CG = CG_SRC(); CS = CS_SRC(); CC = CC_SRC(); CH = CH_SRC(); CB = CB_SRC(); CD = CD_SRC(); CLT = CLT_SRC(); CCP = CCP_SRC(); }
   catch (e) { CG = null; CI.failed = true; document.documentElement.classList.add('no-cine'); }
+}
+// the hall is drawn once its shaders have finished compiling in the background; a shader that fails leaves the plain film player
+function cineReady() {
+  if (CI.ok) return true;
+  const L = [CG, CS, CC, CH, CB, CD, CLT, CCP];
+  if (!L.every(done)) return false;
+  try { L.forEach(fin); CI.ok = true; } catch (e) { CG = null; CI.failed = true; document.documentElement.classList.add('no-cine'); }
+  return !!CI.ok;
 }
 if (CI) {
   CI.tex = tex2d(2, 2, gl.UNSIGNED_BYTE, gl.LINEAR, new Uint8Array(16));
@@ -1110,7 +1142,7 @@ function drawCinema(P, t) {
   gl.drawArrays(gl.TRIANGLES, 0, CI.geo.n);
   u = use(CS); gl.uniformMatrix4fv(u.vp, false, vp); attr(CS, 'p', CI.scr.b, 3, 5, 0); attr(CS, 'uv', CI.scr.b, 2, 5, 3);
   gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, CI.tex); gl.uniform1i(u.tx, 0);
-  gl.uniform1f(u.K, K); gl.uniform1f(u.expo, P.cexpo); gl.uniform1f(u.gain, CI.gain * 3.0); gl.uniform1f(u.has, CI.has); gl.uniform1f(u.house, CI.house);
+  gl.uniform1f(u.K, K); gl.uniform1f(u.expo, P.cexpo); gl.uniform1f(u.gain, CI.gain * 1.2); gl.uniform1f(u.has, CI.has); gl.uniform1f(u.house, CI.house);
   gl.drawArrays(gl.TRIANGLE_STRIP, 0, CI.scr.n);
   u = use(CC); gl.uniformMatrix4fv(u.vp, false, vp); cineLights(u, P); gl.uniform1f(u.t, t); attr(CC, 'uv', CI.curt.b, 2);
   for (const [sd, val] of [[-1, 0], [1, 0], [0, 1]]) { gl.uniform1f(u.sd, sd || 1); gl.uniform1f(u.valance, val); gl.uniform1f(u.open, CI.curtain); gl.drawArrays(gl.TRIANGLE_STRIP, 0, CI.curt.n); }
@@ -1141,7 +1173,7 @@ function drawCinema(P, t) {
 // ======================================================================
 const S = {
   w: 1, h: 1, cw: 1, ch: 1, time: 0, frame: 0, rot: 0, open: Y.skipOpening || RED ? 1 : 0, openT0: 0, drag: null, az: 0, el: 0, vaz: 0,
-  hover: -1, running: true, px: 0, py: 0, tpx: 0, tpy: 0, sound: false, sc: 0, sv: 0, jump: null, ft: 0
+  hover: -1, running: true, px: 0, py: 0, tpx: 0, tpy: 0, sound: false, sc: 0, sv: 0, jump: null, ft: 0, slow: 0, late: false, dead: false
 };
 const view = new Float32Array(16), proj = new Float32Array(16), vp = new Float32Array(16);
 let camR = [1, 0, 0], camU = [0, 1, 0], camF = [0, 0, -1], camE = [0, 0, 100], fpx = 1;
@@ -1322,18 +1354,18 @@ function cineUpdate(t) {
   const r = el.getBoundingClientRect(), H = innerHeight;
   const q = clamp(-r.top / Math.max(1, r.height - H)), pinned = r.top <= 1 && r.bottom >= H - 1;
   if (!CG && r.top < H * 2.5 && r.bottom > -H) cinePrep();
-  if (!CG) { let g = 1; if (pinned) g = 0; else if (r.top > 0 && r.top < H) g = ss(r.top / H); else if (r.bottom > 0 && r.bottom < H) g = ss(1 - r.bottom / H); return { w: 0, g: CI.failed ? g : 1 }; }
+  if (!CG || !cineReady()) { let g = 1; if (pinned) g = 0; else if (r.top > 0 && r.top < H) g = ss(r.top / H); else if (r.bottom > 0 && r.bottom < H) g = ss(1 - r.bottom / H); return { w: 0, g: CI.failed ? g : 1 }; }
   let g = 1;
   if (pinned) g = 0; else if (r.top > 0 && r.top < H) g = ss(r.top / H); else if (r.bottom > 0 && r.bottom < H) g = ss(1 - r.bottom / H);
   const w = pinned ? ss(clamp(q / 0.03)) * ss(clamp((1 - q) / 0.05)) : 0;
   CI.q = q; CI.w = w;
   if (pinned && q > 0.025 && CI.state === 'pre') { CI.state = 'show'; CI.showT = t; }
-  if (!pinned && CI.state === 'show') { CI.state = 'pre'; CI.started = false; }
+  if (!pinned && CI.state === 'show') { CI.state = 'pre'; CI.started = false; if (CI.hold) { CI.hold = false; if (CI.cfg.onHold) CI.cfg.onHold(false); } }
   const k = CI.state === 'show' ? t - CI.showT : -1;
   if (k < 0) { CI.house = 1; CI.curtain = 0; CI.beam = 0; CI.gain = 0; }
   else if (RED) { CI.house = 0.07; CI.curtain = 1; CI.beam = 1; CI.gain = 1; }
   else { CI.house = 1 - 0.9 * ss(clamp(k / 2.6)); CI.curtain = ss(clamp((k - 0.8) / 3.4)); CI.beam = ss(clamp((k - 2.4) / 1.5)); CI.gain = ss(clamp((k - 2.6) / 1.6)); }
-  const v = CI.video, want = k > (RED ? 0 : 2.6) && pinned;
+  const v = CI.video, want = k > (RED ? 0 : 2.6) && pinned && !CI.hold;
   if (want && v.paused) { if (!CI.started) { CI.started = true; try { v.currentTime = 0; } catch (e) { } } const pr = v.play(); if (pr && pr.catch) pr.catch(() => { }); }
   if (!want && !v.paused) v.pause();
   if (w > 0) {
@@ -1349,7 +1381,7 @@ function poseCinema() {
   const q = CI.q, z = lerp(MOB ? 25.0 : 23.6, MOB ? 22.4 : 17.8, ss(clamp((q - 0.04) / 0.86)));
   const row = clamp((z - 9) / 1.05, 0, 15), eyeY = 0.35 + row * 0.18 + 1.2;
   const e = [0.05 + S.px * (MOB ? 0 : 0.35), eyeY - S.py * (MOB ? 0 : 0.1), z], c = [0, CI.YB + CI.SH * (MOB ? 0.42 : 0.56), 0];
-  return Object.assign({}, BASE, { e, c, sx: 0, sy: MOB ? -0.1 : -0.02, fov: MOB ? 1.42 : 0.82, cexpo: 2.2, bloom: 0.34, vig: 0.55, gA: 0, pA: 0, dA: 0 });
+  return Object.assign({}, BASE, { e, c, sx: 0, sy: MOB ? -0.1 : -0.02, fov: MOB ? 1.42 : 0.82, cexpo: 2.2, bloom: 0.12, vig: 0.55, gA: 0, pA: 0, dA: 0 });
 }
 function cineScreenTop() {
   const c = xform(vp, [0, CI.YT, CI.ZS]); return c[3] > 0 ? (0.5 - c[1] / c[3] * 0.5) * S.ch : 0;
@@ -1382,15 +1414,36 @@ function spring(x, v, target, w, dt) {
   const d = x - target, e = Math.exp(-w * dt);
   return [target + (d + (v + w * d) * dt) * e, (v - w * (v + w * d) * dt) * e];
 }
+// the first frames only wait: shaders finish compiling in the background, then the galaxy map is painted band by band
+function bootStep() {
+  if (BOOT === 0) {
+    try {
+      if (PSC && performance.now() - BOOTP.t0 < 15000) { if (!BOOTP.every(done)) return false; BOOTP.forEach(fin); }
+      else if (BK < BOOTP.length) { fin(BOOTP[BK++]); return false; }
+      else BOOTP.forEach(fin);
+    } catch (e) { fail(e); return false; }
+    BOOT = 1;
+  }
+  if (BOOT === 1) { if (!bakeMap()) return false; BOOT = 2; }
+  return true;
+}
+function fail(e) {
+  S.dead = true; S.running = false; cv.remove();
+  const de = document.documentElement; de.classList.remove('gl'); de.classList.add('no-gl');
+  Y.engine = null; if (Y.onFail) Y.onFail(e);
+}
 function frame(now) {
-  if (!S.running) return;
+  if (!S.running || S.dead) return;
   requestAnimationFrame(frame);
-  const t = now / 1000, dt = Math.min(0.1, Math.max(0.001, t - (S.time || t - 0.016))); S.time = t; S.frame++;
+  if (BOOT < 2) { if (!bootStep()) return; cv.classList.add('on'); S.time = 0; if (S.open < 1 && performance.now() > 1600) S.late = true; if (Y.onReady) Y.onReady(); }
+  const t = now / 1000, raw = t - (S.time || t - 0.016), dt = Math.min(0.1, Math.max(0.001, raw)); S.time = t; S.frame++;
   if (loNext < PL.length) bakeLo(); else bakeStep();
   scrollTick(dt);
   pace(dt);
   if (!RED) S.rot += dt * 0.004;
-  if (S.open < 1) { if (!S.openT0) S.openT0 = t; S.open = clamp((t - S.openT0) / 3.2); Y.onOpening && Y.onOpening(S.open); if (scrollY > 10) { S.open = 1; Y.onOpening && Y.onOpening(1); } }
+  // the opening plays only when the 3D was ready quickly and runs smoothly; otherwise the words show at once
+  if (S.open < 1 && (S.late || (raw > 0.09 && ++S.slow > 2) || scrollY > 10)) { S.open = 1; Y.onOpening && Y.onOpening(1); }
+  if (S.open < 1) { if (!S.openT0) S.openT0 = t; S.open = clamp((t - S.openT0) / 3.2); Y.onOpening && Y.onOpening(S.open); }
   if (!S.drag && Math.abs(S.vaz) > 1e-5) { S.az += S.vaz; S.vaz *= 0.94; }
   const target = scrollS();
   if (RED) { S.sc = target; S.sv = 0; } else [S.sc, S.sv] = spring(S.sc, S.sv, target, 4.2, dt);
@@ -1453,7 +1506,7 @@ function scrollTick(dt) {
 if (SM.on) {
   SM.y = SM.tg = scrollY;
   addEventListener('wheel', e => {
-    if (e.ctrlKey || e.defaultPrevented) return;
+    if (e.ctrlKey || e.defaultPrevented || BOOT < 2 || S.dead) return;
     const el = e.target.closest && e.target.closest('.menu,[data-scroll]'); if (el) return;
     e.preventDefault(); SM.anim = null;
     const k = e.deltaMode === 1 ? 36 : e.deltaMode === 2 ? innerHeight : 1;
@@ -1465,7 +1518,7 @@ function flyTo(y, done) {
   y = clamp(y, 0, maxY());
   const d = Math.abs(y - scrollY);
   if (d < 2) { done && done(); return; }
-  if (RED) { scrollTo(0, y); done && done(); return; }
+  if (RED || BOOT < 2 || S.dead) { scrollTo(0, y); done && done(); return; }
   SM.anim = { y0: scrollY, y1: y, t0: performance.now(), dur: clamp(700 + d / innerHeight * 140, 900, 2600), done };
 }
 
@@ -1526,15 +1579,18 @@ function sfx(i) {
 // ---------- public ----------
 Y.engine = {
   skip() { S.open = 1; Y.onOpening && Y.onOpening(1); },
+  hold(b) { if (CI) CI.hold = !!b; },
+  get ready() { return BOOT >= 2; },
   sound, sfx, measure, flyTo,
   stop(id) { const s = ST.find(x => x.id === id); return s ? s.y - innerHeight / 2 : null; },
   planet(i) { return SCR[i]; }
 };
 new ResizeObserver(resize).observe(cv);
 addEventListener('resize', resize);
-document.addEventListener('visibilitychange', () => { S.running = !document.hidden; if (S.running) { S.time = 0; requestAnimationFrame(frame); } });
+document.addEventListener('visibilitychange', () => { if (S.dead) return; S.running = !document.hidden; if (S.running) { S.time = 0; requestAnimationFrame(frame); } });
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
 S.ready = true;
 resize();
-requestAnimationFrame(t => { cv.classList.add('on'); frame(t); });
+BOOTP = PROGS.slice(); BOOTP.t0 = performance.now();
+requestAnimationFrame(frame);
 })();

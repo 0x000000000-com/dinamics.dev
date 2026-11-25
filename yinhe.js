@@ -1441,8 +1441,9 @@ function frame(now) {
   scrollTick(dt);
   pace(dt);
   if (!RED) S.rot += dt * 0.004;
-  // the opening plays only when the 3D was ready quickly and runs smoothly; otherwise the words show at once
-  if (S.open < 1 && (S.late || (raw > 0.09 && ++S.slow > 2) || scrollY > 10)) { S.open = 1; Y.onOpening && Y.onOpening(1); }
+  // the opening plays only when the 3D was ready quickly and runs smoothly; otherwise the words show at once (asked for again from the menu, it waits and plays)
+  if (S.open < 1 && scrollY > 10) { S.open = 1; Y.onOpening && Y.onOpening(1); }
+  if (S.open < 1 && !Y.forceOpening && (S.late || (raw > 0.09 && ++S.slow > 2))) { S.open = 1; Y.onOpening && Y.onOpening(1, true); }
   if (S.open < 1) { if (!S.openT0) S.openT0 = t; S.open = clamp((t - S.openT0) / 3.2); Y.onOpening && Y.onOpening(S.open); }
   if (!S.drag && Math.abs(S.vaz) > 1e-5) { S.az += S.vaz; S.vaz *= 0.94; }
   const target = scrollS();
@@ -1578,7 +1579,7 @@ function sfx(i) {
 
 // ---------- public ----------
 Y.engine = {
-  skip() { S.open = 1; Y.onOpening && Y.onOpening(1); },
+  skip(auto) { S.open = 1; Y.onOpening && Y.onOpening(1, !!auto); },
   hold(b) { if (CI) CI.hold = !!b; },
   get ready() { return BOOT >= 2; },
   sound, sfx, measure, flyTo,

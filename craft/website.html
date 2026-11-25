@@ -32,7 +32,7 @@ img{max-width:100%}
 :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:6px}
 [hidden]{display:none!important}
 
-/* space: the sky before the 3D, the planet as a picture until (or instead of) the 3D, the 3D, and a veil that darkens it as you read on */
+/* space: the sky before the 3D, the planet as a picture until (or instead of) the 3D, then the 3D: scrolling walks the camera over the planet */
 .sky{position:fixed;inset:0;z-index:0;pointer-events:none;background:
   radial-gradient(60vmax 40vmax at 78% 40%,rgba(40,48,110,.30),transparent 70%),
   radial-gradient(50vmax 30vmax at 10% 90%,rgba(70,40,110,.22),transparent 70%),var(--bg);transition:opacity 1.2s}
@@ -42,10 +42,11 @@ img{max-width:100%}
 .yh-gl{position:fixed;inset:0;width:100%;height:100%;z-index:1;opacity:0;transition:opacity 1.2s}
 .yh-gl.on{opacity:1}
 html.gl-on .ph{opacity:0}
-html.rest .yh-gl.on{opacity:0;transition:opacity .4s}
-html.gl-on.rest .ph{opacity:1;transition:opacity .4s}
 html.gl-on .sky{opacity:.4}
-.veil{position:fixed;inset:0;z-index:2;background:var(--bg);opacity:0;pointer-events:none}
+/* the sky goes dark for the 50 ms test */
+.dim{position:fixed;inset:0;z-index:2;background:#010106;opacity:0;pointer-events:none;transition:opacity .4s ease}
+html.dark .dim{opacity:.93}
+html.dark .pane,html.dark .sbar,html.dark .top,html.dark .btn{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}   /* nothing to blur in the dark, and the flash's frames stay quick */
 /* the air of a planet: the page changes while the screen is full of it */
 .haze{position:fixed;inset:0;z-index:70;pointer-events:none;opacity:0;transition:opacity .9s ease;background:radial-gradient(130% 95% at 50% 45%,color-mix(in srgb,var(--hz) 72%,#fff),var(--hz) 52%,color-mix(in srgb,var(--hz) 78%,#000))}
 html.hz .haze{opacity:1;transition:none}
@@ -147,7 +148,7 @@ html[lang=en] .cn,html[lang=ms] .cn{font-weight:700;font-size:clamp(52px,min(7.2
   .sbar .btn{padding:0 14px;font-size:14px}
   body.sb-room{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
 }
-@media (max-width:359px){.sb-n b{display:none}}
+@media (max-width:400px){.sb-n b{display:none}}
 
 /* sections */
 .sec{position:relative;padding:clamp(96px,12vw,160px) 0 0}
@@ -159,9 +160,80 @@ html[lang=en] .h2,html[lang=ms] .h2{font-weight:700;letter-spacing:-.012em}
 .sub a:hover{color:var(--glow)}
 .cap{margin:0 0 14px;color:var(--mut);font-size:14px}
 
-/* the film */
-.filmw{max-width:1180px}
-#film .fc{margin-top:0}
+/* every part of the page is a dark glass panel over the planet */
+.pane{position:relative;padding:clamp(26px,3.4vw,54px);border-radius:28px;border:1px solid rgba(238,240,247,.11);
+  background:linear-gradient(180deg,rgba(15,18,32,.8),rgba(7,9,17,.86));box-shadow:0 40px 120px -40px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.06)}
+@media (min-width:701px) and (pointer:fine){.pane{background:linear-gradient(180deg,rgba(15,18,32,.62),rgba(7,9,17,.74));-webkit-backdrop-filter:blur(16px) saturate(1.15);backdrop-filter:blur(16px) saturate(1.15)}}
+@media (max-width:700px){.pane{padding:24px 20px;border-radius:22px}.wrap{padding:0 12px}}
+.pane .tier{-webkit-backdrop-filter:none;backdrop-filter:none;background:rgba(255,255,255,.035)}
+.pane .fl-side{background:rgba(255,255,255,.03)}
+
+/* the film: a screen in the sky over the planet (when there is no 3D, a panel in the page) */
+.fscr{max-width:1180px;margin:0 auto;padding:0 max(5vw,20px)}
+.fscr .fc{margin-top:0}
+.fstage{display:none}
+html.w3d .fstage{display:block;height:150vh;height:150svh}
+html.w3d .l3{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+html.w3d .l3c{position:absolute;left:0;top:0;width:100%;height:100%;transform-style:preserve-3d}
+html.w3d [data-l3]{position:absolute;left:0;top:0;margin:0;display:none;transform-style:preserve-3d;will-change:transform,opacity}
+html.w3d .fscr{width:1280px;max-width:none;padding:0}
+html.w3d .fscr .cap{font-size:18px;margin-bottom:16px;text-shadow:0 2px 12px rgba(0,0,0,.8)}
+html.w3d .fscr .fc{box-shadow:0 0 0 1px rgba(243,215,160,.28),0 60px 160px rgba(0,0,0,.7),0 0 140px rgba(243,215,160,.16)}
+@media (max-width:700px),(pointer:coarse){html.w3d .fscr{width:760px}html.w3d .fscr .cap{font-size:24px}}
+html.w3d main{pointer-events:none}
+html.w3d .pane,html.w3d .hero .hx,html.w3d .pager,html.w3d .back{pointer-events:auto}
+
+/* the works: four screens along the horizon, the words beside each (when there is no 3D, the switcher) */
+.wk-rows,.wk3,.sign{display:none}
+html.w3d .wk-head .ws-cards,html.w3d .wk-head .wsb-main{display:none}
+html.w3d .wk-rows{display:block}
+.wk-row{display:flex;align-items:center;justify-content:flex-end;min-height:96vh;min-height:96svh;max-width:1400px;margin:0 auto;padding:0 max(4vw,20px)}
+.wk-cap{width:min(420px,100%)}
+.wk-cap .wk-i{margin:0 0 8px;color:var(--mut);font-size:14px;font-variant-numeric:tabular-nums}
+.wk-cap h3{margin:0;font:700 clamp(24px,2.1vw,30px)/1.25 var(--body)}
+.wk-cap p{margin:10px 0 0;color:var(--soft);text-wrap:pretty}
+.wk-cap .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.wk-cap .go{display:inline-flex;align-items:center;min-height:44px;margin-top:12px;font-weight:600;color:var(--glow);text-decoration:none;border-bottom:1px solid rgba(243,215,160,.4)}
+.wk-cap .go:hover{border-color:var(--glow)}
+html.w3d .wk3{width:1200px;text-decoration:none}
+.wk3-win{display:block;border-radius:22px;overflow:hidden;border:1px solid rgba(255,255,255,.2);background:#0b0d16;
+  box-shadow:0 0 0 1px rgba(0,0,0,.4),0 50px 140px rgba(0,0,0,.7),0 0 120px rgba(243,215,160,.14)}
+.wk3-bar{display:flex;align-items:center;gap:9px;height:44px;padding:0 20px;background:#141728;color:#8A92A6;font:600 17px/1 var(--body)}
+.wk3-bar i{width:13px;height:13px;border-radius:50%;background:#2B3049}
+.wk3-bar b{margin-left:14px;font-weight:600}
+.wk3-win img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top}
+.wk3-ph{position:absolute;right:-70px;bottom:-80px;width:236px;aspect-ratio:390/844;padding:8px;border-radius:36px;background:#05060b;border:1px solid rgba(255,255,255,.24);
+  box-shadow:0 40px 90px rgba(0,0,0,.75);transform:translateZ(80px)}
+.wk3-ph img{display:block;width:100%;height:100%;object-fit:cover;object-position:top;border-radius:28px}
+@media (max-width:700px),(pointer:coarse){
+  .wk-row{justify-content:center;align-items:flex-end;padding:0 12px calc(26px + env(safe-area-inset-bottom))}
+  .wk-cap{width:100%;max-width:520px;padding:20px 18px}
+  .wk-cap h3{font-size:22px}.wk-cap p{font-size:15px;line-height:1.55}
+  html.w3d .wk3{width:900px}
+  .wk3-ph{right:-40px;bottom:-60px;width:250px}
+}
+
+/* how it goes: the panel holds while the camera flies past a sign for each step */
+html.w3d .how-stage{position:relative;height:250vh;height:250svh}
+html.w3d .how-pane{position:sticky;top:max(16vh,110px);max-width:640px}
+html.w3d .how-pane .steps{grid-template-columns:minmax(0,1fr);gap:0}
+html.w3d .how-pane .steps::before{left:9px;right:auto;top:6px;bottom:24px;width:1px;height:auto;background:linear-gradient(var(--gold),rgba(217,178,107,.12))}
+html.w3d .how-pane .steps li{padding:0 0 26px 44px;opacity:.5;transition:opacity .5s}
+html.w3d .how-pane .steps li.on{opacity:1}
+.how-mk{position:absolute;left:0;width:1px;height:1px;pointer-events:none}
+.how-mk:nth-of-type(1){top:27%}.how-mk:nth-of-type(2){top:52%}.how-mk:nth-of-type(3){top:77%}
+html.w3d .sign{width:300px;height:620px;text-align:center}
+.sign b{display:inline-block;padding:12px 26px;border-radius:99px;border:1px solid rgba(243,215,160,.75);background:rgba(10,12,22,.78);color:var(--glow);
+  font:700 40px/1.2 var(--body);white-space:nowrap;box-shadow:0 0 50px rgba(243,215,160,.4)}
+.sign i{position:absolute;left:50%;top:84px;bottom:0;width:5px;margin-left:-2.5px;border-radius:3px;background:linear-gradient(rgba(243,215,160,.95),rgba(243,215,160,.08))}
+.sign i::after{content:"";position:absolute;left:50%;bottom:-20px;width:40px;height:40px;margin-left:-20px;border-radius:50%;
+  background:radial-gradient(#fff,rgba(243,215,160,.95) 38%,rgba(243,215,160,0) 70%);box-shadow:0 0 50px 16px rgba(243,215,160,.45)}
+@media (max-width:700px),(pointer:coarse){html.w3d .how-pane{top:76px}html.w3d .how-pane .h2{font-size:clamp(26px,7vw,40px)}html.w3d .how-pane .steps{margin-top:22px}html.w3d .how-pane .steps li{padding-bottom:14px}
+  html.w3d .how-pane .steps li:not(.on) h3,html.w3d .how-pane .steps li:not(.on) p{display:none}}   /* on a phone only the step you are on opens, so the signs below stay in sight */
+
+/* the end of the walk: up off the ground, the next planets in the sky */
+html.w3d .talk{padding-top:clamp(140px,22vh,240px)}
+html.w3d .pager{margin-top:clamp(160px,30vh,320px)}
 
 /* what you get */
 .get{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0 clamp(28px,3.4vw,52px);margin-top:clamp(30px,4vw,48px)}
@@ -220,6 +292,10 @@ html[lang=en] .h2,html[lang=ms] .h2{font-weight:700;letter-spacing:-.012em}
 
 /* talk */
 .talk{text-align:center;padding:clamp(110px,14vw,180px) max(5vw,20px) 0}
+.talk .pane{max-width:980px;margin:0 auto}
+@media (max-width:700px){.talk{padding-left:12px;padding-right:12px}}
+@media (max-width:420px){.mail{font-size:clamp(17px,5.5vw,26px)}}
+@media (max-width:700px) and (max-height:760px){.wk-cap .meta{display:none}}
 .talk .h2{margin:0 auto;max-width:13em;font-size:clamp(40px,6vw,88px)}
 .talk .sub{margin:18px auto 0}
 .mail{display:inline-block;margin-top:30px;font:700 clamp(26px,4.4vw,52px)/1.2 "YH Latin",var(--body);color:var(--glow);text-decoration:none;overflow-wrap:anywhere;text-shadow:0 0 40px rgba(243,215,160,.3)}
@@ -273,16 +349,19 @@ footer p{margin:4px 0}
 .plabel{position:fixed;z-index:15;pointer-events:none;padding:6px 12px;border-radius:99px;background:rgba(10,12,22,.8);border:1px solid rgba(217,178,107,.5);font-size:14px;white-space:nowrap;opacity:0;transition:opacity .2s}
 .plabel.on{opacity:1}
 
-/* leaving for another planet: the words go, the veil lifts, the camera dives */
+/* leaving for another planet: the words go, the camera dives */
 html.leaving main,html.leaving footer,html.leaving .sbar,html.leaving .top,html.leaving .plabel{opacity:0!important;pointer-events:none;transition:opacity .3s}
-html.leaving .veil{opacity:0!important;transition:opacity .3s}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
 /* the 50 ms test */
 .fl{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;margin-top:clamp(30px,4vw,46px)}
 .fl-screen{position:relative;aspect-ratio:16/10;border-radius:20px;overflow:hidden;border:1px solid rgba(217,178,107,.3);background:radial-gradient(120% 90% at 50% 0%,#0E1122,#03040A 72%);box-shadow:0 50px 120px -40px rgba(0,0,0,.85)}
-.fl-screen img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;visibility:hidden}
-.fl-screen img.on{visibility:visible}
+.fl-sky{position:fixed;left:50%;top:50%;z-index:60;width:min(84vw,128vh);aspect-ratio:16/10;transform:translate(-50%,-50%);border-radius:22px;overflow:hidden;pointer-events:none;
+  box-shadow:0 0 0 1px rgba(243,215,160,.35),0 0 120px rgba(243,215,160,.25);visibility:hidden}
+.fl-sky:has(img.on){visibility:visible}
+.fl-sky img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:top;visibility:hidden}
+.fl-sky img.on{visibility:visible}
+@media (max-width:700px){.fl-sky{width:94vw;border-radius:14px}}
 .fl-pane{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:24px;text-align:center}
 .fl-go{position:relative;width:min(240px,50%);aspect-ratio:1;border-radius:50%;border:1px solid rgba(217,178,107,.55);color:var(--glow);cursor:pointer;
   background:radial-gradient(circle at 50% 32%,rgba(217,178,107,.17),rgba(4,5,10,.25) 70%);font:700 clamp(20px,2.4vw,31px)/1.15 var(--disp);
@@ -490,7 +569,7 @@ a.chip:hover{border-color:var(--glow)}
 <body>
 <div class="sky" aria-hidden="true"></div>
 <picture class="ph" aria-hidden="true"><source media="(max-width:700px),(pointer:coarse)" srcset="p/00-hm.webp"><img src="p/00-h.webp" alt="" width="1600" height="900" decoding="async"></picture>
-<div class="veil" id="veil" aria-hidden="true"></div>
+<div class="dim" aria-hidden="true"></div>
 <div class="haze" id="haze" aria-hidden="true" style="--hz:#6F8FBF"></div>
 <header class="top">
   <a class="home" href="../yinhe.html" aria-label="Dinamics"><svg class="logo" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 1483 248" role="img" aria-label="Dinamics"><defs></defs><polygon points="54.00,0.00 55.92,0.00 57.84,0.00 59.76,0.00 61.68,0.00 63.59,0.00 65.51,0.00 67.43,0.00 69.35,0.00 71.27,0.00 73.19,0.00 75.11,0.00 77.03,0.00 78.95,0.00 80.86,0.00 82.78,0.00 84.70,0.00 86.62,0.00 88.54,0.00 90.46,0.00 92.38,0.00 94.30,0.00 96.22,0.00 98.13,0.00 100.05,0.00 101.97,0.00 103.89,0.00 105.81,0.00 107.73,0.00 109.65,0.00 111.88,0.01 114.18,0.07 116.48,0.18 118.78,0.32 121.08,0.51 123.37,0.75 125.65,1.03 127.93,1.35 130.21,1.71 132.47,2.12 134.73,2.58 136.98,3.07 139.22,3.61 141.44,4.19 143.66,4.82 145.86,5.48 148.06,6.19 150.23,6.95 152.39,7.74 154.54,8.57 156.67,9.45 158.78,10.36 160.88,11.32 162.95,12.32 165.01,13.35 167.05,14.43 169.06,15.54 171.05,16.69 173.03,17.88 174.97,19.11 176.90,20.38 178.80,21.68 180.67,23.02 182.52,24.39 184.34,25.80 186.13,27.24 187.90,28.72 189.64,30.23 191.34,31.78 193.02,33.35 194.67,34.96 196.29,36.60 197.87,38.28 199.42,39.98 200.94,41.71 202.43,43.47 203.88,45.25 205.29,47.07 206.68,48.91 208.02,50.78 209.33,52.67 210.61,54.59 211.84,56.53 213.04,58.50 214.20,60.49 215.33,62.50 216.41,64.53 217.45,66.58 218.46,68.65 219.42,70.74 220.35,72.85 221.23,74.98 222.08,77.12 222.88,79.28 223.64,81.45 224.36,83.64 225.04,85.84 225.67,88.05 226.26,90.28 226.81,92.52 227.32,94.76 227.78,97.02 228.20,99.28 228.57,101.55 228.91,103.83 229.19,106.12 229.44,108.41 229.64,110.70 229.80,113.00 229.91,115.30 229.98,117.60 230.00,119.90 229.98,122.21 229.92,124.51 229.81,126.81 229.65,129.10 229.46,131.40 229.22,133.69 228.93,135.97 228.60,138.25 228.23,140.53 227.82,142.79 227.36,145.05 226.85,147.29 226.31,149.53 225.72,151.76 225.09,153.97 224.42,156.17 223.70,158.36 222.95,160.54 222.15,162.70 221.31,164.84 220.43,166.97 219.50,169.08 218.54,171.17 217.54,173.24 216.50,175.30 215.42,177.33 214.30,179.34 213.14,181.33 211.95,183.30 210.71,185.25 209.44,187.17 208.13,189.06 206.79,190.93 205.41,192.78 204.00,194.59 202.55,196.38 201.07,198.15 199.55,199.88 198.00,201.58 196.42,203.26 194.81,204.90 193.16,206.51 191.49,208.09 189.78,209.64 188.05,211.15 186.28,212.63 184.49,214.08 182.67,215.49 180.83,216.87 178.96,218.21 177.06,219.51 175.14,220.78 173.19,222.01 171.22,223.21 169.23,224.36 167.22,225.48 165.18,226.56 163.13,227.60 161.05,228.60 158.96,229.56 156.85,230.48 154.72,231.36 152.58,232.19 150.42,232.99 148.24,233.74 146.05,234.46 143.85,235.13 141.63,235.76 139.40,236.34 137.17,236.88 134.92,237.38 132.66,237.84 130.40,238.25 128.12,238.62 125.84,238.95 123.56,239.23 121.27,239.47 118.97,239.66 116.68,239.81 114.38,239.92 112.08,239.98 109.81,240.00 107.89,240.00 105.97,240.00 104.05,240.00 102.13,240.00 100.22,240.00 98.30,240.00 96.38,240.00 94.46,240.00 92.54,240.00 90.62,240.00 88.70,240.00 86.78,240.00 84.86,240.00 82.95,240.00 81.03,240.00 79.11,240.00 77.19,240.00 75.27,240.00 73.35,240.00 71.43,240.00 69.51,240.00 67.59,240.00 65.68,240.00 63.76,240.00 61.84,240.00 59.92,240.00 58.00,240.00 58.00,240.00 59.92,239.67 61.84,239.35 63.76,239.02 65.68,238.70 67.59,238.38 69.51,238.06 71.43,237.74 73.35,237.42 75.27,237.10 77.19,236.79 79.11,236.47 81.03,236.16 82.95,235.85 84.86,235.54 86.78,235.23 88.70,234.92 90.62,234.61 92.54,234.30 94.46,234.00 96.38,233.69 98.30,233.39 100.22,233.09 102.13,232.79 104.05,232.49 105.97,232.19 107.89,231.90 109.81,231.60 111.92,231.29 114.05,230.94 116.16,230.55 118.26,230.12 120.34,229.66 122.41,229.15 124.47,228.61 126.51,228.03 128.53,227.41 130.53,226.76 132.52,226.07 134.49,225.34 136.43,224.58 138.36,223.79 140.27,222.96 142.16,222.10 144.02,221.20 145.87,220.27 147.69,219.31 149.49,218.32 151.26,217.30 153.01,216.24 154.73,215.16 156.43,214.04 158.11,212.90 159.76,211.73 161.38,210.53 162.97,209.30 164.54,208.05 166.08,206.77 167.59,205.46 169.07,204.13 170.53,202.78 171.95,201.40 173.35,200.00 174.71,198.58 176.04,197.13 177.35,195.67 178.62,194.18 179.86,192.67 181.07,191.15 182.25,189.60 183.39,188.04 184.50,186.46 185.58,184.86 186.63,183.24 187.64,181.62 188.63,179.97 189.57,178.31 190.49,176.64 191.37,174.96 192.21,173.26 193.03,171.55 193.81,169.84 194.55,168.11 195.26,166.37 195.94,164.62 196.58,162.86 197.18,161.10 197.76,159.33 198.29,157.56 198.80,155.77 199.27,153.99 199.70,152.19 200.10,150.40 200.46,148.60 200.80,146.80 201.09,145.00 201.35,143.19 201.58,141.39 201.77,139.59 201.93,137.78 202.06,135.98 202.15,134.18 202.21,132.38 202.23,130.59 202.22,128.80 202.18,127.01 202.10,125.23 201.99,123.46 201.85,121.69 201.68,119.93 201.47,118.17 201.23,116.42 200.96,114.68 200.66,112.95 200.32,111.23 199.96,109.52 199.56,107.82 199.13,106.13 198.68,104.46 198.19,102.79 197.67,101.14 197.12,99.50 196.55,97.88 195.94,96.26 195.31,94.67 194.65,93.09 193.96,91.52 193.24,89.97 192.50,88.44 191.72,86.92 190.93,85.42 190.10,83.94 189.25,82.48 188.38,81.04 187.48,79.61 186.56,78.20 185.61,76.82 184.64,75.45 183.64,74.11 182.62,72.78 181.58,71.48 180.52,70.20 179.44,68.94 178.33,67.71 177.20,66.49 176.06,65.30 174.89,64.13 173.71,62.99 172.50,61.87 171.28,60.77 170.04,59.70 168.78,58.65 167.51,57.63 166.21,56.64 164.91,55.66 163.58,54.72 162.24,53.80 160.89,52.90 159.52,52.04 158.14,51.20 156.75,50.38 155.34,49.59 153.92,48.83 152.49,48.10 151.05,47.39 149.60,46.72 148.14,46.06 146.66,45.44 145.18,44.85 143.69,44.28 142.19,43.74 140.69,43.23 139.17,42.74 137.65,42.29 136.13,41.86 134.60,41.46 133.06,41.09 131.52,40.75 129.97,40.44 128.42,40.15 126.87,39.90 125.31,39.67 123.76,39.47 122.20,39.30 120.64,39.16 119.07,39.04 117.51,38.96 115.95,38.90 114.39,38.87 112.83,38.87 111.27,38.90 109.65,38.96 107.73,39.02 105.81,39.08 103.89,39.14 101.97,39.20 100.05,39.26 98.13,39.31 96.22,39.37 94.30,39.42 92.38,39.47 90.46,39.51 88.54,39.56 86.62,39.60 84.70,39.64 82.78,39.68 80.86,39.72 78.95,39.75 77.03,39.79 75.11,39.82 73.19,39.85 71.27,39.87 69.35,39.90 67.43,39.92 65.51,39.94 63.59,39.96 61.68,39.97 59.76,39.98 57.84,39.99 55.92,40.00 54.00,40.00" fill="#FFFFFF"/><polygon points="0.00,70.00 40.00,70.00 40.00,240.00 0.00,240.00" fill="#FFFFFF"/><circle cx="20.00" cy="20.00" r="22.00" fill="#FFFFFF"/><path d="M306.5917113024133 180.0V60.0H371.0302176387395Q393.0665457488532 60.0 408.91038055266336 66.9062850524636Q424.7542153564735 73.8125701049272 433.2475440456816 87.18091914771597Q441.74087273488965 100.54926819050472 441.74087273488965 120.07973007221224Q441.74087273488965 139.45073180949527 433.2475440456816 152.81908085228403Q424.7542153564735 166.1874298950728 408.91038055266336 173.0937149475364Q393.0665457488532 180.0 371.0302176387395 180.0ZM334.58164097696124 157.15103169668782H369.52668297795736Q378.9197905026928 157.15103169668782 386.8207746965884 154.89576701486058Q394.721758890484 152.64050233303334 400.57250924805413 148.24767862582218Q406.42325960562425 143.854854918611 409.6352851539983 137.26752746434227Q412.8473107023724 130.68020001007352 412.8473107023724 122.0008842314981V117.96873530111708Q412.8473107023724 109.28941952254164 409.6352851539983 102.70968718511911Q406.42325960562425 96.12995484769658 400.57250924805413 91.73713114048542Q394.721758890484 87.34430743327424 386.8207746965884 85.09663786829321Q378.9197905026928 82.84896830331219 369.52668297795736 82.84896830331219H334.58164097696124Z M480.19418715060795 180.0V60.0H508.1841168251559V180.0Z M551.8008421785353 180.0V60.0H577.8695430751055L642.9912368341314 121.92470920696053Q645.1553601138041 123.75472196409189 648.1927352840613 126.93636704508116Q651.2301104543185 130.11801212607043 654.5218660749049 133.47430758517658Q657.8136216954912 136.83060304428273 660.1979660543581 139.51867745830614H661.625549546678Q661.4660894022536 135.79789100927377 661.226899185617 130.41792596813087Q660.9877089689802 125.037960926988 660.9877089689802 121.51457289726525V60.0H687.793024271595V180.0H662.233084275683L597.2101643450037 117.68049395442023Q592.585745538002 113.2762962266127 587.5247007857081 107.93430676970087Q582.4636560334142 102.59231731278904 579.3807101620797 99.36510153072251H578.1277770478766Q578.2872371923011 101.65074667993458 578.4466973367255 107.22055233288677Q578.60615748115 112.79035798583897 578.60615748115 119.88263012766993V180.0Z M712.7601720600435 180.0 772.6728095616392 60.0H804.2316979669871L864.1443354685827 180.0H833.4890794212041L822.5013704522239 157.40948952553438H752.4819829171165L741.5094641818287 180.0ZM763.1888591095164 135.19836179992012H811.7944942598239L798.3085514886295 106.64699042828731Q797.4656800654299 104.7714069700787 795.8748575249352 101.13794571010479Q794.2840349844406 97.50448445013086 792.6780222102536 93.65839722780899Q791.0720094360665 89.81231000548713 789.7925120675746 86.92298364971214Q788.5130146990828 84.03365729393715 788.2776033861962 83.66153387781883H786.8955905949534Q785.3693078929787 87.10897073907948 783.4139943625578 91.5891196353491Q781.4586808321369 96.06926853161873 779.6704225629868 100.21530690534698Q777.8821642938367 104.36134527907524 776.6748018807108 106.80645057271178Z M889.923974212846 180.0V60.0H933.4503789696811L959.7767915081796 120.11736987233007Q961.0145343886903 122.9877270906625 962.9698479191111 127.95007263330163Q964.925161449532 132.91241817594076 967.032340007531 138.35314415185331Q969.1395185655302 143.79387012776584 970.8100711782371 148.24363855665064H972.0326238250553Q973.5437162933378 144.2874407947317 975.5711647791246 139.1086903859945Q977.5986132649115 133.92993997725728 979.6412519843908 128.8726741287135Q981.6838907038701 123.81540828016973 983.0810937288053 120.43629016117904L1009.4075062673038 60.0H1051.9543274977075V180.0H1023.9643978231595V108.46966923399383Q1023.9643978231595 105.37909093646725 1024.051723012218 101.57472089278068Q1024.1390482012764 97.77035084909409 1024.3136985793933 94.06090111131216Q1024.4883489575102 90.35145137353024 1024.6478091019346 87.6405542996223H1023.2506060769995Q1022.3469737190302 90.38183184091508 1020.9269853435565 94.19379700144788Q1019.5069969680826 98.00576216198066 1018.0870085926088 101.80253708882103Q1016.667020217135 105.5993120156614 1015.4292773366243 108.46966923399383L983.9696850904658 180.0H957.0429225370035L925.4238701464205 108.46966923399383Q923.8216362759836 104.7943788673469 922.3067275946051 100.88749340090945Q920.7918189132267 96.98060793447199 919.6338061049282 93.4685939253456Q918.4757932966298 89.9565799162192 917.6025414060452 87.6405542996223H916.2053383811101Q916.379988759227 89.79711977179473 916.4673139482854 93.30913378092112Q916.5546391373439 96.82114779004752 916.6419643264023 100.72803325648496Q916.7292895154608 104.63491872292241 916.7292895154608 108.46966923399383V180.0Z M1095.6621196345498 180.0V60.0H1123.6520493090975V180.0Z M1235.8912576474168 182.09580453740276Q1211.4629527522438 182.09580453740276 1194.985056274486 175.02246422366846Q1178.507159796728 167.94912390993417 1170.2758066746953 154.07201396648713Q1162.0444535526626 140.19490402304012 1162.0444535526626 119.92026992778776Q1162.0444535526626 90.21451541422302 1180.9826455577495 74.05935543841014Q1199.9208375628364 57.904195462597244 1235.762177970377 57.904195462597244Q1256.0823827667066 57.904195462597244 1271.5769168142829 63.736013992070696Q1287.0714508618594 69.56783252154415 1295.7470250460306 80.46451201640758Q1304.4225992302017 91.36119151127102 1304.4225992302017 106.71523455186545H1277.017381624774Q1277.017381624774 98.1953789177145 1271.7551222400746 92.42813753610679Q1266.492862855375 86.66089615449907 1257.1453260317169 83.70702996020425Q1247.7977892080587 80.75316376590943 1235.2230366023339 80.75316376590943Q1221.494050092061 80.75316376590943 1211.5352369449936 85.16877282365924Q1201.5764237979263 89.58438188140904 1196.1774896193408 97.8308879277883Q1190.7785554407553 106.07739397416753 1190.7785554407553 117.6498150122681V122.01607446519051Q1190.7785554407553 133.71757518033073 1196.1774896193408 142.05140641576844Q1201.5764237979263 150.38523765120613 1211.5921816666673 154.81603694264834Q1221.6079395354081 159.24683623409055 1235.3065455782962 159.24683623409055Q1248.4508200194489 159.24683623409055 1257.9160624995502 156.38789034570038Q1267.3813049796518 153.52894445731025 1272.5714294089853 147.77689330939495Q1277.761553838319 142.02484216147965 1277.761553838319 133.66444667175318H1304.5820593746262Q1304.5820593746262 148.6539987224214 1296.0317859637444 159.54308310043862Q1287.4815125528628 170.43216747845585 1272.0667085774987 176.2639860079293Q1256.6519046021347 182.09580453740276 1235.8912576474168 182.09580453740276Z M1402.1965051269704 182.09580453740276Q1388.406683063236 182.09580453740276 1376.3937452480554 180.42143571159983Q1364.3808074328747 178.7470668857969 1355.367306513066 174.45294238824053Q1346.3538055932572 170.15881789068416 1341.3079137653099 162.4514159030021Q1336.2620219373625 154.74401391532004 1336.2620219373625 142.6931378252542Q1336.2620219373625 142.34383706902042 1336.2620219373625 141.8122908178235Q1336.2620219373625 141.28074456662662 1336.4366723154794 140.901063343008H1364.0165402990237Q1363.8418899209069 141.5996648554756 1363.7621598486946 142.52986146773367Q1363.6824297764824 143.46005807999177 1363.6824297764824 144.62184979204036Q1363.6824297764824 150.02082127997173 1368.2916583497918 153.37333783532773Q1372.900886923101 156.72585439068376 1381.420742557252 158.24454197581235Q1389.9405981914028 159.76322956094094 1401.3383688513866 159.76322956094094Q1406.2513274798523 159.76322956094094 1411.2668015310692 159.35698408303352Q1416.2822755822858 158.95073860512613 1420.8839090387487 158.11546229877268Q1425.4855424952118 157.28018599241926 1429.1493842225705 155.76909352413688Q1432.8132259499293 154.2580010558545 1434.9507849753134 151.97617211973846Q1437.0883440006974 149.69434318362246 1437.0883440006974 146.62658754598044Q1437.0883440006974 142.2071995844805 1432.9992503486428 139.58366500897688Q1428.910156696588 136.9601304334733 1421.9469269224508 135.28198270392022Q1414.9836971483135 133.60383497436715 1406.2891538266997 132.4116627949337Q1397.594610505086 131.21949061550026 1388.288790860063 129.74255751835287Q1378.9829712150402 128.26562442120547 1370.2884278934264 125.73319393851048Q1361.5938845718126 123.20076345581548 1354.6306547976756 119.15342429174203Q1347.6674250235383 115.10608512766858 1343.5783313714837 108.69337074217083Q1339.489237719429 102.28065635667308 1339.489237719429 92.97861561540034Q1339.489237719429 84.41311466148031 1343.635313402503 77.87509950269308Q1347.7813890855773 71.33708434390583 1355.7773682040693 66.87590458507877Q1363.7733473225614 62.414724826251714 1375.281303140834 60.15946014442448Q1386.7892589591067 57.904195462597244 1401.497828995811 57.904195462597244Q1416.3962396443249 57.904195462597244 1427.642219895422 60.311325172002746Q1438.8882001465192 62.71845488140825 1446.3830134811992 67.24417447875513Q1453.8778268158792 71.769894076102 1457.6024667873535 78.20539381213838Q1461.327106758828 84.64089354817476 1461.327106758828 92.69763360143652V95.43127871653718H1434.0965395315172V93.2975359042493Q1434.0965395315172 89.48560805306242 1430.0720230273282 86.53933697561382Q1426.0475065231394 83.59306589816521 1419.069123824656 81.85415723384246Q1412.0907411261721 80.11524856951971 1403.0848726325555 80.11524856951971Q1390.874611016757 80.11524856951971 1383.212817039498 81.64153127149451Q1375.5510230622392 83.16781397346932 1371.9669114070928 85.79894366581912Q1368.3827997519463 88.43007335816893 1368.3827997519463 91.64209890654303Q1368.3827997519463 95.58310643476953 1372.4718934040009 97.9674507936364Q1376.5609870560554 100.35179515250329 1383.5242168301927 101.79075266541965Q1390.48744660433 103.229710178336 1399.1819899259438 104.42188235776945Q1407.8765332475575 105.61405453720288 1417.1823528925804 107.16312258971632Q1426.4881725376033 108.71219064222976 1435.182715859217 111.1497008190201Q1443.8772591808308 113.58721099581042 1450.840488954968 117.6990899984037Q1457.8037187291052 121.81096900099696 1461.8928123811597 128.0338427746854Q1465.9819060332145 134.25671654837384 1465.9819060332145 143.36891667783726Q1465.9819060332145 157.41689809565105 1457.8948228219137 165.9557974859364Q1449.8077396106132 174.49469687622172 1435.433242787104 178.29525070681223Q1421.0587459635951 182.09580453740276 1402.1965051269704 182.09580453740276Z" fill="#FFFFFF"/></svg> </a>
@@ -512,7 +591,7 @@ a.chip:hover{border-color:var(--glow)}
   <a class="btn gold" href="/order?pkg=website-standard" data-t="order">直接下单</a>
 </div></div>
 <main>
-  <section class="hero yh-drag" id="top">
+  <section class="hero yh-drag" id="top" data-ws="0">
     <div class="hsky"><div class="hx">
       <p class="of" data-t="of">1 / 18</p>
       <h1 class="cn" data-t="name">官网</h1>
@@ -522,9 +601,11 @@ a.chip:hover{border-color:var(--glow)}
     </div></div>
     <i class="cue" aria-hidden="true"></i>
   </section>
-  <section class="sec" id="film"><div class="wrap filmw">
-    <p class="cap" data-t="film_label">官网 · 1 分钟视频</p>
-    <figure class="fc" id="fc" aria-label="官网 · 1 分钟视频" data-fcl="fc_label">
+  <section class="sec film3" id="film">
+    <div class="fstage" data-ws="1" data-at="0.5" aria-hidden="true"></div>
+    <div class="l3"><div class="l3c"><div class="fscr" data-l3="screen" data-st="1" data-d="0.42" data-x="0" data-y="0.13" data-w="0.6" data-ym="0.2" data-wm="0.94">
+      <p class="cap" data-t="film_label">官网 · 1 分钟视频</p>
+      <figure class="fc" id="fc" aria-label="官网 · 1 分钟视频" data-fcl="fc_label">
     <div class="fc-frame">
       <video class="fc-v" src="../work/website-film-zh.mp4" poster="../work/website-film-zh.webp" data-l="zh" muted playsinline preload="metadata" width="1920" height="1080"></video>
       <button type="button" class="fc-tap" aria-label="播放"></button>
@@ -554,20 +635,21 @@ a.chip:hover{border-color:var(--glow)}
       <div class="fc-done" hidden><p class="fc-ok" role="status"></p><button type="button" class="btn ghost fc-more" data-fc="fc_more">再写一条</button></div>
     </form>
   </figure>
-  </div></section>
-  <section class="sec" id="play"><div class="wrap">
+    </div></div></div>
+  </section>
+  <section class="sec" id="play"><div class="wrap"><div class="pane yh-nodrag" data-ws="2">
     <h2 class="h2" data-t="play_h">只看 50 毫秒，你记住了什么？</h2><p class="sub" data-th="play_s">访客只要 50 毫秒，就对一个网页有了第一印象（<a class="src" href="https://www.nature.com/news/2006/060109/full/news060109-13.html" target="_blank" rel="noopener">Lindgaard 等人的研究，《自然》报道</a>）。点一下试试：网页闪一下就消失，说说你看到的是什么颜色。</p>
     <div class="fl">
       <div class="fl-screen">
-        <img id="flA" src="../work/shot-dinamics-d.webp" width="1440" height="900" alt=""><img id="flB" src="../work/shot-phrax-d.webp" width="1440" height="900" alt=""><img id="flC" src="../work/ba-v10.webp" alt="">
+        <div class="fl-sky" aria-hidden="true"><img id="flA" src="../work/shot-dinamics-d.webp" width="1440" height="900" alt=""><img id="flB" src="../work/shot-phrax-d.webp" width="1440" height="900" alt=""><img id="flC" src="../work/ba-v10.webp" alt=""></div>
         <div class="fl-pane" id="flIdle"><button type="button" class="fl-go" id="flGo"><span id="flGoT">闪 50 毫秒</span><small id="flRound"></small></button></div>
         <div class="fl-pane" id="flAsk" hidden><p class="fl-q" data-t="fl_q">刚才那一页，是什么颜色？</p><div class="fl-opts" id="flOpts"></div></div>
         <div class="fl-pane" id="flRes" hidden><p class="fl-big" id="flVerdict"></p><p class="fl-small" id="flWhy"></p><button type="button" class="btn" id="flNext"></button></div>
       </div>
       <aside class="fl-side" aria-live="polite"><h3 data-t="fl_side">三轮，三个网页</h3><ol class="fl-rounds" id="flList"></ol><p class="fl-ms" id="flMs"></p></aside>
     </div>
-  </div></section>
-  <section class="sec wsb" id="works"><div class="wrap">
+  </div></div></section>
+  <section class="sec wsb" id="works"><div class="wrap"><div class="pane wk-head yh-nodrag">
     <h2 class="h2" data-t="works_h">这四个网站，都是我们做的</h2><p class="sub" data-t="works_s">现在都在线上。点任意一个，看它在电脑和手机上的样子。</p>
     <div class="ws-cards" role="tablist" data-ta="works_tabs" aria-label="我们做的四个网站"><button type="button" class="ws-card" role="tab" id="wsC0" aria-selected="true" aria-controls="wsView" style="--c:#D9B26B"><span class="th"><img src="../work/shot-dinamics-d.webp" width="1440" height="900" alt="" loading="lazy"></span><b><i></i><span data-t="w_dinamics_n">Dinamics 官网</span></b><small>dinamics.dev</small><span class="bar"></span></button><button type="button" class="ws-card" role="tab" id="wsC1" aria-selected="false" aria-controls="wsView" tabindex="-1" style="--c:#C8372D"><span class="th"><img src="../work/shot-phrax-d.webp" width="1440" height="900" alt="" loading="lazy"></span><b><i></i><span data-t="w_phrax_n">牌所 PHRAX</span></b><small>phrax.co</small><span class="bar"></span></button><button type="button" class="ws-card" role="tab" id="wsC2" aria-selected="false" aria-controls="wsView" tabindex="-1" style="--c:#3F6BEA"><span class="th"><img src="../work/shot-zero-d.webp" width="1440" height="900" alt="" loading="lazy"></span><b><i></i><span data-t="w_zero_n">零九零</span></b><small>0x000000000.com</small><span class="bar"></span></button><button type="button" class="ws-card" role="tab" id="wsC3" aria-selected="false" aria-controls="wsView" tabindex="-1" style="--c:#FFE14D"><span class="th"><img src="../work/shot-bdy-d.webp" width="1440" height="900" alt="" loading="lazy"></span><b><i></i><span data-t="w_bdy_n">不打烊 AI 工作站</span></b><small>budayangai.com</small><span class="bar"></span></button></div>
     <div class="wsb-main">
@@ -579,32 +661,40 @@ a.chip:hover{border-color:var(--glow)}
       </div><div class="wsh-phone"><img class="on" src="../work/shot-dinamics-m.webp" width="585" height="1266" alt="" loading="lazy"><img src="../work/shot-phrax-m.webp" width="585" height="1266" alt="" loading="lazy"><img src="../work/shot-zero-m.webp" width="585" height="1266" alt="" loading="lazy"><img src="../work/shot-bdy-m.webp" width="585" height="1266" alt="" loading="lazy"></div></div></figure>
       <div class="wsh-cap" id="wsCap" aria-live="off"></div>
     </div>
-  </div></section>
-  <section class="sec" id="get"><div class="wrap">
+  </div></div>
+    <div class="wk-rows"><div class="wk-row" data-ws="3" data-at="0.52"><div class="pane wk-cap yh-nodrag" data-k="0"></div></div><div class="wk-row" data-ws="4" data-at="0.52"><div class="pane wk-cap yh-nodrag" data-k="1"></div></div><div class="wk-row" data-ws="5" data-at="0.52"><div class="pane wk-cap yh-nodrag" data-k="2"></div></div><div class="wk-row" data-ws="6" data-at="0.52"><div class="pane wk-cap yh-nodrag" data-k="3"></div></div></div>
+    <div class="l3"><div class="l3c"><a class="wk3" href="https://dinamics.dev" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-l3="screen" data-st="3" data-d="0.5" data-x="-0.2" data-y="0.05" data-w="0.5" data-xm="0" data-ym="0.38" data-wm="0.76" data-span="0.8"><span class="wk3-win"><span class="wk3-bar"><i></i><i></i><i></i><b>dinamics.dev</b></span><img src="../work/shot-dinamics-d.webp" width="1440" height="900" alt="" decoding="async" fetchpriority="low"></span><span class="wk3-ph"><img src="../work/shot-dinamics-m.webp" width="585" height="1266" alt="" decoding="async" fetchpriority="low"></span></a><a class="wk3" href="https://phrax.co" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-l3="screen" data-st="4" data-d="0.5" data-x="-0.2" data-y="0.05" data-w="0.5" data-xm="0" data-ym="0.38" data-wm="0.76" data-span="0.8"><span class="wk3-win"><span class="wk3-bar"><i></i><i></i><i></i><b>phrax.co</b></span><img src="../work/shot-phrax-d.webp" width="1440" height="900" alt="" decoding="async" fetchpriority="low"></span><span class="wk3-ph"><img src="../work/shot-phrax-m.webp" width="585" height="1266" alt="" decoding="async" fetchpriority="low"></span></a><a class="wk3" href="https://0x000000000.com" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-l3="screen" data-st="5" data-d="0.5" data-x="-0.2" data-y="0.05" data-w="0.5" data-xm="0" data-ym="0.38" data-wm="0.76" data-span="0.8"><span class="wk3-win"><span class="wk3-bar"><i></i><i></i><i></i><b>0x000000000.com</b></span><img src="../work/shot-zero-d.webp" width="1440" height="900" alt="" decoding="async" fetchpriority="low"></span><span class="wk3-ph"><img src="../work/shot-zero-m.webp" width="585" height="1266" alt="" decoding="async" fetchpriority="low"></span></a><a class="wk3" href="https://budayangai.com" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true" data-l3="screen" data-st="6" data-d="0.5" data-x="-0.2" data-y="0.05" data-w="0.5" data-xm="0" data-ym="0.38" data-wm="0.76" data-span="0.8"><span class="wk3-win"><span class="wk3-bar"><i></i><i></i><i></i><b>budayangai.com</b></span><img src="../work/shot-bdy-d.webp" width="1440" height="900" alt="" decoding="async" fetchpriority="low"></span><span class="wk3-ph"><img src="../work/shot-bdy-m.webp" width="585" height="1266" alt="" decoding="async" fetchpriority="low"></span></a></div></div>
+  </section>
+  <section class="sec" id="get"><div class="wrap"><div class="pane yh-nodrag" data-ws="7">
     <h2 class="h2" data-t="get_h">一个官网，从设计到上线，我们做这些</h2>
     <div class="get"><article><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M10 38 30 18l6 6-20 20H10z"/><path d="m27 21 6 6"/><path d="M33 15l4-4 6 6-4 4"/></svg><h3 data-t="g1_t">照你的品牌设计</h3><p data-t="g1_p">从零画起，不套模板。颜色、字体、动画都跟着你的品牌走。</p></article><article><svg viewBox="0 0 48 48" aria-hidden="true"><rect x="15" y="6" width="18" height="36" rx="4"/><path d="M21 36h6"/><path d="M8 20l-3 4 3 4M40 20l3 4-3 4"/></svg><h3 data-t="g2_t">手机上也快</h3><p data-t="g2_p">先做手机版，再做电脑版。我们自己的官网，Google 手机测速 95 分。</p></article><article><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="17"/><path d="M7 24h34"/><path d="M24 7c-6 5-6 29 0 34M24 7c6 5 6 29 0 34"/></svg><h3 data-t="g3_t">多种语言</h3><p data-t="g3_p">中文、英文、马来文、泰文都做过，访客点一下就换。</p></article><article><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M14 10v28l22-14z"/><path d="M40 8l2-2M43 15h3M40 22l2 2"/></svg><h3 data-t="g4_t">会动、能玩</h3><p data-t="g4_p">首屏动画、能玩的小互动，让访客愿意多留一会儿。</p></article><article><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M8 12h32v20H22l-8 7v-7H8z"/><path d="M15 20h18M15 25h11"/></svg><h3 data-t="g5_t">一点就找到你</h3><p data-t="g5_p">邮件、WhatsApp、Telegram，按你常用的接上。</p></article><article><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M24 6c8 6 10 16 6 26H18C14 22 16 12 24 6z"/><circle cx="24" cy="18" r="3"/><path d="M18 32l-5 6h7M30 32l5 6h-7M22 38h4"/></svg><h3 data-t="g6_t">上线我们来</h3><p data-t="g6_p">域名、https、托管都帮你接好，域名开好隐私保护。每一页的标题和描述都写好，搜索结果和聊天里的链接预览一看就懂。</p></article></div>
-  </div></section>
-  <section class="sec" id="price"><div class="wrap">
+  </div></div></section>
+  <section class="sec" id="price"><div class="wrap"><div class="pane yh-nodrag" data-ws="8">
     <h2 class="h2" data-t="price_h">价格</h2><p class="sub" data-t="price_s">都写在这里：多少钱、包含什么、大约多久上线、之后每年多少。以美元报价。</p>
     <div class="prc-bar"><label for="cur" data-t="pr_cur">看价格用</label><select id="cur"><option value="USD">USD · US$</option><option value="MYR">MYR · RM</option><option value="SGD">SGD · S$</option><option value="THB">THB · ฿</option><option value="IDR">IDR · Rp</option><option value="PHP">PHP · ₱</option><option value="CNY">CNY · CN¥</option><option value="HKD">HKD · HK$</option><option value="JPY">JPY · JP¥</option><option value="KRW">KRW · ₩</option><option value="AUD">AUD · A$</option><option value="EUR">EUR · €</option><option value="GBP">GBP · £</option></select><p data-th="pr_fx">其他货币按 <span id="fxd">2026-11-20</span> 的汇率换算，付款以美元为准。</p></div>
     <div class="prc-grid"><article class="tier"><h3 data-t="pr_1n">标准官网</h3><p class="pr"><b class="amt" data-usd="1600">US$1,600</b></p><p class="days" data-t="pr_1w">大约 5 天</p><ul><li data-t="pr_1_1">1–5 页</li><li data-t="pr_1_2">中英两种语言</li><li data-t="pr_1_3">先做手机版，电脑上也好看</li><li data-t="pr_1_4">WhatsApp、邮件一点就到</li><li data-t="pr_1_5">第一年域名、托管、https 包含</li></ul><a class="btn gold" href="/order?pkg=website-standard" data-t="pr_order">下单</a></article><article class="tier"><h3 data-t="pr_2n">动态官网</h3><p class="pr"><b class="amt" data-usd="3800">US$3,800</b></p><p class="days" data-t="pr_2w">大约 10 天</p><ul><li data-t="pr_2_1">最多 10 页</li><li data-t="pr_2_2">定制动画和小互动</li><li data-t="pr_2_3">三种语言</li><li data-t="pr_2_4">预约或询价表单</li><li data-t="pr_2_5">第一年域名、托管、https 包含</li></ul><a class="btn gold" href="/order?pkg=website-animated" data-t="pr_order">下单</a></article><article class="tier"><h3 data-t="pr_3n">旗舰官网</h3><p class="pr"><span data-t="pr_pre"></span><b class="amt" data-usd="8800">US$8,800</b><span data-t="pr_suf"> 起</span></p><p class="days" data-t="pr_3w">按需求排期</p><ul><li data-t="pr_3_1">像 dinamics.dev 这样全动态</li><li data-t="pr_3_2">影片放在页面上</li><li data-t="pr_3_3">自己的后台，改字换图不用找人</li><li data-t="pr_3_4">多种语言</li><li data-t="pr_3_5">第一年域名、托管、https 包含</li></ul><a class="btn" href="/order?pkg=website-flagship" data-t="pr_req">说需求，出报价</a></article></div>
     <div class="prc-notes"><p class="yr"><span data-t="pr_y1">第二年起每年 </span><b class="amt" data-usd="290">US$290</b><span data-t="pr_y2">：域名、托管、https，加两次小改。</span></p><p data-t="pr_flow">标好价的配套，下单当场出报价单：先付定金 50% 开工，做完付尾款 50%，再交付上线。</p></div>
-  </div></section>
-  <section class="sec" id="how"><div class="wrap">
-    <h2 class="h2" data-t="how_h">从开口到上线</h2>
-    <ol class="steps"><li><b data-t="s1_d">第 1 天</b><h3 data-t="s1_t">说给我们听</h3><p data-t="s1_p">你卖什么、给谁看、喜欢哪几个网站。文字和图片还没有也没关系，我们来写、来做。</p></li><li><b data-t="s2_d">第 2–5 天</b><h3 data-t="s2_t">首版上线</h3><p data-t="s2_p">给你一个真网址，手机、电脑都能打开看。</p></li><li><b data-t="s3_d">之后</b><h3 data-t="s3_t">照你的意见改</h3><p data-t="s3_p">你说哪里要改，我们照着改；以后要加页面、加语言，随时说。</p></li></ol>
-  </div></section>
-  <section class="sec" id="faq"><div class="wrap">
+  </div></div></section>
+  <section class="sec how3" id="how"><div class="wrap how-stage">
+    <div class="pane how-pane yh-nodrag">
+      <h2 class="h2" data-t="how_h">从开口到上线</h2>
+      <ol class="steps"><li><b data-t="s1_d">第 1 天</b><h3 data-t="s1_t">说给我们听</h3><p data-t="s1_p">你卖什么、给谁看、喜欢哪几个网站。文字和图片还没有也没关系，我们来写、来做。</p></li><li><b data-t="s2_d">第 2–5 天</b><h3 data-t="s2_t">首版上线</h3><p data-t="s2_p">给你一个真网址，手机、电脑都能打开看。</p></li><li><b data-t="s3_d">之后</b><h3 data-t="s3_t">照你的意见改</h3><p data-t="s3_p">你说哪里要改，我们照着改；以后要加页面、加语言，随时说。</p></li></ol>
+    </div>
+    <i class="how-mk" data-ws="9" data-at="0.5" aria-hidden="true"></i><i class="how-mk" data-ws="10" data-at="0.5" aria-hidden="true"></i><i class="how-mk" data-ws="11" data-at="0.5" aria-hidden="true"></i>
+  </div>
+    <div class="l3"><div class="l3c"><div class="sign" aria-hidden="true" data-l3="sign" data-st="9" data-x="0.5" data-y="-0.5" data-h="0.42" data-xm="0" data-ym="-0.76" data-hm="0.24" data-span="0.9"><b data-t="s1_d">第 1 天</b><i></i></div><div class="sign" aria-hidden="true" data-l3="sign" data-st="10" data-x="0.5" data-y="-0.5" data-h="0.42" data-xm="0" data-ym="-0.76" data-hm="0.24" data-span="0.9"><b data-t="s2_d">第 2–5 天</b><i></i></div><div class="sign" aria-hidden="true" data-l3="sign" data-st="11" data-x="0.5" data-y="-0.5" data-h="0.42" data-xm="0" data-ym="-0.76" data-hm="0.24" data-span="0.9"><b data-t="s3_d">之后</b><i></i></div></div></div>
+  </section>
+  <section class="sec" id="faq"><div class="wrap"><div class="pane yh-nodrag" data-ws="12">
     <h2 class="h2" data-t="faq">常见问题</h2>
     <div class="faq"><details><summary><span data-t="q1">要先付多少钱？</span><i aria-hidden="true"></i></summary><p class="a" data-th="a1">标好价的配套，下单当场出报价单：先付定金 50% 开工，做完付尾款 50%，再交付上线。</p></details><details><summary><span data-t="q2">改稿怎么算？</span><i aria-hidden="true"></i></summary><p class="a" data-th="a2">上线前包含 2 轮修改（动态官网 3 轮），一轮就是把要改的地方一次列好发给我们；第 3 轮起，每轮收项目价的 5%，最少 US$80。改字、换图、调颜色、调位置算修改；加页面、加功能不算修改，另外报价。上线后的小改（1 小时内改完）用年费里的次数，超出的每次按一轮收费。</p></details><details><summary><span data-t="q3">第二年起要付什么？</span><i aria-hidden="true"></i></summary><p class="a" data-th="a3">第二年起每年 <b class="amt" data-usd="290">US$290</b>：域名、托管、https，加两次小改。</p></details><details><summary><span data-t="q4">价格里不包含什么？</span><i aria-hidden="true"></i></summary><p class="a" data-th="a4">不含第三方费用：收款手续费、短信、广告投放。不含源代码；要源代码，另付项目价的 50%（最少 US$800）。</p></details><details><summary><span data-t="q5">文字和图片还没准备好，可以吗？</span><i aria-hidden="true"></i></summary><p class="a" data-th="a5">可以。你卖什么、给谁看、喜欢哪几个网站，说给我们听；文字和图片我们来写、来做。</p></details><details><summary><span data-t="q6">域名和托管要我自己弄吗？</span><i aria-hidden="true"></i></summary><p class="a" data-th="a6">不用。域名、https、托管我们都帮你接好，域名开好隐私保护；第一年的费用已经包含在价格里。</p></details></div>
-  </div></section>
-  <section class="talk" id="talk">
+  </div></div></section>
+  <section class="talk" id="talk"><div class="pane yh-nodrag" data-ws="13">
     <h2 class="h2" data-t="h2c">你要做的事，说给我们听。</h2><p class="sub" data-t="talk">发一封邮件，说说你想做什么。</p>
     <a class="mail" href="mailto:contact@dinamics.dev">contact@dinamics.dev</a>
     <div class="tbtn"><button class="btn" type="button" id="copy" data-t="copy">复制邮箱</button><a class="btn gold" href="/order?pkg=website-standard" data-t="order">直接下单</a></div>
-  </section>
+  </div></section>
   <div class="wrap">
-    <nav class="pager" aria-label="十八般技术"><a class="pg pv" href="../work/infra.html" data-dive="17"><img src="p/17.webp" alt="" width="240" height="240" loading="lazy"><span class="pl" data-t="prev">上一门</span><b data-t="pv_n">硬件与网络</b><span class="pd" data-t="pv_d">主机托管、远程连接、VPN 节点、算力调度</span></a><a class="pg nx" href="../work/platform.html" data-dive="1"><img src="p/01.webp" alt="" width="240" height="240" loading="lazy"><span class="pl" data-t="next">下一门</span><b data-t="nx_n">网页平台</b><span class="pd" data-t="nx_d">会员、订单、管理后台、数据库</span></a></nav>
+    <nav class="pager yh-nodrag" aria-label="十八般技术" data-ws="14" data-at="0.42"><a class="pg pv" href="../work/infra.html" data-dive="17"><img src="p/17.webp" alt="" width="240" height="240" loading="lazy"><span class="pl" data-t="prev">上一门</span><b data-t="pv_n">硬件与网络</b><span class="pd" data-t="pv_d">主机托管、远程连接、VPN 节点、算力调度</span></a><a class="pg nx" href="../work/platform.html" data-dive="1"><img src="p/01.webp" alt="" width="240" height="240" loading="lazy"><span class="pl" data-t="next">下一门</span><b data-t="nx_n">网页平台</b><span class="pd" data-t="nx_d">会员、订单、管理后台、数据库</span></a></nav>
     <p class="back"><a href="../yinhe.html#c0" data-back><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><ellipse cx="12" cy="12" rx="10" ry="4.2" transform="rotate(-18 12 12)"/></svg><span data-t="back">回银河</span></a></p>
   </div>
 </main>
@@ -727,21 +817,44 @@ document.addEventListener('click', e => {
 // the browser kept this page and came back to it: out of the air, and back out of the planet we dived into
 addEventListener('pageshow', e => { if (!e.persisted || !leaving) return; leaving = false; gone = false; de.classList.remove('leaving'); hazeTo(D.i, 0, 600); airOff(650); if (eng() && eng().back) eng().back(); scrolled(); });
 
-// ---------- scrolling: the veil, the sub-bar; the 3D rests once the veil covers it ----------
-const veil = $('veil'), sbar = $('sbar'), hero = document.querySelector('.hero'), heroCtas = hero.querySelector('.ctas');
+// ---------- scrolling walks the camera over the planet: each part of the page is a stop (data-ws), the camera holds at each ----------
+const sbar = $('sbar'), hero = document.querySelector('.hero'), heroCtas = hero.querySelector('.ctas'), steps = qa('.how-pane .steps li');
+let WS = [];
+function wsMeasure() {
+  if (!de.classList.contains('w3d')) { WS = []; return; }
+  const H = innerHeight, max = Math.max(0, document.documentElement.scrollHeight - H);
+  let prev = -1;
+  WS = qa('[data-ws]').map(el => ({ el, j: +el.dataset.ws })).sort((a, b) => a.j - b.j).map(({ el, j }) => {
+    // a panel that fits holds in the middle of the space the bars leave; a taller one holds with its top just under the bars
+    const r = el.getBoundingClientRect(), top = r.top + scrollY, a0 = MOB ? 64 : 120, a1 = H - (MOB ? 64 : 0), sp = a1 - a0;
+    let y = el.dataset.at ? top + r.height / 2 - H * +el.dataset.at : r.height <= sp - 40 ? top + r.height / 2 - (a0 + sp / 2) : top - a0 - 20;
+    y = Math.min(max, Math.max(0, y)); if (y <= prev) y = prev + 1; prev = y;
+    return { j, y };
+  });
+}
+window.DN.stops = () => WS.map(w => [w.j, Math.round(w.y)]);   // where each stop holds (for checking)
+function wsT() {
+  const y = scrollY; if (!WS.length) return 0;
+  if (y <= WS[0].y) return WS[0].j;
+  for (let k = 1; k < WS.length; k++) if (y < WS[k].y) { const a = WS[k - 1], b = WS[k]; return a.j + (b.j - a.j) * (y - a.y) / (b.y - a.y); }
+  return WS[WS.length - 1].j;
+}
 function scrolled() {
-  const H = innerHeight, k = Math.min(1, Math.max(0, (scrollY - H * 0.22) / (H * 0.58)));
-  veil.style.opacity = (k * 0.9).toFixed(3);
-  const rest = k >= 1 && !leaving && de.classList.contains('gl-on');
-  if (rest !== de.classList.contains('rest')) de.classList.toggle('rest', rest);
-  if (eng() && !leaving) eng().pause(rest);
+  const t = wsT();
+  if (eng() && !leaving && WS.length) eng().walk(t);
+  steps.forEach((li, k) => li.classList.toggle('on', !WS.length || Math.abs(t - (9 + k)) < 0.5 || (k === 0 && t < 9) || (k === 2 && t > 11)));
   const sc = scrollY > 8; if (sc !== de.classList.contains('scrolled')) de.classList.toggle('scrolled', sc);
   const on = heroCtas.getBoundingClientRect().bottom < (MOB ? 0 : 64);
   if (on !== sbar.classList.contains('on')) { sbar.classList.toggle('on', on); document.body.classList.toggle('sb-room', on); }
 }
 addEventListener('scroll', scrolled, { passive: true });
-addEventListener('resize', () => { scrolled(); fitFr(); });
-if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitFr);
+// on a short phone the signs stand lower and smaller, under the panel
+const signFit = () => { if (!MOB) return; const lo = innerHeight < 720; qa('.sign').forEach(el => { el.dataset.ym = lo ? '-0.82' : '-0.76'; el.dataset.hm = lo ? '0.17' : '0.24'; }); };
+const relayout = () => { signFit(); wsMeasure(); if (eng() && eng().relayout) eng().relayout(); scrolled(); };
+addEventListener('resize', () => { fitFr(); relayout(); });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { fitFr(); relayout(); });
+document.addEventListener('toggle', relayout, true);   // a question opened or closed: the stops below it moved
+if ('ResizeObserver' in window) new ResizeObserver(() => wsMeasure()).observe(document.querySelector('main'));
 // in-page jumps glide (and land below the two bars)
 document.addEventListener('click', e => {
   const a = e.target.closest('a[href^="#"]'); if (!a || a.getAttribute('href').length < 2) return;
@@ -751,11 +864,21 @@ document.addEventListener('click', e => {
 });
 
 // ---------- the 3D, after the first paint ----------
+// the walk: 0 the landing, 1 the film, 2 the test, 3-6 the four sites, 7 what you get, 8 prices, 9-11 the three steps, 12 questions, 13 talk, 14 up and away
+const W = (th, h, yaw, hz, n, g) => ({ th, h, yaw, hz, n, g });
+const WALK = MOB ? [W(0, 1.42, 0, .4, 0, .55), W(.03, 1.38, .02, .72, .06, .6), W(.06, 1.34, .06, .55, .14, .62),
+  W(.085, 1.3, .14, .66, .22, .64), W(.105, 1.3, .3, .66, .28, .66), W(.125, 1.3, .46, .66, .34, .68), W(.145, 1.3, .62, .66, .4, .7),
+  W(.18, 1.34, .5, .5, .5, .72), W(.22, 1.36, .34, .55, .58, .74), W(.26, 1.24, .22, .36, .66, .76), W(.31, 1.22, .12, .36, .74, .78), W(.36, 1.22, .02, .36, .82, .8),
+  W(.4, 1.3, -.05, .55, .9, .84), W(.43, 1.38, -.08, .5, .97, .88), W(.5, 2.7, 0, .3, .45, 1)]
+  : [W(0, 1.34, 0, .32, 0, .55), W(.03, 1.31, .06, .66, .06, .6), W(.06, 1.29, .14, .5, .14, .62),
+  W(.085, 1.27, .3, .6, .22, .64), W(.105, 1.27, .52, .6, .28, .66), W(.125, 1.27, .74, .6, .34, .68), W(.145, 1.27, .96, .6, .4, .7),
+  W(.18, 1.3, .7, .42, .5, .72), W(.22, 1.32, .45, .46, .58, .74), W(.26, 1.2, .25, .3, .66, .76), W(.31, 1.18, .12, .3, .74, .78), W(.36, 1.18, 0, .3, .82, .8),
+  W(.4, 1.26, -.1, .5, .9, .84), W(.43, 1.34, -.15, .45, .97, .88), W(.5, 2.6, 0, .2, .45, 1)];
 window.YH = {
-  mobile: MOB, reduced: RED, skipOpening: true, crafts: 18, works: D.works3d, host: document.body, dStrokes: D.dstrokes, land: D.i,
+  mobile: MOB, reduced: RED, skipOpening: true, crafts: 18, works: D.works3d, host: document.body, dStrokes: D.dstrokes, land: D.i, walk: RED ? null : WALK,
   // the 3D is ready: inside the air (from a dive) the camera comes down out of it, the air thins, the horizon rises and the words follow it
-  onReady() { de.classList.add('gl-on'); if (de.classList.contains('hz')) { eng().descend(); haze.style.transition = 'opacity 1.3s cubic-bezier(.5,0,.75,1)'; de.classList.remove('hz'); airOff(1400); setTimeout(() => de.classList.remove('hzt'), 1800); } scrolled(); },
-  onFail() { de.classList.remove('gl', 'gl-on', 'hz', 'hzt'); airOff(950); de.classList.add('no-gl'); },
+  onReady() { de.classList.add('gl-on'); if (de.classList.contains('hz')) { eng().descend(); haze.style.transition = 'opacity 1.3s cubic-bezier(.5,0,.75,1)'; de.classList.remove('hz'); airOff(1400); setTimeout(() => de.classList.remove('hzt'), 1800); } relayout(); },
+  onFail() { de.classList.remove('gl', 'gl-on', 'w3d', 'hz', 'hzt'); airOff(950); de.classList.add('no-gl'); wsMeasure(); },
   onPick(i) { if (i !== D.i && D.crafts[i]) leave(i, D.crafts[i].href); },
   // the name over a planet: above it when there is room under the bar, otherwise below it; never off the screen
   onHover(i, s) {
@@ -770,8 +893,8 @@ window.YH = {
 words(); scrolled();
 // never stay in the air: if the 3D has not come in 5 s, the picture of the landing shows with the words
 if (de.classList.contains('hz')) setTimeout(() => { if (!de.classList.contains('hz')) return; de.classList.remove('hz', 'hzt'); airOff(950); }, 5000);
-const noGL = () => { de.classList.remove('hz', 'hzt'); airOff(950); de.classList.add('no-gl'); };
-const boot = () => { const s = document.createElement('script'); s.src = '../yinhe.js?v=9330bb1cfb'; s.onload = () => { if (eng()) de.classList.add('gl'); else noGL(); scrolled(); }; s.onerror = noGL; document.body.appendChild(s); };
+const noGL = () => { de.classList.remove('hz', 'hzt', 'w3d'); airOff(950); de.classList.add('no-gl'); wsMeasure(); };
+const boot = () => { const s = document.createElement('script'); s.src = '../yinhe.js?v=a6bbcea9ab'; s.onload = () => { if (eng()) { de.classList.add('gl'); if (!RED) de.classList.add('w3d'); relayout(); } else noGL(); }; s.onerror = noGL; document.body.appendChild(s); };
 requestAnimationFrame(() => setTimeout(boot, 0));
 }
 </script>
@@ -790,13 +913,15 @@ function draw(){const T=S[L];
   $('flMs').textContent=last?T.ms.replace('{ms}',last):'';
   if(!$('flRes').hidden){$('flNext').textContent=r<2?T.next:T.again;$('flWhy').textContent=T.why.replace('{ms}',last);$('flVerdict').textContent=res[r]?T.ok:T.no.replace('{a}',T.opts[r])}}
 function show(p){['flIdle','flAsk','flRes'].forEach(i=>$(i).hidden=i!==p)}
-$('flGo').addEventListener('click',()=>{const im=IM[r];$('flIdle').hidden=true;
-  const go=()=>requestAnimationFrame(t0=>{im.classList.add('on');
+/* the sky goes dark first, then the page flashes in it; the sky comes back with the answer */
+const de=document.documentElement,E=()=>window.YH&&window.YH.engine,hold=on=>{const e=E();if(e&&e.pause&&!de.classList.contains('leaving'))e.pause(on)};   /* the 3D holds still while the page flashes, so the 50 ms is 50 ms */
+$('flGo').addEventListener('click',()=>{const im=IM[r];$('flIdle').hidden=true;de.classList.add('dark');
+  const go=()=>setTimeout(()=>{hold(true);requestAnimationFrame(t0=>{im.classList.add('on');
     requestAnimationFrame(function f(t){if(t-t0<45){requestAnimationFrame(f);return}
-      im.classList.remove('on');last=Math.round(t-t0);draw();setTimeout(()=>show('flAsk'),260)})});
+      im.classList.remove('on');last=Math.round(t-t0);hold(false);draw();setTimeout(()=>show('flAsk'),260)})})},DN.RM.matches?0:450);
   im.complete?go():im.onload=go});
-$('flOpts').addEventListener('click',e=>{const b=e.target.closest('.fl-opt');if(!b)return;res[r]=+b.dataset.i===r;show('flRes');draw()});
-$('flNext').addEventListener('click',()=>{if(r<2)r++;else{r=0;res=[null,null,null]}show('flIdle');draw()});
+$('flOpts').addEventListener('click',e=>{const b=e.target.closest('.fl-opt');if(!b)return;res[r]=+b.dataset.i===r;show('flRes');draw();de.classList.remove('dark')});
+$('flNext').addEventListener('click',()=>{if(r<2)r++;else{r=0;res=[null,null,null]}show('flIdle');draw();de.classList.remove('dark')});
 DN.on(l=>{L=l;draw()});
 })();
 </script>
@@ -826,6 +951,17 @@ band.addEventListener('focusin',hold);band.addEventListener('focusout',()=>setTi
 new IntersectionObserver(es=>{vis=es[es.length-1].isIntersecting;hold()},{threshold:.2}).observe(band);
 DN.on(()=>cap());
 show(0,false);
+})();
+</script>
+<script>
+(()=>{
+/* the works along the horizon: each screen has its words in a panel beside it */
+const D=window.CW.D,S=D.works,caps=[...document.querySelectorAll('.wk-cap')];if(caps.length!==S.length)return;
+const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function draw(){const T=window.CW.T();caps.forEach((el,k)=>{const s=S[k],w=s[DN.lang],chips=w.chips.map(c=>`<span class="chip">${esc(c)}</span>`);
+  if(s.proof)chips.push(`<a class="chip" href="${s.proof}" target="_blank" rel="noopener">${esc(T.proof)}</a>`);
+  el.innerHTML=`<p class="wk-i">${k+1} / ${S.length}</p><h3>${esc(w.n)}</h3><p>${esc(w.p)}</p><div class="meta">${chips.join('')}</div><a class="go" href="${s.url}" target="_blank" rel="noopener">${esc(T.open.replace('{h}',s.host))}</a>`})}
+DN.on(draw);
 })();
 </script>
 <script>window.FC=Object.assign({"id":"website","name":"官网 · 1 分钟视频","len":60,"src":{"zh":["../work/website-film-zh.mp4","../work/website-film-zh.webp"],"en":["../work/website-film-en.mp4","../work/website-film-en.webp"]},"words":{"zh":{"fc_play":"播放","fc_pause":"暂停","fc_mute":"静音","fc_unmute":"开声音","fc_full":"全屏","fc_xfs":"退出全屏","fc_seek":"进度","fc_snd":"点一下开声音","fc_like":"赞","fc_liked":"已赞","fc_likes":"{n} 人赞过","fc_fb":"留言","fc_endT":"看完了，觉得怎么样？","fc_again":"再看一遍","fc_fbT":"说说你的想法","fc_close":"收起","fc_pick":"快选","fc_c1":"很喜欢","fc_c3":"有问题想问","fc_msgL":"想说的话","fc_msgP":"想说什么都可以，也可以说说你想做什么。","fc_conL":"怎么联系你（可不填）","fc_conP":"邮箱、WhatsApp 或 Telegram","fc_send":"发送","fc_sending":"发送中…","fc_ok":"收到了，谢谢你。每一条我们都会看。","fc_okc":"收到了，谢谢你。我们会尽快回复你。","fc_more":"再写一条","fc_err":"没发出去，可能是网络断了。再点一次「发送」试试。","fc_empty":"写一句话，或者点上面一个。","fc_prev":"这是预览页，留言不会发出。","fc_c2":"想做一个这样的网站","fc_label":"官网 · 1 分钟视频"},"en":{"fc_play":"Play","fc_pause":"Pause","fc_mute":"Mute","fc_unmute":"Sound on","fc_full":"Full screen","fc_xfs":"Exit full screen","fc_seek":"Position","fc_snd":"Tap for sound","fc_like":"Like","fc_liked":"Liked","fc_likes":"{n} likes","fc_fb":"Feedback","fc_endT":"That was the film. What did you think?","fc_again":"Watch again","fc_fbT":"Tell us what you think","fc_close":"Close","fc_pick":"Quick picks","fc_c1":"Love it","fc_c3":"I have a question","fc_msgL":"Your note","fc_msgP":"Anything at all, or tell us what you want to build.","fc_conL":"How to reach you (optional)","fc_conP":"Email, WhatsApp or Telegram","fc_send":"Send","fc_sending":"Sending…","fc_ok":"Got it, thank you. We read every note.","fc_okc":"Got it, thank you. We'll get back to you soon.","fc_more":"Write another","fc_err":"That didn't send. Check your connection and press Send again.","fc_empty":"Write a line, or pick one above.","fc_prev":"This is a preview, so nothing is sent.","fc_c2":"I want a site like this","fc_label":"Websites · the 1-minute film"},"ms":{"fc_play":"Main","fc_pause":"Jeda","fc_mute":"Senyap","fc_unmute":"Bunyi","fc_full":"Skrin penuh","fc_xfs":"Keluar skrin penuh","fc_seek":"Kedudukan","fc_snd":"Ketik untuk bunyi","fc_like":"Suka","fc_liked":"Disukai","fc_likes":"{n} suka","fc_fb":"Maklum balas","fc_endT":"Itulah videonya. Apa pendapat anda?","fc_again":"Tonton lagi","fc_fbT":"Beritahu pendapat anda","fc_close":"Tutup","fc_pick":"Pilihan pantas","fc_c1":"Saya suka","fc_c3":"Saya ada soalan","fc_msgL":"Nota anda","fc_msgP":"Apa sahaja, atau ceritakan apa yang anda mahu bina.","fc_conL":"Cara menghubungi anda (pilihan)","fc_conP":"E-mel, WhatsApp atau Telegram","fc_send":"Hantar","fc_sending":"Menghantar…","fc_ok":"Sudah diterima, terima kasih. Kami baca setiap nota.","fc_okc":"Sudah diterima, terima kasih. Kami akan membalas secepat mungkin.","fc_more":"Tulis lagi","fc_err":"Tidak berjaya dihantar. Semak sambungan anda dan tekan Hantar sekali lagi.","fc_empty":"Tulis satu baris, atau pilih satu di atas.","fc_prev":"Ini halaman pratonton, jadi tiada apa-apa yang dihantar.","fc_c2":"Saya mahu laman web seperti ini","fc_label":"Laman web · filem 1 minit"}}},{lang:()=>DN.lang,on:f=>DN.on(f)});</script>

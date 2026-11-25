@@ -894,7 +894,7 @@ words(); scrolled();
 // never stay in the air: if the 3D has not come in 5 s, the picture of the landing shows with the words
 if (de.classList.contains('hz')) setTimeout(() => { if (!de.classList.contains('hz')) return; de.classList.remove('hz', 'hzt'); airOff(950); }, 5000);
 const noGL = () => { de.classList.remove('hz', 'hzt', 'w3d'); airOff(950); de.classList.add('no-gl'); wsMeasure(); };
-const boot = () => { const s = document.createElement('script'); s.src = '../yinhe.js?v=a6bbcea9ab'; s.onload = () => { if (eng()) { de.classList.add('gl'); if (!RED) de.classList.add('w3d'); relayout(); } else noGL(); }; s.onerror = noGL; document.body.appendChild(s); };
+const boot = () => { const s = document.createElement('script'); s.src = '../yinhe.js?v=3da5244411'; s.onload = () => { if (eng()) { de.classList.add('gl'); if (!RED) de.classList.add('w3d'); relayout(); } else noGL(); }; s.onerror = noGL; document.body.appendChild(s); };
 requestAnimationFrame(() => setTimeout(boot, 0));
 }
 </script>

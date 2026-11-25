@@ -710,11 +710,12 @@ void main(){
   vec3 rd = normalize(wp - eye), oc = eye - cen;
   float b = dot(oc, rd), c = dot(oc, oc) - rad*rad, disc = b*b - c;
   vec3 pc = oc - rd*b; float dmin = length(pc);
-  float cov = clamp((rad - dmin)/pix + 0.5, 0.0, 1.0);
+  float pixL = pix*sqrt(max(1.0 - rad*rad/dot(oc, oc), 0.04));   // one pixel, measured across the edge (smaller than pix when the planet is near)
+  float cov = clamp((rad - dmin)/pixL + 0.5, 0.0, 1.0);
   if (pass < 0.5) {
-    if (cov < 0.5 || disc < 0.0) discard;
-    float tS = -b - sqrt(disc);
-    vec3 Pp = oc + rd*tS, N = Pp/rad, S = rotM*N;
+    if (cov <= 0.0) discard;
+    float tS = -b - sqrt(max(disc, 0.0));
+    vec3 Pp = oc + rd*tS, N = normalize(Pp), S = rotM*N;
     vec4 A = textureCube(ta, S);
     vec3 nb = N;
     if (bump > 0.0) {
@@ -753,11 +754,11 @@ void main(){
     gl_FragColor = vec4(col*expo*K*cov, cov);
   } else {
     vec3 acc = vec3(0.0); float al = 0.0;
-    bool hitS = disc > 0.0 && cov > 0.5;
+    bool hitS = disc > 0.0;
     float tS = hitS ? -b - sqrt(disc) : 1e9;
-    if (dmin > rad*0.99 && atm.a > 0.0) {
+    if (dmin > rad*0.97 && atm.a > 0.0) {
       float x = (dmin - rad)/(rad*atmH);
-      float dens = exp(-x*2.3)*(1.0 - smoothstep(2.6, 4.0, x));
+      float dens = exp(-x*2.3)*(1.0 - smoothstep(2.6, 4.0, x))*smoothstep(rad*0.99 - max(pixL, rad*0.004), rad*0.99 + pixL, dmin);
       float atL = smoothstep(-0.4, 0.45, dot(pc/max(dmin, 1e-4), L));
       acc += atm.rgb*atm.a*dens*atL*1.5;
     }
@@ -895,8 +896,8 @@ function m3(a) { return new Float32Array(a); }
 // the spin angle at which a body shows its signature side (body +z) to the camera at its stop
 function faceAng(p) { const d = rotYv(p.D0, S.rot), yv = p.axis, xr = nrm(cross([0, 0, 1], yv)), zr = cross(xr, yv); return Math.atan2(dot(xr, d), dot(zr, d)); }
 // world -> planet frame, turning with time: rows are the planet's own axes
-function frameOf(p, ang) {
-  const yv = p.axis, xr = nrm(cross([0, 0, 1], yv)), zr = cross(xr, yv);
+function frameOf(p, ang, ax = p.axis) {
+  const yv = ax, xr = nrm(cross([0, 0, 1], yv)), zr = cross(xr, yv);
   const c = Math.cos(ang), s = Math.sin(ang);
   const x = add(mul(xr, c), mul(zr, -s)), z = add(mul(xr, s), mul(zr, c));
   // mat3 column-major: M*v gives (dot(x,v), dot(y,v), dot(z,v))
@@ -920,15 +921,18 @@ function drawPlanets(P, t, pass) {
     const ext = p.rad * extK * Math.min(3, d / Math.sqrt(Math.max(d * d - (p.rad * extK) * (p.rad * extK) * 0.98, 1e-3)));
     gl.uniform3fv(u.cen, w); gl.uniform1f(u.ext, ext); gl.uniform1f(u.rad, p.rad);
     gl.uniform1f(u.pix, d * 2 * Math.tan(FOV / 2) / S.h);
-    gl.uniform3fv(u.L, lightOf(p)); gl.uniform3fv(u.Lc, [1.0, 0.97, 0.92]);
-    gl.uniform4fv(u.atm, W.atm); gl.uniform1f(u.atmH, W.atmH || 0.03);
+    const LD = S.land && S.land.i === p.i && S.land.L;   // the planet we landed on: its own light, a softer and deeper air
+    gl.uniform3fv(u.L, LD ? S.land.L : lightOf(p)); gl.uniform3fv(u.Lc, [1.0, 0.97, 0.92]);
+    gl.uniform4fv(u.atm, LD ? [W.atm[0], W.atm[1], W.atm[2], W.atm[3] * 0.5] : W.atm); gl.uniform1f(u.atmH, (W.atmH || 0.03) * (LD ? 2.4 : 1));
     gl.uniform1f(u.spec, W.spec || 0); gl.uniform1f(u.clouds, W.clouds || 0); gl.uniform1f(u.bump, W.bump || 0); gl.uniform1f(u.limb, W.limb || 0);
     gl.uniform1f(u.wrap, W.atm[3] > 0.6 ? 0.18 : 0.06); gl.uniform1f(u.night, W.night || 0); gl.uniform3fv(u.emitC, W.emit || [0, 0, 0]);
-    gl.uniform4fv(u.ring, W.ring ? [W.ring[0], W.ring[1], W.ring[2], 1] : [0, 0, 0, 0]); gl.uniform3fv(u.ringC, W.ringC || [0, 0, 0]); gl.uniform3fv(u.ringN, p.axis);
+    const AX = LD ? S.land.ax : p.axis;
+    gl.uniform4fv(u.ring, W.ring ? [W.ring[0], W.ring[1], W.ring[2], 1] : [0, 0, 0, 0]); gl.uniform3fv(u.ringC, W.ringC || [0, 0, 0]); gl.uniform3fv(u.ringN, AX);
     gl.uniform1f(u.hi, p.hi); gl.uniform1f(u.ret, P.ret || 0); gl.uniform1f(u.texel, 2 / T.A.size); gl.uniform1f(u.amb, 0.012);
     gl.uniform1f(u.expo, P.pA === undefined ? 1 : P.pA);
-    const ang = W.face !== undefined ? faceAng(p) + W.face + t * 0.003 : t * p.spin;
-    gl.uniformMatrix3fv(u.rotM, false, frameOf(p, ang)); gl.uniformMatrix3fv(u.cloudM, false, frameOf(p, ang + t * p.cloudSpin));
+    const tl = LD && S.land.tr != null ? t - S.land.tr : t;   // the planet we landed on starts turning when the 3D comes in, so it matches its picture
+    const ang = W.face !== undefined && !LD ? faceAng(p) + W.face + t * 0.003 : tl * p.spin;
+    gl.uniformMatrix3fv(u.rotM, false, frameOf(p, ang, AX)); gl.uniformMatrix3fv(u.cloudM, false, frameOf(p, ang + tl * p.cloudSpin, AX));
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_CUBE_MAP, T.A.t);
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_CUBE_MAP, T.B.t);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -1278,6 +1282,7 @@ const S = {
   w: 1, h: 1, cw: 1, ch: 1, time: 0, frame: 0, rot: 0, open: Y.skipOpening || RED ? 1 : 0, openT0: 0, drag: null, az: 0, el: 0, vaz: 0,
   hover: -1, running: true, px: 0, py: 0, tpx: 0, tpy: 0, sound: false, sc: 0, sv: 0, jump: null, ft: 0, slow: 0, late: false, dead: false
 };
+if (Y.land != null && Y.land >= 0 && Y.land < N) S.land = { i: Y.land, t0: null };
 const view = new Float32Array(16), proj = new Float32Array(16), vp = new Float32Array(16);
 let camR = [1, 0, 0], camU = [0, 1, 0], camF = [0, 0, -1], camE = [0, 0, 100], fpx = 1;
 const FOV = MOB ? 1.0 : 0.82;
@@ -1318,6 +1323,47 @@ function poseCraft(i) {
   return Object.assign({}, BASE, { e: add(w, mul(d, D)), c: w, sx: MOB ? 0 : (i % 2 ? -0.46 : 0.46), sy: MOB ? 0.36 : 0.02, dA: 0, gA: 0.55, act: i, lift: 1 });
 }
 PL.forEach(p => { p.D0 = stationDir(p, planetPos(p, 0)); });
+// ---------- landing on a planet (a craft's page): low over its lit side, the horizon ahead, the galaxy above ----------
+const LANDH = MOB ? 1.42 : 1.34, LB = { a: 2.06, yaw: MOB ? 0.0 : -0.3, hz: MOB ? 0.4 : 0.32 };   // the galaxy's centre ahead and to the right, away from the words
+// the site faces away from the galaxy's centre, so from low over it the centre rises just above the horizon ahead;
+// the light comes from behind the right shoulder, so the ground below shows its colours
+function landFrame(p) {
+  const w = planetPos(p), k = nrm(sub([0, 0, 0], w));
+  let m = sub([0, 1, 0], mul(k, k[1])); m = len(m) < 1e-3 ? [1, 0, 0] : nrm(m);
+  const u = nrm(add(mul(k, Math.cos(LB.a)), mul(m, Math.sin(LB.a))));
+  let f = nrm(sub(k, mul(u, dot(k, u)))), r = nrm(cross(f, u));
+  f = nrm(add(mul(f, Math.cos(LB.yaw)), mul(r, Math.sin(LB.yaw)))); r = nrm(cross(f, u));
+  const e = add(w, mul(u, p.rad * LANDH));
+  const g = Math.acos(1 / LANDH) - Math.atan(LB.hz * Math.tan(FOV / 2));   // look down so the horizon sits a third of the way up the screen
+  S.land.L = nrm(add(add(mul(r, 0.7), mul(u, 0.62)), mul(f, -0.28)));
+  S.land.ax = nrm(add(mul(u, Math.sin(0.44)), mul(f, -Math.cos(0.44))));   // its pole tilted back: we fly at about 25° north, its bands and rings run along the horizon
+  return { w, u, f, e, v: nrm(sub(mul(f, Math.cos(g)), mul(u, Math.sin(g)))) };
+}
+// the descent: from inside the atmosphere looking straight down, the camera rises a little and pitches up to the horizon
+function landPose() {
+  const p = PL[S.land.i], F = landFrame(p);
+  const P = Object.assign({}, BASE, { e: F.e, c: add(F.e, F.v), up: F.u, dA: 0, gA: 0.55, act: p.i, landed: 1 });
+  if (S.land.t0 != null) {
+    const k = clamp((performance.now() - S.land.t0) / 3000), E = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(2 - 2 * k, 3) / 2;   // slow out of the air, pull up, level off
+    if (k < 1) {
+      P.e = mix(add(F.w, mul(F.u, p.rad * 1.06)), F.e, E);
+      P.c = add(P.e, nrm(add(mul(F.u, -(1 - E)), mul(F.v, E))));
+      P.up = nrm(add(mul(F.f, 1 - E), mul(F.u, E)));
+    }
+  }
+  return P;
+}
+const HILAND = MOB ? [512, 256] : [1024, 512];
+function landBaked() {
+  const p = PL[S.land.i]; if (p.hiTex) return true;
+  const job = S.land.job || (S.land.job = { p, A: cubeTex(HILAND[0]), B: cubeTex(HILAND[1]), k: 0 });
+  for (let n = 0; n < 2 && job.k < 12; n++, job.k++) bakeFace(p, job.k < 6 ? job.A : job.B, job.k % 6, job.k >= 6);
+  if (job.k < 12) return false;
+  gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+  gl.bindTexture(gl.TEXTURE_CUBE_MAP, job.A.t); gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+  gl.bindTexture(gl.TEXTURE_CUBE_MAP, job.B.t); gl.generateMipmap(gl.TEXTURE_CUBE_MAP);
+  p.hiTex = { A: job.A, B: job.B }; return true;
+}
 function poseFilm() { const P = poseCraft(N - 1); P.e = mix(P.e, P.c, 0.35); P.lift = 0; return P; }
 // the works ride on a ring above the disc; the camera orbits outside it, looking in at one at a time
 const RW = 46, YW = 18, PHI0 = 0.25, NW = Y.works || 8, WDC = MOB ? 27.5 : 24.5;
@@ -1527,7 +1573,7 @@ function bootStep() {
     } catch (e) { fail(e); return false; }
     BOOT = 1;
   }
-  if (BOOT === 1) { if (!bakeMap()) return false; BOOT = 2; }
+  if (BOOT === 1) { if (!bakeMap()) return false; if (S.land && !landBaked()) return false; BOOT = 2; }
   return true;
 }
 function fail(e) {
@@ -1539,14 +1585,19 @@ function fail(e) {
 function landing(P) {
   const now = performance.now();
   if (S.dive) {
-    const D = S.dive, k = clamp((now - D.t0) / 950), e = k * k * (3 - 2 * k), p = PL[D.i], w = planetPos(p);
-    if (!D.e0) { D.e0 = P.e.slice(); D.c0 = P.c.slice(); D.sx = P.sx; D.sy = P.sy; }
-    const near = add(w, mul(nrm(sub(D.e0, w)), p.rad * 1.2));
-    P.e = mix(D.e0, near, e * e); P.c = mix(D.c0, w, Math.min(1, e * 1.6)); P.sx = D.sx * (1 - e); P.sy = D.sy * (1 - e);
+    const D = S.dive, k = clamp((now - D.t0) / 1300), e = k * k * (3 - 2 * k), p = PL[D.i], w = planetPos(p);
+    if (!D.e0) {
+      D.e0 = P.e.slice(); D.c0 = P.c.slice(); D.sx = P.sx; D.sy = P.sy; D.up = (P.up || [0, 1, 0]).slice();
+      if (P.landed) { const o = PL[S.land.i]; D.m = add(D.e0, mul(nrm(sub(D.e0, planetPos(o))), o.rad * 4)); }   // off the planet first, then across
+    }
+    const near = add(w, mul(nrm(sub(D.m || D.e0, w)), p.rad * 1.06)), s2 = e * e;
+    P.e = D.m ? add(add(mul(D.e0, (1 - s2) * (1 - s2)), mul(D.m, 2 * (1 - s2) * s2)), mul(near, s2 * s2)) : mix(D.e0, near, s2);
+    P.c = mix(D.c0, w, Math.min(1, e * 1.6)); P.sx = D.sx * (1 - e); P.sy = D.sy * (1 - e); P.up = nrm(mix(D.up, [0, 1, 0], Math.min(1, e * 1.6)));
+    if (Y.onDive) Y.onDive(k, D.i);
     if (k >= 1 && !D.fired) { D.fired = true; D.done(); }
   } else if (S.arrive) {
     const A = S.arrive, k = clamp((now - A.t0) / 1500), e = 1 - Math.pow(1 - k, 3), p = PL[A.i], w = planetPos(p);
-    const from = add(w, mul(nrm(sub(P.e, w)), p.rad * 1.2));
+    const from = add(w, mul(nrm(sub(P.e, w)), p.rad * 1.06));
     P.e = mix(from, P.e, e); P.c = mix(w, P.c, e); P.sx *= e; P.sy *= e;
     if (k >= 1) S.arrive = null;
   }
@@ -1554,7 +1605,7 @@ function landing(P) {
 function frame(now) {
   if (!S.running || S.dead || S.paused) return;
   requestAnimationFrame(frame);
-  if (BOOT < 2) { if (!bootStep()) return; cv.classList.add('on'); S.time = 0; if (S.open < 1 && performance.now() > 1600) S.late = true; if (Y.arrive != null && !RED && PL[Y.arrive]) { S.sc = scrollS(); S.sv = 0; S.arrive = { i: Y.arrive, t0: performance.now() }; } if (Y.onReady) Y.onReady(); }
+  if (BOOT < 2) { if (!bootStep()) return; cv.classList.add('on'); S.time = 0; if (S.open < 1 && performance.now() > 1600) S.late = true; if (Y.arrive != null && !RED && PL[Y.arrive]) { S.sc = scrollS(); S.sv = 0; S.arrive = { i: Y.arrive, t0: performance.now() }; } if (S.land) S.land.tr = now / 1000; if (Y.onReady) Y.onReady(); }
   const t = now / 1000, raw = t - (S.time || t - 0.016), dt = Math.min(0.1, Math.max(0.001, raw)); S.time = t; S.frame++;
   if (loNext < PL.length) bakeLo(); else bakeStep();
   scrollTick(dt);
@@ -1571,7 +1622,7 @@ function frame(now) {
   S.px += (S.tpx - S.px) * (1 - Math.exp(-dt * 3)); S.py += (S.tpy - S.py) * (1 - Math.exp(-dt * 3));
   const cin = CI ? cineUpdate(t) : { w: 0, g: 1 };
   const inHall = cin.w > 0.0005 && cin.g < 0.001;
-  let P = inHall ? poseCinema() : poseAtS(S.sc);
+  let P = inHall ? poseCinema() : S.land ? landPose() : poseAtS(S.sc);
   if (!inHall) {
     if (S.open < 1) { const k = eio(clamp((S.open - 0.3) / 0.6)); P.e = mix([0, 0, 30], P.e, k); P.c = mix([0, 0, 0], P.c, k); P.sy *= k; }
     if (!RED && !MOB) { const B = camBasis(P.e, P.c), k = len(sub(P.e, P.c)) * 0.035; P.e = add(P.e, add(mul(B.x, S.px * k), mul(B.y, -S.py * k * 0.6))); }
@@ -1579,7 +1630,7 @@ function frame(now) {
     P.expo *= cin.g;
   } else P.expo = cin.w;
   const fov = P.fov || FOV;
-  lookAt(view, P.e, P.c, [0, 1, 0]); persp(proj, fov, S.w / S.h, inHall ? 0.12 : (S.dive || S.arrive) ? 0.04 : 0.3, inHall ? 200 : 4000, P.sx, P.sy); mmul(vp, proj, view);
+  lookAt(view, P.e, P.c, P.up || [0, 1, 0]); persp(proj, fov, S.w / S.h, inHall ? 0.12 : (S.dive || S.arrive || S.land) ? 0.04 : 0.3, inHall ? 200 : 4000, P.sx, P.sy); mmul(vp, proj, view);
   camR = [view[0], view[4], view[8]]; camU = [view[1], view[5], view[9]]; camF = [-view[2], -view[6], -view[10]]; camE = P.e;
   gl.bindFramebuffer(gl.FRAMEBUFFER, R.scene.f); gl.viewport(0, 0, R.w, R.h);
   gl.clearColor(0, 0, 0, 1); gl.depthMask(true); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -1701,6 +1752,7 @@ function sfx(i) {
 Y.engine = {
   skip(auto) { S.open = 1; Y.onOpening && Y.onOpening(1, !!auto); },
   hold(b) { if (CI) CI.hold = !!b; },
+  descend() { if (S.land && !RED) S.land.t0 = performance.now(); },
   dive(i, done) { if (RED || BOOT < 2 || S.dead || S.paused || !PL[i]) { done(); return; } S.arrive = null; S.dive = { i, t0: performance.now(), done }; },
   // back from a page we dived out to (the browser kept this one as it was): come back out of that planet
   back() { if (!S.dive) return; const i = S.dive.i; S.dive = null; if (!RED) S.arrive = { i, t0: performance.now() }; },

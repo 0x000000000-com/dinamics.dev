@@ -124,72 +124,113 @@ html[lang=en] .cn,html[lang=ms] .cn{font-weight:700}
 .rail button:hover::after{width:16px;background:var(--glow)}
 @media (max-width:860px){.rail{display:none}}
 
-/* the cinema */
-.film{min-height:0;height:330vh}
-.cine{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:#000}
-.yh-cine-gl{position:absolute;inset:0;width:100%;height:100%}
-.ctitle{position:absolute;left:0;right:0;top:20%;text-align:center;margin:0;color:rgba(245,240,230,.9);pointer-events:none;
-  font:200 clamp(40px,5.6vw,88px)/1 "YH Light","Noto Serif SC","Songti SC",serif;letter-spacing:.32em;text-indent:.32em;transform:translateY(-100%) scaleY(1.32);transform-origin:bottom;opacity:var(--ta,0);transition:opacity .6s}
+/* the cinema: the hall itself is drawn on the canvas behind; only the words and buttons live here */
+.film{min-height:0;height:340vh}
+.cine{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.ctitle{position:absolute;left:0;right:0;top:20%;text-align:center;margin:0;color:rgba(245,236,222,.92);pointer-events:none;
+  font:200 clamp(40px,5.6vw,88px)/1 "YH Light","Noto Serif SC","Songti SC",serif;letter-spacing:.32em;text-indent:.32em;transform:translateY(-100%) scaleY(1.32);transform-origin:bottom;opacity:calc(var(--ta,0)*(.35 + .65*var(--th,1)));transition:opacity .6s;text-shadow:0 0 30px rgba(255,190,120,.25)}
 html[lang=en] .ctitle,html[lang=ms] .ctitle{font:400 clamp(36px,5.6vw,84px)/1 "YH Latin",serif;letter-spacing:.24em;text-indent:.24em}
-.csub{position:absolute;left:0;right:0;bottom:22px;text-align:center;margin:0;color:#C9CFDC;font-size:15px;opacity:var(--ta,0);pointer-events:none}
-.snd,.full{position:absolute;z-index:3;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.35);color:#E9E4DA;border-radius:99px;padding:9px 16px;cursor:pointer;min-height:42px;font-size:14px;opacity:var(--ta,0)}
+.csub{position:absolute;left:0;right:0;bottom:22px;text-align:center;margin:0;color:#C9CFDC;font-size:15px;opacity:calc(var(--ta,0)*var(--tg,0));pointer-events:none;transition:opacity .8s}
+.snd,.full{position:absolute;z-index:3;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.35);color:#E9E4DA;border-radius:99px;padding:9px 16px;cursor:pointer;min-height:42px;font-size:14px;opacity:var(--ta,0);pointer-events:auto}
 .snd{left:max(3vw,16px);top:80px;letter-spacing:.08em}
 .full{right:max(3vw,16px);bottom:18px}
 .vid{position:absolute;width:2px;height:2px;opacity:0;pointer-events:none;left:0;top:0}
-.ppl{position:absolute;left:0;right:0;bottom:0;width:100%;height:64%;pointer-events:none;opacity:var(--ta,0)}
-.ppl .k{fill:#000;stroke:#000;stroke-linecap:round;stroke-linejoin:round}
-.ppl .rim{fill:rgb(var(--tm));stroke:rgb(var(--tm));stroke-linecap:round;opacity:calc(var(--ga)*.9)}
-.ppl .gl{transform:translate(calc(var(--px)*-16px),0)}
-.ppl .gr{transform:translate(calc(var(--px)*-11px),0)}
-.ppl .rimL{fill:rgb(var(--tl));stroke:rgb(var(--tl))}
-.ppl .rimR{fill:rgb(var(--tr));stroke:rgb(var(--tr))}
-.ppl .mon{fill:#9EC3FF;opacity:.85}
+html.no-gl .cine,html.no-cine .cine{background:#000}
+html.no-gl .vid,html.no-cine .vid{width:90%;height:70%;left:5%;top:18%;opacity:1;object-fit:contain;pointer-events:auto}
+html.no-gl .cine>*:not(.vid),html.no-cine .cine>*:not(.vid){--ta:1;--tg:1}
 
-/* our work */
-.works,.free,.talk{min-height:0;padding:clamp(110px,14vh,170px) max(5vw,20px) clamp(60px,10vh,110px)}
-.wrapx{max-width:1240px;margin:0 auto}
-.h2{font:900 clamp(36px,5vw,64px)/1.08 var(--disp);margin:0;text-wrap:balance}
+/* our work, on a ring around the galaxy */
+.works,.free,.talk{min-height:0}
+.wsec{padding:clamp(120px,22vh,220px) max(5vw,20px) 60px;text-align:center}
+.wrapx{max-width:1240px;margin:0 auto;position:relative;z-index:4}
+.h2{font:900 clamp(40px,6vw,84px)/1.06 var(--disp);margin:0;text-wrap:balance;text-shadow:0 4px 40px rgba(0,0,0,.6)}
 html[lang=en] .h2,html[lang=ms] .h2{font-weight:700}
-.sub{color:#C9CFDC;max-width:40em;margin:14px 0 0;font-size:17px}
-.wgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:40px}
-@media (max-width:1100px){.wgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:640px){.wgrid{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;margin:30px -20px 0;padding:0 20px 8px;scrollbar-width:none}
-  .wgrid::-webkit-scrollbar{display:none}.wk{flex:0 0 82%;scroll-snap-align:center}}
-.wk{position:relative;border-radius:20px;overflow:hidden;background:rgba(12,14,26,.8);border:1px solid var(--line);transition:transform .5s cubic-bezier(.2,.9,.25,1),border-color .4s,box-shadow .4s;transform-style:preserve-3d}
-.wk:hover{border-color:rgba(217,178,107,.6);box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px rgba(217,178,107,.2)}
-.shot{display:block;aspect-ratio:16/11;overflow:hidden;background:#0b0d18}
-.shot img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;transition:transform 1.2s cubic-bezier(.2,.9,.25,1)}
-.wk:hover .shot img{transform:scale(1.05)}
-.wb{padding:16px 18px 18px}
+.sub{color:#D3D8E4;max-width:38em;margin:16px auto 0;font-size:clamp(16px,1.5vw,19px);text-shadow:0 2px 20px rgba(0,0,0,.7)}
+.wst{height:100vh;height:100svh}
+html:not(.gl) .wst{display:none}
+/* the panels: a big screen, the phone in front of it, the words in front of both */
+.w3cam{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr));gap:18px;max-width:1240px;margin:44px auto 0;text-align:left}
+.w3p{position:relative;border-radius:22px}
+.w3s{display:block;border-radius:18px;overflow:hidden;background:#0b0d18;border:1px solid rgba(255,255,255,.14);aspect-ratio:16/10}
+.w3s img{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.w3m{display:none}
+.w3b{padding:16px 4px 4px}
 .tag{display:inline-block;font-size:12px;padding:3px 10px;border-radius:99px;border:1px solid rgba(61,220,132,.5);color:#8DEBB6}
 .tag.smp{border-color:rgba(243,215,160,.5);color:var(--glow)}
-.wb h3{font:700 22px/1.25 var(--body);margin:10px 0 4px}
-.wb p{margin:0;color:#C3C9D6;font-size:15px}
-.wb .host{color:var(--mut);font-size:13px;margin-top:6px;overflow-wrap:anywhere}
+.w3b h3{font:700 22px/1.25 var(--body);margin:10px 0 4px}
+.w3b p{margin:0;color:#C3C9D6;font-size:15px}
+.w3b .host{color:var(--mut);font-size:13px;margin-top:6px;overflow-wrap:anywhere}
 .wa{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
-.wa a{min-height:40px;display:inline-flex;align-items:center;padding:0 14px;border-radius:99px;border:1px solid var(--line);text-decoration:none;font-size:14px}
-.wa .want{border-color:rgba(217,178,107,.6);color:var(--glow)}
+.wa a{min-height:44px;display:inline-flex;align-items:center;padding:0 18px;border-radius:99px;border:1px solid var(--line);text-decoration:none;font-size:15px;background:rgba(10,12,22,.55)}
+.wa .want{border-color:var(--gold);background:var(--gold);color:#16120A;font-weight:600}
+.wa a:hover{border-color:var(--glow)}
+html.gl .w3{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden;visibility:hidden}
+html.gl .w3.on{visibility:visible}
+html.gl .w3cam{position:absolute;left:0;top:0;width:100%;height:100%;display:block;margin:0;max-width:none;transform-style:preserve-3d}
+html.gl .w3p{position:absolute;left:0;top:0;width:960px;transform-style:preserve-3d;will-change:transform,opacity}
+html.gl .w3s{position:relative;width:960px;height:600px;aspect-ratio:auto;border-radius:22px;border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 0 0 1px rgba(0,0,0,.4),0 40px 120px rgba(0,0,0,.65),0 0 120px rgba(217,178,107,.12);transform:translateZ(0)}
+html.gl .w3s::after{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(115deg,rgba(255,255,255,.16),rgba(255,255,255,0) 32%,rgba(255,255,255,0) 70%,rgba(255,255,255,.05));pointer-events:none}
+html.gl .w3m{display:block;position:absolute;right:-46px;top:250px;width:196px;height:424px;border-radius:30px;padding:7px;background:#05060b;border:1px solid rgba(255,255,255,.22);
+  box-shadow:0 30px 80px rgba(0,0,0,.7);transform:translateZ(90px)}
+html.gl .w3m img{width:100%;height:100%;object-fit:cover;object-position:top;border-radius:24px;display:block}
+html.gl .w3b{position:absolute;left:0;top:628px;width:720px;padding:0;transform:translateZ(50px)}
+html.gl .w3b h3{font:900 46px/1.1 var(--disp);margin:14px 0 6px}
+html[lang=en].gl .w3b h3,html[lang=ms].gl .w3b h3{font-weight:700}
+html.gl .w3b p{font-size:21px;color:#D5DAE6}
+html.gl .w3b .host{font-size:16px}
+html.gl .tag{font-size:15px;padding:4px 14px}
+html.gl .wa{margin-top:18px;gap:12px}
+html.gl .wa a{min-height:52px;font-size:18px;padding:0 24px}
+@media (max-width:700px),(pointer:coarse){
+  html.gl .w3p{width:340px}
+  html.gl .w3s{display:none}
+  html.gl .w3m{position:relative;right:auto;top:auto;width:300px;height:650px;margin:0 auto;transform:none;border-radius:38px;padding:8px}
+  html.gl .w3m img{border-radius:30px}
+  html.gl .w3b{position:relative;top:auto;width:340px;margin-top:22px;transform:translateZ(30px);text-align:center}
+  html.gl .w3b h3{font-size:36px}
+  html.gl .w3b p{font-size:18px}
+  html.gl .wa{justify-content:center}
+}
+/* the free tools: a shelf of glass tiles above the galaxy */
+.fsec{padding:clamp(110px,18vh,190px) max(5vw,20px) 40px;text-align:center}
+.w3t{display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 14px;padding:18px;border-radius:18px;border:1px solid var(--line);background:rgba(10,12,22,.62);text-decoration:none;text-align:left;transition:border-color .3s}
+.w3t:hover{border-color:rgba(217,178,107,.7)}
+.w3t svg{grid-row:span 2;width:40px;height:40px;padding:8px;border-radius:12px;background:rgba(217,178,107,.12);stroke:var(--glow);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.w3t b{font-weight:700;font-size:17px}
+.w3t span{color:#C3C9D6;font-size:14px}
+.w3t i{display:none}
+html.gl .free .w3cam{transform-style:preserve-3d}
+html.gl .w3t{position:absolute;left:0;top:0;width:340px;min-height:190px;padding:26px 26px 22px;grid-template-columns:56px minmax(0,1fr);gap:6px 18px;background:linear-gradient(160deg,rgba(26,30,50,.78),rgba(8,10,18,.72));
+  border:1px solid rgba(255,255,255,.16);box-shadow:0 30px 90px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.12);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+html.gl .w3t svg{width:52px;height:52px;padding:11px;border-radius:15px}
+html.gl .w3t b{font-size:22px}
+html.gl .w3t span{font-size:16px;line-height:1.5}
+html.gl .w3t i{display:inline-block;grid-column:2;justify-self:start;margin-top:10px;font-style:normal;font-size:13px;color:#16120A;background:var(--glow);border-radius:99px;padding:3px 12px;font-weight:600}
+@media (max-width:700px),(pointer:coarse){
+  html.gl .free .w3{position:static;inset:auto;visibility:visible;pointer-events:auto;overflow:visible}
+  html.gl .free .w3cam{position:static;display:grid;grid-template-columns:minmax(0,1fr);gap:12px;width:auto;height:auto;margin:30px auto 0;max-width:520px;transform:none}
+  html.gl .w3t{position:relative;width:auto;min-height:0;padding:16px;grid-template-columns:44px minmax(0,1fr);gap:4px 14px;transform:none!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+  html.gl .w3t svg{width:44px;height:44px;padding:9px;border-radius:12px}
+  html.gl .w3t b{font-size:17px}
+  html.gl .w3t span{font-size:14px}
+  html.gl .w3t i{display:none}
+  .fsp{display:none}
+}
+html:not(.gl) .free .w3cam{grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr))}
+.fsp{height:40vh}
+html:not(.gl) .fsp{display:none}
 
-/* the dim galaxy stays behind the last three stations; a veil keeps the words readable */
-.works,.free,.talk{background:linear-gradient(rgba(4,5,10,0),rgba(4,5,10,.5) 160px,rgba(4,5,10,.58))}
-.free,.talk{background:rgba(4,5,10,.58)}
-/* free tools */
-.fgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:36px}
-@media (max-width:900px){.fgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:560px){.fgrid{grid-template-columns:minmax(0,1fr)}}
-.ft{display:grid;grid-template-columns:44px minmax(0,1fr);gap:4px 14px;padding:18px;border-radius:18px;border:1px solid var(--line);background:rgba(10,12,22,.62);text-decoration:none;transition:border-color .3s,transform .3s}
-.ft:hover{border-color:rgba(217,178,107,.6);transform:translateY(-3px)}
-.ft svg{grid-row:span 2;width:40px;height:40px;padding:8px;border-radius:12px;background:rgba(217,178,107,.12);stroke:var(--glow);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
-.ft b{font-weight:700;font-size:17px}
-.ft span{color:#C3C9D6;font-size:14px}
-
-/* talk */
-.talk{text-align:center}
-.talk .h2{max-width:14em;margin:0 auto}
-.talk .sub{margin:16px auto 0}
-.mail{display:inline-block;margin-top:30px;font:700 clamp(24px,4.4vw,48px)/1.2 "YH Latin",var(--body);color:var(--glow);text-decoration:none;overflow-wrap:anywhere}
-.copy{display:block;margin:18px auto 0;border:1px solid var(--line);background:rgba(10,12,22,.5);border-radius:99px;padding:10px 20px;cursor:pointer;min-height:44px}
-footer{padding:30px max(5vw,20px) 46px;text-align:center;color:var(--mut);font-size:14px;border-top:1px solid var(--line);background:rgba(4,5,10,.7)}
+/* talk: the whole galaxy, and one line */
+.talk{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:center;text-align:center;padding:120px max(5vw,20px) 80px}
+.talk .h2{max-width:13em;margin:0 auto;font-size:clamp(44px,7vw,104px)}
+.talk .sub{margin:18px auto 0}
+.mail{display:inline-block;margin-top:34px;font:700 clamp(26px,4.6vw,56px)/1.2 "YH Latin",var(--body);color:var(--glow);text-decoration:none;overflow-wrap:anywhere;text-shadow:0 0 40px rgba(243,215,160,.35)}
+.mail:hover{text-decoration:underline;text-underline-offset:8px;text-decoration-thickness:2px}
+.tbtn{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:24px}
+.copy{border:1px solid var(--line);background:rgba(10,12,22,.5);border-radius:99px;padding:10px 22px;cursor:pointer;min-height:46px;font-size:15px}
+.tbtn .btn{min-height:46px}
+footer{padding:30px max(5vw,20px) 46px;text-align:center;color:var(--mut);font-size:14px;border-top:1px solid var(--line);background:rgba(4,5,10,.55)}
 footer p{margin:4px 0}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -222,25 +263,26 @@ footer p{margin:4px 0}
   <section class="st film" data-st="film" id="film" aria-labelledby="ctitle">
     <div class="cine" id="cine">
       <h2 class="ctitle" id="ctitle" data-t="film">影片</h2>
-      <svg class="ppl" id="ppl" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMax slice" aria-hidden="true"></svg>
       <button class="snd" type="button" id="snd" aria-pressed="false"><span data-t="sound">声音</span> · <span class="v" data-t="off">关</span></button>
       <button class="full" type="button" id="full" data-t="full">全屏看</button>
       <p class="csub" data-t="filmSub">两分钟，看懂 Dinamics。</p>
       <video class="vid" id="vid" playsinline muted loop preload="none" crossorigin="anonymous" aria-hidden="true" tabindex="-1"></video>
     </div>
   </section>
-  <section class="st works" data-st="works" id="works"><div class="wrapx">
-    <h2 class="h2" data-t="h2w">做出来的，自己看。</h2><p class="sub" data-t="subw">上线的网站、平台和样板，点进去就能用。</p>
-    <div class="wgrid" id="wgrid"></div></div>
+  <section class="st works wsec" data-st="wi" id="works"><div class="wrapx">
+    <h2 class="h2" data-t="h2w">做出来的，自己看。</h2><p class="sub" data-t="subw">上线的网站、平台和样板，点进去就能用。</p></div>
+    <div class="w3" id="w3w"><div class="w3cam" id="wgrid"></div></div>
   </section>
-  <section class="st free" data-st="free" id="free"><div class="wrapx">
-    <h2 class="h2" data-th="h2free">六件免费工具，<span class="nw">打开就能用。</span></h2><p class="sub" data-t="subfree">不用注册，不收钱。先用工具把小事做好，大事再交给我们。</p>
-    <div class="fgrid" id="fgrid"></div></div>
+  <div id="wst"></div>
+  <section class="st free fsec" data-st="free" id="free"><div class="wrapx">
+    <h2 class="h2" data-th="h2free">六件免费工具，<span class="nw">打开就能用。</span></h2><p class="sub" data-t="subfree">不用注册，不收钱。先用工具把小事做好，大事再交给我们。</p></div>
+    <div class="w3" id="w3f"><div class="w3cam" id="fgrid"></div></div>
+    <div class="fsp" aria-hidden="true"></div>
   </section>
   <section class="st talk" data-st="talk" id="talk"><div class="wrapx">
     <h2 class="h2" data-t="h2c">你要做的事，说给我们听。</h2><p class="sub" data-t="talk">发一封邮件，说说你想做什么。</p>
     <a class="mail" id="mail" href="mailto:contact@dinamics.dev">contact@dinamics.dev</a>
-    <button class="copy" type="button" id="copy" data-t="copy">复制邮箱</button></div>
+    <div class="tbtn"><button class="copy" type="button" id="copy" data-t="copy">复制邮箱</button><a class="btn gold" href="order.html" data-t="order">直接下单</a></div></div>
   </section>
 </main>
 <footer><p data-th="foot1">Dinamics 是 <a href="https://dsj.vc">DSJ Ventures</a> 投资的企业。</p><p data-t="foot2">© 2026 Dinamics</p></footer>
@@ -248,7 +290,7 @@ footer p{margin:4px 0}
 <div class="plabel" id="plabel" aria-hidden="true"></div>
 <div class="hintp" id="hintp" aria-hidden="true"><span data-t="hint">拖一拖银河，点一颗星球。</span><svg viewBox="0 0 46 30" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M2 26C14 24 30 18 42 4M42 4l-9 1M42 4l-1 9"/></svg></div>
 <button class="skipb" type="button" id="skip" data-t="skip" hidden>跳过</button>
-<script id="yh-data" type="application/json">{"ui":{"zh":{"title":"Dinamics · 你要的，都造得出来","navw":"作品","nav1":"能做什么","navf":"商家们的免费工具","nav3":"联系","more":"更多","h1":"你要的，<br>都造得出来。","lede":"网站、App、AI 智能体、交易系统、智能合约、视频……十八般技术，一家做齐。","cta":"说说你要做的事","cta2":"看作品","hint":"拖一拖银河，点一颗星球。","skip":"跳过","cue":"往下滚，在银河里飞一圈","of":"{i} / 18","first":"首版","open":"看这一门","did":"我们做的","skipTour":"跳过，直接看作品","film":"影片","filmSub":"两分钟，看懂 Dinamics。","sound":"声音","on":"开","off":"关","full":"全屏看","h2w":"做出来的，自己看。","subw":"上线的网站、平台和样板，点进去就能用。","wOpen":"打开","want":"我要这种","live":"已上线","sample":"样板","h2free":"六件免费工具，<span class=\"nw\">打开就能用。<\/span>","subfree":"不用注册，不收钱。先用工具把小事做好，大事再交给我们。","free":"免费","h2c":"你要做的事，说给我们听。","talk":"发一封邮件，说说你想做什么。","copy":"复制邮箱","copied":"已复制","foot1":"Dinamics 是 <a href=\"https://dsj.vc\">DSJ Ventures<\/a> 投资的企业。","foot2":"© 2026 Dinamics","lang":"语言","replay":"再看一次开场","old":"看现在的首页","close":"关闭","rail":"十八般技术","ft_check":"网站体检","fd_check":"看你的网站快不快、手机上好不好看、Google 找不找得到。","ft_card":"电子名片","fd_card":"一条链接、一个二维码，放上你的 logo，客户一点就能联系你。","ft_invoice":"收据和报价单","fd_invoice":"中文英文都行，存成 PDF 或图片直接发给客户。","ft_qr":"扫码牌","fd_qr":"WhatsApp、Wi-Fi、网址放在同一张牌上，下载 PDF 就能印。","ft_greeting":"节日祝福图","fd_greeting":"全世界 27 个节日，放上店名和标志，一张图发给所有客户。","ft_ai":"AI 客服免费试用","fd_ai":"24 小时替你回客户，每个月的名额有限。"},"en":{"title":"Dinamics · Whatever you need, built","navw":"Work","nav1":"What we build","navf":"Free tools for businesses","nav3":"Contact","more":"More","h1":"Anything,<br>engineered.","lede":"Websites, apps, AI agents, trading systems, smart contracts, video — eighteen crafts under one roof.","cta":"Tell us what you're building","cta2":"See our work","hint":"Drag the galaxy. Tap a planet.","skip":"Skip","cue":"Scroll to fly through the galaxy","of":"{i} of 18","first":"First version","open":"See this craft","did":"What we've built","skipTour":"Skip to our work","film":"THE FILM","filmSub":"Two minutes to understand Dinamics.","sound":"Sound","on":"on","off":"off","full":"Full screen","h2w":"See what we've built.","subw":"Live sites, platforms and samples. Click through and use them.","wOpen":"Open","want":"I want one like this","live":"Live","sample":"Sample","h2free":"Six free tools, <span class=\"nw\">ready to use.<\/span>","subfree":"No sign-up, no charge. Get the small things done with our tools, and bring the big ones to us.","free":"Free","h2c":"Tell us what you want to build.","talk":"Send us an email and tell us what you have in mind.","copy":"Copy email","copied":"Copied","foot1":"Dinamics is a <a href=\"https://dsj.vc\">DSJ Ventures<\/a> portfolio company.","foot2":"© 2026 Dinamics","lang":"Language","replay":"Watch the opening again","old":"See the current home page","close":"Close","rail":"Eighteen crafts","ft_check":"Website check","fd_check":"How fast your site is, how it looks on phones, whether Google can find it.","ft_card":"E-card","fd_card":"One link and one QR code, with your logo: customers reach you in a tap.","ft_invoice":"Receipts and quotations","fd_invoice":"In Chinese or English, saved as a PDF or a picture to send.","ft_qr":"Scan signs","fd_qr":"Your WhatsApp, Wi-Fi and website on one sign. Download the PDF and print.","ft_greeting":"Festival greetings","fd_greeting":"27 festivals from around the world: add your shop name and logo, send one picture to everyone.","ft_ai":"Free AI customer service trial","fd_ai":"Answers your customers around the clock. Limited places each month."},"ms":{"title":"Dinamics · Apa yang anda mahu, kami bina","navw":"Hasil kerja","nav1":"Apa yang kami bina","navf":"Alat percuma untuk peniaga","nav3":"Hubungi","more":"Lagi","h1":"Apa yang anda mahu,<br>kami bina.","lede":"Laman web, aplikasi, ejen AI, sistem dagangan, kontrak pintar, video — lapan belas kepakaran di bawah satu bumbung.","cta":"Ceritakan projek anda","cta2":"Lihat hasil kerja","hint":"Seret galaksi. Ketik sebuah planet.","skip":"Langkau","cue":"Tatal untuk terbang melalui galaksi","of":"{i} daripada 18","first":"Versi pertama","open":"Lihat kepakaran ini","did":"Yang kami bina","skipTour":"Terus ke hasil kerja","film":"FILEM","filmSub":"Dua minit untuk mengenali Dinamics.","sound":"Bunyi","on":"buka","off":"tutup","full":"Skrin penuh","h2w":"Lihat sendiri apa yang kami bina.","subw":"Laman web, platform dan contoh yang sudah dilancarkan. Klik dan gunakan.","wOpen":"Buka","want":"Saya mahu seperti ini","live":"Sudah dilancarkan","sample":"Contoh","h2free":"Enam alat percuma, <span class=\"nw\">sedia digunakan.<\/span>","subfree":"Tanpa daftar, tanpa bayaran. Selesaikan perkara kecil dengan alat kami, dan serahkan perkara besar kepada kami.","free":"Percuma","h2c":"Beritahu kami apa yang anda mahu bina.","talk":"Hantar e-mel kepada kami dan ceritakan apa yang anda fikirkan.","copy":"Salin e-mel","copied":"Disalin","foot1":"Dinamics ialah syarikat portfolio <a href=\"https://dsj.vc\">DSJ Ventures<\/a>.","foot2":"© 2026 Dinamics","lang":"Bahasa","replay":"Tonton pembukaan sekali lagi","old":"Lihat halaman utama sekarang","close":"Tutup","rail":"Lapan belas kepakaran","ft_check":"Semakan laman web","fd_check":"Sepantas mana laman anda, bagaimana rupanya di telefon, dan sama ada Google boleh menemuinya.","ft_card":"Kad nama digital","fd_card":"Satu pautan dan satu kod QR, dengan logo anda: pelanggan boleh menghubungi anda dengan satu ketikan.","ft_invoice":"Resit dan sebut harga","fd_invoice":"Dalam bahasa Melayu, Inggeris atau Cina, disimpan sebagai PDF atau gambar untuk dihantar.","ft_qr":"Papan kod QR","fd_qr":"WhatsApp, Wi-Fi dan laman web anda pada satu papan. Muat turun PDF dan terus cetak.","ft_greeting":"Ucapan perayaan","fd_greeting":"27 perayaan dari seluruh dunia: letak nama kedai dan logo anda, hantar satu gambar kepada semua pelanggan.","ft_ai":"Percubaan percuma khidmat pelanggan AI","fd_ai":"Menjawab pelanggan anda sepanjang masa. Tempat terhad setiap bulan."}},"crafts":[{"slug":"website","zh":{"n":"官网","d":"品牌官网、活动页、多语言网站","t":"2–5 天"},"en":{"n":"Websites","d":"Brand sites, campaign pages, multilingual sites","t":"2–5 days"},"ms":{"n":"Laman web","d":"Laman web jenama, halaman kempen, laman web pelbagai bahasa","t":"2–5 hari"}},{"slug":"platform","zh":{"n":"网页平台","d":"会员、订单、管理后台、数据库","t":"2–4 周"},"en":{"n":"Web platforms","d":"Members, orders, admin panels, databases","t":"2–4 weeks"},"ms":{"n":"Platform web","d":"Ahli, pesanan, panel pentadbir, pangkalan data","t":"2–4 minggu"}},{"slug":"app","zh":{"n":"手机 App","d":"iOS、Android 跨平台应用","t":"3–6 周，不含审核"},"en":{"n":"Mobile apps","d":"Cross-platform iOS and Android apps","t":"3–6 weeks, plus store review"},"ms":{"n":"Aplikasi mudah alih","d":"Aplikasi merentas platform iOS dan Android","t":"3–6 minggu, tidak termasuk semakan kedai aplikasi"}},{"slug":"chatbot","zh":{"n":"聊天机器人","d":"Telegram、WhatsApp、LINE 机器人，频道推送，自动客服","t":"1–3 天"},"en":{"n":"Chatbots","d":"Telegram, WhatsApp and LINE bots, channel posts, auto-replies","t":"1–3 days"},"ms":{"n":"Bot sembang","d":"Bot Telegram, WhatsApp dan LINE, hantaran saluran, balasan automatik","t":"1–3 hari"}},{"slug":"miniapp","zh":{"n":"Mini App","d":"在 Telegram 里直接打开的应用","t":"2–4 周"},"en":{"n":"Mini Apps","d":"Apps that open right inside Telegram","t":"2–4 weeks"},"ms":{"n":"Mini App","d":"Aplikasi yang dibuka terus di dalam Telegram","t":"2–4 minggu"}},{"slug":"agents","zh":{"n":"AI 智能体","d":"客服问答、知识库、多个模型互相审核","t":"1–2 周"},"en":{"n":"AI agents","d":"Support answers, knowledge bases, models that review each other","t":"1–2 weeks"},"ms":{"n":"Ejen AI","d":"Jawapan khidmat pelanggan, pangkalan pengetahuan, model yang saling menyemak","t":"1–2 minggu"}},{"slug":"automation","zh":{"n":"自动化","d":"文件处理、系统对接、定时任务","t":"1–2 周"},"en":{"n":"Automation","d":"File handling, system integrations, scheduled jobs","t":"1–2 weeks"},"ms":{"n":"Automasi","d":"Pengurusan fail, integrasi sistem, tugas berjadual","t":"1–2 minggu"}},{"slug":"dashboards","zh":{"n":"数据看板","d":"公开数据采集、数据管道、看板、指数、报表","t":"3 天–2 周"},"en":{"n":"Data dashboards","d":"Public data collection, pipelines, dashboards, indices, reports","t":"3 days–2 weeks"},"ms":{"n":"Papan pemuka data","d":"Pengumpulan data awam, saluran data, papan pemuka, indeks, laporan","t":"3 hari–2 minggu"}},{"slug":"brand","zh":{"n":"品牌 Logo","d":"Logo、品牌规范、海报","t":"1–5 天"},"en":{"n":"Brand and logo","d":"Logos, brand guidelines, posters","t":"1–5 days"},"ms":{"n":"Jenama dan logo","d":"Logo, garis panduan jenama, poster","t":"1–5 hari"}},{"slug":"ui","zh":{"n":"界面设计","d":"App 和网站界面、设计系统","t":"1–5 天"},"en":{"n":"Interface design","d":"App and web interfaces, design systems","t":"1–5 days"},"ms":{"n":"Reka bentuk antara muka","d":"Antara muka aplikasi dan web, sistem reka bentuk","t":"1–5 hari"}},{"slug":"games","zh":{"n":"游戏","d":"网页小游戏、学习类游戏、Roblox 游戏","t":"1–4 周"},"en":{"n":"Games","d":"Web games, learning games, Roblox games","t":"1–4 weeks"},"ms":{"n":"Permainan","d":"Permainan web, permainan pembelajaran, permainan Roblox","t":"1–4 minggu"}},{"slug":"documents","zh":{"n":"商务文档","d":"计划书、白皮书、合同初稿、财务模型","t":"当天–3 天"},"en":{"n":"Business documents","d":"Business plans, white papers, draft contracts, financial models","t":"Same day–3 days"},"ms":{"n":"Dokumen perniagaan","d":"Pelan perniagaan, kertas putih, draf kontrak, model kewangan","t":"Hari yang sama–3 hari"}},{"slug":"pitch","zh":{"n":"路演 PPT","d":"融资路演、产品发布、内部汇报","t":"当天–3 天"},"en":{"n":"Pitch decks","d":"Fundraising, product launches, internal reviews","t":"Same day–3 days"},"ms":{"n":"Slaid pembentangan","d":"Pembentangan kepada pelabur, pelancaran produk, laporan dalaman","t":"Hari yang sama–3 hari"}},{"slug":"trading","zh":{"n":"交易系统","d":"行情、自动下单、熔断保护、撮合引擎","t":"1–2 周"},"en":{"n":"Trading systems","d":"Market data, automated orders, circuit breakers, matching engines","t":"1–2 weeks"},"ms":{"n":"Sistem dagangan","d":"Data pasaran, pesanan automatik, pemutus litar, enjin pemadanan","t":"1–2 minggu"}},{"slug":"contracts","zh":{"n":"智能合约","d":"代币、金库合约、链上收款、钱包","t":"1–3 周"},"en":{"n":"Smart contracts","d":"Tokens, vault contracts, on-chain payments, wallets","t":"1–3 weeks"},"ms":{"n":"Kontrak pintar","d":"Token, kontrak bilik kebal, bayaran atas rantaian, dompet","t":"1–3 minggu"}},{"slug":"video","zh":{"n":"视频内容","d":"剧本、分镜、AI 视频、配音、剪辑","t":"按条报价"},"en":{"n":"Video","d":"Scripts, storyboards, AI video, voice-over, editing","t":"Quoted per video"},"ms":{"n":"Video","d":"Skrip, papan cerita, video AI, alih suara, suntingan","t":"Sebut harga mengikut video"}},{"slug":"security","zh":{"n":"服务器与安全","d":"部署、权限锁、自动还原、备份、漏洞自查","t":"1–3 天"},"en":{"n":"Servers and security","d":"Deployment, permission locks, auto-restore, backups, vulnerability checks","t":"1–3 days"},"ms":{"n":"Pelayan dan keselamatan","d":"Pelaksanaan, kunci kebenaran, pemulihan automatik, sandaran, semakan kerentanan","t":"1–3 hari"}},{"slug":"infra","zh":{"n":"硬件与网络","d":"主机托管、远程连接、VPN 节点、算力调度","t":"约 1 周"},"en":{"n":"Hardware and networks","d":"Hosting, remote access, VPN nodes, compute scheduling","t":"About 1 week"},"ms":{"n":"Perkakasan dan rangkaian","d":"Hos pelayan, akses jauh, nod VPN, penjadualan kuasa pengkomputeran","t":"Kira-kira 1 minggu"}}],"works":[{"id":"zero","url":"https://0x000000000.com","host":"0x000000000.com","shot":"zero","tag":"live","crafts":[2,15,17,16],"zh":{"n":"零九零","k":"靓号地址铸造平台"},"en":{"n":"0x000000000","k":"Vanity-address foundry"},"ms":{"n":"0x000000000","k":"Penempaan alamat vanity"}},{"id":"phrax","url":"https://phrax.co","host":"phrax.co","shot":"phrax","tag":"live","crafts":[2,10],"zh":{"n":"牌所 PHRAX","k":"泰国佛牌平台"},"en":{"n":"PHRAX","k":"Thai amulet platform"},"ms":{"n":"PHRAX","k":"Platform amulet Thailand"}},{"id":"bdy","url":"https://budayangai.com","host":"budayangai.com","shot":"bdy","tag":"live","crafts":[1,9,16,18],"zh":{"n":"不打烊 AI 工作站","k":"曼谷机房的独享 AI 工作站"},"en":{"n":"不打烊 AI Workstation","k":"Dedicated AI workstations in Bangkok"},"ms":{"n":"不打烊 AI Workstation","k":"Stesen kerja AI khusus di Bangkok"}},{"id":"dinamics","url":"/","host":"dinamics.dev","shot":"dinamics","tag":"live","crafts":[1],"zh":{"n":"Dinamics 官网","k":"你现在逛的这个站"},"en":{"n":"Dinamics","k":"The site you are on"},"ms":{"n":"Dinamics","k":"Laman yang anda lawati"}},{"id":"salon","url":"/samples/silhouette/","host":"dinamics.dev/samples/silhouette","shot":"salon","tag":"sample","crafts":[2],"zh":{"n":"剪影","k":"发廊预约与排队"},"en":{"n":"Silhouette","k":"Salon bookings and queue"},"ms":{"n":"Silhouette","k":"Tempahan dan giliran salun"}},{"id":"glug","url":"/samples/glug/","host":"dinamics.dev/samples/glug","shot":"glug","tag":"sample","crafts":[2],"zh":{"n":"茶咕 GLUG","k":"奶茶会员积分"},"en":{"n":"GLUG","k":"Bubble-tea membership"},"ms":{"n":"GLUG","k":"Keahlian teh boba"}},{"id":"pawn","url":"/samples/goldenjoy/","host":"dinamics.dev/samples/goldenjoy","shot":"pawn","tag":"sample","crafts":[2],"zh":{"n":"金禧当铺","k":"黄金典当"},"en":{"n":"Golden Joy Pawn","k":"Gold pawnbroking"},"ms":{"n":"Golden Joy Pawn","k":"Pajak gadai emas"}},{"id":"ecard","url":"/dsj","host":"dinamics.dev/dsj","shot":"ecard","tag":"live","crafts":[9],"zh":{"n":"电子名片","k":"会自己换风格的电子名片"},"en":{"n":"E-card","k":"A card that changes its own style"},"ms":{"n":"Kad nama digital","k":"Kad yang menukar gayanya sendiri"}}],"ft":["check","card","invoice","qr","greeting","ai"],"ficon":{"check":"<circle cx=\"12\" cy=\"13\" r=\"8\"/><path d=\"M12 13l4.5-4.5M8 21h8\"/>","card":"<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2.5\"/><circle cx=\"8.5\" cy=\"11\" r=\"2.2\"/><path d=\"M13.5 10h4.5M13.5 13.5h3M6 15.5h5\"/>","invoice":"<path d=\"M6 3h12v18l-3-2-3 2-3-2-3 2z\"/><path d=\"M9 8h6M9 11.5h6M9 15h3.5\"/>","qr":"<path d=\"M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2.5v2.5H14zM17.5 17.5H20V20h-2.5zM14 19h1M19 14h1\"/>","greeting":"<path d=\"M12 2.5v2.5M9 5h6M9 19h6M12 19v2.5\"/><ellipse cx=\"12\" cy=\"12\" rx=\"6.5\" ry=\"7\"/><path d=\"M10 5.5c-2 4-2 9 0 13M14 5.5c2 4 2 9 0 13\"/>","ai":"<path d=\"M4 5h16v11H9.5L5 20v-4H4z\"/><path d=\"M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01\"/>"},"mail":"contact@dinamics.dev","film":{"zh":["work/dinamics-film-zh.mp4","work/dinamics-film-zh.webp"],"en":["work/dinamics-film-en.mp4","work/dinamics-film-en.webp"]},"dstrokes":[[22,42,22,88,11],[22,17,22,17,13],[37,14,52,14,10],[52.0,14.0,63.4,15.8,11.5],[63.4,15.8,73.7,21.1,11.2],[73.7,21.1,81.9,29.3,10.7],[81.9,29.3,87.2,39.6,10.0],[87.2,39.6,89.0,51.0,9.1],[89.0,51.0,87.2,62.4,8.1],[87.2,62.4,81.9,72.7,6.9],[81.9,72.7,73.7,80.9,5.5],[73.7,80.9,63.4,86.2,4.0],[63.4,86.2,52.0,88.0,2.4],[52,88,36,88,1.5]]}</script>
+<script id="yh-data" type="application/json">{"ui":{"zh":{"title":"Dinamics · 你要的，都造得出来","navw":"作品","nav1":"能做什么","navf":"商家们的免费工具","nav3":"联系","more":"更多","h1":"你要的，<br>都造得出来。","lede":"网站、App、AI 智能体、交易系统、智能合约、视频……十八般技术，一家做齐。","cta":"说说你要做的事","cta2":"看作品","hint":"拖一拖银河，点一颗星球。","skip":"跳过","cue":"往下滚，在银河里飞一圈","of":"{i} / 18","first":"首版","open":"看这一门","did":"我们做的","skipTour":"跳过，直接看作品","film":"影片","filmSub":"两分钟，看懂 Dinamics。","sound":"声音","on":"开","off":"关","full":"全屏看","h2w":"做出来的，自己看。","subw":"上线的网站、平台和样板，点进去就能用。","wOpen":"打开","want":"我要这种","live":"已上线","sample":"样板","h2free":"六件免费工具，<span class=\"nw\">打开就能用。<\/span>","subfree":"不用注册，不收钱。先用工具把小事做好，大事再交给我们。","free":"免费","h2c":"你要做的事，说给我们听。","talk":"发一封邮件，说说你想做什么。","copy":"复制邮箱","copied":"已复制","order":"直接下单","foot1":"Dinamics 是 <a href=\"https://dsj.vc\">DSJ Ventures<\/a> 投资的企业。","foot2":"© 2026 Dinamics","lang":"语言","replay":"再看一次开场","old":"看现在的首页","close":"关闭","rail":"十八般技术","ft_check":"网站体检","fd_check":"看你的网站快不快、手机上好不好看、Google 找不找得到。","ft_card":"电子名片","fd_card":"一条链接、一个二维码，放上你的 logo，客户一点就能联系你。","ft_invoice":"收据和报价单","fd_invoice":"中文英文都行，存成 PDF 或图片直接发给客户。","ft_qr":"扫码牌","fd_qr":"WhatsApp、Wi-Fi、网址放在同一张牌上，下载 PDF 就能印。","ft_greeting":"节日祝福图","fd_greeting":"全世界 27 个节日，放上店名和标志，一张图发给所有客户。","ft_ai":"AI 客服免费试用","fd_ai":"24 小时替你回客户，每个月的名额有限。"},"en":{"title":"Dinamics · Whatever you need, built","navw":"Work","nav1":"What we build","navf":"Free tools for businesses","nav3":"Contact","more":"More","h1":"Anything,<br>engineered.","lede":"Websites, apps, AI agents, trading systems, smart contracts, video — eighteen crafts under one roof.","cta":"Tell us what you're building","cta2":"See our work","hint":"Drag the galaxy. Tap a planet.","skip":"Skip","cue":"Scroll to fly through the galaxy","of":"{i} of 18","first":"First version","open":"See this craft","did":"What we've built","skipTour":"Skip to our work","film":"THE FILM","filmSub":"Two minutes to understand Dinamics.","sound":"Sound","on":"on","off":"off","full":"Full screen","h2w":"See what we've built.","subw":"Live sites, platforms and samples. Click through and use them.","wOpen":"Open","want":"I want one like this","live":"Live","sample":"Sample","h2free":"Six free tools, <span class=\"nw\">ready to use.<\/span>","subfree":"No sign-up, no charge. Get the small things done with our tools, and bring the big ones to us.","free":"Free","h2c":"Tell us what you want to build.","talk":"Send us an email and tell us what you have in mind.","copy":"Copy email","copied":"Copied","order":"Place an order","foot1":"Dinamics is a <a href=\"https://dsj.vc\">DSJ Ventures<\/a> portfolio company.","foot2":"© 2026 Dinamics","lang":"Language","replay":"Watch the opening again","old":"See the current home page","close":"Close","rail":"Eighteen crafts","ft_check":"Website check","fd_check":"How fast your site is, how it looks on phones, whether Google can find it.","ft_card":"E-card","fd_card":"One link and one QR code, with your logo: customers reach you in a tap.","ft_invoice":"Receipts and quotations","fd_invoice":"In Chinese or English, saved as a PDF or a picture to send.","ft_qr":"Scan signs","fd_qr":"Your WhatsApp, Wi-Fi and website on one sign. Download the PDF and print.","ft_greeting":"Festival greetings","fd_greeting":"27 festivals from around the world: add your shop name and logo, send one picture to everyone.","ft_ai":"Free AI customer service trial","fd_ai":"Answers your customers around the clock. Limited places each month."},"ms":{"title":"Dinamics · Apa yang anda mahu, kami bina","navw":"Hasil kerja","nav1":"Apa yang kami bina","navf":"Alat percuma untuk peniaga","nav3":"Hubungi","more":"Lagi","h1":"Apa yang anda mahu,<br>kami bina.","lede":"Laman web, aplikasi, ejen AI, sistem dagangan, kontrak pintar, video — lapan belas kepakaran di bawah satu bumbung.","cta":"Ceritakan projek anda","cta2":"Lihat hasil kerja","hint":"Seret galaksi. Ketik sebuah planet.","skip":"Langkau","cue":"Tatal untuk terbang melalui galaksi","of":"{i} daripada 18","first":"Versi pertama","open":"Lihat kepakaran ini","did":"Yang kami bina","skipTour":"Terus ke hasil kerja","film":"FILEM","filmSub":"Dua minit untuk mengenali Dinamics.","sound":"Bunyi","on":"buka","off":"tutup","full":"Skrin penuh","h2w":"Lihat sendiri apa yang kami bina.","subw":"Laman web, platform dan contoh yang sudah dilancarkan. Klik dan gunakan.","wOpen":"Buka","want":"Saya mahu seperti ini","live":"Sudah dilancarkan","sample":"Contoh","h2free":"Enam alat percuma, <span class=\"nw\">sedia digunakan.<\/span>","subfree":"Tanpa daftar, tanpa bayaran. Selesaikan perkara kecil dengan alat kami, dan serahkan perkara besar kepada kami.","free":"Percuma","h2c":"Beritahu kami apa yang anda mahu bina.","talk":"Hantar e-mel kepada kami dan ceritakan apa yang anda fikirkan.","copy":"Salin e-mel","copied":"Disalin","order":"Buat pesanan","foot1":"Dinamics ialah syarikat portfolio <a href=\"https://dsj.vc\">DSJ Ventures<\/a>.","foot2":"© 2026 Dinamics","lang":"Bahasa","replay":"Tonton pembukaan sekali lagi","old":"Lihat halaman utama sekarang","close":"Tutup","rail":"Lapan belas kepakaran","ft_check":"Semakan laman web","fd_check":"Sepantas mana laman anda, bagaimana rupanya di telefon, dan sama ada Google boleh menemuinya.","ft_card":"Kad nama digital","fd_card":"Satu pautan dan satu kod QR, dengan logo anda: pelanggan boleh menghubungi anda dengan satu ketikan.","ft_invoice":"Resit dan sebut harga","fd_invoice":"Dalam bahasa Melayu, Inggeris atau Cina, disimpan sebagai PDF atau gambar untuk dihantar.","ft_qr":"Papan kod QR","fd_qr":"WhatsApp, Wi-Fi dan laman web anda pada satu papan. Muat turun PDF dan terus cetak.","ft_greeting":"Ucapan perayaan","fd_greeting":"27 perayaan dari seluruh dunia: letak nama kedai dan logo anda, hantar satu gambar kepada semua pelanggan.","ft_ai":"Percubaan percuma khidmat pelanggan AI","fd_ai":"Menjawab pelanggan anda sepanjang masa. Tempat terhad setiap bulan."}},"crafts":[{"slug":"website","zh":{"n":"官网","d":"品牌官网、活动页、多语言网站","t":"2–5 天"},"en":{"n":"Websites","d":"Brand sites, campaign pages, multilingual sites","t":"2–5 days"},"ms":{"n":"Laman web","d":"Laman web jenama, halaman kempen, laman web pelbagai bahasa","t":"2–5 hari"}},{"slug":"platform","zh":{"n":"网页平台","d":"会员、订单、管理后台、数据库","t":"2–4 周"},"en":{"n":"Web platforms","d":"Members, orders, admin panels, databases","t":"2–4 weeks"},"ms":{"n":"Platform web","d":"Ahli, pesanan, panel pentadbir, pangkalan data","t":"2–4 minggu"}},{"slug":"app","zh":{"n":"手机 App","d":"iOS、Android 跨平台应用","t":"3–6 周，不含审核"},"en":{"n":"Mobile apps","d":"Cross-platform iOS and Android apps","t":"3–6 weeks, plus store review"},"ms":{"n":"Aplikasi mudah alih","d":"Aplikasi merentas platform iOS dan Android","t":"3–6 minggu, tidak termasuk semakan kedai aplikasi"}},{"slug":"chatbot","zh":{"n":"聊天机器人","d":"Telegram、WhatsApp、LINE 机器人，频道推送，自动客服","t":"1–3 天"},"en":{"n":"Chatbots","d":"Telegram, WhatsApp and LINE bots, channel posts, auto-replies","t":"1–3 days"},"ms":{"n":"Bot sembang","d":"Bot Telegram, WhatsApp dan LINE, hantaran saluran, balasan automatik","t":"1–3 hari"}},{"slug":"miniapp","zh":{"n":"Mini App","d":"在 Telegram 里直接打开的应用","t":"2–4 周"},"en":{"n":"Mini Apps","d":"Apps that open right inside Telegram","t":"2–4 weeks"},"ms":{"n":"Mini App","d":"Aplikasi yang dibuka terus di dalam Telegram","t":"2–4 minggu"}},{"slug":"agents","zh":{"n":"AI 智能体","d":"客服问答、知识库、多个模型互相审核","t":"1–2 周"},"en":{"n":"AI agents","d":"Support answers, knowledge bases, models that review each other","t":"1–2 weeks"},"ms":{"n":"Ejen AI","d":"Jawapan khidmat pelanggan, pangkalan pengetahuan, model yang saling menyemak","t":"1–2 minggu"}},{"slug":"automation","zh":{"n":"自动化","d":"文件处理、系统对接、定时任务","t":"1–2 周"},"en":{"n":"Automation","d":"File handling, system integrations, scheduled jobs","t":"1–2 weeks"},"ms":{"n":"Automasi","d":"Pengurusan fail, integrasi sistem, tugas berjadual","t":"1–2 minggu"}},{"slug":"dashboards","zh":{"n":"数据看板","d":"公开数据采集、数据管道、看板、指数、报表","t":"3 天–2 周"},"en":{"n":"Data dashboards","d":"Public data collection, pipelines, dashboards, indices, reports","t":"3 days–2 weeks"},"ms":{"n":"Papan pemuka data","d":"Pengumpulan data awam, saluran data, papan pemuka, indeks, laporan","t":"3 hari–2 minggu"}},{"slug":"brand","zh":{"n":"品牌 Logo","d":"Logo、品牌规范、海报","t":"1–5 天"},"en":{"n":"Brand and logo","d":"Logos, brand guidelines, posters","t":"1–5 days"},"ms":{"n":"Jenama dan logo","d":"Logo, garis panduan jenama, poster","t":"1–5 hari"}},{"slug":"ui","zh":{"n":"界面设计","d":"App 和网站界面、设计系统","t":"1–5 天"},"en":{"n":"Interface design","d":"App and web interfaces, design systems","t":"1–5 days"},"ms":{"n":"Reka bentuk antara muka","d":"Antara muka aplikasi dan web, sistem reka bentuk","t":"1–5 hari"}},{"slug":"games","zh":{"n":"游戏","d":"网页小游戏、学习类游戏、Roblox 游戏","t":"1–4 周"},"en":{"n":"Games","d":"Web games, learning games, Roblox games","t":"1–4 weeks"},"ms":{"n":"Permainan","d":"Permainan web, permainan pembelajaran, permainan Roblox","t":"1–4 minggu"}},{"slug":"documents","zh":{"n":"商务文档","d":"计划书、白皮书、合同初稿、财务模型","t":"当天–3 天"},"en":{"n":"Business documents","d":"Business plans, white papers, draft contracts, financial models","t":"Same day–3 days"},"ms":{"n":"Dokumen perniagaan","d":"Pelan perniagaan, kertas putih, draf kontrak, model kewangan","t":"Hari yang sama–3 hari"}},{"slug":"pitch","zh":{"n":"路演 PPT","d":"融资路演、产品发布、内部汇报","t":"当天–3 天"},"en":{"n":"Pitch decks","d":"Fundraising, product launches, internal reviews","t":"Same day–3 days"},"ms":{"n":"Slaid pembentangan","d":"Pembentangan kepada pelabur, pelancaran produk, laporan dalaman","t":"Hari yang sama–3 hari"}},{"slug":"trading","zh":{"n":"交易系统","d":"行情、自动下单、熔断保护、撮合引擎","t":"1–2 周"},"en":{"n":"Trading systems","d":"Market data, automated orders, circuit breakers, matching engines","t":"1–2 weeks"},"ms":{"n":"Sistem dagangan","d":"Data pasaran, pesanan automatik, pemutus litar, enjin pemadanan","t":"1–2 minggu"}},{"slug":"contracts","zh":{"n":"智能合约","d":"代币、金库合约、链上收款、钱包","t":"1–3 周"},"en":{"n":"Smart contracts","d":"Tokens, vault contracts, on-chain payments, wallets","t":"1–3 weeks"},"ms":{"n":"Kontrak pintar","d":"Token, kontrak bilik kebal, bayaran atas rantaian, dompet","t":"1–3 minggu"}},{"slug":"video","zh":{"n":"视频内容","d":"剧本、分镜、AI 视频、配音、剪辑","t":"按条报价"},"en":{"n":"Video","d":"Scripts, storyboards, AI video, voice-over, editing","t":"Quoted per video"},"ms":{"n":"Video","d":"Skrip, papan cerita, video AI, alih suara, suntingan","t":"Sebut harga mengikut video"}},{"slug":"security","zh":{"n":"服务器与安全","d":"部署、权限锁、自动还原、备份、漏洞自查","t":"1–3 天"},"en":{"n":"Servers and security","d":"Deployment, permission locks, auto-restore, backups, vulnerability checks","t":"1–3 days"},"ms":{"n":"Pelayan dan keselamatan","d":"Pelaksanaan, kunci kebenaran, pemulihan automatik, sandaran, semakan kerentanan","t":"1–3 hari"}},{"slug":"infra","zh":{"n":"硬件与网络","d":"主机托管、远程连接、VPN 节点、算力调度","t":"约 1 周"},"en":{"n":"Hardware and networks","d":"Hosting, remote access, VPN nodes, compute scheduling","t":"About 1 week"},"ms":{"n":"Perkakasan dan rangkaian","d":"Hos pelayan, akses jauh, nod VPN, penjadualan kuasa pengkomputeran","t":"Kira-kira 1 minggu"}}],"works":[{"id":"zero","url":"https://0x000000000.com","host":"0x000000000.com","shot":"zero","tag":"live","crafts":[2,15,17,16],"zh":{"n":"零九零","k":"靓号地址铸造平台"},"en":{"n":"0x000000000","k":"Vanity-address foundry"},"ms":{"n":"0x000000000","k":"Penempaan alamat vanity"}},{"id":"phrax","url":"https://phrax.co","host":"phrax.co","shot":"phrax","tag":"live","crafts":[2,10],"zh":{"n":"牌所 PHRAX","k":"泰国佛牌平台"},"en":{"n":"PHRAX","k":"Thai amulet platform"},"ms":{"n":"PHRAX","k":"Platform amulet Thailand"}},{"id":"bdy","url":"https://budayangai.com","host":"budayangai.com","shot":"bdy","tag":"live","crafts":[1,9,16,18],"zh":{"n":"不打烊 AI 工作站","k":"曼谷机房的独享 AI 工作站"},"en":{"n":"不打烊 AI Workstation","k":"Dedicated AI workstations in Bangkok"},"ms":{"n":"不打烊 AI Workstation","k":"Stesen kerja AI khusus di Bangkok"}},{"id":"dinamics","url":"/","host":"dinamics.dev","shot":"dinamics","tag":"live","crafts":[1],"zh":{"n":"Dinamics 官网","k":"你现在逛的这个站"},"en":{"n":"Dinamics","k":"The site you are on"},"ms":{"n":"Dinamics","k":"Laman yang anda lawati"}},{"id":"salon","url":"/samples/silhouette/","host":"dinamics.dev/samples/silhouette","shot":"salon","tag":"sample","crafts":[2],"zh":{"n":"剪影","k":"发廊预约与排队"},"en":{"n":"Silhouette","k":"Salon bookings and queue"},"ms":{"n":"Silhouette","k":"Tempahan dan giliran salun"}},{"id":"glug","url":"/samples/glug/","host":"dinamics.dev/samples/glug","shot":"glug","tag":"sample","crafts":[2],"zh":{"n":"茶咕 GLUG","k":"奶茶会员积分"},"en":{"n":"GLUG","k":"Bubble-tea membership"},"ms":{"n":"GLUG","k":"Keahlian teh boba"}},{"id":"pawn","url":"/samples/goldenjoy/","host":"dinamics.dev/samples/goldenjoy","shot":"pawn","tag":"sample","crafts":[2],"zh":{"n":"金禧当铺","k":"黄金典当"},"en":{"n":"Golden Joy Pawn","k":"Gold pawnbroking"},"ms":{"n":"Golden Joy Pawn","k":"Pajak gadai emas"}},{"id":"ecard","url":"/dsj","host":"dinamics.dev/dsj","shot":"ecard","tag":"live","crafts":[9],"zh":{"n":"电子名片","k":"会自己换风格的电子名片"},"en":{"n":"E-card","k":"A card that changes its own style"},"ms":{"n":"Kad nama digital","k":"Kad yang menukar gayanya sendiri"}}],"ft":["check","card","invoice","qr","greeting","ai"],"ficon":{"check":"<circle cx=\"12\" cy=\"13\" r=\"8\"/><path d=\"M12 13l4.5-4.5M8 21h8\"/>","card":"<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2.5\"/><circle cx=\"8.5\" cy=\"11\" r=\"2.2\"/><path d=\"M13.5 10h4.5M13.5 13.5h3M6 15.5h5\"/>","invoice":"<path d=\"M6 3h12v18l-3-2-3 2-3-2-3 2z\"/><path d=\"M9 8h6M9 11.5h6M9 15h3.5\"/>","qr":"<path d=\"M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2.5v2.5H14zM17.5 17.5H20V20h-2.5zM14 19h1M19 14h1\"/>","greeting":"<path d=\"M12 2.5v2.5M9 5h6M9 19h6M12 19v2.5\"/><ellipse cx=\"12\" cy=\"12\" rx=\"6.5\" ry=\"7\"/><path d=\"M10 5.5c-2 4-2 9 0 13M14 5.5c2 4 2 9 0 13\"/>","ai":"<path d=\"M4 5h16v11H9.5L5 20v-4H4z\"/><path d=\"M8.5 10.5h.01M12 10.5h.01M15.5 10.5h.01\"/>"},"mail":"contact@dinamics.dev","film":{"zh":["work/dinamics-film-zh.mp4","work/dinamics-film-zh.webp"],"en":["work/dinamics-film-en.mp4","work/dinamics-film-en.webp"]},"dstrokes":[[22,42,22,88,11],[22,17,22,17,13],[37,14,52,14,10],[52.0,14.0,63.4,15.8,11.5],[63.4,15.8,73.7,21.1,11.2],[73.7,21.1,81.9,29.3,10.7],[81.9,29.3,87.2,39.6,10.0],[87.2,39.6,89.0,51.0,9.1],[89.0,51.0,87.2,62.4,8.1],[87.2,62.4,81.9,72.7,6.9],[81.9,72.7,73.7,80.9,5.5],[73.7,80.9,63.4,86.2,4.0],[63.4,86.2,52.0,88.0,2.4],[52,88,36,88,1.5]]}</script>
 <script>
 {
 const D = JSON.parse(document.getElementById('yh-data').textContent);
@@ -260,6 +302,7 @@ const MOB = matchMedia('(max-width: 700px), (pointer: coarse)').matches;
 let L = ({ en: 'en', ms: 'ms' })[store.get('dinamics-lang')] || 'zh';
 const seen = store.get('dn-yinhe-seen') === '1';
 const T = () => D.ui[L];
+const eng = () => window.YH && window.YH.engine;
 
 // ---------- the crafts, the work, the free tools ----------
 function crafts() {
@@ -275,12 +318,14 @@ function crafts() {
   }).join('');
   $('rail').innerHTML = D.crafts.map((c, i) => `<button type="button" data-i="${i}" aria-label="${esc(c[L].n)}" title="${esc(c[L].n)}"></button>`).join('');
   $('rail').setAttribute('aria-label', T().rail);
-  $('wgrid').innerHTML = D.works.map((w, i) => `<article class="wk" style="--i:${i}">
-      <a class="shot" href="${esc(w.url)}" tabindex="-1" aria-hidden="true"><picture><source media="(max-width:700px)" srcset="work/shot-${w.shot}-m.webp"><img src="work/shot-${w.shot}-d.webp" alt="" loading="lazy" decoding="async"></picture></a>
-      <div class="wb"><span class="tag${w.tag === 'sample' ? ' smp' : ''}">${esc(T()[w.tag === 'sample' ? 'sample' : 'live'])}</span>
+  $('wgrid').innerHTML = D.works.map((w, i) => `<article class="w3p" data-k="${i}">
+      <a class="w3s" href="${esc(w.url)}" tabindex="-1" aria-hidden="true"><img src="work/shot-${w.shot}-d.webp" alt="" loading="lazy" decoding="async" width="1440" height="900"></a>
+      <a class="w3m" href="${esc(w.url)}" tabindex="-1" aria-hidden="true"><img src="work/shot-${w.shot}-m.webp" alt="" loading="lazy" decoding="async" width="585" height="1266"></a>
+      <div class="w3b"><span class="tag${w.tag === 'sample' ? ' smp' : ''}">${esc(T()[w.tag === 'sample' ? 'sample' : 'live'])}</span>
       <h3>${esc(w[L].n)}</h3><p>${esc(w[L].k)}</p><p class="host">${esc(w.host)}</p>
-      <div class="wa"><a href="${esc(w.url)}">${esc(T().wOpen)}</a><a class="want" href="order.html">${esc(T().want)}</a></div></div></article>`).join('');
-  $('fgrid').innerHTML = D.ft.map(k => `<a class="ft" href="/free/${k}"><svg viewBox="0 0 24 24" aria-hidden="true">${D.ficon[k]}</svg><b>${esc(T()['ft_' + k])}</b><span>${esc(T()['fd_' + k])}</span></a>`).join('');
+      <div class="wa"><a href="${esc(w.url)}" data-w="${i}">${esc(T().wOpen)}</a><a class="want" href="order.html" data-w="${i}">${esc(T().want)}</a></div></div></article>`).join('');
+  $('wst').innerHTML = D.works.map((w, i) => `<div class="wst" data-st="w${i}" aria-hidden="true"></div>`).join('');
+  $('fgrid').innerHTML = D.ft.map(k => `<a class="w3t" href="/free/${k}"><svg viewBox="0 0 24 24" aria-hidden="true">${D.ficon[k]}</svg><b>${esc(T()['ft_' + k])}</b><span>${esc(T()['fd_' + k])}</span><i>${esc(T().free)}</i></a>`).join('');
   observe(); measure();
 }
 function words() {
@@ -321,47 +366,12 @@ function scatter() {
   document.querySelectorAll('.hero .fade').forEach(el => el.style.opacity = p ? Math.max(0, 1 - p * 2) : '');
 }
 
-// ---------- the cinema: a hall, a curved screen, our own silhouettes ----------
-const FIG = {
-  stand: [['c', 0, -166, 12.5], ['l', 0, -153, 0, -146, 11], ['l', -19, -137, 19, -137, 16], ['l', 0, -138, 0, -96, 37], ['l', -9, -93, 9, -93, 27],
-    ['l', -9, -90, -11, -6, 17], ['l', 9, -90, 11, -6, 17], ['l', -22, -133, -27, -98, 12], ['l', -27, -98, -24, -64, 10], ['l', 22, -133, 27, -98, 12], ['l', 27, -98, 25, -64, 10]],
-  pockets: [['c', 0, -167, 12.5], ['l', 0, -154, 0, -147, 11], ['l', -20, -138, 20, -138, 16], ['l', 0, -139, 0, -96, 38], ['l', -9, -93, 9, -93, 27],
-    ['l', -8, -90, -14, -6, 17], ['l', 8, -90, 13, -6, 17], ['l', -23, -134, -33, -104, 12], ['l', -33, -104, -16, -86, 10], ['l', 23, -134, 33, -104, 12], ['l', 33, -104, 16, -86, 10]],
-  sit: [['l', -34, -54, 8, -54, 7], ['l', -32, -54, -38, -112, 6], ['l', -12, -54, -12, -6, 6], ['l', -32, -3, 10, -3, 6],
-    ['c', 18, -138, 12], ['l', 12, -124, 15, -130, 10], ['l', -4, -60, 10, -118, 34], ['l', -4, -60, 40, -62, 19], ['l', 40, -62, 42, -8, 14], ['l', 42, -5, 56, -5, 9],
-    ['l', 10, -112, 36, -92, 12], ['l', 36, -92, 66, -86, 10],
-    ['l', 54, -82, 156, -82, 6], ['l', 62, -82, 62, -4, 5], ['l', 148, -82, 148, -4, 5], ['l', 118, -82, 118, -98, 5], ['m', 88, -156, 58, 58]],
-  draw: [['l', 0, -4, 0, -84, 6], ['p', '-46,-84 40,-84 52,-150 -34,-150'], ['l', -20, -4, 20, -4, 6],
-    ['c', 92, -160, 12], ['l', 90, -147, 88, -141, 11], ['l', 70, -130, 104, -130, 15], ['l', 88, -132, 92, -92, 34], ['l', 84, -90, 98, -90, 26],
-    ['l', 84, -88, 80, -6, 16], ['l', 98, -88, 102, -6, 16], ['l', 72, -128, 50, -112, 11], ['l', 50, -112, 40, -128, 9], ['l', 106, -128, 112, -96, 11], ['l', 112, -96, 108, -70, 9]]
-};
-function figSVG(name, x, y, s, side) {
-  const shape = (cls) => FIG[name].map(p => p[0] === 'c' ? `<circle class="${cls}" cx="${p[1]}" cy="${p[2]}" r="${p[3]}"/>`
-    : p[0] === 'l' ? `<line class="${cls}" x1="${p[1]}" y1="${p[2]}" x2="${p[3]}" y2="${p[4]}" stroke-width="${p[5]}"/>`
-    : p[0] === 'p' ? `<polygon class="${cls}" points="${p[1]}"/>`
-    : `<rect class="${cls === 'k' ? 'k' : cls}" x="${p[1]}" y="${p[2]}" width="${p[3]}" height="${p[4]}" rx="4"/>`).join('');
-  const mon = name === 'sit' ? '<rect class="mon" x="92" y="-152" width="50" height="50" rx="2"/>' : '';
-  return `<g transform="translate(${x} ${y}) scale(${s})"><ellipse cx="${name === 'draw' ? 50 : 10}" cy="-2" rx="${name === 'sit' ? 110 : 52}" ry="7" fill="url(#ring${side})"/>
-    <g filter="url(#soft)" transform="translate(0 -2.5)">${shape('rim ' + (side === 'L' ? 'rimL' : 'rimR'))}</g>${shape('k')}${mon}</g>`;
-}
-function people() {
-  const narrow = innerWidth / innerHeight < 0.9;
-  const L1 = narrow ? figSVG('sit', 552, 892, 1.5, 'L') : figSVG('sit', 170, 892, 1.9, 'L') + figSVG('draw', 520, 896, 1.75, 'L');
-  const R1 = narrow ? figSVG('pockets', 1036, 884, 1.75, 'R') : figSVG('stand', 1190, 884, 1.95, 'R') + figSVG('pockets', 1330, 892, 2.05, 'R');
-  const grad = s => `<radialGradient id="ring${s}"><stop offset="0" style="stop-color:rgb(var(--t${s.toLowerCase()}));stop-opacity:calc(var(--ga)*.8)"/><stop offset="1" style="stop-color:rgb(var(--t${s.toLowerCase()}));stop-opacity:0"/></radialGradient>`;
-  $('ppl').innerHTML = `<defs><filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter>${grad('L')}${grad('R')}</defs>
-    <g class="gl">${L1}</g><g class="gr">${R1}</g>`;
-}
-let filmOn = false, cineQ = 0;
+// ---------- the cinema: the film, its sound, full screen ----------
+let filmOn = false;
 function film(swap) {
   const v = $('vid'), src = (D.film[L] || D.film.en);
   if (!filmOn && !swap) return;
-  if (v.dataset.src !== src[0]) { const was = !v.paused; v.dataset.src = src[0]; v.poster = src[1]; v.src = src[0]; if (was) v.play().catch(() => { }); }
-  if (window.YH && YH.cine) YH.cine.init();
-}
-function cineProgress() {
-  const el = $('film'), r = el.getBoundingClientRect();
-  return Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)));
+  if (v.dataset.src !== src[0]) { const was = !v.paused; v.dataset.src = src[0]; v.poster = src[1]; v.src = src[0]; v.load(); if (was) v.play().catch(() => { }); }
 }
 function sndLabels() {
   const v = $('vid');
@@ -372,9 +382,9 @@ function sndLabels() {
 }
 let sndAll = false;
 
-// ---------- scrolling: which station, the canvas, the cinema ----------
+// ---------- scrolling: which station, the rail ----------
 let ANCH = [];
-function measure() { ANCH = [...document.querySelectorAll('.craft')].map(el => ({ el, i: +el.dataset.st.slice(1) })); if (window.YH && YH.engine) YH.engine.measure(); }
+function measure() { ANCH = [...document.querySelectorAll('.craft')].map(el => ({ el, i: +el.dataset.st.slice(1) })); if (eng()) eng().measure(); }
 let ioC;
 function observe() {
   if (ioC) ioC.disconnect();
@@ -384,72 +394,73 @@ function observe() {
 function onScroll() {
   scatter();
   const fr = $('film').getBoundingClientRect(), H = innerHeight;
-  let op = 1;
-  if (fr.top < H && fr.bottom > H) op = Math.max(0, Math.min(1, fr.top / H));
-  else if (fr.bottom <= H) op = 0.5 * Math.min(1, Math.max(0, (H - fr.bottom) / H));
-  const cv = document.querySelector('.yh-gl'); if (cv) cv.style.opacity = op < 0.005 ? '0' : String(op);
-  // the cinema
-  cineQ = cineProgress();
-  const near = fr.top < H * 2.5 && fr.bottom > -H;
-  if (near) { if (!filmOn) { filmOn = true; film(true); } else if (window.YH && YH.cine) YH.cine.init(); }
-  const v = $('vid'), playing = cineQ > 0.05 && cineQ < 0.95 && fr.top < H && fr.bottom > 0;
-  if (filmOn) { if (playing && v.paused) v.play().catch(() => { }); else if (!playing && !v.paused) v.pause(); }
-  if (!playing && !v.muted) { v.muted = true; sndLabels(); }
-  // the rail
+  if (!filmOn && fr.top < H * 3 && fr.bottom > -H) { filmOn = true; film(true); }
+  const v = $('vid');
+  if (!eng() || de.classList.contains('no-cine')) {   // without the 3D the film just plays in the hall
+    const playing = fr.top < H * 0.5 && fr.bottom > H * 0.5;
+    if (playing && v.paused) v.play().catch(() => { }); else if (!playing && !v.paused) v.pause();
+  }
+  if (v.paused && !v.muted) { v.muted = true; sndLabels(); }
   const yc = H / 2; let cur = -1;
   for (const a of ANCH) { const r = a.el.getBoundingClientRect(); if (r.top <= yc && r.bottom > yc) { cur = a.i; break; } }
   $('rail').classList.toggle('on', cur >= 0);
   $('rail').querySelectorAll('button').forEach((b, i) => b.setAttribute('aria-current', i === cur));
 }
 addEventListener('scroll', onScroll, { passive: true });
-addEventListener('resize', () => { measure(); people(); onScroll(); });
+addEventListener('resize', () => { measure(); onScroll(); });
+// every jump on the page glides there; with the 3D the camera flies along
+function go(el) {
+  if (!el) return;
+  const e = eng();
+  if (e && e.flyTo) { const st = el.dataset && el.dataset.st ? e.stop(el.dataset.st) : null; e.flyTo(st !== null && st !== undefined ? st : el.getBoundingClientRect().top + scrollY); }
+  else el.scrollIntoView({ behavior: RED ? 'auto' : 'smooth' });
+}
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (a && a.getAttribute('href').length > 1) { const el = document.querySelector(a.getAttribute('href')); if (el) { e.preventDefault(); menu.classList.remove('open'); go(el); history.replaceState(null, '', a.getAttribute('href')); } }
+  const g = e.target.closest('[data-go]'); if (g) go($(g.dataset.go));
+});
 
 // ---------- controls ----------
 const menu = $('menu'), more = document.querySelector('.more');
 more.addEventListener('click', e => { e.stopPropagation(); const o = !menu.classList.contains('open'); menu.classList.toggle('open', o); more.setAttribute('aria-expanded', o); });
-document.addEventListener('click', e => { if (!menu.contains(e.target)) { menu.classList.remove('open'); more.setAttribute('aria-expanded', false); } });
+document.addEventListener('click', e => { if (!menu.contains(e.target) && e.target !== more) { menu.classList.remove('open'); more.setAttribute('aria-expanded', false); } });
 addEventListener('keydown', e => { if (e.key === 'Escape') { menu.classList.remove('open'); more.setAttribute('aria-expanded', false); } });
-menu.addEventListener('click', e => { if (e.target.closest('a[href^="#"]')) menu.classList.remove('open'); });
 $('langs').addEventListener('click', e => { const b = e.target.closest('[data-l]'); if (!b) return; L = b.dataset.l; store.set('dinamics-lang', L); words(); onScroll(); });
-$('sndAll').addEventListener('click', () => { sndAll = !sndAll; if (window.YH && YH.engine) YH.engine.sound(sndAll); sndLabels(); });
+$('sndAll').addEventListener('click', () => { sndAll = !sndAll; if (eng()) eng().sound(sndAll); sndLabels(); });
 $('replay').addEventListener('click', () => { store.set('dn-yinhe-seen', '0'); location.hash = ''; location.reload(); });
-$('snd').addEventListener('click', () => { const v = $('vid'); v.muted = !v.muted; if (!v.muted) { v.play().catch(() => { }); if (sndAll && YH.engine) YH.engine.sound(false); } sndLabels(); });
+$('snd').addEventListener('click', () => { const v = $('vid'); v.muted = !v.muted; if (!v.muted) { if (sndAll && eng()) eng().sound(false); } sndLabels(); });
 $('full').addEventListener('click', () => { const v = $('vid'); try { (v.requestFullscreen || v.webkitEnterFullscreen || v.webkitRequestFullscreen).call(v); v.play().catch(() => { }); } catch (e) { } });
 $('copy').addEventListener('click', () => { const b = $('copy'); (navigator.clipboard ? navigator.clipboard.writeText(D.mail) : Promise.reject()).then(() => { b.textContent = T().copied; setTimeout(() => b.textContent = T().copy, 1800); }).catch(() => { }); });
-document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) $(g.dataset.go).scrollIntoView({ behavior: RED ? 'auto' : 'smooth' }); });
-$('rail').addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) document.querySelector(`[data-st="c${b.dataset.i}"]`).scrollIntoView({ behavior: RED ? 'auto' : 'smooth' }); });
-$('skip').addEventListener('click', () => { if (YH.engine) YH.engine.skip(); else opening(1); });
+$('rail').addEventListener('click', e => { const b = e.target.closest('[data-i]'); if (b) go(document.querySelector(`[data-st="c${b.dataset.i}"]`)); });
+$('skip').addEventListener('click', () => { if (eng()) eng().skip(); else opening(1); });
+// a focused work panel brings the camera to it
+document.addEventListener('focusin', e => { const a = e.target.closest && e.target.closest('[data-w]'); if (a && eng()) go(document.querySelector(`[data-st="w${a.dataset.w}"]`)); });
 
 // ---------- the 3D, after the first paint ----------
 let tried = +store.get('dn-ring-tried') || 0;
 function tryOnce() { tried++; store.set('dn-ring-tried', tried); }
 window.YH = {
-  mobile: MOB, reduced: RED, skipOpening: seen || RED, crafts: 18, host: document.body, dStrokes: D.dstrokes, film: D.film,
+  mobile: MOB, reduced: RED, skipOpening: seen || RED, crafts: 18, works: D.works.length, host: document.body, dStrokes: D.dstrokes,
   onOpening: opening,
-  onPick(i) { tryOnce(); const el = document.querySelector(`[data-st="c${i}"]`); if (el) el.scrollIntoView({ behavior: RED ? 'auto' : 'smooth' }); },
+  onPick(i) { tryOnce(); go(document.querySelector(`[data-st="c${i}"]`)); },
   onDragged() { tryOnce(); },
-  onHover(i, s) { const l = $('plabel'); if (i >= 0 && s) { l.textContent = D.crafts[i][L].n; l.style.left = s[0] + 'px'; l.style.top = (s[1] - s[2]) + 'px'; l.classList.add('on'); } else l.classList.remove('on'); },
-  onFrame(scr) {
-    const hp = $('hintp'), s = scr[0], show = tried < 3 && scrollY < innerHeight * 0.3 && !$('h1').classList.contains('pre') && s;
-    if (show) { hp.style.left = (s[0] - s[2] - 280) + 'px'; hp.style.top = (s[1] - 14) + 'px'; if (s[0] - s[2] - 280 < 8) { hp.style.left = Math.max(8, s[0] - 120) + 'px'; hp.style.top = (s[1] + s[2] + 12) + 'px'; } }
+  onHover(i, s) { const l = $('plabel'); if (i >= 0 && s) { l.textContent = D.crafts[i][L].n; l.style.left = s[0] + 'px'; l.style.top = (s[1] - s[2] * 1.7) + 'px'; l.classList.add('on'); } else l.classList.remove('on'); },
+  onFrame(scr, P, sc) {
+    const hp = $('hintp'), s = scr[0], show = tried < 3 && sc < 0.25 && !$('h1').classList.contains('pre') && s;
+    if (show) { hp.style.left = (s[0] - s[2] - 290) + 'px'; hp.style.top = (s[1] - 14) + 'px'; if (s[0] - s[2] - 290 < 8) { hp.style.left = Math.max(8, s[0] - 120) + 'px'; hp.style.top = (s[1] + s[2] + 12) + 'px'; } }
     hp.classList.toggle('on', !!show);
   },
-  cinema: { host: $('cine'), video: $('vid'), get poster() { return (D.film[L] || D.film.en)[1]; }, progress: () => cineQ,
-    onLight(c, a, px, py) {
-      const st = $('cine').style, lift = x => { const m = Math.max(x[0], x[1], x[2], 0.08); return x.map(v => Math.round(255 * Math.min(1, v / m * 0.92))).join(','); };
-      st.setProperty('--tl', lift(c[0])); st.setProperty('--tm', lift(c[1])); st.setProperty('--tr', lift(c[2]));
-      const br = (c[1][0] + c[1][1] + c[1][2]) / 3;
-      st.setProperty('--ga', (a * Math.min(1, 0.35 + br * 2.2)).toFixed(3)); st.setProperty('--ta', a.toFixed(3));
-      st.setProperty('--px', px.toFixed(3)); st.setProperty('--py', py.toFixed(3));
-    },
-    onScreenTop(y) { $('ctitle').style.top = Math.max(96, y - 18) + 'px'; }
+  cinema: { el: $('film'), video: $('vid'), get poster() { return (D.film[L] || D.film.en)[1]; },
+    onState(w, house, curtain, gain) { const st = $('cine').style; st.setProperty('--ta', w.toFixed(3)); st.setProperty('--th', (0.4 + 0.6 * house).toFixed(3)); st.setProperty('--tg', gain.toFixed(3)); },
+    onScreenTop(y) { $('ctitle').style.top = Math.max(110, y - 26) + 'px'; }
   }
 };
 if (!seen && !RED) { $('skip').hidden = false; } else { $('h1').classList.remove('pre'); document.querySelector('.hero').classList.remove('pre'); }
-words(); people(); onScroll();
-const boot = () => { const s = document.createElement('script'); s.src = 'yinhe.js?v=313fe2704f'; s.onload = () => { if (window.YH.engine) de.classList.add('gl'); else opening(1); }; document.body.appendChild(s); };
+words(); onScroll();
+const boot = () => { const s = document.createElement('script'); s.src = 'yinhe.js?v=60135fc34c'; s.onload = () => { if (eng()) { de.classList.add('gl'); measure(); setTimeout(measure, 200); } else { de.classList.add('no-gl'); opening(1); } }; s.onerror = () => { de.classList.add('no-gl'); opening(1); }; document.body.appendChild(s); };
 requestAnimationFrame(() => setTimeout(boot, 0));
-if (!seen && !RED) setTimeout(() => { if (!window.YH.engine) opening(1); }, 6000);
+if (!seen && !RED) setTimeout(() => { if (!eng()) opening(1); }, 6000);
 }
 </script>
 </body>

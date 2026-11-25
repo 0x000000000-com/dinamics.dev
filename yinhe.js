@@ -1535,10 +1535,26 @@ function fail(e) {
   const de = document.documentElement; de.classList.remove('gl'); de.classList.add('no-gl');
   Y.engine = null; if (Y.onFail) Y.onFail(e);
 }
+// going into a craft: the camera dives at its planet (then the page changes); arriving on a craft page it pulls back out from just above the surface
+function landing(P) {
+  const now = performance.now();
+  if (S.dive) {
+    const D = S.dive, k = clamp((now - D.t0) / 950), e = k * k * (3 - 2 * k), p = PL[D.i], w = planetPos(p);
+    if (!D.e0) { D.e0 = P.e.slice(); D.c0 = P.c.slice(); D.sx = P.sx; D.sy = P.sy; }
+    const near = add(w, mul(nrm(sub(D.e0, w)), p.rad * 1.2));
+    P.e = mix(D.e0, near, e * e); P.c = mix(D.c0, w, Math.min(1, e * 1.6)); P.sx = D.sx * (1 - e); P.sy = D.sy * (1 - e);
+    if (k >= 1 && !D.fired) { D.fired = true; D.done(); }
+  } else if (S.arrive) {
+    const A = S.arrive, k = clamp((now - A.t0) / 1500), e = 1 - Math.pow(1 - k, 3), p = PL[A.i], w = planetPos(p);
+    const from = add(w, mul(nrm(sub(P.e, w)), p.rad * 1.2));
+    P.e = mix(from, P.e, e); P.c = mix(w, P.c, e); P.sx *= e; P.sy *= e;
+    if (k >= 1) S.arrive = null;
+  }
+}
 function frame(now) {
-  if (!S.running || S.dead) return;
+  if (!S.running || S.dead || S.paused) return;
   requestAnimationFrame(frame);
-  if (BOOT < 2) { if (!bootStep()) return; cv.classList.add('on'); S.time = 0; if (S.open < 1 && performance.now() > 1600) S.late = true; if (Y.onReady) Y.onReady(); }
+  if (BOOT < 2) { if (!bootStep()) return; cv.classList.add('on'); S.time = 0; if (S.open < 1 && performance.now() > 1600) S.late = true; if (Y.arrive != null && !RED && PL[Y.arrive]) { S.sc = scrollS(); S.sv = 0; S.arrive = { i: Y.arrive, t0: performance.now() }; } if (Y.onReady) Y.onReady(); }
   const t = now / 1000, raw = t - (S.time || t - 0.016), dt = Math.min(0.1, Math.max(0.001, raw)); S.time = t; S.frame++;
   if (loNext < PL.length) bakeLo(); else bakeStep();
   scrollTick(dt);
@@ -1559,10 +1575,11 @@ function frame(now) {
   if (!inHall) {
     if (S.open < 1) { const k = eio(clamp((S.open - 0.3) / 0.6)); P.e = mix([0, 0, 30], P.e, k); P.c = mix([0, 0, 0], P.c, k); P.sy *= k; }
     if (!RED && !MOB) { const B = camBasis(P.e, P.c), k = len(sub(P.e, P.c)) * 0.035; P.e = add(P.e, add(mul(B.x, S.px * k), mul(B.y, -S.py * k * 0.6))); }
+    landing(P);
     P.expo *= cin.g;
   } else P.expo = cin.w;
   const fov = P.fov || FOV;
-  lookAt(view, P.e, P.c, [0, 1, 0]); persp(proj, fov, S.w / S.h, inHall ? 0.12 : 0.3, inHall ? 200 : 4000, P.sx, P.sy); mmul(vp, proj, view);
+  lookAt(view, P.e, P.c, [0, 1, 0]); persp(proj, fov, S.w / S.h, inHall ? 0.12 : (S.dive || S.arrive) ? 0.04 : 0.3, inHall ? 200 : 4000, P.sx, P.sy); mmul(vp, proj, view);
   camR = [view[0], view[4], view[8]]; camU = [view[1], view[5], view[9]]; camF = [-view[2], -view[6], -view[10]]; camE = P.e;
   gl.bindFramebuffer(gl.FRAMEBUFFER, R.scene.f); gl.viewport(0, 0, R.w, R.h);
   gl.clearColor(0, 0, 0, 1); gl.depthMask(true); gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -1610,7 +1627,7 @@ function scrollTick(dt) {
 if (SM.on) {
   SM.y = SM.tg = scrollY;
   addEventListener('wheel', e => {
-    if (e.ctrlKey || e.defaultPrevented || BOOT < 2 || S.dead) return;
+    if (e.ctrlKey || e.defaultPrevented || BOOT < 2 || S.dead || S.paused) return;
     const el = e.target.closest && e.target.closest('.menu,[data-scroll]'); if (el) return;
     e.preventDefault(); SM.anim = null;
     const k = e.deltaMode === 1 ? 36 : e.deltaMode === 2 ? innerHeight : 1;
@@ -1622,7 +1639,7 @@ function flyTo(y, done) {
   y = clamp(y, 0, maxY());
   const d = Math.abs(y - scrollY);
   if (d < 2) { done && done(); return; }
-  if (RED || BOOT < 2 || S.dead) { scrollTo(0, y); done && done(); return; }
+  if (RED || BOOT < 2 || S.dead || S.paused) { scrollTo(0, y); done && done(); return; }
   SM.anim = { y0: scrollY, y1: y, t0: performance.now(), dur: clamp(700 + d / innerHeight * 140, 900, 2600), done };
 }
 
@@ -1684,6 +1701,10 @@ function sfx(i) {
 Y.engine = {
   skip(auto) { S.open = 1; Y.onOpening && Y.onOpening(1, !!auto); },
   hold(b) { if (CI) CI.hold = !!b; },
+  dive(i, done) { if (RED || BOOT < 2 || S.dead || S.paused || !PL[i]) { done(); return; } S.arrive = null; S.dive = { i, t0: performance.now(), done }; },
+  // back from a page we dived out to (the browser kept this one as it was): come back out of that planet
+  back() { if (!S.dive) return; const i = S.dive.i; S.dive = null; if (!RED) S.arrive = { i, t0: performance.now() }; },
+  pause(b) { b = !!b; if (b === !!S.paused) return; S.paused = b; if (!b && S.running && !S.dead) { S.time = 0; requestAnimationFrame(frame); } },
   get ready() { return BOOT >= 2; },
   sound, sfx, measure, flyTo,
   stop(id) { const s = ST.find(x => x.id === id); return s ? s.y - innerHeight / 2 : null; },
@@ -1691,7 +1712,7 @@ Y.engine = {
 };
 new ResizeObserver(resize).observe(cv);
 addEventListener('resize', resize);
-document.addEventListener('visibilitychange', () => { if (S.dead) return; S.running = !document.hidden; if (S.running) { S.time = 0; requestAnimationFrame(frame); } });
+document.addEventListener('visibilitychange', () => { if (S.dead) return; S.running = !document.hidden; if (S.running && !S.paused) { S.time = 0; requestAnimationFrame(frame); } });
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(measure);
 S.ready = true;
 resize();

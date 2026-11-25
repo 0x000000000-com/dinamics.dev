@@ -56,9 +56,12 @@ function tcol(T) {
 // ======================================================================
 const cv = document.createElement('canvas'); cv.className = 'yh-gl'; cv.setAttribute('aria-hidden', 'true');
 (Y.host || document.body).appendChild(cv);
-const gl = cv.getContext('webgl', { alpha: false, antialias: false, depth: true, stencil: false, premultipliedAlpha: false, preserveDrawingBuffer: false, powerPreference: 'high-performance' })
-  || cv.getContext('experimental-webgl', { alpha: false, antialias: false });
-if (!gl) { document.documentElement.classList.add('no-gl'); cv.remove(); return; }
+const gl = cv.getContext('webgl', { alpha: false, antialias: false, depth: true, stencil: false, premultipliedAlpha: false, preserveDrawingBuffer: false, powerPreference: 'high-performance', failIfMajorPerformanceCaveat: true })
+  || cv.getContext('experimental-webgl', { alpha: false, antialias: false, failIfMajorPerformanceCaveat: true });
+// no graphics chip (the 3D would be drawn by the processor, a few frames a second): the still picture instead
+const SOFT = /swiftshader|llvmpipe|softpipe|lavapipe|software|basic render|gdi generic/i;
+const gpuName = () => { try { const x = gl.getExtension('WEBGL_debug_renderer_info'); return String(gl.getParameter(x ? x.UNMASKED_RENDERER_WEBGL : gl.RENDERER) || ''); } catch (e) { return ''; } };
+if (!gl || SOFT.test(gpuName())) { try { const lc = gl && gl.getExtension('WEBGL_lose_context'); if (lc) lc.loseContext(); } catch (e) {} document.documentElement.classList.add('no-gl'); cv.remove(); return; }
 const HI = (() => { const f = gl.getShaderPrecisionFormat(gl.FRAGMENT_SHADER, gl.HIGH_FLOAT); return f && f.precision > 0; })();
 const PREC = HI ? 'precision highp float;\n' : 'precision mediump float;\n';
 const MAXPT = Math.min(gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)[1] || 64, 512);

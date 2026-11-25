@@ -94,7 +94,7 @@ html[lang=en] .h1,html[lang=ms] .h1{font-weight:800;font-size:clamp(46px,min(11v
 .hintp.r{flex-direction:row-reverse}.hintp.r svg{scale:-1 1}
 @media (max-width:520px){.hintp span{white-space:normal;max-width:10.5em;text-wrap:balance;line-height:1.35}}
 @keyframes nudge{50%{transform:translate(6px,-4px)}}
-.plabel{position:fixed;z-index:15;pointer-events:none;padding:6px 12px;border-radius:99px;background:rgba(10,12,22,.8);border:1px solid rgba(217,178,107,.5);font-size:14px;white-space:nowrap;transform:translate(-50%,-150%);opacity:0;transition:opacity .2s}
+.plabel{position:fixed;z-index:15;pointer-events:none;padding:6px 12px;border-radius:99px;background:rgba(10,12,22,.8);border:1px solid rgba(217,178,107,.5);font-size:14px;white-space:nowrap;opacity:0;transition:opacity .2s}
 .plabel.on{opacity:1}
 
 /* the eighteen crafts: one planet, one card */
@@ -515,7 +515,15 @@ window.YH = {
   onOpening: opening,
   onPick(i) { tryOnce(); go(document.querySelector(`[data-st="c${i}"]`)); },
   onDragged() { tryOnce(); },
-  onHover(i, s) { const l = $('plabel'); if (i >= 0 && s) { l.textContent = D.crafts[i][L].n; l.style.left = s[0] + 'px'; l.style.top = (s[1] - s[2] * 1.7) + 'px'; l.classList.add('on'); } else l.classList.remove('on'); },
+  // the name over a planet: above it when there is room under the bar, otherwise below it; never off the screen
+  onHover(i, s) {
+    const l = $('plabel'); if (!(i >= 0 && s)) { l.classList.remove('on'); return; }
+    l.textContent = D.crafts[i][L].n;
+    const w = l.offsetWidth, h = l.offsetHeight, bar = 72;
+    let y = s[1] - s[2] * 1.25 - h - 6; if (y < bar) y = s[1] + s[2] * 1.25 + 6;
+    y = Math.min(Math.max(y, bar), innerHeight - h - 8);
+    l.style.left = Math.min(Math.max(s[0] - w / 2, 8), innerWidth - w - 8) + 'px'; l.style.top = y + 'px'; l.classList.add('on');
+  },
   onFrame(scr, P, sc) {
     // point at a planet that has room on its left or right: never on top of the headline, the words, the buttons or the scroll cue; stay on the same planet and side while it still fits
     const hp = $('hintp');

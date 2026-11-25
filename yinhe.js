@@ -696,7 +696,7 @@ void main(){
 const PDRAW = prog(`attribute vec2 q; uniform mat4 vp; uniform vec3 cen, cr, cu; uniform float ext; varying vec3 wp;
 void main(){ wp = cen + (cr*q.x + cu*q.y)*ext; gl_Position = vp*vec4(wp, 1.0); }`, `varying vec3 wp;
 uniform vec3 cen, eye, L, Lc, emitC, ringC, ringN; uniform vec4 atm, ring;
-uniform float rad, pix, pass, K, expo, atmH, spec, clouds, bump, limb, wrap, hi, ret, texel, night, amb;
+uniform float rad, pix, pass, K, expo, atmH, spec, clouds, bump, limb, wrap, hi, ret, texel, night, amb, nbias;
 uniform samplerCube ta, tb; uniform mat3 rotM, cloudM;
 float ringD(float rr){
   if (rr < ring.x || rr > ring.y) return 0.0;
@@ -742,7 +742,9 @@ void main(){
     float mu = max(dot(N, V), 0.0);
     col *= mix(1.0, pow(mu, 0.45), limb);
     float nightK = mix(1.0, smoothstep(0.1, -0.2, ndl0), night);
-    col += emitC*textureCube(tb, S).g*nightK*(1.0 - cl*0.8);
+    float lite = textureCube(tb, S).g;
+    if (nbias > 0.0) lite *= clamp(2.0 - texel*1.57*rad/max(tS*pix/length(oc), 1e-6), 0.0, 1.0);   // close to the ground its lights would show as squares: they fade where a texel is bigger than a pixel
+    col += emitC*lite*nightK*(1.0 - cl*0.8);
     float rim = pow(1.0 - mu, 2.4), atL = smoothstep(-0.3, 0.55, ndl0);
     col = mix(col, atm.rgb*atL*1.2, clamp(rim*atm.a*1.1, 0.0, 0.85)) + atm.rgb*atm.a*0.05*atL;
     col *= mix(vec3(1.0), vec3(1.0, 0.72, 0.5), atm.a*0.6*smoothstep(0.25, 0.0, abs(ndl0))*step(0.0, ndl0));
@@ -925,7 +927,7 @@ function drawPlanets(P, t, pass) {
     gl.uniform3fv(u.L, LD ? S.land.L : lightOf(p)); gl.uniform3fv(u.Lc, [1.0, 0.97, 0.92]);
     gl.uniform4fv(u.atm, LD ? [W.atm[0], W.atm[1], W.atm[2], W.atm[3] * 0.5] : W.atm); gl.uniform1f(u.atmH, (W.atmH || 0.03) * (LD ? 2.4 : 1));
     gl.uniform1f(u.spec, W.spec || 0); gl.uniform1f(u.clouds, W.clouds || 0); gl.uniform1f(u.bump, W.bump || 0); gl.uniform1f(u.limb, W.limb || 0);
-    gl.uniform1f(u.wrap, W.atm[3] > 0.6 ? 0.18 : 0.06); gl.uniform1f(u.night, W.night || 0); gl.uniform3fv(u.emitC, W.emit || [0, 0, 0]);
+    gl.uniform1f(u.wrap, W.atm[3] > 0.6 ? 0.18 : 0.06); gl.uniform1f(u.night, W.night || 0); gl.uniform3fv(u.emitC, W.emit || [0, 0, 0]); gl.uniform1f(u.nbias, LD ? 1 : 0);
     const AX = LD ? S.land.ax : p.axis;
     gl.uniform4fv(u.ring, W.ring ? [W.ring[0], W.ring[1], W.ring[2], 1] : [0, 0, 0, 0]); gl.uniform3fv(u.ringC, W.ringC || [0, 0, 0]); gl.uniform3fv(u.ringN, AX);
     gl.uniform1f(u.hi, p.hi); gl.uniform1f(u.ret, P.ret || 0); gl.uniform1f(u.texel, 2 / T.A.size); gl.uniform1f(u.amb, 0.012);
@@ -1314,6 +1316,7 @@ function measure() {
     return { id, el, top, h: r.height, y: id === 'film' ? top + r.height / 2 : top + Math.min(r.height, innerHeight) / 2 };
   }).sort((a, b) => a.y - b.y);
   if (typeof w3layout === 'function' && S.ready) w3layout();
+  L3.dirty = true;
 }
 const BASE = { sx: 0, sy: 0, gA: 1, dA: 1, coreA: 1, pA: 1, ret: 0, bloom: 0.2, expo: 1.0, vig: 0.35, lift: 0 };
 function poseHero() { return Object.assign({}, BASE, { e: sph(0.35 + S.az, 0.56 + S.el, MOB ? 118 : 92), c: [0, 0, 0], sy: MOB ? -0.2 : -0.24, ret: 0 }); }
@@ -1327,31 +1330,105 @@ PL.forEach(p => { p.D0 = stationDir(p, planetPos(p, 0)); });
 const LANDH = MOB ? 1.42 : 1.34, LB = { a: 2.06, yaw: MOB ? 0.0 : -0.3, hz: MOB ? 0.4 : 0.32 };   // the galaxy's centre ahead and to the right, away from the words
 // the site faces away from the galaxy's centre, so from low over it the centre rises just above the horizon ahead;
 // the light comes from behind the right shoulder, so the ground below shows its colours
-function landFrame(p) {
+function siteFrame(p) {
   const w = planetPos(p), k = nrm(sub([0, 0, 0], w));
   let m = sub([0, 1, 0], mul(k, k[1])); m = len(m) < 1e-3 ? [1, 0, 0] : nrm(m);
   const u = nrm(add(mul(k, Math.cos(LB.a)), mul(m, Math.sin(LB.a))));
   let f = nrm(sub(k, mul(u, dot(k, u)))), r = nrm(cross(f, u));
   f = nrm(add(mul(f, Math.cos(LB.yaw)), mul(r, Math.sin(LB.yaw)))); r = nrm(cross(f, u));
-  const e = add(w, mul(u, p.rad * LANDH));
-  const g = Math.acos(1 / LANDH) - Math.atan(LB.hz * Math.tan(FOV / 2));   // look down so the horizon sits a third of the way up the screen
-  S.land.L = nrm(add(add(mul(r, 0.7), mul(u, 0.62)), mul(f, -0.28)));
-  S.land.ax = nrm(add(mul(u, Math.sin(0.44)), mul(f, -Math.cos(0.44))));   // its pole tilted back: we fly at about 25° north, its bands and rings run along the horizon
-  return { w, u, f, e, v: nrm(sub(mul(f, Math.cos(g)), mul(u, Math.sin(g)))) };
+  return { w, u, f, r };
+}
+// a stop on the walk: th, how far round the planet from the landing site; h, the height (in radii from its centre);
+// yaw, turned right of ahead; hz, where the horizon sits (0 the middle of the screen, 1 its bottom edge)
+function walkCam(p, B, q) {
+  const c = Math.cos(q.th), s = Math.sin(q.th);
+  const U = nrm(add(mul(B.u, c), mul(B.f, s))), F0 = nrm(sub(mul(B.f, c), mul(B.u, s)));
+  const F = nrm(add(mul(F0, Math.cos(q.yaw)), mul(B.r, Math.sin(q.yaw)))), Rt = nrm(cross(F, U));
+  const e = add(B.w, mul(U, p.rad * q.h));
+  const g = Math.acos(Math.min(1, 1 / q.h)) - Math.atan(q.hz * Math.tan(FOV / 2));
+  const v = nrm(sub(mul(F, Math.cos(g)), mul(U, Math.sin(g))));
+  return { e, U, F, R: Rt, v, up: nrm(cross(Rt, v)) };
+}
+// the walk: the page says where it has scrolled to (a stop number, fractions between); the camera follows on a spring and holds at each stop
+const WK = Array.isArray(Y.walk) && Y.walk.length ? Y.walk : [{ th: 0, h: LANDH, yaw: 0, hz: LB.hz, n: 0, g: 0.55 }];
+S.walk = { t: 0, x: 0, v: 0 };
+function walkAt(x) {
+  const n = WK.length - 1, X = clamp(x, 0, n), j = Math.min(n - 1, Math.floor(X)), f = n ? X - j : 0;
+  if (!n) return Object.assign({}, WK[0]);
+  const a = WK[j], b = WK[j + 1], e = ss(clamp((f - 0.14) / 0.72)), q = {};
+  for (const k in a) q[k] = typeof a[k] === 'number' ? lerp(a[k], b[k] === undefined ? a[k] : b[k], e) : a[k];
+  return q;
+}
+// day at the top of the page, night by its foot: the light swings from above the right shoulder to below the horizon behind
+function landLight(B, n) {
+  const dayL = add(add(mul(B.r, 0.7), mul(B.u, 0.62)), mul(B.f, -0.28)), nightL = add(add(mul(B.r, 0.25), mul(B.u, -0.45)), mul(B.f, -0.85));   // night: the light is behind us and below, so the ground ahead goes dark
+  return nrm(mix(nrm(dayL), nrm(nightL), clamp(n)));
+}
+function landFrame(p) {
+  const B = siteFrame(p), q = walkAt(S.walk.x), C = walkCam(p, B, q);
+  S.land.L = landLight(B, q.n || 0);
+  S.land.ax = nrm(add(mul(B.u, Math.sin(0.44)), mul(B.f, -Math.cos(0.44))));   // its pole tilted back: we fly at about 25° north, its bands and rings run along the horizon
+  return { w: B.w, u: C.U, f: C.F, e: C.e, v: C.v, q };
 }
 // the descent: from inside the atmosphere looking straight down, the camera rises a little and pitches up to the horizon
 function landPose() {
   const p = PL[S.land.i], F = landFrame(p);
-  const P = Object.assign({}, BASE, { e: F.e, c: add(F.e, F.v), up: F.u, dA: 0, gA: 0.55, act: p.i, landed: 1 });
+  const P = Object.assign({}, BASE, { e: F.e, c: add(F.e, F.v), up: F.u, dA: 0, gA: F.q.g === undefined ? 0.55 : F.q.g, act: p.i, landed: 1 });
   if (S.land.t0 != null) {
     const k = clamp((performance.now() - S.land.t0) / 3000), E = k < 0.5 ? 4 * k * k * k : 1 - Math.pow(2 - 2 * k, 3) / 2;   // slow out of the air, pull up, level off
     if (k < 1) {
       P.e = mix(add(F.w, mul(F.u, p.rad * 1.06)), F.e, E);
       P.c = add(P.e, nrm(add(mul(F.u, -(1 - E)), mul(F.v, E))));
       P.up = nrm(add(mul(F.f, 1 - E), mul(F.u, E)));
-    }
+    } else S.land.t0 = null;
   }
   return P;
+}
+// ---------- the page's own elements on the planet (a screen in the sky, signs along the way), in CSS 3D with the same camera ----------
+const L3 = { layers: [], items: [], ok: false, dirty: true }, LK = 1000;   // the CSS camera works in thousandths of a world unit: a planet is small, and near the camera the browser would drop elements
+function l3layout() {
+  L3.dirty = false; L3.ok = false; L3.items = [];
+  if (!S.land) return;
+  L3.layers = [...document.querySelectorAll('.l3')].filter(L => L.firstElementChild && getComputedStyle(L).position === 'fixed');
+  if (!L3.layers.length) return;
+  const p = PL[S.land.i], B = siteFrame(p), ty = Math.tan(FOV / 2), tx = ty * S.cw / Math.max(1, S.ch);
+  L3.layers.forEach(L => L.querySelectorAll('[data-l3]').forEach(el => {
+    const d = el.dataset, g = k => +((MOB && d[k + 'm'] != null ? d[k + 'm'] : d[k]) || 0), st = +d.st, C = walkCam(p, B, WK[Math.min(st, WK.length - 1)]);
+    const was = el.style.display; el.style.display = 'block'; const wpx = el.offsetWidth || 1, hpx = el.offsetHeight || 1; el.style.display = was;   // measured while shown
+    const x = g('x'), y = g('y');
+    let pos, X, Yv, Z, s;
+    if (d.l3 === 'sign') {   // stands on the ground where the screen point (x, y) meets the planet, upright, turned to the camera
+      const dir = nrm(add(add(C.v, mul(C.R, x * tx)), mul(C.up, y * ty))), oc = sub(C.e, B.w), bq = dot(oc, dir), cq = dot(oc, oc) - p.rad * p.rad, disc = bq * bq - cq;
+      const tH = disc > 0 ? -bq - Math.sqrt(disc) : p.rad * 0.3, base = add(C.e, mul(dir, tH)), N = nrm(sub(base, B.w));
+      const toC = sub(C.e, base); Z = nrm(sub(toC, mul(N, dot(toC, N)))); Yv = N; X = cross(Yv, Z);
+      s = (g('h') || 0.3) * 2 * len(toC) * ty / hpx; pos = add(base, mul(N, hpx * s / 2));
+    } else {                 // a flat screen held in the sky in front of the camera at this stop: centre (x, y) on the screen, w of its width
+      const D = p.rad * (g('d') || 0.5);
+      pos = add(add(add(C.e, mul(C.v, D)), mul(C.R, x * D * tx)), mul(C.up, y * D * ty));
+      X = C.R; Yv = C.up; Z = mul(C.v, -1); s = (g('w') || 0.6) * 2 * D * tx / wpx;
+    }
+    el.style.transform = cssObj(X, Yv, Z, mul(pos, LK), s * LK);
+    L3.items.push({ el, st, pos, span: g('span') || 1, a: -1 });
+  }));
+  L3.ok = true;
+}
+function l3frame(P, hidden) {
+  if (!S.land) return;
+  if (L3.dirty) l3layout();
+  if (!L3.ok) return;
+  const p = (S.ch / 2) / Math.tan(FOV / 2), ox = P.sx * S.cw / 2, oy = -P.sy * S.ch / 2, v = view;
+  const cam = 'translate(' + ox.toFixed(2) + 'px,' + oy.toFixed(2) + 'px) translateZ(' + p.toFixed(3) + 'px) matrix3d(' + [v[0], -v[1], v[2], v[3], v[4], -v[5], v[6], v[7], v[8], -v[9], v[10], v[11], v[12] * LK, -v[13] * LK, v[14] * LK, v[15]].map(w3f).join(',') + ') translate(' + (S.cw / 2) + 'px,' + (S.ch / 2) + 'px)';
+  L3.layers.forEach(L => { L.style.perspective = p.toFixed(3) + 'px'; L.style.perspectiveOrigin = (S.cw / 2 + ox).toFixed(1) + 'px ' + (S.ch / 2 + oy).toFixed(1) + 'px'; L.firstElementChild.style.transform = cam; });
+  const desc = S.land.t0 != null, x = S.walk.x;
+  for (const it of L3.items) {
+    const ez = v[2] * it.pos[0] + v[6] * it.pos[1] + v[10] * it.pos[2] + v[14];
+    let a = hidden || desc || S.dive || ez > -0.002 ? 0 : ss(clamp(1 - Math.abs(x - it.st) / it.span)); if (a < 0.02) a = 0;
+    if (Math.abs(a - it.a) > 0.004 || (a === 0) !== (it.a === 0)) {
+      it.a = a; const st = it.el.style, show = a > 0;
+      st.opacity = a.toFixed(3); st.pointerEvents = a > 0.6 ? 'auto' : 'none';
+      if (show !== it.shown) { it.shown = show; st.display = show ? 'block' : 'none'; it.el.classList.toggle('on', show); }   // hidden ones are out of the page, so a film there does not start
+    }
+  }
 }
 const HILAND = MOB ? [512, 256] : [1024, 512];
 function landBaked() {
@@ -1610,7 +1687,7 @@ function frame(now) {
   if (loNext < PL.length) bakeLo(); else bakeStep();
   scrollTick(dt);
   pace(dt);
-  if (!RED) S.rot += dt * 0.004;
+  if (!RED && !S.land) S.rot += dt * 0.004;   // on a planet's page the galaxy holds still: only the walk moves the camera
   // the opening plays only when the 3D was ready quickly and runs smoothly; otherwise the words show at once (asked for again from the menu, it waits and plays)
   if (S.open < 1 && scrollY > 10) { S.open = 1; Y.onOpening && Y.onOpening(1); }
   if (S.open < 1 && !Y.forceOpening && (S.late || (raw > 0.09 && ++S.slow > 2))) { S.open = 1; Y.onOpening && Y.onOpening(1, true); }
@@ -1622,6 +1699,7 @@ function frame(now) {
   S.px += (S.tpx - S.px) * (1 - Math.exp(-dt * 3)); S.py += (S.tpy - S.py) * (1 - Math.exp(-dt * 3));
   const cin = CI ? cineUpdate(t) : { w: 0, g: 1 };
   const inHall = cin.w > 0.0005 && cin.g < 0.001;
+  if (S.land) { if (RED) { S.walk.x = S.walk.t; S.walk.v = 0; } else [S.walk.x, S.walk.v] = spring(S.walk.x, S.walk.v, S.walk.t, 4.6, dt); }
   let P = inHall ? poseCinema() : S.land ? landPose() : poseAtS(S.sc);
   if (!inHall) {
     if (S.open < 1) { const k = eio(clamp((S.open - 0.3) / 0.6)); P.e = mix([0, 0, 30], P.e, k); P.c = mix([0, 0, 0], P.c, k); P.sy *= k; }
@@ -1656,6 +1734,7 @@ function frame(now) {
   } else SCR.fill(null);
   post(P);
   w3frame(P, inHall || P.expo < 0.05);
+  l3frame(P, inHall || P.expo < 0.05);
   if (Y.onFrame) Y.onFrame(SCR, P, S.sc);
 }
 
@@ -1753,6 +1832,9 @@ Y.engine = {
   skip(auto) { S.open = 1; Y.onOpening && Y.onOpening(1, !!auto); },
   hold(b) { if (CI) CI.hold = !!b; },
   descend() { if (S.land && !RED) S.land.t0 = performance.now(); },
+  walk(t) { if (S.land) S.walk.t = clamp(+t || 0, 0, WK.length - 1); },
+  get walkX() { return S.walk ? S.walk.x : 0; },
+  relayout() { measure(); L3.dirty = true; },
   dive(i, done) { if (RED || BOOT < 2 || S.dead || S.paused || !PL[i]) { done(); return; } S.arrive = null; S.dive = { i, t0: performance.now(), done }; },
   // back from a page we dived out to (the browser kept this one as it was): come back out of that planet
   back() { if (!S.dive) return; const i = S.dive.i; S.dive = null; if (!RED) S.arrive = { i, t0: performance.now() }; },

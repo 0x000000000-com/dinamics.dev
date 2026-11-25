@@ -591,7 +591,7 @@ if (de.classList.contains('hz')) setTimeout(() => { if (!de.classList.contains('
 // the galaxy fades in when its first frame is drawn; the headline never waits for it: if the 3D is not ready 1.6 s after the page opened, the words show at once and the opening is skipped
 window.YH.onReady = () => { de.classList.add('gl-on'); if (de.classList.contains('hz')) { de.classList.remove('hz'); airOff(950); } measure(); };
 window.YH.onFail = () => { de.classList.remove('gl', 'gl-on', 'hz'); airOff(950); de.classList.add('no-gl'); opening(1); measure(); };
-const boot = () => { const s = document.createElement('script'); s.src = 'yinhe.js?v=9330bb1cfb'; s.onload = () => { if (eng()) { de.classList.add('gl'); measure(); setTimeout(measure, 200); } else { de.classList.remove('hz'); airOff(950); de.classList.add('no-gl'); opening(1); } }; s.onerror = () => { de.classList.remove('hz'); airOff(950); de.classList.add('no-gl'); opening(1); }; document.body.appendChild(s); };
+const boot = () => { const s = document.createElement('script'); s.src = 'yinhe.js?v=a6bbcea9ab'; s.onload = () => { if (eng()) { de.classList.add('gl'); measure(); setTimeout(measure, 200); } else { de.classList.remove('hz'); airOff(950); de.classList.add('no-gl'); opening(1); } }; s.onerror = () => { de.classList.remove('hz'); airOff(950); de.classList.add('no-gl'); opening(1); }; document.body.appendChild(s); };
 requestAnimationFrame(() => setTimeout(boot, 0));
 if (!seen && !RED && !replay) setTimeout(() => { if (eng() && eng().ready) return; window.YH.skipOpening = true; if (eng()) eng().skip(true); else opening(1, true); }, Math.max(0, 1600 - performance.now()));
 }

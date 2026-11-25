@@ -474,7 +474,7 @@ float craters(vec3 p, float sc){
   }
   return h;
 }
-// 0 terra · 1 banded giant · 2 ice moon · 3 lava · 4 rock · 5 haze
+// 0 terra · 1 banded giant · 2 ice moon · 3 lava · 4 rock · 5 haze · 6 Pluto · 7 Enceladus · 8 Triton · 9 Iapetus · 10 Ceres
 vec4 terra(vec3 n){
   vec3 p = n*P.w + seed;
   vec3 w = vec3(fbm(p*1.1 + 3.1, 4.0), fbm(p*1.1 + 7.7, 4.0), fbm(p*1.1 + 11.5, 4.0)) - 0.5;
@@ -558,7 +558,10 @@ vec4 rock(vec3 n){
   col = mix(col, C2, smoothstep(0.52, 0.85, fbm(p*3.0 + 2.0, 5.0))*0.55);
   col *= 0.78 + 0.45*b;
   float lat = abs(n.y);
-  col = mix(col, C5, smoothstep(P.z, P.z + 0.04, lat + (b - 0.5)*0.12));
+  col = mix(col, C5, smoothstep(P.z, P.z + 0.1, lat + (b - 0.5)*0.12));
+  col = mix(col, C2, smoothstep(0.9, 0.97, vn(n*70.0 + seed*3.0))*Q.z);
+  float grooves = (1.0 - smoothstep(0.0, 0.035, abs(fbm(p*5.5 + 2.0, 5.0) - 0.5)))*(1.0 - maria);
+  col = mix(col, C2, grooves*Q.w*0.55);
   return vec4(col, clamp(0.5 + h, 0.0, 1.0));
 }
 vec4 haze(vec3 n){
@@ -570,13 +573,91 @@ vec4 haze(vec3 n){
   col = mix(col, C2, smoothstep(0.58, 0.8, fbm(sp*4.0 + 3.0, 4.0))*0.35);
   return vec4(col, 0.5);
 }
+// a point on the sphere as east/north offsets from a centre, for drawing one feature
+vec2 loc(vec3 n, vec3 c){ vec3 e = normalize(cross(vec3(0.0, 1.0, 0.0), c)), u = cross(c, e); return vec2(dot(n - c, e), dot(n - c, u)); }
+// Pluto: tan ground, a dark red-brown belt along the equator, the bright heart of nitrogen ice
+vec4 pluto(vec3 n){
+  vec3 p = n*1.6 + seed;
+  float b = fbm(p*1.5, 7.0);
+  vec3 col = mix(C0, C1, smoothstep(0.35, 0.7, b));
+  vec3 c = normalize(ST.xyz);
+  float belt = smoothstep(0.42, 0.16, abs(n.y + 0.05 + (fbm(p*2.0, 4.0) - 0.5)*0.3))*smoothstep(0.36, 0.6, fbm(p*0.9 + 5.0, 5.0));
+  vec2 h = loc(n, c)/ST.w + (vec2(fbm(n*9.0 + seed, 4.0), fbm(n*9.0 + seed + 3.0, 4.0)) - 0.5)*0.2;
+  float x = h.x*1.05, y = h.y + 0.2, r2 = x*x + y*y - 1.0, hf = r2*r2*r2 - x*x*y*y*y;   // the heart curve, written out: pow() of a negative number is undefined on some GPUs
+  float heart = (1.0 - smoothstep(-0.03, 0.05, hf))*step(0.2, dot(n, c));
+  col = mix(col, C2, belt*0.85*(1.0 - heart));
+  col = mix(col, C3, heart);
+  col *= 0.86 + 0.28*fbm(p*8.0, 4.0)*(1.0 - heart*0.8);
+  float cr = craters(n + seed*0.1, 4.0)*0.12;
+  return vec4(col, clamp(0.5 + (b - 0.5)*0.25 + cr*(1.0 - heart) - belt*0.03, 0.0, 1.0));
+}
+// Enceladus: brilliant white ice, cratered in the north, four blue "tiger stripes" in the south
+vec4 encel(vec3 n){
+  vec3 p = n*2.0 + seed;
+  float b = fbm(p*1.6, 6.0);
+  vec3 col = mix(C0, C1, smoothstep(0.42, 0.72, b));
+  vec3 c = normalize(ST.xyz); float d = dot(n, c);
+  vec2 l = loc(n, c)/ST.w;
+  float region = smoothstep(0.5, 0.8, d);
+  float ca = cos(0.5), sa = sin(0.5);
+  float k = l.x*ca + l.y*sa + (fbm(n*6.0 + seed, 4.0) - 0.5)*0.5, along = -l.x*sa + l.y*ca;
+  float stripes = (1.0 - smoothstep(0.0, 0.07, abs(fract(k*0.5 + 0.5) - 0.5)))*step(abs(k), 3.6)*smoothstep(2.6, 1.6, abs(along))*region;
+  float ridges = (1.0 - smoothstep(0.0, 0.07, abs(fbm(p*5.0, 4.0) - 0.5)))*0.3;
+  col = mix(col, C1*0.94, ridges*(0.3 + 0.7*region));
+  col = mix(col, C2, stripes*0.9);
+  float cr = craters(n + seed*0.1, 3.2)*0.1 + craters(n + seed*0.2, 8.0)*0.05;
+  return vec4(col, clamp(0.5 + cr*(1.0 - region) - stripes*0.08 + ridges*0.05, 0.0, 1.0));
+}
+// Triton: pale dimpled "cantaloupe" ground and a pink polar cap streaked dark by geysers
+vec4 triton(vec3 n){
+  vec3 p = n*2.2 + seed;
+  float b = fbm(p*1.4, 6.0);
+  float dimp = craters(n + seed*0.1, 9.0)*0.5 + craters(n + seed*0.2, 15.0)*0.3;
+  vec3 col = mix(C0, C1, smoothstep(0.35, 0.7, b))*(0.92 + dimp*0.25);
+  vec3 c = normalize(ST.xyz); float d = dot(n, c);
+  float cap = smoothstep(ST.w - 0.05, ST.w + 0.05, d + (fbm(p*2.5, 5.0) - 0.5)*0.22);
+  vec2 l = loc(n, c);
+  float streak = smoothstep(0.6, 0.78, fbm(vec3(l.x*3.0, l.y*16.0, 1.0) + seed, 4.0))*cap;
+  col = mix(col, C2, cap);
+  col = mix(col, C3, streak*0.7);
+  return vec4(col, clamp(0.5 + (b - 0.5)*0.15 + dimp*0.06*(1.0 - cap), 0.0, 1.0));
+}
+// Iapetus: one side bright ice, the other coated in dark red-brown dust; a ridge along the equator
+vec4 iapetus(vec3 n){
+  vec3 p = n*1.8 + seed;
+  float b = fbm(p*1.6, 6.0);
+  float cr = craters(n + seed*0.1, 2.6)*0.3 + craters(n + seed*0.2, 6.0)*0.15;
+  vec3 c = normalize(ST.xyz);
+  float dark = smoothstep(ST.w - 0.08, ST.w + 0.08, dot(n, c) + (fbm(p*1.8 + 3.0, 6.0) - 0.5)*0.35);
+  vec3 col = mix(mix(C0, C1, smoothstep(0.3, 0.7, b)), C2*(0.8 + 0.4*b), dark);
+  float ridge = exp(-n.y*n.y*700.0)*0.1;
+  return vec4(col*(0.86 + 0.28*fbm(p*7.0, 4.0)), clamp(0.5 + cr + ridge + (b - 0.5)*0.2, 0.0, 1.0));
+}
+// Ceres: dark grey, cratered, and in Occator crater the brightest salt spots in the asteroid belt
+vec4 ceres(vec3 n){
+  vec3 p = n*2.0 + seed;
+  float b = fbm(p*1.5, 7.0);
+  float cr = craters(n + seed*0.1, 3.0)*0.28 + craters(n + seed*0.2, 7.0)*0.14 + craters(n + seed*0.3, 15.0)*0.06;
+  vec3 col = mix(C0, C1, smoothstep(0.35, 0.7, b))*(0.85 + 0.3*fbm(p*6.0, 4.0));
+  vec3 c = normalize(ST.xyz); vec2 l = loc(n, c)/ST.w; float r = length(l), front = step(0.0, dot(n, c));
+  float rim = exp(-(r - 1.0)*(r - 1.0)*40.0)*front, flo = smoothstep(1.0, 0.85, r)*front;
+  float spot = (smoothstep(0.3, 0.13, length(l - vec2(0.05, 0.02))) + smoothstep(0.16, 0.06, length(l - vec2(0.42, 0.18)))*0.9 + smoothstep(0.11, 0.04, length(l - vec2(0.36, -0.12)))*0.8)*front;
+  col = mix(col, C1*0.85, flo*0.4);
+  col = mix(col, C2, clamp(spot, 0.0, 1.0));
+  return vec4(col, clamp(0.5 + cr + rim*0.12 - flo*0.1 + (b - 0.5)*0.2, 0.0, 1.0));
+}
 vec4 surf(vec3 n){
   if (type < 0.5) return terra(n);
   if (type < 1.5) return gas(n);
   if (type < 2.5) return icy(n);
   if (type < 3.5) return lava(n);
   if (type < 4.5) return rock(n);
-  return haze(n);
+  if (type < 5.5) return haze(n);
+  if (type < 6.5) return pluto(n);
+  if (type < 7.5) return encel(n);
+  if (type < 8.5) return triton(n);
+  if (type < 9.5) return iapetus(n);
+  return ceres(n);
 }
 void main(){
   vec3 n = normalize(faceDir(face, uv));
@@ -706,24 +787,43 @@ void main(){
 const C = h => hex(h);
 function hex(h) { const v = [parseInt(h.slice(1, 3), 16) / 255, parseInt(h.slice(3, 5), 16) / 255, parseInt(h.slice(5, 7), 16) / 255]; return v; }
 const WORLDS = [
+  // eighteen real bodies of the solar system, each its own look
+  // Earth
   { type: 0, rad: 0.81, c: ['#081a3a', '#0f4a66', '#3d5a22', '#6b5a3c', '#a88a5a', '#f2f2f2'], P: [0.5, 0.55, 0.78, 1.8], Q: [0.55, 1.0, 0.35, 0.8], atm: [0.35, 0.58, 1.0, 0.85], atmH: 0.035, spec: 1, clouds: 1, bump: 1, night: 1, emit: [1.0, 0.72, 0.38], tilt: 0.41 },
-  { type: 1, rad: 1.47, c: ['#e6dac4', '#a8805e', '#8a5e44', '#f4ede0', '#b5624a', '#ffffff'], P: [7.0, 1.0, 0, 0], Q: [0, 0, 0, 0], st: [0.6, -0.38, 0.7, 0.1], atm: [0.8, 0.72, 0.6, 0.25], atmH: 0.025, limb: 0.6, tilt: 0.05 },
+  // Jupiter
+  { type: 1, rad: 1.47, c: ['#eadcc0', '#a8744a', '#7a4a2c', '#f6eedc', '#b0543a', '#ffffff'], P: [7.0, 1.0, 0, 0], Q: [0, 0, 0, 0], st: [0.6, -0.38, 0.7, 0.1], atm: [0.8, 0.72, 0.6, 0.25], atmH: 0.025, limb: 0.6, tilt: 0.05 },
+  // Mars
   { type: 4, rad: 0.66, c: ['#9a5a34', '#6e3a22', '#c0865a', '#000000', '#000000', '#efe8e2'], P: [0.55, 0.6, 0.9, 0], Q: [0, 0, 0, 0], atm: [0.95, 0.62, 0.45, 0.25], atmH: 0.02, bump: 2.2, tilt: 0.44 },
+  // Neptune
   { type: 1, rad: 1.23, c: ['#4f76c8', '#2c4f9e', '#24407e', '#9cb8ea', '#14244e', '#ffffff'], P: [5.0, 0.7, 0, 0], Q: [0, 0, 0, 0], st: [-0.5, -0.3, 0.8, 0.08], atm: [0.45, 0.62, 1.0, 0.6], atmH: 0.03, limb: 0.7, tilt: 0.5 },
+  // Saturn
   { type: 1, rad: 1.38, c: ['#e8d8ae', '#c9a876', '#b08f5e', '#f2e8cc', '#c89a5a', '#ffffff'], P: [8.0, 0.5, 0, 0], Q: [0, 0, 0, 0], atm: [0.9, 0.82, 0.6, 0.25], atmH: 0.025, limb: 0.55, ring: [1.28, 2.25, 0.9], ringC: [0.88, 0.8, 0.66], tilt: 0.47 },
-  { type: 3, rad: 0.69, c: ['#141110', '#2a2420', '#4a1a0c', '#000000', '#000000', '#000000'], P: [2.0, 0, 0, 0], Q: [0, 1, 0, 0], atm: [1.0, 0.45, 0.2, 0.22], atmH: 0.03, emit: [1.0, 0.26, 0.04], bump: 1.4, tilt: 0.2, night: 0.7 },
+  // Pluto: tan ground, the dark red-brown belt along the equator, and the bright heart-shaped plain of nitrogen ice
+  { type: 6, rad: 0.62, c: ['#c4a284', '#e2cbb2', '#5c2c1e', '#f6f1ea', '#000000', '#000000'], P: [0, 0, 0, 0], Q: [0, 0, 0, 0], st: [-0.18, 0.12, 1, 0.42], face: 0, atm: [0.55, 0.72, 1.0, 0.3], atmH: 0.025, bump: 0.8, tilt: 0.3 },
+  // Europa
   { type: 2, rad: 0.59, c: ['#e8e0d2', '#c9b39a', '#8a4a2a', '#000000', '#000000', '#000000'], P: [0, 0, 0, 0], Q: [0, 0, 0, 0], atm: [0.7, 0.8, 1.0, 0.0], atmH: 0.02, bump: 1.2, tilt: 0.1 },
-  { type: 0, rad: 0.85, c: ['#061a46', '#0a5a8a', '#2f5a2a', '#5f5a3a', '#b89a64', '#f4f4f4'], P: [0.6, 0.7, 0.82, 1.4], Q: [0.72, 0.4, 0.2, 0.2], atm: [0.3, 0.55, 1.0, 1.0], atmH: 0.04, spec: 1, clouds: 1, bump: 0.8, night: 1, emit: [1.0, 0.75, 0.45], tilt: 0.3 },
-  { type: 5, rad: 0.78, c: ['#ead7a6', '#d2b47a', '#f6ecd2', '#000000', '#000000', '#000000'], P: [3.0, 0, 0, 0], Q: [0, 0, 0, 0], atm: [1.0, 0.86, 0.6, 0.75], atmH: 0.04, limb: 0.35, tilt: 0.05 },
+  // Ganymede: dark old ground and lighter grooved ice, frost at the poles
+  { type: 4, rad: 0.72, c: ['#b6aea2', '#584c42', '#e2ded6', '#000000', '#000000', '#d4d9de'], P: [0.55, 0.6, 0.8, 0], Q: [0, 0, 0, 1], atm: [0, 0, 0, 0], atmH: 0.02, bump: 1.6, tilt: 0.05 },
+  // Venus
+  { type: 5, rad: 0.78, c: ['#f0e6cc', '#dccaa0', '#fbf6ea', '#000000', '#000000', '#000000'], P: [3.0, 0, 0, 0], Q: [0, 0, 0, 0], atm: [1.0, 0.92, 0.75, 0.75], atmH: 0.04, limb: 0.35, tilt: 0.05 },
+  // Moon
   { type: 4, rad: 0.57, c: ['#8e8a84', '#4e4b48', '#b5b0a8', '#000000', '#000000', '#000000'], P: [1.0, 0.9, 2.0, 0], Q: [0, 0, 0, 0], atm: [0, 0, 0, 0], atmH: 0.02, bump: 2.6, tilt: 0.1 },
+  // Uranus
   { type: 1, rad: 1.17, c: ['#a4d8de', '#8ccad2', '#7cbcc6', '#c8eef0', '#6ab0c0', '#ffffff'], P: [3.5, 0.3, 0, 0], Q: [0, 0, 0, 0], atm: [0.6, 0.9, 1.0, 0.55], atmH: 0.035, limb: 0.65, ring: [1.6, 2.0, 0.35], ringC: [0.5, 0.52, 0.55], tilt: 1.5 },
-  { type: 5, rad: 0.71, c: ['#c98a3a', '#a86a26', '#e0a858', '#000000', '#000000', '#000000'], P: [2.2, 0, 0, 0], Q: [0, 0, 0, 0], atm: [1.0, 0.62, 0.25, 1.0], atmH: 0.07, limb: 0.3, tilt: 0.3 },
-  { type: 0, rad: 0.83, c: ['#06233a', '#0d5a6a', '#1e4a1a', '#3c4a26', '#7a6a3e', '#f0f0f0'], P: [0.45, 0.6, 0.86, 2.2], Q: [0.62, 0.6, 0.3, 0.3], atm: [0.4, 0.62, 1.0, 0.9], atmH: 0.04, spec: 1, clouds: 1, bump: 1, night: 1, emit: [1.0, 0.78, 0.5], tilt: 0.2 },
-  { type: 0, rad: 0.73, c: ['#5a3c22', '#7a5430', '#c0905a', '#a87444', '#dcb27a', '#d8b27e'], P: [0.34, 0.8, 0.9, 2.6], Q: [0.12, 0.0, 0.55, 1.0], atm: [1.0, 0.8, 0.55, 0.45], atmH: 0.03, bump: 1.8, tilt: 0.25 },
-  { type: 1, rad: 1.20, c: ['#6aaabc', '#3a7a90', '#2a6a80', '#a8dce6', '#1a4a5a', '#ffffff'], P: [6.0, 0.6, 0, 0], Q: [0, 0, 0, 0], atm: [0.5, 0.85, 1.0, 0.55], atmH: 0.03, limb: 0.6, ring: [1.35, 2.3, 0.75], ringC: [0.78, 0.86, 0.92], tilt: 0.35 },
-  { type: 4, rad: 0.63, c: ['#d8c25a', '#b0862a', '#e8dc8a', '#000000', '#000000', '#3a2410'], P: [0.25, 0.7, 2.0, 0], Q: [0, 0.8, 0, 0], atm: [1.0, 0.9, 0.5, 0.12], atmH: 0.02, emit: [1.5, 0.5, 0.1], bump: 1.0, tilt: 0.05 },
-  { type: 0, rad: 0.90, c: ['#04304a', '#0c8a9a', '#3a6a2a', '#6a6040', '#c8b07a', '#f6f6f6'], P: [0.58, 0.9, 0.84, 2.0], Q: [0.5, 0.9, 0.25, 0.4], atm: [0.35, 0.6, 1.0, 0.9], atmH: 0.04, spec: 1, clouds: 1, bump: 0.9, night: 1, emit: [1.0, 0.7, 0.36], tilt: 0.4 },
-  { type: 1, rad: 1.53, c: ['#7a3a22', '#4a1a10', '#3a120a', '#a85a34', '#1e0a06', '#ffffff'], P: [6.5, 0.9, 0, 0], Q: [0, 0.9, 0, 0], atm: [1.0, 0.45, 0.25, 0.5], atmH: 0.03, limb: 0.5, emit: [0.9, 0.18, 0.05], tilt: 0.1 }
+  // Titan
+  { type: 5, rad: 0.71, c: ['#c48446', '#ad6e32', '#d69c58', '#000000', '#000000', '#000000'], P: [2.2, 0, 0, 0], Q: [0, 0, 0, 0], atm: [0.55, 0.72, 1.0, 1.0], atmH: 0.07, limb: 0.3, tilt: 0.3 },
+  // Enceladus: the whitest ice in the solar system, blue tiger stripes in the south
+  { type: 7, rad: 0.5, c: ['#f4f6f8', '#dce3e8', '#86b6d0', '#000000', '#000000', '#000000'], P: [0, 0, 0, 0], Q: [0, 0, 0, 0], st: [0, -0.55, 0.84, 0.16], face: 0, atm: [0.8, 0.9, 1.0, 0.18], atmH: 0.02, bump: 1.0, tilt: 0.1 },
+  // Ceres: dark grey, cratered, with the bright salt spots of Occator
+  { type: 10, rad: 0.52, c: ['#5c5a57', '#474541', '#f6f6f2', '#000000', '#000000', '#000000'], P: [0, 0, 0, 0], Q: [0, 0, 0, 0], st: [0.12, 0.3, 0.95, 0.17], face: 0, atm: [0, 0, 0, 0], atmH: 0.02, bump: 2.0, tilt: 0.05 },
+  // Iapetus: one side bright ice, the other coated in dark red-brown dust
+  { type: 9, rad: 0.58, c: ['#e6e2da', '#bab3a6', '#3c2618', '#000000', '#000000', '#000000'], P: [0, 0, 0, 0], Q: [0, 0, 0, 0], st: [0.92, 0.05, 0.38, 0.0], face: 0, atm: [0, 0, 0, 0], atmH: 0.02, bump: 1.6, tilt: 0.1 },
+  // Io
+  { type: 4, rad: 0.63, c: ['#e2c63e', '#4a2e10', '#f4eecc', '#000000', '#000000', '#5a3216'], P: [0.25, 0.75, 1.6, 0], Q: [0, 0.8, 0, 0], atm: [1.0, 0.9, 0.5, 0.12], atmH: 0.02, emit: [1.5, 0.5, 0.1], bump: 1.0, tilt: 0.05 },
+  // Triton: pale dimpled 'cantaloupe' ground and a pink polar cap streaked by geysers
+  { type: 8, rad: 0.6, c: ['#b4b29a', '#d2cab4', '#f2dcd2', '#5c4a46', '#000000', '#000000'], P: [0, 0, 0, 0], Q: [0, 0, 0, 0], st: [0, -0.62, 0.78, 0.55], face: 0, atm: [0.6, 0.75, 1.0, 0.22], atmH: 0.02, bump: 1.2, tilt: 0.2 },
+  // Callisto: dark, the most cratered body known, sprinkled with bright crater spots
+  { type: 4, rad: 0.68, c: ['#4e463c', '#38322c', '#cfc9be', '#000000', '#000000', '#000000'], P: [1.0, 0.35, 2.0, 0], Q: [0, 0, 0.9, 0], atm: [0, 0, 0, 0], atmH: 0.02, bump: 2.0, tilt: 0.05 }
 ];
 const PL = [];
 {
@@ -792,6 +892,8 @@ function bakeStep() {
   }
 }
 function m3(a) { return new Float32Array(a); }
+// the spin angle at which a body shows its signature side (body +z) to the camera at its stop
+function faceAng(p) { const d = rotYv(p.D0, S.rot), yv = p.axis, xr = nrm(cross([0, 0, 1], yv)), zr = cross(xr, yv); return Math.atan2(dot(xr, d), dot(zr, d)); }
 // world -> planet frame, turning with time: rows are the planet's own axes
 function frameOf(p, ang) {
   const yv = p.axis, xr = nrm(cross([0, 0, 1], yv)), zr = cross(xr, yv);
@@ -825,7 +927,8 @@ function drawPlanets(P, t, pass) {
     gl.uniform4fv(u.ring, W.ring ? [W.ring[0], W.ring[1], W.ring[2], 1] : [0, 0, 0, 0]); gl.uniform3fv(u.ringC, W.ringC || [0, 0, 0]); gl.uniform3fv(u.ringN, p.axis);
     gl.uniform1f(u.hi, p.hi); gl.uniform1f(u.ret, P.ret || 0); gl.uniform1f(u.texel, 2 / T.A.size); gl.uniform1f(u.amb, 0.012);
     gl.uniform1f(u.expo, P.pA === undefined ? 1 : P.pA);
-    gl.uniformMatrix3fv(u.rotM, false, frameOf(p, t * p.spin)); gl.uniformMatrix3fv(u.cloudM, false, frameOf(p, t * (p.spin + p.cloudSpin)));
+    const ang = W.face !== undefined ? faceAng(p) + W.face + t * 0.003 : t * p.spin;
+    gl.uniformMatrix3fv(u.rotM, false, frameOf(p, ang)); gl.uniformMatrix3fv(u.cloudM, false, frameOf(p, ang + t * p.cloudSpin));
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_CUBE_MAP, T.A.t);
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_CUBE_MAP, T.B.t);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);

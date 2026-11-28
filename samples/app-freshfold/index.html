@@ -4,211 +4,1105 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#F3F1EC">
-<title>快洗 FreshFold</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231F2A44'/%3E%3Cpath d='M14 26l18-10 18 10v20H14z' fill='%23F3F1EC'/%3E%3Cpath d='M20 34h24M20 40h24' stroke='%232B59C3' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="theme-color" content="#F4F7FB">
+<title>快洗 FreshFold · 样板 App</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231F5EFF'/%3E%3Cpath d='M16 26l4 22h24l4-22M14 26c5-4 9 4 14 0s9 4 14 0 9 4 12 0' fill='none' stroke='%23fff' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='32' cy='38' r='3' fill='%23fff'/%3E%3C/svg%3E">
 <style>
-b,strong,h1,h2,h3,h4{font-weight:500}
-body{font-variant-numeric:tabular-nums}
-
-/* 快洗 FreshFold — a sample pickup-and-delivery app by Dinamics. Folded linen, a city at night, one cobalt route line. */
-:root{--ink:#1F2A44;--mut:#646D7E;--line:#E2DFD7;--bg:#F3F1EC;--card:#FFFFFF;--c:#2B59C3;--c0:#E6ECFA;--lem:#F6D55C;--ok:#1E9E62;
-  font-family:"Avenir Next","Segoe UI","PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
-*{box-sizing:border-box;margin:0}
+@font-face{font-family:"FF Display";src:url(data:font/woff2;base64,d09GMgABAAAAAEt8ABIAAAAAj5gAAEsRAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGoR2G8QkHIFKP0hWQVKEBQZgP1NUQVR+AIISL1wRCArMGLxLMPEkATYCJAOEBAuCBAAEIAWEQgcgG4uFFezYi7gdIGh/ZVcdiRA2Dg54bMMBdxg2DiQw3Lbx/ynJyRjC6rBpN8veY9mhhBSbVK1XIFIJOr7jbDAOHDWTsqP3ySNxFZJu2IK42sogM4MON2rIXsXOYUXrnNEzHEmxxCJtFMTSd8vTf00/Xa9RIqORhfxrUGoO7qJ5hqNw3Q7ygZfedzjwujP5v0Efc6+SWfuZDjvUPkdocoo90+ef3OzvmxmGAUcYcGijMROCNIkhBA02NAYTREJIxBJiRaJoCKYf0sr+6pbeTdvq31KrW7onny1drWXuamW9xu8vFdaUxgJwJoRXxAMoOp7/Z79e97lvwjR/8tZXUSQUGYEqClCxJVdVoys0oKyqFDnD52b9Q4PFXuKEiBFCCCEEqFAdVk0Yul9O/7y3fzK10XZU2JYRq/hfa+Xr7iHq3euBJTgAGm3/QKB8LJADQHcqwufKx4XXabnvXdZu26nL0Ol9/ogiShFCLmcRy3F8frxdVdU41Jt/ND8aoxXDU7SdzqYXUpp/m1pfYEcGkgmf11kgKtp928Nd0VzRxdFSfz0wKY4sj2VpRAMAf4aFlgbmOcbyUl/LcGg4PfIgIYDDdr/GwLGiSVFCCWVZAhkEHNAGW+PAjbl6vgDJ4Wmb/3TR5oyVRedB3x3HAUd4hICoCIKKbk57a+e64+viRxYYdDt70G3Gb1aAmljaXEj7L17I5/WMV2ODUo6QZWlaAP88fDsD+4EMDB5KPtwlu4V1fZt0WNO+l6rVgG63MYCDDyjLs0Rw38NtHGfpAx//iWn2EQ5mkB2H7MTUwJIaAprTLxGOFalpc33tRhoYk7TcgSBWQv9vaUp3vClSqiZVStd7UVoDyAUnneUFVUB3/mhvNPu1e/1558at6dykWxfJfST5IukurVVkpXelEmCAUjoMYiEo1ICGsBCQEGVDxesB6PUAuRFuCt1TzkX8FfHIOACVBmAU8fy9qWn7HqEAKC5InvQlp0/Ht4pLFVWIlVPlUuOm2l0chggXPsG0JBVWywsLXPoAiZkFFMFz4jnT1dldiFVMH6Q4/iQddh1xjoq5Upkqx87Tu0pFU3ncpdLw39u0790qGXfCR24BhTBywmH5J2xnP1etWXoYMblJkdnxomYJjmSWICKSCYsEFZHgtSey1/V47ZuLf1T4ebBgWDCMz8IFg2FhPAwLBoPhwn1kEDQ94CoAAHIfxYSoiqboqRJPNbRUx4AmY2VRinQ5JTyU8J6YqNOE0kIprZRoo0S7A10pJjugRLcDHbdBboUSeUrsdqB77ftoekpWPnE5k85zHQrlzEYli2DQaR8fmUJ/ASrtQV9bFfWg50r6J8qwExr3rGqycsMOXBpsRZ9I1oqLRrXvEqYw4rcCRDTABlgCwYfUn44EpFnD/VOzeOl3yiuth6NxVp09/d+pn/77Cfv/WJI/jeAage/xk7vPHF8nvz59V/yhPJs/FZ7b/5cL+Z8+cSFROP4SpLj97VenrDRMy+n5Yqa0ICOM4t3bb0/fHSAEYyHYh4ZHOFkESdEMezgceY9oqgRRkpUZ/Pasp8swLdvxS/Wanywkkql0japCsbQcSy61PpUvVL+tzta/b74DWSO5e97B/YwmsHy/tuWwHNdgYwqfvy1M81pbahzSWJ7Lz/PvQ+MokAyMySF136M9iXEcwSRuUy+eKO/3t/HQG/p8dDHPf/AqTvGBiEe6K+NjCkeWM/SETIz5nx234jTK+cgxEpfpS2tvi4diRgJb18M+u3miQnGllSWoDjW4tFq6F9E0g0JvqFsxtSI8LYGOXgmRgZGJmYWk1Dw2di5ulbwW86tWq06rNhErxXXolrROvwEpw9YbMSqTMSS7dt5Ou+y2Z750QjP2aVMGSnuF4RpElMVfgGnRsmHa9qlS3oSddSNJofTHKwp9wmnviaBsFzfSh/Wj05X/EqVSNz+BWhp1qJOS0jZApN7PMlKvu5hw6yks2PqlS5vWiwra9VsOeGlXC3+p7NL6EY+CXsDFStRf3gZUA7YyMIIq20v/JTEsGKexA2E3G3tFsJ8PQqGPSCE1jLsg066PGCNwnKPTDW0Og83F5ZEvAezszlFjT8tm7bPpCSSTUVkU/N6QJmjG90OtH+zUP2Z3BgnTTlow7u0po1XfCT0SL0G/akBJfRGtoQNEo/inqLA+Z6/ODdD/ze7nCpZqh2inwQUccUz+gUcoWBXhOBKNTSakUynG1ev38+yJiOQSmrpju7YUbo0nLupLYtZdc7u1evwqfWrWQiSsbQRdqgClGlUXJggtjTropKTYPUTcaoUZs/aw4FOG0oaaVOg0B7yRqy/jg7vd/ktlz7A96AVcDFF/K4BqwFYGRtBwe3N+SoPYbpDT2IGwmx1NFmpFryD224wO1LZfyhBCVOgxQlVjhsBxO9ENNV0u69lH2Yq9+oB8sX7s7N4EsYsDdyO1p+ky7qXX3FdoGsWeHhCDvvEmwU7uTWGuOmkaK815R3K1pFuU332t3iZ4c9HUbhqpuJ9IzAovoFmDNxu1OCIlJBJeSgl+wSQv2ZmKP8dQVNNW/K6L2kT69DvQe3kNlOaOgEan7Faq2U8kQiaTjQmwTRVHtRBygHY5yymFpGlKdMj6AXtzMbsuu8VnieERj8Wf7IVPJWvT3NtYS/MT788PS98yTipqUKwtwC5jF3A3gXuKDe6l35hlLQNECXvPGW4tHEF2pnIndXqwKre13WI4ur+if6i2I9jP8EmZXmwkbKcpze+dNc9otp+qt09NO9Mt0sbfVTRokP1hsNy/XV+QcCBZcf9c7PZYzF76H6AM3SMVUBK21tZVljTZBrFbsRNDnxxj7J6cMPXkZZhxey0snfKXnod3C1etruJBttduxTbDaNTyPRcrFewGO/XmG5pcjq1d214i3w895A2/difuinFXknr70EqE7W+ghAbJl18QV4h6nUP9e0Krt5w1LcoiOXbkByQEj+Q/hKZFUSqKOvxPtAd14SwhMBoq3VqfNy60c/ePKiL1oS5Zbh+8LxbU89APbJfqKnwJgDU7l7VzC/wrcbmBM7RBEcYl4s51IUMVyRYEf2jyAvK+JftiCxD2l/1JUbmOgUej2UDFHE4XTbrUHITJtaW//iQOTRI6Zyrjpy9JU3KnzzzTSubl986Y/EnLqh2wfSTgHOQ8mt7XJ40JZE8Rb9jgZ44A1jH1iJ5wW+N196jTPmlQLrKmeS40uli6XcAr980e3htqlD3x9W3jQrPu89AuiObnTcyvxSSvr1GW4+idbR66M2+0SI5Or+aafvM+8pHdl83ThSqLMzDlEEazXZgq/zLfL9I3uoTzVzz9cA2XUWGd1BZUwTrUwPn6wM/3KU+8J5TphtRM9MHXbOnR902IMceqUQrb3z+P22xag2vnA+aj8GcG+9j5+oVt4wZ8DxKxm6VqYxHek+mf3xQXTA3JhZAW2QL6oFZcIbMQMx675nJHOD5Ie8BbEOfVvPGb596sRf06Ote0OU1jhRS4YbhDNZlcQx1Kk2opOllTnZpAX4Rm/HmQVSfcCoUbaBh/6obsptVsWvVj3otDnOA9NoI3JHbc8q5Qqc39wKl6T/DKRADXmUMkS9w8Dk0BZGzpGYnzkj89o1R+bFtc8oqrTnBDEfg684dYw6BLJkV3nNUk1Z2+cyqzMZ36ihvUlgLIojft4OxXBVk6wCqpNOhCorRSOIpDIC/gndrxhXvGQutyqmEX9sEG9qzMF3uvicWB30BGEm+UgpHBoBBDrqFVSGXPBy/QvtSQ495VGH26wtwE5eJ8FiQP1ZyMnpQJnKhaWaHeSxQSHwVZL2iRLA9ZHrsem3rcw11xboaghkp8M8+ifJohX2CYswoVMOtWoH+22NMabmFKKlvUDnXVhZFZTghbcIL9YQPQuDRpIjoFLFXOMfxsJJWQeKnPiTMb9fFG6d5W56zzrbhrBckU9e+KtqdGyaJ9HfI2TjZbYOSTVMZrczDLsOXYsYvp4Az4+YCbogXKR3+plr4dFHVTIzjgPbg39ZvPZoyyRVs7it0erm0pZrOJrrLqsu1L0yl4eMPI95Pcnuiq7nDBFRGN4/2LzQOOEAYISxHA2iq1T7tJknKUMOLOCxhXKkB3i3+KpiDtvPhFgZo73M47fsNa+RRQ62WAMQvqRZYX/lDSoMXPabwLw4B6d4q0qZolCCc/frjc5Gx8IZkH+aVtLYK6Zb2kHgqt/ELva/yDiaPxwFsCobs0Ibh4NtWaMhtYN86Y5n6whcao5oxJGGaE/IptUKLAw/FYM/AFOF2l13qYyVJ1Z1agUOy+7J3v5jDKD/rYSSMSzrgt4P+kEO2qaMarPIDqY9Izcv66Ig/B4B1dV3AE8MOEJw6+DG4E7bcMvOEDsyNaFC+am5vpP3FQxaGluRtetk5/YpOP7zlo2s432zo9DBEz3ywS5XCH5V6UqPhGmIV8RV7Jes19oP1QHIFS4zL/bWERe4Eh7u+AR+675H/U4iVz4aJ/Vjpse77krouMT9CCMbGi2bDostZr+FPmTSFPIP+oD2cMg7+FRu94xVUKYi4MNv1MlZb3WTdu2eJpxSfKAiUTvt1i5HN2fEWvt6kPqwbLLX5wBfcVSXf1fm1WMcQEqnG23j/Ii3xLwH1eUktHGmPf4HLAQ6+RzNycG5lzx8DnH1fFeGDNut82Q5pZnMAbMwc1xeMvHHCwqXfJSLso9ibkXxhPPnddNCBa6f0ryNpqPWqzB16qXoNGQU1avorU7aKf1xufSXanP4/0x5q4GW0CiiCjqIKdBoKx9elyc5WkAcBxZLMiIjY0cNp9WKhoyCio1QEtF8hM8xRpZamJRIKCHuYdn4lifCmC8EcYahKzrAzq72qnZ0b9auK4zWdTof+fr5Su7h2Xsi1EOeVw3Nc54fgNoD2/oOugrJ3mplVG+K7DK9qZV14SZjpEQZY6JUq+q8+Dr2qzBqBRjA+iob5T3Oc5ol91Brv02ekPlputmBlSHhWcmXBkbgz7ryHKSWjgS+cAWDp1nSguJZir3NIsbACDDMoCQFU16NBkuUHD1kjiiUoZzKtKEWzKOkDUM9FL6DFghZXatejKUANwhh8EZjZ+zVoxiiJ1Qi2OqxIGFYuaioHi6mMrIptPx1VaYOQ2p9aCqCUiGgWssyyeAXAERalAN0dVgUVVC1F3guONtQPKVBRJ7b/YNf9cZAK8DPX21egQNK252zdCbNcE9KUUlr+Ncggh31ajyiI1mi2zWkKPQRtN2GaH/RhTDFMvrSQwkzlV8RfOKK1WuwbYM6oxHVOH8pqSIi5Io1owJu7XZh0Ryd8EVX8uRArUJr/Xjq1AF4EXgLH/B7z95wZejlz1XIvexO8a7sJ3ffdVj/1P0Zfy90a+B72nlnn70Y6zHY/veHXx0aUXd53uenzP3T2P731r39n+wwOnB548eHbw7qGnD719eO/IxpGto48fm907PbE8WD2xdWLv5O7Jg2FxuDHcGZ4MT4dnK5WVQyPNs0fOqHlaC6zAOUPCUqRE9lnnvJSRTM4UClRhhMmcSJlcKJqSKNz07SNrw+19DgUCAMW4CDiJ4uTpHgn+Y9sIGUpquqq6yvhwvDWUFKzd6GgdEUdbPtKeen3I2daENd4o7BGWhBBlsvUAIJQZDqMiztNihLRymEdYGFirq8HkLFh2YaAXikTj4ItiSsVd17g6EZNwdKsHMq2fbQfHvU966RuFaeCZ8ghZrJVuQCYWFgr00zwGAEHqM4NPBI6Bdk0MAHP/99gmFiKTvG+nn/nxBZh/LZEQUBepd8zKaNm3c08YKueXoT6/yGy7ZXUNiZ1PUEQXNIMEaaDPHDy1ZSGeV1FhyFmvATlA9Zx5kHrghkO0/JzZTk/xMqGyjL/uKzMBjdMsaZ+7HPemLMoWeY5sle1/9zTIllpn9OoS2SyX/Uh/XwZ/T+pID8FHq6q2iv3oxDNyC9AFFygqtMIWAWn7a16lT5kx6/Saa1CliH6b7ddjh22WaTZho0US3LJWqRE2TGZn5TDHTsuVmsfFw6tWq7Z9Eqa2RlW2RevbzFehXPUyRAUUxMbj4gLhh/Bmw8czAtFtzRHxFEAWyOuFbMjP1gGeLvJgIL/iITscz23PSiEHs3zWzBGK7oH2nyPgHsCkG6Uj0ggKI2i4JoRQhA5Il9CRhoA24+JyOCdNHp9m8G4XJHu0FYTkGQAT4YA3BW+OwCKh6AI7B7UHWS3rlWHEIODn5rdYXb/XO8oYGNFeymjoJKjIcMWCxiiamOI0i2FMi1KPUe1bFNSMYJAsEsNJnE7QfkbUMYyNYeZMEwK/kP2knFaB9xlF8wwPDhaPxQRhgOS4z+lSJXfsc+os0WToJMIFla1bZIyCUslIOj2j548AbDainClltG6eHqvgUaaYcTgqKkydmgfCSkcirxduI7SgSYqLZWveOWUMo/PP2U9k+N2+fwn0+SO5EEHSy8VhVWXnJHP2h5eGRk4tQql8LEH0ZZu9DjM+uPe/Gfxr8gbbEZEoGWFF9dC1Z8I1m3e3irWaQT8+yZbs+Qb2sJO1ByC56XVYLGIfXscLXhGes14aUGvrenjBgoqRxhFh/0iSgYyhJkzqeftmmRq4JEbi2xEa7qEbN2BTSqKDtqE9MlOALD+4+xBUgrhehI84hw4a8nWz19qTfCYwh5xsxVvygui53uzBHGzrZu4ZZj5BfJAuqV5LFVFYgk0l5EESZW+ZiwZKJAujIXWdkiit1ALM28vopS8Lbhk0Y3yOe1LjkOkTFCkWzl5S+bwZx+f3792bznXF0x5Qa9aD6PnxiufXY6ef+PzpWf/qd2sci8eTsHvHnPNdXle+ne1W3GkeLKLl0D1It0bKitIUsVeLairfs9H9ImmYPt6/nw+PT4f+PsYjcWTxpcGyM5pMorUdHmGpjZwxeolui4fAgPMSr+APGWRPYBHD69Aveqv3a+XUI/YTidskw0MOPWd4X0P9gi1IQng63oA5nkBl5hAOmq7och/uXpgJd85DdrLkol1YzCN/aXJZg0VBGHSoEFdtms4YLafc4akRjsQJu0NjU7Og+tb4CyDA0ESD4aWT4GK4/3BNZ++81bCuS0s19WrgiX8c+9rtS7pmgBojLSJ4rKaZ4S/HoLDuMX4v5HO3W+Mosb6MI/85dEcssoJ9gUfQxtJFyDXLcW8qVFHaWKbmuBBBQIMIo9o3oQJldhn0TavnnqweFbo8dLFvPReQXPvImd1d0ok0S1h5e+f8AEzvS2hfP+KuxNXX/1lvZgU+Y5yTq7CNZatrNrzWJEkV5WZGEy7/89tmWEw9v2/UvAdSLHLcYGoHnxAt6OzaMG0B332FQXaL3Zgh3rgL56dlgl+2ZGEc1xBXc1V8FTx5gmAecfHTwuNPxFiYhCYdylalnusrKymisXW5TSlfdLQDdf8ljVcVp5U1e+t3xQ17al2RVXHTQQxLif/joKeruSe117mxNXGmrRguF1aBeiGX8ydAJgRN6AMm9I6t8dIcl/814729Sw5vvR9a0JjkWJ9mmphZ468z9BDnQ3x41UxqgLrSKv+xWnKFQf0xlGlY0PanJkfQfZuRlTrGxbQtxtcfMKYf5vwZZ/OvgeFV2p368GS2U5nknV9V2RY9/a15cocbHmLY6uZ7B6592BXup8EHZaaZQXXGiSw1xrmDHomI3e27QQMnn3B7B1g7XHXR6CxifvzOy5sLRBMGdXC4qehuQ0a2WO5iy2M71Y5TfdHhHu7Vnl2n4C2+5R1XZWRz0sFjz2wl96LW+ZC/OR7P6f0A+MXgJXje9TC/O3HStqRyBQdqAwEHLp3FGCSpnWifpELOhROKNy01Bwd5i0qK/KWBgT61pzO2xfz+wFXPnw8sMW0oShrFcINPc7VJrOx7WDQBOxsuswMfRu7/Mkb27d6Z0h37Zc3vOxzfrFF1F5SoC0rAKdr3nNoAKyG9QXPfcBFLFGocaIphsb+W7xr8UeSjzJDhiE4FS2UqWHfEt7mjtaoiBal3JArMYKeuar7J28CYps2GmV3eujnGcGQeUjyuP5mepHeFGRpjJdfgKqjVqQtq4eIoHymfUjbEnx5gjU9YaAGn6OAxOM7GbbSYWkerwq1xBnwyuD+6RBOOCybD2QbBlHD1El30r49SH4FET6RnqD/ir8T8iB9W+f3+zjAT9SvB71NL7bf6wSGdd44iEpPNJbMx4bRQzQyNp3QB6h3f15WuN7rCTCVUwURttFrYxhxrsVbRNN6paF9KW3foYOoa86RCchYJ/D2RHlepz9T5j/tB/VgPKDpzsxpu9Q+LcGwlJIoS2g5HNvrrhE3qT5f51/uB3OmpI6ePlVT0R/95Ebuf97rkcFee9uqztJefdf20NlQ+fNHx6EVjw8pNNzd1FoiWl/dspeKBw7rIAlNpI7dTk23kdZXVzzeGw8XGjqExW8PtbNnNOJUBQ1xgJmk1Ki2t1uyK8wyGYgc7Cq3q1L5gX1KCU392XStFmEUmDrf8NRthSLf5lgQ7lNpqcxqmrelQBt/9+y71DihekTvzODbYH6wujBVMLPnx8jDiJd5F3lX+iG79Ff2jX8ljfCONAnM4/JM10vnXfUdd7QJj1JnmhKNtAhfwpZdOUSO1SKSwyEhyzLCbPpnGs6usfV1sWNk86kUM0WalnWhWGKqwCGWIyaGUYzQuhfn2uquvVVHvU3nUiLm6EwJ/rIys1Hf68/xgri46k0Dnhk5Hrmv5oVIJDAfF/JDueuR0CJk7gwCZf3Sv/2jN73nH4zWRr7rBx9e7Y3vXfN6umDshtPFc2sFzFesn5HQwVq/C0f+N0rQzMn6PTVzMSbuSk/ivlmR2NnSL056Kwe8jPr8QvzYp2Db+1KRw94WuEcKwEOjyV1L6nTvwEDm445GUQX8sukuCTVelnVHMUuQbk44Ue4qThblkNV1UYiP/GqLxMfl2BSS2VdJNS/AVqldc7gtV0XtzM1fgXMLBAMM8hidis5NmFHpr2Z7C4j4/exb98lQ0z1ZwmZaLkY6adHszpI9qU/H4mCMi+ITcIxE8shbwsJhDvrbZV8Xc6GxoUVO2EH0JGKU71o/Ztt4x1Zc7zQf831Jtx+blZP/TuhRocp15bf6QqhZ1kkB32+q68C/n2qcp2fpbprSzbsEeB5docqOp84+TP/bCXooAiAX0698NID1VfwybMc1yfEzCfGL6rDO2xugh5awxxNY6v2xOuVMvQBhUjK8blYzVlPl4Em1Yo6iG02AoFoG0ihKBPJBssF1wSEdSfsgsWkmJmkp1sxoCi7nF4bX60U3Q6sD46tNn4+MLTp50nzgpJRgwhWESDxesN+bROQZ6ESYUUix/gNZ0OA6pxyTbpU+JnnC0EO/laxxdJdVCZWzESolAGRA1aiLCHJNb7pRwghoNN+AUyoTFbKEL4itE9mIW+E495Gd8bYmLRU9u9W0FkqNkrDJ4Ot+VF8xz5R8PzuKQ2UQ29zfZQekfL7gXv8uOyn7jWncw+sTF0EUhsZsY2NU0igMqtvwz+4sh3VQlMLoKKkUZkvQMhx1RAYIkRIagNlRph2HIJqEFIAUtSEhVPGN+qyjEh0vrxSC+nhgZSnLMASodVMHCbPSoKgOiRVFbOVuljYr1db28+6vDPcS3I3sFl42Ni3lukZMjIJV8hZBwMYUyl4gb0Gp5wWIhOH0DH2MxTGw2Aw2MLzCxnFgwIX/PekGlvGB1dy6F+gKYfO1KXY05WFRgsvPRoM8mEtr1lr5GRQXXOFSq1/jHCGy2eqm66ryGmm+AWQoRmmcq5Lz7NSVIqKbWBHXGULtk0tSlvqV9trGtBkqBp3W5uROCRfmojQ+XuK0igdWA9TUqypSjU6V6tb+Ob7EkpFDUNZRRBgNLJoDzqIWcQ9f9WVWrJmWCOn2oVTyhk1+p02Exgd6RVynJkA7sYc8RPlIy1ipvRTg9+HIfRCHNPAVklVADaogatEs1ficoWoI7jc4oC2h1jg4FGoW5hdixsoFvBt2j6+GSMXwYKRpjiZ5+btA3A0dPFWIcuLc3FI5ihb2IZeByF02KyilfxOUyDT+kPIEWq7Q6UokgJKTVkipQnO4cJ3A2pwg73veaNfARFOFzvx70ZmDZVFHfuJQDNzkUNmFXJQeA29e6ITQ4gKeW/i0ZJs/hTb1xInGXuHMkCRCZGu+It/gu2g0iINE9vmW86UWBMncp7CJpHVTjjlu4E1/2KbJyF/Z+5r+Z8A/uvJi23/63IqtxET+qOTM7nK1IeojPx93EQQLdUvDh8OEfFqDDcvTLXCbV4ls+FX0ODQpxkNZv6SpEzqzAl+FuYi+B7umvc4h9vKzQZVhZm9oT7pFfuY0vxGU3MuhdTghB5PJoRgJ63nc8wGV414PscPaBO414ap2nGVU36Mv5TLOFJRFbmSycH+8Ui5Ujodly435q1xTSPHbE8NX3yUKZpxFV1atT1Or6FhSUPmO0ohpliM/GCaZEQrDYZmXZFgIcEOifSToukjniP5q7GVUbmvrWJYmxa3bcwhX4xFs94Z6dC4hdiiO4rY1/G5YO39f5HnF2f5+gAiyvkQM5Az3EmWfI+Bdp1j5Di6WOvhSLj04njfF8W7KrMRGRapQhNmyjRhQZSloYMZczICSmVNUnO+76hHgVVrVNVdgpQgeL71Dw5UKLncaXOgUcn1rNLXHwwejo6Bu1vhvA1u46scguKv+QHCeWmmJkHglCPeHjuU5mk1eL9A4PTW4ThU1G3KwyEB6TFBi/IVtI0JYdzj5yhzgq9R0kDZ+SPoemDQke34frv4I4/Oi092//4S+MjL0FkcHmD3vCPcH5+Pn2LCD2EiCUTXw62OGsL4b0vfUkxKh3jHSw6sk2ww0xn7UojBn1GKQ2WxHDsRI8bp09f95s6bzFi9BfAjZMrF+HLlgtnb161Wz7PTnd9SVKpHdscFK7KGzSmaxavd1u1INpm7p9lJcT9RseYzhG+THFA8XpWK0Ad1ArJRkSWsTiqOWjaLKDHZ25Qa3EYwhMXo1Hyg0oIV7AI1GrvBLzICXXVFJwf++Rh2RyD1DyCz8l+/akkHeRoPTWO+Lz9N7eYH1MolGVcxAbJarMUK7ucTkQVC1CGnoHK53RgwPkTjEnqNZwAiyVb1AP0p8nCNdCzv5EgrvPNU85Rgv7FnG3R6Ocnb6lOhP4O7ObyOzuLIYwSYFXPFxe6DELFUpMiCcfLq6VJglk5HNhxMwz8PKXkgFDuMivG6wqwJJ7Gv+tfY98M+TWynROZmdvksl5/Rf0y61Rmi3Z19RQJdNA5RzUTquCMiBapclawVKjcUg9OtlR9inxbvCQzSojkGeDGs09KQJ3u8+azKhNwRr+kMEzUHWskFoaq9U7sSqlvBwarJSVJeQObdKq2iXwbhHcLB1Q4E2h2iZGo4NGwvmjaHmZ6WWcLAvFaczjgcC9FFKTAP/y3vRuHamvzvAVubweVyEYGGNbAkn2ZN5OswER0wqHtq6w9auIoBIJXkrXBBucSY5k6nylcgMlr+uTFd7+1VFMrCSibLDYP9m/iPyqhRa7lnnTdRPclE7G15N/NDvij4bcd90HoUxXQqELD59kEh7Yd3Ybw/0zSTc7S2sR3uQgL8cPHKrquARx1OnkozEz1NCk97gVFhYV370oMKZU4qLxcBk33qM2DqjJdCYUusjwKWbRrgOnN9GjH5M/dzGCtTB3cnBmLrDIa6IKhKzTyXiPfaze7ZbgHLqFJy7EMYZSZKdzcQm/0GJlg3n8NTxYnpaAo9D4CvmkOTmk4XzHKfc1PMPH4oCtIxv1qlpdOepzWkVmCgPmoT63Jf/hQIE3+96SKHlhxme7TMl9/jnS1aBWRdUpKlV8rB7Y0slmvXoAs99pE+MUJgTijPhmhMQ57PGSOHllxtf7zeAllLVRUWvAUMeb7iyig7vgqXm2LhvCVZjdbsacdqxcL62t07ndCZ00pklxJuuIovXo8z8poQ1bSRC/Tg586J+pC5wXQl123Ozy63UeT/FkMRX+2kQxzUd/zQV2/1BDtRXrJ7TKwxY9gqk0NgLRh3NWgIfCVU8qDWB62ICDhyeyqo5k4UQLga3NKt+QBf6oo6dN6kXuTSqoT5pKNBAzVmaFlmaNGj914ClZJdOywMiHcilH0xJTb6eMeyq6e0DhrVGJFe+lLHoPKF702Ys++HzxLln5EccvEEzmKUpfu1pcky8OiBwbAJZsKAql/X7DRkxMPaTkvicgQHM62aTEKvOn4vKYbsv08pqarvLgxeR4bTfUjcrikprw/DWbI3Pi1SXuxrWVC0BxZllzqWxrgt8AbW3x+wPNfvca+Am3XRfyqnBdYVe8rmg6roEgD4u6EtWFcWVdugGsYEseptF8dIK9jbqGfoDyYpq808MxcIxHMLCOAQBrhTat8MTmnD/JV0zMufNOdtNc57x/unWpQ7XXYDfG6YzKN9niIzm2mXQupDIDGY9sySiMV268Qva7AFDsC6DCq7QctNaq9qV54VATUG1tAzyYbyX01P92AfXUNO1GVH5YT4K/fNvnew1t7iqKwhspL76WJCaZ55KYd7hzS/4xn/CCk+DOeKy5vP2eId/+7OQiFJDLOOj/EDsAQIVJn5GFJJZcXsnX+W2WUN2zYc6eqcVAdy+v7B9Cfi75R9rfaHfzsXgk9RXFLsUNhiX9zvgHY/fOQWSv8BkuyeW46cL5wm4hUEX1O6ox1T7VB/MLub9yFf3nRd8u/pI/4P259zfe8975xe5Syfxa8f+WP6Q5O0hKn9beEAn2FPFQ2kDicq4skTPkG+mfkSdk7hRhHU7DzzdeatxaJymZqlA3ZH6p+XLz9sYk/fTQN7LiNcioTJu5KuurKq9n6zxrsy32zezPxv+bVDmLuzrniZwtO73cW3MfzP1cure7adjH2XDPEcfF+4Z/3Hpzb3XGKb424nfvg+lyj6OCkAUWskAI3Yt/Yk7Od+fddb25k0DH1MozExMN8Oj35NFBOGh81N65IeStj2kqNsJYplZe/lL+Dy5G6WKJFx/EB6XVU6qnLuZhufgONQ23mXo5KurmLdgaGlioZMc4agwBnbAMZ43JEZ6DM3RfDxNRBs45lI+yqS23Yb17rtlSkSQHqyshEj4kYnl4I163fAtNFu8IlbOGHoYVgsdRgyGAzTJ/p7MSSregSHFNUSTMOQAfHbC4v4VAtpkmceiOoG94M95cN2c2HQKD2LBA4rH1pdAmknG3hfTQ5FOp2WitjJ0eYkwB0AY2ZqxgEhV0Bxb9CYsvIejSU6fSnYHQ7UF7LkkTbyQvTPOdUqszv/zUsgelx6cvpwedhyWd//+7Wc1SJKNxznhx1RMIAdF8ZBjoXx9YXroZIa08SzYpeZ5Mcfexh/ORwRE+vzQ+B+Mb5EpuVl1FZeAERLeJiEhgiR5+C0vbGCES9SZgfVjBNBQFwLYrcHvw7rGLu9d/uYd/4pw+pLpKi6ARAcVYdIQTCfhQ42tmQTkY9m/++wHAtKwrTy1kfJUBrHmHFFC7bSsGdC8pzS30+G58d6C0jJNAvsAxoVy/GCZXsJVM0jI+BPka/K8gFECowB2Dj+NJWDYaZu1KPnDMOpsEeHHgemVngVkmMsraLcmNLeb//zvHq+HBe/H+2pIh8Ip4UgUXwsgbmhsOlRjhN71VampOMqvl8nE74BgHQXsJwGqQG0oQ558eJ+YuI9UjLrWeS+nDak5SLi9q2iSH6i5uY7CS93kFSm/bQS46YvH3FSrM5eWxy9WzQknnW/9+8OZFETJpjG0CAEuc6zUsz9OcgygLJ5Nrf3tgefacPmpOXO1aU9/sxmE6z71lfRQQooBOmOaQGtLTQy33eLrNO3tAWtvb87r3j+Fs4tE9EmIWs336PgBdEuNXaA63MrGN7TBTPKpkOMnwpGLCPh/2dX3UHQyZAcDhtmFEnbNCiF7SHEwwHOvjmMxKRZI5fIkxsHAdznxbOeGgAYQZzkEUHIiv3MzzI8ZPvBBE4CcKdKKK7k394P/H6qs/e/SWuz/yA4R1vcXota+17J3T8E0juA7/bvzIh4U/VWMi/RZhDnJjujEs3UhzCx56LZyk3VoAYR+foaIGpUccMsr/5Nza/Mkb6mx9/j7DgJYSn0VK+kdbB6g+vmy67AifyPqebz6aojnYSU8FAfiYEv9iZAaj9Newi6W0lIVw9PtuPuv8zYuLAqg/ajhZqZX4sYlowVYwFQH0zZXOt1bwY8e2njb7eF8Hb+LEu0t3p+XZRtMhWxwKI1kQJm6JwpzU3E63oVWGyWijyMgoGyGZBRvGEirmGLAz+i45yRMGJytNuY+UZKFZNYPO3zUrpaViFLsFpj7hhaLDzpaChDbGnfLfLK+14bRU716+T+PiaKPInIPylkVEZ6RtJZwy/hUSZqHo1NF/HtgtXr4ZIbM2T8YRJ3FS7hzhNiiGGQ7BfuKjYKM1K8b56xpKssNDDgxUR3RX8Bi4VDMqtg34eK3z7jE070t45sicClH+V9zGmCw+9vAg2ZvLmaATh6r8DeC2dCTLxPXFBSgs+Cq8KmFfpzQN4OjHr2/ZxMNV7cqykvdQNHpQ5z11R+pwX43v14HTj5/IxmHiVTKOE3DCsKR7vGfPRQF72CsNHnZ4nHnxm2FGxqEMGOud1U+3Gnp1kKA7CHPeytIUHf7Q/oHmiNWIpIMk7QWVwUB2xf+HX5b6vlDIXBueGVO+r9bnLEqjQAVHIQzQyloeulUhSXeHufoXwC3SkW0bPEG4iE/ik9KmWy+L4hnJylnN2uS7N+4xhZqpoxGtnMnz9081pVzak0QGqoMLqYLYoME6AFqN3kOkwkoIaU4PVNi2IhQiUsuYqjbzb5ymKawOLNOUJTNk0F6LB6Iizwcuee7ef58ZX8cHfVxH8mpEGfvXu/93Xr2dqYiQiQ1jIEliC13rBxlkw6i406irRDJ+yFIMnAgiiPIoCPrtcrTrc21RM43SxUm0XlqxsKSQd/SzPQhehR0D5P7ti4dVcCKOn4AVhhBKSKxyqZlhC2FDZSGahAt6rCISDQBnbstK+62KdG1r0BJuhqGdxO6uIHiduIW4+/AvYAUyRaNMNYqQrVI2nvu+kUL2q0mhuEIGmbvATaVfd7O3veNdZaAohQuVSv1L9/rk21l6bmrx5buAe2X3Rxu6m4oaVu62ikBQ0dxb+sKZuLKlspM9oy6sR80tD4GgFK9WKu1R3tLznEz8pboff5HRIfWL77jmvfjt+enhnYcvXAMqrpH3d7tTSWIXF+UdoYVGD9I6xeFv+Hu7/71EkK3l6HXA4RizFlvYXkxD7880FmR0iwq/OMT0jyevxvn/3ip8BVYI8Q77eGsnIE28/CEHoIbaYx9GiL/BzH7m0CF6V9hOgj4QEdcIonMuRLQ2Wgvvxp/LVFbYqxuNnfQLDSCBCPGeTme8LyKU9W2jhdbdIsNsJ5joQHguvimg9JgiBRJf3FuZiqK+/rGnkWqtVi7WvX/5+K+31S321bFNLX0U6NwVQv7/7Rv/eNNEPwvDGOYAH8KH/XWX2cia7J43MW0Ck3kW7dJiGcPGLErmlkpjAfUNr6fe0KB2iqEhciiVK2WobRonoe+qRqm0qmjk92VJsFxBoz4UuJka0q/WXXcTzUCpFqI9y7m1WcFpia34k4FlZFZOutvevM/l0MCLEV3QFOQARNstERTdoBlWlS/YaowBZEUUjFm2NOd/LjaTJgTWcm/oCCnLUId9XhFMU7SiIfUfnetko+xjg+k9GpUZxy8iejiELd6xrJOugEDvqBZkzRSoEUZXomYYU8FJOkGgzzx/YDtmMZ9PtrG64gj9QsEogHQDm20vpQ2OwkVqStmzNF4JwvmA2Yk5++DCPw+pXZ7urUKRsbzlfCosZhNzpclJ8B7oHduqGcReAhrC6FdPORnujTUH0KFQajCsSK8JM0bYfWlNpwCQRQlNnvTPZxmyyN6XdhC70cqMky2gMedjeF72fXlg76kf39xXVibA+zChxsThNpnlwQmcuFPaZ4Lpe2NX5vNS4Y8tkSJpVrMrFwgGEFmTZxnKCYQUEvQN24Hg9T4ym4P2IUsROLGkmYCbq8WiVq7YpizNIqoa+BBhVxJYGkKy7LAuG6phfW62YSR7UmmXd/faMFaHDOO6A9V0y6yJqunwLkuOECNxsvHoKMG6t1QsdThx4r4L8BZ0lcSskJVLJRJVQ1/Nt6UoVM1NdaRJSiaBYR8rinpayqIZlU5p4UCWDwQV4a/wl1I+5qJVzRaIiRzR/xGJkRY39GEMTVO4TTFZsqAzY1E9QfqK0dDNxKqQ4/lkhzvcxakhp97YCzlXGqoIh/C4xyr0HsrIZVkSxVRF4DSLgjjGhhkXhkNXFSpLhLMsUaRZnhdqfx1GJWnvLqwAi28zxVTwoK1poTOSfIcSIwjIjC21jOFgkyrlwKORJYsdZCCbNiRUnqdja5jnJdHYNTWFIsmGoSj95KiITKLy5EFi2R2CZAtySZaFAggVlqUTRbTREZF7RTJpxxYzCMGiNEsoVnVpNeepP/b9SCwp4mM3xYUXh6L0V+XGKgE4UtnNtBgb23y3ThkfgW3eN+r+quJR/FEV5dEu0ZLdOsTNJXfwphPvSrb815dVg+NWiX+hHIWxNoSWbtSJImotlU0qSvfIlgLTQYAOUCoXuT3YjDqSj35oOQETVQnWa3wSs4otwaU8ufKwVlp+2g+akese0t7utlv1WiPwyhbU8QIkvNcwsT25Xu9aAx5UKASe0/Zgf1HSbD2EuC5iztFHJhEz8b26vgY6BGu+Nd/1QcY0gFP/A2US0+/7QaLzg1Ey6HFxnwTGFLgo2npHONUBzGzPpydeg9cE0+dEhX6byJrDniAY1E2AKwpOFak6FnAU+siXbZI8bjuJDTfLp01dJs4xxMesiHzfRvXyz6eL+aR/BPtmfdE01fqV7jPXVYoCjwXqFHqmbYgs+4ihKGflVfl/rr7ia1gglBfvtn+t8psHpjHdwt+Bo4b6O3kjxJfg7wD96V2QOaqdc1zCngbS9YuhrW8S28fnsP8DN2Ygc5LQfw97OIHhGoDPrSRUh3bwery+bjoERdWyTpWAp0PLf9wh1wddRDrMGSvzNX80hCnK4LLiVg+iKPQnJMKyXHeIkKT+PWT1juo4MYf2lGXhZNusiVkR9zHML79q05q/x0Yicm2A/ud9xcFEhDDeIctIspZqLA3J0SjaRokwlGvB/FeVW5LEILwdVBQlAghVZUBr+wVDxBCr6q8HuVvtbkJP3iRK+sFDvY9sHBDD2U94mng33llbHueM+J+QcIbLPIkuaXvFdQrRq5hPmkomYibYQBE9KoKACEBSxMLf121fse4RUC+pLHNgfL1GWX6SO7YC8mIaZMzcnmk5lYJkhq67Bk3i+DO1o6Yoe5HFt3Ej6rSUHeuNKmRrLc0CG1SjZNMlQ7R+Sfk+Ub4apMUCWjlFfiw1I8oAnEp3smH3zptKmRRjGbv8H7/EZNlksqywPSigwvjgTGQpYn5V6tOKFc2IoqDYliy2IogDacdmAAs3ygD3iWCzsSjCK1eQpJlK02YUXZn2hScnhRgF15U/nBONcoNIH3wZn1HvWwXZsq51lFtlNoQbqFk3dSwiaxDHzzQcBon6hvhE05SoAWsHjOO2PgcKrO6TfffOTd18MiRLZyRdKKDVMTSDMlnyQlLmCsHAjq+FKQKJGTAj90mwI0nP+lUxudMRNwMx3tUZXk9yaPpP1brUUw80xCU01eYbJGI3v1/Uq4CjMniew3xbR6aCuxRBGjHFq4qzhufevGCTlhmTOicIVIom2R/6jS/i0+pd1U8xPnWJu6k8C8fjIh7WIXEYDURxvwhj4Q5NiXvjIOg02GmZ3E7qtdIqxihgUbsxB1jMmMWzJha5J9eaFBwy0QjV47F6l49EQXjac5j1h9dwyZ66WzrZDJDm0F/5eJIOyIIvziG+WPPp/G1y5OreYDUx12cxF1GAwL0apYcZhyL9FjfKBKgeCjAfpliS/CEaeDvevm9hBIqGAlVgXjqrAveA58kZNiJqxCfcW9uqfOJHDEUwgNYYQxT63kSqkGLD6EpTMWqLsHHq3691FyM/B2gvSBI6+ymaFlGzUpFVBHHpSouNpZnGhHR1Lj1sNA8lDkMEc1xmLCqaVaFVOCR9MyfwoIuJmKAQqHYPynjJknIEfoCbw1wJuEa6YRg6hxJ0Won6rNGqXqbbPLHTkNRKhI6Hu90a7+qJOMOy4UbjrlSAKQAQcYwNDaCggiWuLYiWQIugXjMhxiJcqDMwysxtJZr5I6Zu23lbiGgTieR+Ka8iG7o8NnTddANIJFX1RodOzMwZ9eMRqWt0rM8RE2xUZ67meofeuHGqwhXEZIGjnFAaxxzjggNmDEkWIk+W0CHEwItgUcUx/QgslWF60jWlLzlyNJ8nZ0ft/2jXVTg3v5nie/hhSH1sTpG2GkZgSbM4Rskk081GA2V0SNRqWfMWKRXQqTuaSxEq5RkE4388aMvyWgPzBDGk9wW7EpTBul2M4okSIiupUdutVl1TJgKKTswq6ThgoznGazTYH8wGmwsTzOD8CsBZJYi4ZweyU8pmRp3sNVjoKB0aTb/fAYiLhE13wEfCYTbIPynH2Qhmt/fBcebA+NJxYIyFKSJbNxDVQ8f2IekWzx0BxNDpCXtbfGri/Wf0Nyqa+Z5iabeVcqZeYvOQ3C05jPmpvBDQmueWzxL32KV/FaT75q53penE4ajyiXafXfBnemnf84JNTFlQXBeFkDWTo4InFQYHltVoeSC3RFPVsmp6ULc8MQyUvOGFTAGu+KIL0OX2S9mF0zhd7oqcnISFGacjTpIU7OorFZQtBRhIFTxyX1x0u0ZjGaCi+nCeanOyXGn36n6AWQlUn7qdK+/KuVv4OD6e2rha5J8qCOJ0tYgoOtjB03sks3iXQKwEIJBaS0Zw9KgS2afD2PPQfEnPq/Iiy6bzsWCfszeS6oMN9082TcX/v25+gAWFJIPHL6HG5vxZp9UA6iHVzyW4dBRvn9OF2HN+Fagg7zCMgVyz824GSXt+4pv45pEP5T7Z88IxlTXd4GKUilVFiWPGpqNwsvT5iG/aB+GBON6LLXmAbyEa7PfB+86Q86DneD7DFs+nZ0pzcAh2zkHIdnOKCHw7irPo5cmSRlFTT6yRMC3suY+ITsDFljwwXkFMjB8O1koIpaGQBCEoMmnbjRZuB/BqvPrSp6dCGHnxnaJMJkkSlkHrSVdjC9iqtl2YKS5o8AXy+3hSThNP+ke+Qv4AM1EwwjKgLgElNkxWtfUc0PrnGnzY6jlOf8WZc/dkCMM5tcrxDoszeqb+BApNm46O9KWfzwecew6A/g6PDfutjUlq1fYchBR1yh0BH0ZFcG0y0XXGpt7IfA7TZ/2pz+CDg9Bjo3nbSI9B/bWBRhhgywA+SYDczVlBqPtccrGuINT+P3c9JuXkNq7eU39ZHs8tz45Q5tjd7lnER/rdDtgZl6Gr3AhMFJVu42W1/96lDyJx3HTHx13rwzgAV/1dLV4qAufUGNRsm7nQA7sRtZaLhnGh3lJ6+qySExVz8cjgd8XdPFR5Awb+WBclGREaUtRYHEWDfYpEOilykrYSg5qt8O2RfFzQ3slXkzCOmatNlXrep3C1geNdzBJpmTJVbe/mn6sfPy5zvBi4FU+SyYFZFDLlklQPexDI5HLBDgjW8/B/nrxMlzTdpKoMVwAY8UMzPzH5BGGJ5eHUmatZMgVuaOHgMeeAMvaHKS1+82So6no4ap8ieXEiFb2vbKAgosn+obHkkuvj7oUn6/ot1TT/fnOs7F6q5U2jrIiCpOvpdFvB5sWVqWh5wVawmW5my1kiTIzychJhTNPOIjNiCQCF5l7K3rrCl3G2bFSaDuXSNOhTJGXn7bPvM58JhklLn2mfYfbsfXYafMX22JYEgm/XFkYXbwhiQb/cBAJn5r9xY79t74NYW/MHztXuHWV8fwjfnwVOnGv7yXsnkvQ/sOh8l4tFKP62cJNSkNjgNW2H38WVOH9Pbkf4t//Z1SOlReZZf6Dim/hG7dBt45ZmNFXtVgxfYtIA0vtEWbMxvcEdxOSB1DpjzCr58LJrUwEJ+4SI0tUWlq6cFN+KEARxmgQHDwWfOF0O7oy8iU/J82/O8qobaMuKk3NHRuMf1bE07BuGDj2FoTUcJxRLUXQbqhzHskyZY1X1CZl4UBKHkuhTK93pmeUyKBH6mWOTm/nkRRIUoc6UZXkRsb6t/CEwXSMOjNPQ/8B0KKFxr1Mi5wVQqU8PLjFejQuA2pegXcj6EL/ouU8lwp63Jgi67dMJy2KjjKLvW5WRO4P4RzLLggh39ni4hNcPifsH1f2BnyQ2DsX/sSYoYJ7dwE5bysvtqg42sFFKD6siOE5zLM0KBicMXthGu4CQUv24PhFMREO5ZeTGo2Y+t5buaG+TqbFGq+7BFhaIC91RYF+vVmmBp6FktmXQDeQDwoWKCJld7MP2/vluz9Lw5C7kP0M1C3Q7Lo7PXqv+b/FaJNiJLUyZL4JHoU68/P22xs7bo/clg6BWbrfLemGVy2F0muYCFX+sCN/emeysqoZpXs5qZkG87CNT7J1y8S+a3xbDDZ/DpmF3jQUEelZlUNErvOWhm49cd+LRCR8mVO0WtcEcHf6hr10zCWFdyXK+JizylXybdo2yf33nr/87FgL8nY1FxjwPdr72+cGQeX5KR1DyUfCttS+Aqjpw/QDayFjPrzP32ZOAPL97+gN2tndK//3AVRQBkFxBGZCD8B67LACWvcQuzcLQJEEoisQEnmXggOHZDgZbLBt0UHeDban7viwnY5/3dTMybBmZ+ihTeXrK1pZ3tDi+H4RB1Gy2245TcR2v6gXADhaQqTbsqfS0NHJ3pY11B2bVMnMxxZCkO60y6YMp6fb0SGufHSjsW3799NZsHWSyzJzpLc9md4dt0WG4r2if7WbBLR4sL48ehMsYII30Sqbam29ivbA5MK1dO/bYoh45d7t3JHs7d+wsbp+306HYlsq3X5REnpk/g3i6tYd0zwtRKbjAUoZYy8myv+5XajYMeDNzzv3dDsxpvlfzLZ1upWX0L+qL2R/knnEIHMIkJG8B/Jc1wtIAFVR6kw7zerugXUHz5B6ThTsU4FySnSNGkR9CS+IOnFM9Lb2vu0qPOn3xuAeOnv0aO6vEHn9RXf5O1riSH0y0KJCFk54kZCoZXiI21BqXDHfai2ZGA5bShtFG4Qe+O0WcEBairm9q6CCFpuM4fDx17yJ+ioBaohQLklnhM6UxSXCvloO2L9Q2UUnCAompRbOUEa3Cc7TpOZ7KEZZm/EMGAYuknZaahIFcr88C5srYh8I+HG2eNW7FeDba3PXBwjvx23PoW6WKWIHaOlkytYA4v3pk1/Pb90GfrYPvCrjN8FbtxV+9fH9Xgb+EkyX3zqEFAo1zrnfAfwduFIwZQjZQtNJ/daVgm/kRz2OTB6J25HhREbVLANDgV3XUX1NI06KSOxOeO696Vce2sqUahHXHH+9uVa7OpLaDnSyvEtUmCIqGqAwFX1U42Z/p36y0mEsfYAXLYbNq67I3aJazSxDje0wiBxyEMKLglLUMXgQmlOO15usIcVGmGtXTxljb/sx5ug7qFIRxkMVVAzCKmwReX8cFWGhHrml3qzndhnPgqkDjiGVCWWUwEeycnVylhXPwZLt2WakgbRn9bvviL2z0VgZtUb3XMFRFZ4we2ROFrqjGljIQjYOsWCDpVp5glFDC4MhGIaCY8R4TMDLLOknq3ivl+fCtq8Cff/syRQwJrhpHBXQimQM2akNMu1nRTJVme3yTjSNQW0fZcvvqCq0tCW2qpSAIU84FWZGQhT6ahsGjLsrHLVb0JuajZ6M4bxmiWtNTiq0gj6PHPRyt7HN9gEo1cUR2IiXyOW+L0YsFPHwOQ9di/gGgQADqskAW6P1kolI/UAdhgdXffSHPnz52lCHO8GwR1EC6Th3eO5Tb3j+yk7j1uITlbYykeubuVslpuMOT8QLFduw7sZzLhiZXqL1ihf54P4cCTG3cmwhBl7501fKzdlP0ieeh0y+mOXFsLetZonE4pqql7mzsqALkRm43u/WyfXYry1merhn7sfvWNRWONZ/BtnFcPRnrKagEGdySVcVzWkRcNm4aDvjANHcSQ/D1ut94FVwlYxygRmg6W4j1SQ+r1eaH0PKLxOkUN7jc3mT+3QQx2aW6uJmxDkXmCrHGCOGaAhiFlraDgn+9WztwuzLZfZe9TgrVYNbwHewRxZZ0kwVUXgkXmWckYDE4SMMv9ogH/zCfFkOPCqCgrrsry4JzBq4sXYiuMwsvAMSFifEFdC22eRvbAIVHjW+hJ3Wlg6e/C9A3/k7wrYFPAF9vGSxjF7vFzn9tLhkkN6BUquehdJ4MFSuc6mKo9TRPWaXOdDotVhYxquVqXVTdIBh0gqCcJyCi6xI6+zyUKlXLtzp8Bum0LmRp5nmT23iLsUZIvr50C+NEsl4v7QZJ88D4OGt6p89mwvZ1QKNmCISo0LYRBKZrmseUWXDAmB57dioczXNiZi1aMRs9W5RltlJWwQJjep2zVPiHfxgxWsN3ARUqKvm2dvXUqMEvZUFRUWbzqE/ia1Q82qY1YwXxC4GeoAEKcRRt1K2mxVKD++bvdOp6MIwdW4kJ+Y6qaDDMMLjCSQzM5xoee6EHD0N1X1d6t+J0GA3tVJiti1ct0gokTwHTLBDKFUrwUGI43LcMe4L1MhSPheFIWXOsV03TNmGeFBwwPZvPgl3vV+cBrgKEf3wFhzLK7X6YggSxyLSlFEBrHxM8E0V9/nHIYFH6xbOPB877s5XfOC+G4PGm8T9vnjds8Oz2Z3kRArzWsqAFqgR5iobGTuyRleOi14CPwWHLwx9fvfHk3MuDmv3PG1Qq/x8PPgVP1GNL0ZockZXrEISeF3lCttmRWRAoRtNUYvohaWiEi42Yxs16hAUCUkKCbX2wm3Jl2TNhQjM5+M7Pb7SqGBdUlVyoCwPBXF7rrmYh26iXtkwDjZ7hQ4dwXE4QcqMLHq/5tXCc2CSS7IpET4WKE8bxBHAIk/M8y4sPYW1y4vkJWc7q6fkzReQ1okhn0foqKleIeJ9Rk5UtS1FPInwCnqzHRr80X+JYKaZSmmUs09Cx9KnTVSMYWBCYZMaCXRPTyTYmQSVsB1m3KUedpLAsX2k6vEkv9uIhLhX0Ja7lcN6t24iikUSiVEeJYZpWkiqLNVk0zTAUlpVIPpl06xfkivGhaQgJ2W7nnCZx6goYjN+/+L3ltJoeNA2JDQSByox0SCoRoMftnC23Fvn6/8WT4o0Hr5d/P4ApTIUEm2oAvZEPV06xM29ceTkTLkuUqGlZQANCNIyz3e65fbt5RSlTgdMPGnMbb5Zlv9Zu+w7Lno1MAG2Dc67MVL2VsVk/8N9TEW4Rwlvx1mC+h9W6VCgPpGnTEhEXY38iP1bP62H4d9+1KHX7miTTRx7xV43Twj6+EQ5txzz7/LGfxr7/2S/chIKf5hn3gXlLCxkY3+qQKDVLJfvk924G9bYmlVJLhqO6WlmFoEnMOUOK9ZDia3hwA7+N5v/vR26ZO3CVwPjcqlRGK3K+g1bTVK2J4iLjgoWkyQ/DxLIkKvuhIJyL//MHEjEb+PAh7LStDtrW2ut/68fq2aI/lOU3xoWNz85DS6RPOOMPv31lW33UzgW8IPxFTZOJ9s+l0MFGbaY/tMlL0HgD3iBmvRBUgppYjhbYqNMpQgYLZW2vWxn3foyxMetPUAAt74gMgUtqInwOFwgJQXmGCiIntWxVkGIgWbXa57N7mYR58cJdd7fys9PTR4yAE7WhiavIUmc2joBlgQMtH/U63a5XJlZv/0viZvhEbi+/Ns5ZHA7G8pTzoMNR1PE6vF5M4k7ovDQjlVckE+ED7kCSmYTf8zqE2QFPMaeHXvscyDcihZihuEk/DolJB6IH8Tb1wJPGtY2WXZyRUlyaYgyju4TfxsKs9gQ/Whuf1XkGmnlsEdCFgd83R+dyH3Q6kw5jhJGfWhXL4AJjQqWZ3UbMa1VZQkcEAMV+4EY7VQnJH0otfVfvA7yd7ugavM1MPLkz9nxwIKUzLLBFwDmTyyRTvxLBQv0b09cFgeWctz87GwgWwbLGeg1wowR2jl4pXWyA9YMLwKo5VVvsSus82LbRvfgznHX+3kli9BE/8DFYtc8+F+20PMIWto4lU+UXz8YjrDKnXqhvYVe5OPifJ13vb/fRqy+kfX/MdR10OPpVsmX+VizFfK1TFNSDYfwZbdWruq7xciNIOR2zCceH8QBNtOJI54xF/91zVy6U/3q2NvTPAQpZyVLPu8+W+GyVTQkLcq9+o73Pi6c/XRE2fb1JzYB3XpbVct6Bts38DQOsZ3wugCE2ji35hB2MM+HC+T89e+EsMa+du17QzjQBSUkXsqYjhN4g5JIEl9AsxATQTizrQ9V2kT32+l2BoFUsovgX/FAH80TBO7V6wyxCSMajIEDvWxrTIj+HjWES3+VHfkbx/deQ8lXooUiy+dYTZVXXv6Qn/nzTRVFibCl/efFv/7tnPevfG6oqp5rAkTClVomYr02Fj4S009MIL8fL64Z/QpmG2USm/C7WJW1MjnCDAf8J1alA1wfIY6qGksylkaVQpXEOp6tmpjGmbtzGc7U0NKXcG2hXQsz6ti9UaXSMwbylx3qEA6bp892FHCprJWiR+VdIHrja7Pqr4Jnv1OOVeGWVBjVVwlSCYHgUItogH7YJk0Brb5TaGreHhKSxlKkKl05RMylOyXqtY2WbfltdfQ70V61Ei3FflMnsISWiEC6LPslrgnugWGsNVeBA8MGWAUarwS3YTusGFl89ot0jr03AeDvxHQiAgoeuXPNbKWz4MU7TXwLwLjP6mfrxlaY3Sv2w4cLmMgCLAgAE/kWZYa/iZtPqwIWpfdCDyzrJKSibm4wvpQgsJoxPT5HeE9Jk2dqkDtk5wD43XCCyvMjI6nBIAJeyHojP3R9sDWkxoHceY9yUoHxOEGbSOjlDcJpQNXeRpwEt+YE4S+DdpLS80b43PYTscFbyApAqkmtfk7sMTj9/WLRJSltO/CBblM2kwFwnMWn+2cundqHFjsRyhH5gKqbldEvDcSKZ3eR5hfjyPfnB+jI+F5ELccKm6pyzTB3iZa3gXMsfDzTGB4nOAb35RUv8sKXxb72NA8NQOcxSbHmKMRlaUGNzgNNz+Rc1zBQbOmBFugH/Y6vywn2psKxhMwvalMGw7TjhzB2SOcZNaa8Ct/KGHV/6Er1jxoKwKJ8gDSfnXGGLN0wPixmA/EIzIzyoIzOu92X7Z5v4NAN1C+YlThovymY+9PlSzXyxhO0/5IUdlKa0mtIXpL16J6370MhGBeAK4BmCc0WGonFDhlZlKsMw+ySjIPntUJY54rEIwMeTIeASyFAQ05yhoU4CmafZHGQUENKfYcEl17kS+uywzIRNdtpizKiMbWQ+XovUdjJRk/VH7jBhiyEZD47L8QYOW6mltjtmmGQrOu05e7mpUnUWHvWoMWNno5BSZXi/dKOFtvLrBfKk0U5GZG672+VB5RrrjdouG6Nb+FTxXhfqxawqM1vVW7VY0BSMycm6y3rvcUy4QRaoj1d2927IIEwsRnNa5W27GIxibUrKjtty437VFhOy0tQmF6K9n6ad29/r+QAAAA==) format("woff2");font-weight:400 700;font-display:swap}
+/* the frame every sample app stands on: screens that slide, a bar of tabs, sheets from the bottom, a tour that plays by itself */
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
-body{overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
-button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
-button:focus-visible{outline:3px solid var(--c);outline-offset:2px}
-.app{position:relative;height:100%;max-width:520px;margin:0 auto;background:var(--bg);overflow:hidden}
-.scr{position:absolute;inset:0;display:flex;flex-direction:column;transition:transform .38s cubic-bezier(.22,1,.36,1),opacity .3s}
-.scr[hidden]{display:flex!important;visibility:hidden;opacity:0;transform:translateX(30%);pointer-events:none}
-.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:0 0 116px}
-.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(16px + env(safe-area-inset-top)) 20px 0}
-.brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.1px}
-.brand svg{width:32px;height:32px}
-.lang{display:flex;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:4px}
-.lang button{font-size:12px;padding:4px 8px;border-radius:99px;color:var(--mut)}
-.lang button[aria-pressed=true]{background:var(--ink);color:#fff;font-weight:600}
-h1{font-size:25px;line-height:1.2;font-weight:600;padding:24px 20px 0}
-.lede{font-size:14px;color:var(--mut);padding:8px 20px 0;line-height:1.5}
-.lab{font-size:13px;font-weight:500;color:var(--mut);padding:20px 20px 12px}
-.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px}
-.seg button{padding:12px 4px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);font-size:13.5px;font-weight:500;line-height:1.3}
-.seg button small{display:block;font-weight:400;color:var(--mut);font-size:12px}
-.seg button[aria-pressed=true]{border-color:var(--c);background:var(--c0)}
-.list{margin:0 16px;background:var(--card);border:1px solid var(--line);border-radius:16px}
-.it{display:flex;align-items:center;gap:12px;padding:16px}
-.it + .it{border-top:1px solid var(--line)}
-.it .ic{flex:none;width:42px;height:42px;border-radius:12px;background:var(--bg);display:grid;place-items:center}
-.it .ic svg{width:26px;height:26px}
-.it b{display:block;font-size:15px;font-weight:500}
-.it small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px;font-variant-numeric:tabular-nums}
-.step{margin-left:auto;flex:none;display:flex;align-items:center;gap:8px}
-.step button{width:32px;height:32px;border-radius:10px;border:1.5px solid var(--line);font-size:18px;font-weight:500;line-height:1}
-.step output{min-width:34px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums;font-size:14.5px}
-.addr{display:flex;align-items:center;gap:12px;margin:0 16px;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:16px}
-.addr svg{flex:none;width:22px;height:22px;color:var(--c)}
-.addr b{display:block;font-size:14.5px;font-weight:500}
-.addr small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
-.cta{position:absolute;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));padding:16px;border-radius:16px;background:var(--ink);color:#fff;font-weight:600;font-size:16px;text-align:center;font-variant-numeric:tabular-nums}
-.cta[disabled]{opacity:.45}
-/* tracking */
-.map{position:relative;height:46%;min-height:250px;background:#1A2238;overflow:hidden}
-.map svg{position:absolute;inset:0;width:100%;height:100%}
-.back{position:absolute;left:12px;top:calc(12px + env(safe-area-inset-top));width:40px;height:40px;border-radius:12px;background:#ffffffe6;display:grid;place-items:center;z-index:2}
-.back svg{width:22px;height:22px}
-.sheet{flex:1;margin-top:-24px;position:relative;background:var(--bg);border-radius:22px 22px 0 0;overflow-y:auto;padding:20px 0 112px;scroll-padding-bottom:104px}
-.eta{display:flex;align-items:center;gap:12px;padding:0 20px}
-.eta .av{flex:none;width:46px;height:46px;border-radius:50%;background:var(--lem);display:grid;place-items:center;font-weight:600;color:var(--ink)}
-.eta b{display:block;font-size:18px;font-weight:600}
-.eta small{display:block;color:var(--mut);font-size:13px;margin-top:2px}
-.eta .min{margin-left:auto;text-align:right;font-variant-numeric:tabular-nums}
-.eta .min b{font-size:26px;line-height:1}
-.tl{list-style:none;padding:0;margin:20px 20px 0}
-.tl li{display:flex;gap:12px;position:relative;padding-bottom:20px;color:var(--mut)}
-.tl li::before{content:"";position:absolute;left:9px;top:22px;bottom:2px;width:2px;background:var(--line)}
-.tl li:last-child::before{display:none}
-.tl i{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);background:var(--card);margin-top:1px;position:relative;z-index:1;transition:.3s}
-.tl li.on{color:var(--ink)}
-.tl li.on i{border-color:var(--c);background:var(--c)}
-.tl li.now i{box-shadow:0 0 0 5px #2B59C326}
-.tl b{display:block;font-size:15px;font-weight:500}
-.tl small{font-size:12.5px;font-variant-numeric:tabular-nums}
-.rate{margin:8px 16px 0;padding:16px;border-radius:16px;background:var(--card);border:1px solid var(--line);text-align:center;opacity:0;transform:translateY(8px);transition:.4s;pointer-events:none}
-.rate.on{opacity:1;transform:none;pointer-events:auto}
-.rate p{font-size:14px;font-weight:500}
-.stars{display:flex;justify-content:center;gap:8px;margin-top:12px}
-.stars button{width:40px;height:40px;display:grid;place-items:center}
-.stars svg{width:30px;height:30px;fill:#D9D5CB;transition:fill .15s}
-.stars button.on svg{fill:var(--lem)}
-.thanks{font-size:13px;color:var(--mut);margin-top:8px;min-height:18px}
-.tap{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:#2B59C355;border:2px solid #2B59C3;pointer-events:none;z-index:20;opacity:0;transition:opacity .2s,transform .2s}
-.tap.on{opacity:1;transform:scale(.8)}
-@media (max-width:360px){h1{font-size:22px}.seg button{font-size:12.5px}.step button{width:30px;height:30px}}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+html{--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px);--tabh:60px}
+html.emb{--sat:44px;--sab:20px}
+body{height:100dvh;overflow:hidden;background:var(--out);color:var(--ink);font:400 15px/1.45 var(--font);-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0;text-align:inherit}
+input,textarea{font:inherit;font-size:16px;color:inherit;border:0;background:none;outline:0;min-width:0}
+a{color:inherit}
+h1,h2,h3,h4,b,strong{font-weight:600}
+svg{display:block;flex:none}
+:focus-visible{outline:2px solid var(--focus,currentColor);outline-offset:2px}
+[hidden]{display:none!important}
+.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:var(--isw,1.75);stroke-linecap:round;stroke-linejoin:round}
+.i.s{width:16px;height:16px}.i.m{width:20px;height:20px}.i.l{width:28px;height:28px}
+.i .f{fill:currentColor;stroke:none}
+
+#app{position:relative;height:100%;max-width:430px;margin:0 auto;background:var(--bg);overflow:hidden;isolation:isolate}
+#stack{position:absolute;inset:0}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg)}
+.scr>.body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.body::-webkit-scrollbar,.hs::-webkit-scrollbar,.sbody::-webkit-scrollbar{display:none}
+.scr.tabscr>.body{padding-bottom:calc(var(--tabh) + var(--sab) + 16px)}
+.scr.push{z-index:5;transform:translateX(100%);transition:transform .34s cubic-bezier(.2,.8,.2,1);box-shadow:-12px 0 32px rgba(0,0,0,.08)}
+.scr.push.in{transform:none}
+.scr.up{transform:translateY(100%)}
+.scr.under{transform:translateX(-22%);transition:transform .34s cubic-bezier(.2,.8,.2,1)}
+.scr.push>.body{padding-bottom:calc(var(--sab) + 24px)}
+.scr>.foot{flex:none;padding:12px 16px calc(var(--sab) + 12px);background:var(--card);border-top:1px solid var(--line)}
+.sat{padding-top:var(--sat)}
+/* the band behind the phone's clock: a screen gives it a colour with --strip */
+.scr::before{content:"";position:absolute;left:0;right:0;top:0;height:var(--sat);z-index:3;pointer-events:none;background:var(--strip,transparent);transition:opacity .2s}
+.scr.strip:not(.sc)::before{opacity:0}
+.hs{display:flex;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
+.hs>*{flex:none;scroll-snap-align:start}
+
+#tabs{position:absolute;left:0;right:0;bottom:0;z-index:4;display:flex;height:calc(var(--tabh) + var(--sab));padding-bottom:var(--sab);background:var(--tabbg,var(--card));border-top:1px solid var(--line)}
+#tabs button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:11px;color:var(--mut);position:relative;min-width:0}
+#tabs button[aria-current=page]{color:var(--tabon,var(--ink))}
+#tabs .dot{position:absolute;top:8px;left:50%;margin-left:8px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--badge,#D43D2A);color:#fff;font-size:10px;line-height:16px;text-align:center;font-weight:600}
+
+.sb{position:absolute;left:0;right:0;top:0;height:44px;z-index:30;display:none;align-items:center;justify-content:space-between;padding:8px 28px 0 32px;font:600 15px/1 var(--font);color:var(--sbc,var(--ink));pointer-events:none;transition:color .3s}
+html.emb .sb{display:flex}
+.sb span{display:flex;gap:8px;align-items:center}
+.sb svg{height:12px;width:auto;fill:currentColor}
+.homebar{position:absolute;left:50%;bottom:6px;width:128px;height:5px;margin-left:-64px;border-radius:3px;background:var(--ink);opacity:.28;z-index:31;display:none;pointer-events:none}
+html.emb .homebar{display:block}
+
+.shade{position:absolute;inset:0;z-index:20;background:rgba(10,14,12,.5);opacity:0;transition:opacity .28s;pointer-events:none}
+.shade.in{opacity:1;pointer-events:auto}
+.sheet{position:absolute;left:0;right:0;bottom:0;z-index:21;max-height:calc(100% - var(--sat) - 16px);display:flex;flex-direction:column;background:var(--card);border-radius:var(--sheetr,24px) var(--sheetr,24px) 0 0;transform:translateY(105%);transition:transform .36s cubic-bezier(.2,.85,.2,1);box-shadow:0 -8px 40px rgba(0,0,0,.16)}
+.sheet.in{transform:none}
+.sheet .grab{flex:none;height:24px;display:grid;place-items:center;touch-action:none;cursor:grab}
+.sheet .grab::before{content:"";width:36px;height:4px;border-radius:2px;background:var(--line2,var(--line))}
+.sheet .sbody{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 20px calc(var(--sab) + 20px);scrollbar-width:none}
+.sheet .sfoot{flex:none;padding:12px 20px calc(var(--sab) + 12px);border-top:1px solid var(--line)}
+
+#toast{position:absolute;left:50%;bottom:calc(var(--tabh) + var(--sab) + 24px);z-index:40;max-width:calc(100% - 48px);transform:translate(-50%,12px);padding:12px 16px;border-radius:12px;background:var(--toastbg,rgba(20,24,22,.94));color:#fff;font-size:14px;line-height:1.35;text-align:center;opacity:0;pointer-events:none;transition:opacity .22s,transform .22s}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+#note{position:absolute;left:8px;right:8px;top:calc(var(--sat) + 4px);z-index:41;display:flex;gap:12px;align-items:center;padding:12px 16px;border-radius:20px;background:var(--notebg,rgba(250,250,250,.96));color:#111;box-shadow:0 12px 36px rgba(0,0,0,.22);transform:translateY(calc(-100% - var(--sat) - 24px));visibility:hidden;transition:transform .42s cubic-bezier(.2,.9,.2,1),visibility 0s .42s;text-align:left}
+#note.on{transform:none;visibility:visible;transition:transform .42s cubic-bezier(.2,.9,.2,1),visibility 0s}
+#note .ni{flex:none;width:38px;height:38px;border-radius:10px;display:grid;place-items:center;background:var(--brand);color:var(--onbrand,#fff)}
+#note b{display:block;font-size:14px;line-height:1.3}
+#note span{display:block;font-size:13px;line-height:1.35;color:#444}
+#note small{margin-left:auto;align-self:flex-start;font-size:11px;color:#777;white-space:nowrap}
+
+.finger{position:absolute;left:50%;top:60%;z-index:60;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:rgba(255,255,255,.3);border:2px solid rgba(255,255,255,.9);box-shadow:0 2px 12px rgba(0,0,0,.35),inset 0 0 0 1px rgba(0,0,0,.12);pointer-events:none;opacity:0;transition:left .55s cubic-bezier(.3,.7,.2,1),top .55s cubic-bezier(.3,.7,.2,1),opacity .25s,transform .14s}
+.finger.on{opacity:1}
+.finger.down{transform:scale(.72);background:rgba(255,255,255,.55)}
+
+.outnote{display:none}
+@media (min-width:700px){
+  html:not(.inframe) body{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+  html:not(.inframe) #app{flex:none;width:390px;height:min(844px,calc(100dvh - 88px));border-radius:44px;box-shadow:0 0 0 10px #0C0E12,0 0 0 11px rgba(255,255,255,.14),0 40px 80px -24px rgba(0,0,0,.5)}
+  html:not(.inframe) .outnote{display:block;font-size:13px;color:var(--outink,rgba(255,255,255,.72));text-align:center}
+  html:not(.inframe) .outnote a{text-underline-offset:3px}
+}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important}}
+
+/* parts every sample app is built from. An app sets the look with variables: --disp --card --line --line2 --soft --tint --brand --brand2 --onbrand --hi --ok --ink --mut */
+h1,h2,h3{font-family:var(--disp);font-weight:600;letter-spacing:-.01em;line-height:1.2}
+.pr{font-family:var(--disp);font-weight:600;font-feature-settings:"lnum","tnum";white-space:nowrap}
+.art{width:100%;height:100%}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:var(--rb,14px);background:var(--brand);color:var(--onbrand);font-weight:600;font-size:15px;white-space:nowrap;text-decoration:none;transition:transform .12s}
+.btn:active{transform:scale(.98)}
+.btn.ghost{background:none;color:var(--brand);box-shadow:inset 0 0 0 1.5px var(--line2)}
+.btn.sm{min-height:40px;padding:0 16px;font-size:14px;border-radius:12px}
+.btn.wide{display:flex;width:100%}
+.btn.wide+.btn.wide{margin-top:8px}
+.btn.inv{background:var(--hi);color:var(--ink)}
+.btn.two{flex-wrap:wrap;gap:0 12px;padding:4px 12px;line-height:1.25}
+.btn.two .pr{opacity:.9}
+.lk{display:inline-flex;align-items:center;gap:2px;min-width:40px;min-height:40px;font-size:13px;font-weight:600;color:var(--brand2)}
+.lk.inv{color:var(--onbrand)}
+.ib{position:relative;flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%}
+.ib.txt{width:auto;padding:0 12px;font-size:14px;color:var(--mut);border-radius:12px}
+.ib.ong{color:var(--onbrand)}
+.ib.glass{position:absolute;top:calc(var(--sat) + 8px);z-index:4;background:color-mix(in srgb,var(--card) 90%,transparent);box-shadow:0 2px 10px rgba(20,24,28,.14)}
+.ib.glass.l{left:12px}.ib.glass.r{right:12px}
+.ib[aria-pressed=true]{color:var(--hot,#C8452C)}
+.pip{position:absolute;top:10px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--hi);box-shadow:0 0 0 2px var(--bg)}
+.ong .pip{box-shadow:0 0 0 2px var(--brand)}
+.bar{flex:none;background:var(--card);border-bottom:1px solid var(--line)}
+.bar>div{display:flex;align-items:center;height:52px;padding:0 4px}
+.bar h1{flex:1;min-width:0;text-align:center;font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pt{flex:none;display:flex;align-items:flex-end;justify-content:space-between;padding:calc(var(--sat) + 12px) 12px 8px 20px;min-height:calc(var(--sat) + 64px)}
+.pt h1{font-size:28px;padding-bottom:4px}
+.sec{padding:0 16px;margin-top:24px}
+.sech{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 4px 12px}
+.sech h2{flex:0 1 auto;font-size:19px}
+.sech small{flex:1 1 0;min-width:0;font-size:13px;color:var(--mut);text-align:right}
+.sl{font:600 13px/1.3 var(--font);letter-spacing:0;color:var(--mut);margin:0 4px 8px}
+.card{background:var(--card);border-radius:var(--rc,16px);border:1px solid var(--line);overflow:hidden}
+.row{display:flex;align-items:center;gap:12px;width:100%;min-height:60px;padding:12px 16px;text-align:left}
+.row+.row{border-top:1px solid var(--line)}
+.row>span{flex:1;min-width:0}
+.row b{display:block;font-size:15px;line-height:1.35}
+.row small{display:block;font-size:13px;color:var(--mut);line-height:1.35}
+.row em{font-style:normal;font-size:14px;color:var(--mut);white-space:nowrap}
+.row em.ok{color:var(--ok);font-weight:600}
+.row>.i:first-child{color:var(--brand2)}
+.row>.i.s{color:var(--line2)}
+.switch{flex:none;position:relative;width:48px;height:28px;border-radius:14px;background:var(--line2);transition:background .2s}
+.switch::before{content:"";position:absolute;inset:-8px -4px}
+.switch i{position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:transform .2s}
+.switch[aria-checked=true]{background:var(--brand)}
+.switch[aria-checked=true] i{transform:translateX(20px)}
+.chip{display:inline-flex;align-items:center;height:24px;padding:0 12px;border-radius:12px;background:var(--soft);color:var(--mut);font:600 12px var(--font);font-style:normal;white-space:nowrap}
+.chip.on{background:var(--tint);color:var(--brand)}
+.empty{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:56px 32px}
+.empty .art{width:144px;height:144px}
+.empty>.i{width:48px;height:48px;color:var(--line2)}
+.empty h2{font-size:20px}
+.empty p{color:var(--mut);font-size:14px;margin-bottom:12px}
+.empty.sm{padding:32px 16px}
+.pad{padding:8px 16px 0}
+.qty{flex:none;display:flex;align-items:center;height:48px;border-radius:14px;background:var(--soft)}
+.qty button{display:grid;place-items:center;width:44px;height:48px;color:var(--brand)}
+.qty button:disabled{opacity:.3}
+.qty b{min-width:24px;text-align:center;font:600 17px var(--disp)}
+.qty.sm{height:36px;border-radius:10px;margin-top:8px}
+.qty.sm button{width:36px;height:36px}
+.qty.sm b{min-width:20px;font-size:15px}
+.addm{flex:none;display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:var(--brand);color:var(--onbrand)}
+.seg{display:flex;padding:4px;border-radius:12px;background:var(--soft)}
+.seg button{flex:1;min-width:0;min-height:38px;padding:0 2px;border-radius:9px;font-size:clamp(12px,3.6vw,14px);font-weight:600;color:var(--mut);text-align:center}
+.seg button[aria-pressed=true]{background:var(--card);color:var(--brand);box-shadow:0 1px 3px rgba(20,24,28,.12)}
+.livebar{display:flex;align-items:center;gap:12px;width:calc(100% - 32px);margin:12px 16px 0;padding:12px 12px 12px 16px;border-radius:16px;background:var(--brand);color:var(--onbrand)}
+.livebar span{flex:1;min-width:0}
+.livebar b{display:block;font-size:14px}
+.livebar small{display:block;font-size:12px;opacity:.76}
+.pulse{flex:none;width:10px;height:10px;border-radius:50%;background:var(--hi);animation:pulse 1.6s infinite}
+.thumbs{display:flex}
+.sum{padding:4px 4px 0}
+.sum p{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:4px 0;font-size:14px;color:var(--mut)}
+.sum p b{color:var(--ink);font-family:var(--disp)}
+.sum .off b{color:var(--ok)}
+.sum .tot{margin-top:8px;padding-top:12px;border-top:1px dashed var(--line2);font-size:16px;font-weight:600;color:var(--ink)}
+.sum .tot b{font-size:22px}
+.sum .tot small{margin-left:8px;font-weight:400;font-size:12px;color:var(--mut)}
+.sum .earn{justify-content:flex-start;gap:8px;font-size:13px;color:var(--brand2)}
+.pfoot{display:flex;align-items:center;gap:16px}
+.pfoot>div{flex:none;min-width:84px}
+.pfoot small{display:block;font-size:12px;color:var(--mut)}
+.pfoot b{font:600 24px/1.1 var(--disp)}
+.pfoot .btn{flex:1}
+.sh{font-size:20px;margin:4px 0 16px}
+.hint{margin-top:12px;font-size:13px;color:var(--mut);text-align:center}
+.hint.l{text-align:left;margin:-8px 0 12px}
+.plist{border:1px solid var(--line);border-radius:16px;overflow:hidden;margin-bottom:12px}
+.radio{flex:none;width:22px;height:22px;border-radius:50%;border:2px solid var(--line2)}
+[aria-pressed=true]>.radio,.radio.on{border:7px solid var(--brand)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips button{flex:1 1 72px;min-height:48px;padding:0 12px;border-radius:12px;background:var(--soft);font-size:15px;text-align:center;white-space:nowrap}
+.paying{display:flex;flex-direction:column;align-items:center;gap:8px;padding:24px 20px 48px!important;text-align:center}
+.paying h2{font-size:20px}
+.paying p{color:var(--mut);font-family:var(--disp)}
+.spin{width:44px;height:44px;margin-bottom:8px;border-radius:50%;border:4px solid var(--tint);border-top-color:var(--brand);animation:spin .8s linear infinite}
+.amts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.amts button{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:72px;border-radius:14px;background:var(--soft)}
+.amts b{font:600 20px var(--disp)}
+.amts small{font-size:11px;color:var(--mut)}
+.wl{list-style:none;padding:0;margin:0}
+.wl li{display:flex;align-items:center;gap:12px;padding:12px 0}
+.wl li+li{border-top:1px solid var(--line)}
+.wl i{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--soft);color:var(--mut)}
+.wl i.in{background:var(--tint);color:var(--brand)}
+.wl span{flex:1;min-width:0}
+.wl span b{display:block;font-size:15px}
+.wl small{font-size:12px;color:var(--mut)}
+.wl li>b{font-family:var(--disp)}
+.wl b.in{color:var(--ok)}
+.codes{text-align:center}
+.codes .sh{text-align:left}
+.qrc{margin:0 auto;border-radius:12px;border:1px solid var(--line)}
+.codes .big{margin-top:12px;font:600 28px var(--disp);letter-spacing:.04em}
+.cbal{display:flex;justify-content:center;gap:28px;margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
+.cbal span{display:inline-flex;align-items:center;gap:8px;font:600 16px var(--disp);color:var(--brand)}
+.rds{display:flex;flex-direction:column;align-items:center;text-align:center}
+.rds h2{margin-top:16px;font-size:22px}
+.rds p{margin:8px 0 20px;font-size:14px;color:var(--mut)}
+.steps{list-style:none;margin:0;padding:12px 16px;background:var(--card);border:1px solid var(--line);border-radius:16px}
+.steps li{position:relative;display:flex;align-items:center;gap:12px;min-height:40px;color:var(--mut)}
+.steps li>i{position:relative;z-index:1;flex:none;display:grid;place-items:center;width:20px;height:20px;border-radius:50%;border:2px solid var(--line2);background:var(--card)}
+.steps li:not(:last-child)::after{content:"";position:absolute;left:9px;top:30px;width:2px;height:20px;background:var(--line2)}
+.steps li.done>i{background:var(--brand);border-color:var(--brand);color:var(--onbrand)}
+.steps li.done::after{background:var(--brand)}
+.steps li.now{color:var(--ink)}
+.steps li.now>i{border-color:var(--hi);box-shadow:0 0 0 4px color-mix(in srgb,var(--hi) 30%,transparent)}
+.steps li.now>i:not(:empty){background:var(--hi);color:var(--ink);box-shadow:none}
+.steps li>i .i{width:12px;height:12px;stroke-width:3}
+.steps b{flex:1;font-size:15px}
+.steps small{font-size:13px}
+.tact{display:flex;gap:8px;padding:0 16px 16px}
+.tact .btn{flex:1}
+.ocard{display:block;width:100%;padding:16px 16px;background:var(--card);border:1px solid var(--line);border-radius:16px;text-align:left}
+.ocard+.ocard{margin-top:12px}
+.oh{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.oh b{font-size:15px}
+.oh small{display:block;margin-top:2px;font-size:12px;color:var(--mut)}
+.of{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px}
+.of>b{font:600 18px var(--disp)}
+.of span{display:flex;gap:8px}
+.othumbs{display:flex;align-items:center;margin-top:12px}
+.othumbs p{flex:1;min-width:0;margin-left:12px;font-size:13px;line-height:1.4;color:var(--mut)}
+.omap{height:236px;overflow:hidden;border-bottom:1px solid var(--line)}
+.citymap{width:100%;height:100%}
+.olist{padding:12px 16px 0}
+.orow{display:flex;align-items:center;gap:12px;width:100%;padding:16px 16px;border-radius:16px;background:var(--card);border:1px solid var(--line);text-align:left}
+.orow+.orow{margin-top:8px}
+.orow.on{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand)}
+.orow>span:first-child{flex:1;min-width:0}
+.orow b{display:block;font:600 16px/1.3 var(--disp)}
+.orow small{display:block;margin-top:2px;font-size:12px;color:var(--mut)}
+.okm{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.okm b{font-size:14px}
+.nrow{display:flex;gap:12px;padding:16px 0}
+.nrow+.nrow{border-top:1px solid var(--line)}
+.nrow>i{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:var(--soft);color:var(--mut)}
+.nrow.new>i{background:var(--brand);color:var(--onbrand)}
+.nrow b{display:block;font-size:15px;line-height:1.35}
+.nrow.new b::after{content:"";display:inline-block;width:8px;height:8px;margin-left:8px;border-radius:50%;background:var(--hi);vertical-align:middle}
+.nrow small{display:block;margin-top:2px;font-size:13px;color:var(--mut)}
+.nrow em{display:block;margin-top:4px;font-style:normal;font-size:12px;color:var(--mut)}
+.faq{border-bottom:1px solid var(--line)}
+.faq summary{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;font-size:15px;font-weight:600;cursor:pointer;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary .i{color:var(--mut);transition:transform .2s}
+.faq[open] summary .i{transform:rotate(180deg)}
+.faq p{padding-bottom:16px;font-size:14px;color:var(--mut)}
+.pad>.btn{margin-top:20px}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--hi) 70%,transparent)}70%,100%{box-shadow:0 0 0 10px transparent}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* 快洗 FreshFold: clean and exact. Cool paper, ink navy, one cobalt, aqua for what is live; the wash label, with its stitched edge and its own little signs, is the mark that repeats. */
+:root{--font:"FF Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue","PingFang SC","Hiragino Sans GB","Noto Sans CJK SC","Noto Sans SC","Microsoft YaHei",sans-serif;--disp:var(--font);
+  --bg:#F2F5FA;--card:#FFFFFF;--ink:#0F1B2D;--mut:#526177;--line:#E1E7F0;--line2:#C6D1E0;--soft:#E9EEF6;--tint:#E3ECFF;
+  --brand:#1F5EFF;--brand2:#1848C8;--onbrand:#FFFFFF;--hi:#18C3B3;--ok:#0F7A57;--hot:#D93A44;--out:#0A1322;--focus:#1848C8;--tabon:#1F5EFF;--badge:#1F5EFF;--rb:12px;--rc:14px;--sheetr:20px;--isw:1.7}
+body{font-size:14.5px}
+h1,h2,h3{letter-spacing:-.02em}
+.btn{font-size:15px}
+.btn:disabled{opacity:.35}
+.btn.inv{background:#fff;color:var(--brand2)}
+.btn.sm{border-radius:10px}
+.bar{background:var(--bg);border-bottom:0}
+.pt h1{font-size:28px}
+.sec.first{margin-top:4px}
+.padc{padding:16px 16px}
+.pad>.sl{margin-top:20px}
+.seg{border-radius:12px}
+.chips button{flex:0 1 auto;min-height:44px;border-radius:22px;font-size:14px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line2)}
+.chips button[aria-pressed=true]{background:var(--ink);color:#fff;box-shadow:none}
+.ocard,.orow,.plist,.steps{border-radius:14px}
+.row>em.pr{color:var(--ink);font-size:15px}
+.ib.soft{background:var(--soft);color:var(--brand2)}
+.tabscr[data-s=home]{--strip:var(--card)}
+/* the wash label: a card with a stitched inner edge */
+.tagc{position:relative;background:var(--card);border:1px solid var(--line);border-radius:14px}
+.tagc::after{content:"";position:absolute;inset:5px;border:1.5px dashed var(--line2);border-radius:10px;pointer-events:none}
+.ocard.tagc{padding:16px 20px}
+.ocard.live .chip.on{background:var(--hi);color:var(--ink)}
+.obar{height:6px;margin:12px 0 0;border-radius:3px;background:var(--soft);overflow:hidden}
+.obar i{display:block;height:100%;border-radius:3px;background:var(--hi);transition:width .8s}
+.of small{font-size:13px;color:var(--mut)}
+.carel{display:inline-flex;flex-wrap:wrap;align-items:center;gap:2px 4px;font-size:13px;color:var(--mut)}
+.carel .i{color:var(--ink)}
+.carel i{font-style:normal;opacity:.5}
+
+/* home */
+.hd{background:var(--card);padding:calc(var(--sat) + 8px) 12px 16px 16px;border-bottom:1px solid var(--line)}
+.hdrow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.apill{display:flex;align-items:center;gap:8px;min-width:0;min-height:44px;text-align:left}
+.apill>.i:first-child{color:var(--brand)}
+.apill span{min-width:0}
+.apill small{display:block;font-size:11px;color:var(--mut);line-height:1.2}
+.apill b{display:block;font-size:14px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.apill>.i.s{color:var(--mut)}
+.hd h1{margin:12px 4px 0;font-size:26px;text-wrap:balance}
+.hd .pip{background:var(--hot);box-shadow:0 0 0 2px var(--card)}
+.cta{position:relative;display:flex;margin:16px 16px 0;padding:16px 16px 16px;border-radius:18px;background:var(--brand);color:#fff;overflow:hidden}
+.cta>span{position:relative;z-index:1;display:flex;flex-direction:column;align-items:flex-start;max-width:66%}
+.cta b{font-size:21px;line-height:1.2;letter-spacing:-.02em;text-wrap:balance}
+.cta small{margin:8px 0 16px;font-size:13px;line-height:1.4;opacity:.9}
+.cta .art{position:absolute;right:-14px;bottom:-22px;width:150px;height:150px}
+.sgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.sgrid button{display:flex;flex-direction:column;align-items:flex-start;min-width:0;padding:12px;border-radius:14px;background:var(--card);border:1px solid var(--line);text-align:left}
+.sgrid .i{color:var(--brand);margin-bottom:12px}
+.sgrid b{font-size:14px;line-height:1.25}
+.sgrid small{margin-top:2px;font-size:11.5px;line-height:1.35;color:var(--mut)}
+.planc{display:flex;align-items:center;gap:16px;width:100%;padding:16px 16px;border-radius:14px;background:var(--card);border:1px solid var(--line);text-align:left}
+.ringp{flex:none;width:56px;height:56px}
+.ringp.big{width:96px;height:96px}
+.planc span{flex:1;min-width:0}
+.planc small{display:block;font-size:12px;color:var(--mut)}
+.planc b{display:block;font-size:16px;line-height:1.3}
+.planc em{font-style:normal;font-size:12px;color:var(--mut)}
+.planc>.i{color:var(--line2)}
+.how{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0;padding:0;counter-reset:h}
+.how li{position:relative;padding:12px;border-radius:14px;background:var(--soft)}
+.how i{display:grid;place-items:center;width:36px;height:36px;margin-bottom:12px;border-radius:10px;background:var(--card);color:var(--brand)}
+.how b{display:block;font-size:14px}
+.how small{display:block;margin-top:2px;font-size:11.5px;line-height:1.35;color:var(--mut)}
+.amap{height:150px;margin-bottom:12px;border-radius:14px;overflow:hidden;border:1px solid var(--line)}
+.amap .citymap,.tmap .citymap{display:block;width:100%;height:100%}
+
+/* starting an order */
+.mcards{display:flex;flex-direction:column;gap:12px}
+.mcard{display:flex;align-items:center;gap:12px;width:100%;padding:12px 16px 12px 8px;border-radius:16px;background:var(--card);border:1px solid var(--line);text-align:left}
+.mcard .art{flex:none;width:88px;height:88px}
+.mcard>span{flex:1;min-width:0}
+.mcard b{font-size:18px;letter-spacing:-.02em}
+.mcard small{display:block;margin-top:2px;font-size:13px;line-height:1.4;color:var(--mut)}
+.mcard em{display:block;margin-top:8px;font-style:normal;font-size:13px;color:var(--brand2)}
+.mcard em b{font-size:15px}
+.mcard>.i{color:var(--line2)}
+.fprog{display:flex;gap:4px;padding:0 16px 12px}
+.fprog i{flex:1;height:3px;border-radius:2px;background:var(--line2)}
+.fprog i.on{background:var(--brand)}
+.ib.num{width:auto;padding:0 16px;font-style:normal;font-size:13px;font-weight:600;color:var(--mut)}
+.fbody{padding:12px 16px 24px}
+.fbody>.card{margin-bottom:12px}
+.fq{margin:4px 4px 16px;font-size:24px;text-wrap:balance}
+.fh{display:flex;align-items:baseline;gap:8px;margin:24px 4px 12px;font-size:16px}
+.fh small{font-size:12px;font-weight:400;letter-spacing:0;color:var(--mut)}
+.kgbox{display:flex;flex-direction:column;align-items:center;margin-top:12px;padding:8px 16px 20px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.kgbox .bag{width:176px;height:176px;transition:none}
+.kgbox .bag g{transition:transform .3s cubic-bezier(.3,1.3,.5,1)}
+.qty.big{height:56px;border-radius:14px}
+.qty.big button{width:56px;height:56px}
+.qty.big b{min-width:84px;font-size:28px;letter-spacing:-.02em}
+.qty.big b small{margin-left:4px;font-size:14px;font-weight:500;color:var(--mut)}
+.kgbox p{margin-top:12px;font-size:13px;color:var(--mut)}
+.itl{margin-top:12px}
+.itl .row{min-height:64px}
+.itl .qty.sm{margin-top:0}
+.itl small.pr{font-size:13px;color:var(--mut);font-weight:500}
+.cg{border:0;padding:0;margin:16px 0 0;min-width:0}
+.cg legend{padding:0;margin:0 4px 8px;font-size:14px;font-weight:600}
+.copts{display:flex;gap:8px}
+.copts button{flex:1 1 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:60px;padding:8px 4px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);font-size:13px;line-height:1.2;text-align:center}
+.copts button[aria-pressed=true],.spd button[aria-pressed=true],.wins button[aria-pressed=true],.stypes button[aria-pressed=true]{border-color:var(--brand);background:var(--tint);color:var(--brand2)}
+.softr{margin-top:16px}
+.stn{padding:12px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.stypes{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.stypes button{display:flex;align-items:center;gap:8px;min-height:36px;padding:0 12px 0 8px;border-radius:18px;border:1.5px solid var(--line);font-size:13px}
+.stypes i{width:14px;height:14px;border-radius:50%}
+.gwrap{margin-top:8px;border-radius:12px;background:var(--bg)}
+.garm{display:block;width:100%;max-width:300px;margin:0 auto;font-family:var(--font)}
+.zone{cursor:pointer}
+.zone:hover circle+circle{stroke-width:3}
+.mark circle:first-child{animation:pop .3s}
+.marks{list-style:none;margin:8px 0 0;padding:0}
+.marks li{display:flex;align-items:center;gap:12px;min-height:44px;font-size:14px}
+.marks li+li{border-top:1px solid var(--line)}
+.marks li>i{flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;color:#fff;font-style:normal;font-size:12px;font-weight:600}
+.marks span{flex:1;min-width:0}
+.marks .ib{color:var(--mut)}
+.days{gap:8px;margin:0 -16px;padding:0 16px;scroll-padding:0 16px}
+.dayb{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:56px;height:66px;border-radius:14px;background:var(--card);border:1.5px solid var(--line)}
+.dayb small{font-size:12px;color:var(--mut)}
+.dayb b{font-size:20px;line-height:1.1;letter-spacing:-.02em}
+.dayb[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.dayb[aria-pressed=true] small{color:rgba(255,255,255,.76)}
+.wins{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.wins button{min-height:48px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);font-size:14px;font-weight:500;text-align:center}
+.wins button:disabled{opacity:.38;text-decoration:line-through;background:none}
+.spd{display:flex;flex-direction:column;gap:8px}
+.spd button{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;padding:12px 16px;border-radius:14px;background:var(--card);border:1.5px solid var(--line);text-align:left;color:var(--ink)}
+.spd span{flex:1;min-width:0}
+.spd b{display:block;font-size:15px}
+.spd small{font-size:13px;color:var(--mut)}
+.spd em{font-style:normal;font-size:14px}
+.notes{margin-top:12px}
+.sumc{padding:16px 20px;margin-bottom:12px}
+.sumh{display:flex;align-items:center;gap:12px;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.sumh .art{flex:none;width:56px;height:56px;margin-left:-8px}
+.sumh span{flex:1;min-width:0}
+.sumh b{display:block;font-size:16px;letter-spacing:-.01em}
+.sumh small{font-size:13px;color:var(--mut)}
+.sumh>.pr{font-size:18px}
+.sumc dl{margin:12px 0 0}
+.sumc dl div{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:4px 0;font-size:13.5px}
+.sumc dt{flex:none;color:var(--mut)}
+.sumc dd{margin:0;text-align:right}
+.sumc dd .carel{justify-content:flex-end;color:var(--ink)}
+.fbody .sum{margin-bottom:12px}
+
+/* an order on its way */
+.trk{padding-bottom:calc(var(--sab) + 24px)}
+.tmap{height:236px;margin:0 16px;border-radius:16px;overflow:hidden;border:1px solid var(--line)}
+.tart{display:grid;place-items:center;height:236px;margin:0 16px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.tart .art{width:188px;height:188px;animation:pop .35s cubic-bezier(.3,1.3,.5,1)}
+.tart.s4{background:var(--tint)}
+.spinning{animation:spin 2.4s linear infinite}
+.tart.s4 .wave{animation:slosh 1.6s ease-in-out infinite alternate}
+.thead{padding:16px 20px 4px}
+.thead h2{font-size:22px}
+.thead p{margin-top:4px;color:var(--mut)}
+.trk>.card,.trk>.steps,.trk>.tagc,.trk>.btn{margin:12px 16px 0}
+.trk>.btn.wide{width:calc(100% - 32px)}
+.weigh{padding:16px}
+.weigh dl{margin:0 0 16px}
+.weigh dl div{display:flex;justify-content:space-between;align-items:baseline;padding:8px 0;font-size:14px}
+.weigh dl div+div{border-top:1px dashed var(--line2)}
+.weigh dt{color:var(--mut)}
+.weigh dd{margin:0}
+.weigh dd b{font-size:20px;letter-spacing:-.02em;color:var(--brand2)}
+.rider{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.rav{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;background:var(--brand);color:#fff}
+.rider>span{flex:1;min-width:0}
+.rider b{display:block;font-size:15px}
+.rider small{font-size:13px;color:var(--mut)}
+.rate{padding:16px;text-align:center}
+.rate h3{font-size:17px}
+.stars{display:flex;justify-content:center;gap:2px;margin-top:8px}
+.stars button{display:grid;place-items:center;width:48px;height:48px;color:var(--line2)}
+.stars button[aria-pressed=true]{color:#F2A400}
+
+/* plans */
+.mine{display:flex;align-items:center;gap:16px;padding:16px 16px;border-radius:16px;background:var(--ink);color:#fff;--tint:rgba(255,255,255,.16);--brand:var(--hi)}
+.mine span{flex:1;min-width:0}
+.mine small{display:block;font-size:13px;opacity:.8}
+.mine b{display:block;margin:2px 0;font-size:32px;line-height:1.1;letter-spacing:-.03em}
+.mine em{font-style:normal;font-size:15px;font-weight:500;opacity:.8;letter-spacing:0}
+.mine i{font-style:normal;font-size:12px;opacity:.76}
+.pcard{display:flex;align-items:center;gap:12px;width:100%;padding:16px 16px;border-radius:14px;background:var(--card);border:1.5px solid var(--line);text-align:left}
+.pcard+.pcard{margin-top:8px}
+.pcard.on{border-color:var(--brand)}
+.pcard>span:first-child{flex:1;min-width:0}
+.pcard b{font-size:17px;letter-spacing:-.02em}
+.pcard .chip{margin-left:8px;vertical-align:2px}
+.pcard small{display:block;margin-top:2px;font-size:13px;color:var(--mut)}
+.pcard em{display:block;margin-top:4px;font-style:normal;font-size:12px;color:var(--brand2)}
+.pp{flex:none;text-align:right}
+.pp b{font-size:20px}
+.rds .ringp{margin-top:4px}
+
+/* account */
+.prof{display:flex;align-items:center;gap:12px;margin:4px 16px 0}
+.av{flex:none;display:grid;place-items:center;width:56px;height:56px;border-radius:50%;background:var(--ink);color:#fff;font-style:normal;font-size:22px;font-weight:600}
+.prof b{display:block;font-size:20px;line-height:1.2;letter-spacing:-.02em}
+.prof small{font-size:13px;color:var(--mut)}
+.mlistc{margin:12px 16px 0}
+.ver{margin:20px 0 8px;text-align:center;font-size:12px;color:var(--mut)}
+.kgp{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px;border-radius:14px;background:var(--brand);color:#fff}
+.kgp span b{display:block;font-size:17px}
+.kgp small{font-size:13px;opacity:.9}
+.kgp>b{font-size:24px;white-space:nowrap}
+.kgp>b small{font-weight:500}
+.about{text-align:center}
+.about .ab{width:120px;height:120px;margin:0 auto 8px}
+.about h2{font-size:22px}
+.about p{margin:8px 0 20px;font-size:14px;color:var(--mut)}
+@keyframes pop{from{transform:scale(.92);opacity:.5}}
+@keyframes slosh{from{transform:translateX(-6px)}to{transform:translateX(6px)}}
+
 </style>
 </head>
 <body>
-<div class="app" id="app">
-
-<section class="scr" id="sOrder">
-  <div class="scroll">
-    <div class="top">
-      <div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1F2A44"/><path d="M14 26l18-10 18 10v20H14z" fill="#F3F1EC"/><path d="M20 34h24M20 40h24" stroke="#2B59C3" stroke-width="4" stroke-linecap="round"/></svg><span data-t="brand">快洗 FreshFold</span></div>
-      <div class="lang" role="group" aria-label="Language"><button type="button" data-l="zh" aria-pressed="true">中</button><button type="button" data-l="en" aria-pressed="false">EN</button><button type="button" data-l="ms" aria-pressed="false">BM</button></div>
-    </div>
-    <h1 data-t="h1">今晚来收，明晚送回</h1>
-    <p class="lede" data-t="lede">洗好、烘干、叠整齐，按公斤算。骑手到楼下会先打电话。</p>
-    <p class="lab" data-t="when">什么时候来收？</p>
-    <div class="seg" id="when" role="group"></div>
-    <p class="lab" data-t="what">要洗的（骑手到了会再称一次）</p>
-    <div class="list" id="items"></div>
-    <p class="lab" data-t="where">在哪里收</p>
-    <div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span><b>Menara Hijau, 12-3A</b><small data-t="addrNote">保安处可以签收</small></span></div>
-  </div>
-  <button type="button" class="cta" id="call"></button>
-</section>
-
-<section class="scr" id="sTrack" hidden>
-  <div class="map" id="map">
-    <svg viewBox="0 0 390 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <rect width="390" height="300" fill="#1A2238"/>
-      <path d="M-10 210 C 80 190, 140 250, 230 230 S 360 170, 410 190" stroke="#24406E" stroke-width="26" fill="none"/>
-      <g stroke="#2A3352" stroke-width="12" stroke-linecap="square" fill="none"><path d="M0 70H390M0 150H390M60 0V300M170 0V300M290 0V300M0 260H390"/></g>
-      <g fill="#222B47"><rect x="72" y="82" width="86" height="56" rx="6"/><rect x="182" y="82" width="96" height="56" rx="6"/><rect x="302" y="82" width="80" height="56" rx="6"/><rect x="72" y="8" width="86" height="50" rx="6"/><rect x="182" y="8" width="96" height="50" rx="6"/><rect x="8" y="162" width="40" height="86" rx="6"/><rect x="302" y="8" width="80" height="50" rx="6"/></g>
-      <path id="route" d="M300 268 H170 V150 H60 V70 H118" stroke="#2B59C3" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-      <path id="done" d="M300 268 H170 V150 H60 V70 H118" stroke="#9DB6F0" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0 2000"/>
-      <g transform="translate(118 70)"><circle r="13" fill="#F6D55C"/><path d="M-5 -1l5-4 5 4v6h-10z" fill="#1F2A44"/></g>
-      <g id="rider"><circle r="16" fill="#2B59C3" opacity=".25"/><circle r="9" fill="#fff"/><circle r="5" fill="#2B59C3"/></g>
-    </svg>
-    <button type="button" class="back" id="back1" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
-  </div>
-  <div class="sheet">
-    <div class="eta"><span class="av">H</span><span><b id="etaT"></b><small id="etaS"></small></span><span class="min"><b id="etaM">6</b><small data-t="min">分钟</small></span></div>
-    <ol class="tl" id="tl"></ol>
-    <div class="rate" id="rate"><p data-t="rateQ">这次收件怎么样？</p><div class="stars" id="stars"></div><p class="thanks" id="thanks"></p></div>
-  </div>
-  <button type="button" class="cta" id="fin" data-t="fin" hidden>好的</button>
-</section>
-
-<div class="tap" id="tap"></div>
-</div>
-
+<div id="app"></div>
+<p class="outnote"></p>
 <script>
-(() => {
+/* one set of line icons for all sample apps: 24 px box, drawn with the stroke each app sets */
+const ICON = {
+  home: '<path d="M3.5 10.5 12 3.5l8.5 7V20a.5.5 0 0 1-.5.5h-5V14h-6v6.5H4a.5.5 0 0 1-.5-.5z"/>',
+  cup: '<path d="M5 8h12v6a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z"/><path d="M17 9.5h1.5a2.5 2.5 0 0 1 0 5H17M8.5 2.500v2.500M12.500 2.500v2.500"/>',
+  receipt: '<path d="M6 3h12v18l-2.500-1.500L13 21l-2-1.500L8.500 21 6 19.500z"/><path d="M9 8h6M9 12h6M9 16h3"/>',
+  gift: '<rect x="3.500" y="8" width="17" height="4" rx="1"/><path d="M5 12v8.500h14V12M12 8v12.500M12 8c-2 0-4-1-4-2.500s1.500-2 2.500-1S12 8 12 8zm0 0c2 0 4-1 4-2.500s-1.500-2-2.500-1S12 8 12 8z"/>',
+  user: '<circle cx="12" cy="8" r="4"/><path d="M4 20.500c1-4 4-6 8-6s7 2 8 6"/>',
+  search: '<circle cx="11" cy="11" r="6.500"/><path d="m16 16 4.500 4.500"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>', minus: '<path d="M5 12h14"/>', x: '<path d="m6 6 12 12M18 6 6 18"/>',
+  left: '<path d="m14.500 5-7 7 7 7"/>', right: '<path d="m9.500 5 7 7-7 7"/>', down: '<path d="m5 9.500 7 7 7-7"/>', up: '<path d="m5 14.500 7-7 7 7"/>',
+  arrow: '<path d="M4.500 12h15M13.500 6l6 6-6 6"/>',
+  heart: '<path d="M12 20s-7.500-4.600-7.500-10.200A4.300 4.300 0 0 1 12 7.300a4.300 4.300 0 0 1 7.500 2.500C19.500 15.400 12 20 12 20z"/>',
+  heartf: '<path class="f" d="M12 20s-7.500-4.600-7.500-10.200A4.300 4.300 0 0 1 12 7.300a4.300 4.300 0 0 1 7.500 2.500C19.500 15.400 12 20 12 20z"/>',
+  clock: '<circle cx="12" cy="12" r="8.500"/><path d="M12 7.500V12l3 2"/>',
+  pin: '<path d="M12 21s-6.500-5.800-6.500-11a6.500 6.500 0 0 1 13 0c0 5.200-6.500 11-6.500 11z"/><circle cx="12" cy="10" r="2.500"/>',
+  bag: '<path d="M5 8h14l-1 12.500H6z"/><path d="M9 8V6.500a3 3 0 0 1 6 0V8"/>',
+  star: '<path d="m12 3.500 2.600 5.400 5.900.8-4.300 4.100 1 5.900-5.200-2.800-5.200 2.800 1-5.900-4.300-4.100 5.900-.8z"/>',
+  starf: '<path class="f" d="m12 3.500 2.600 5.400 5.900.8-4.300 4.100 1 5.900-5.200-2.800-5.200 2.800 1-5.900-4.300-4.100 5.900-.8z"/>',
+  check: '<path d="m5 12.500 4.500 4.500L19 7.500"/>',
+  bell: '<path d="M6 16.500V11a6 6 0 0 1 12 0v5.500l1.500 2h-15z"/><path d="M10 21h4"/>',
+  wallet: '<path d="M4 7.500A2.500 2.500 0 0 1 6.500 5H17v3"/><rect x="4" y="8" width="16.500" height="11.500" rx="2"/><path d="M16 13.800h1.500"/>',
+  card: '<rect x="3" y="5.500" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/>',
+  qr: '<rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><path d="M14 14h2.500v2.500H14zM18 18h2v2h-2zM18.500 14h1.500M14 19.500h1.500"/>',
+  globe: '<circle cx="12" cy="12" r="8.500"/><path d="M3.500 12h17M12 3.500c2.500 2.500 3.500 5.300 3.500 8.500s-1 6-3.500 8.500c-2.500-2.500-3.500-5.300-3.500-8.500s1-6 3.500-8.500z"/>',
+  help: '<circle cx="12" cy="12" r="8.500"/><path d="M9.500 9.500a2.500 2.500 0 1 1 3.500 2.300c-.7.300-1 .8-1 1.700M12 16.800v.2"/>',
+  info: '<circle cx="12" cy="12" r="8.500"/><path d="M12 11v5.500M12 7.500v.2"/>',
+  tune: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+  phone: '<path d="M6.500 3.500h3l1.500 4-2 1.500a11 11 0 0 0 6 6l1.500-2 4 1.500v3a2 2 0 0 1-2 2A15.500 15.500 0 0 1 4.500 5.500a2 2 0 0 1 2-2z"/>',
+  chat: '<path d="M4.500 5.500h15v11h-8l-4.500 3.500v-3.500h-2.500z"/>',
+  send: '<path d="m4 12 16-7.500-5.500 16-3-6.500z"/><path d="m11.500 14 3.500-4"/>',
+  cal: '<rect x="3.500" y="5" width="17" height="15.500" rx="2"/><path d="M3.500 10h17M8 3v4M16 3v4"/>',
+  scissors: '<circle cx="6.500" cy="7" r="2.500"/><circle cx="6.500" cy="17" r="2.500"/><path d="M8.500 8.500 20 18M8.500 15.500 20 6"/>',
+  bath: '<path d="M3 12h18v2.500a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5z"/><path d="M6 12V6.500A2.500 2.500 0 0 1 8.500 4c1.200 0 2 .8 2.300 1.800M7 19.500l-1 1.500M17 19.500l1 1.500"/>',
+  paw: '<ellipse cx="12" cy="15.500" rx="4.500" ry="3.800"/><ellipse cx="6" cy="10.500" rx="1.800" ry="2.300"/><ellipse cx="9.800" cy="6.500" rx="1.800" ry="2.300"/><ellipse cx="14.200" cy="6.500" rx="1.800" ry="2.300"/><ellipse cx="18" cy="10.500" rx="1.800" ry="2.300"/>',
+  car: '<path d="M5 11 6.800 6.500h10.400L19 11"/><rect x="3" y="11" width="18" height="6" rx="2"/><path d="M6.500 17v2M17.500 17v2M7 14h.500M16.500 14h.500"/>',
+  bike: '<circle cx="6" cy="17" r="2.500"/><circle cx="18" cy="17" r="2.500"/><path d="M8.500 17h6.500l2-7h-3M17 10l-1-3.500h-2.500M5 13.500c2-1.500 4.500-2 7.500-1.500"/>',
+  shirt: '<path d="M8.500 4 4 6.500l1.500 4 2.500-1V20h8V9.500l2.500 1 1.500-4L15.500 4a3.500 3.500 0 0 1-7 0z"/>',
+  drop: '<path d="M12 3.500s6 6.200 6 10.500a6 6 0 0 1-12 0c0-4.300 6-10.500 6-10.500z"/>',
+  leaf: '<path d="M5 19c0-8 5-13 14.500-14C19 14 14 19 5 19zM5 19c2-4 5-7 9-9"/>',
+  bolt: '<path d="M13 3 5.500 13.500H12L11 21l7.500-10.500H12z"/>',
+  tag: '<path d="M3.500 12.500V4.500h8l9 9-8 8z"/><circle cx="8" cy="9" r="1.300"/>',
+  ticket: '<path d="M3.500 7h17v3.500a1.500 1.500 0 0 0 0 3V17h-17v-3.500a1.500 1.500 0 0 0 0-3z"/><path d="M14.500 7v2M14.500 11v2M14.500 15v2"/>',
+  edit: '<path d="M4 20h4L19.500 8.500l-4-4L4 16z"/><path d="m13.500 6.500 4 4"/>',
+  trash: '<path d="M4.500 6.500h15M9.500 6.500V4h5v2.500M6.500 6.500l1 14h9l1-14M10 10.500v6M14 10.500v6"/>',
+  copy: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/>',
+  share: '<path d="M12 15V3.500M8 7l4-3.500L16 7M5 12v7.500h14V12"/>',
+  map: '<path d="m3.500 6.500 5.500-2 6 2 5.500-2v13l-5.500 2-6-2-5.500 2z"/><path d="M9 4.500v13M15 6.500v13"/>',
+  nav: '<path d="M12 3.500 19 20l-7-3.500L5 20z"/>',
+  refresh: '<path d="M19.500 12a7.500 7.500 0 1 1-2.200-5.300"/><path d="M19.500 4v4h-4"/>',
+  lock: '<rect x="5" y="10.500" width="14" height="10" rx="2"/><path d="M8 10.500V8a4 4 0 0 1 8 0v2.500"/>',
+  store: '<path d="M4 9.500 5.500 4h13L20 9.500a2.700 2.700 0 0 1-5.300 0 2.700 2.700 0 0 1-5.400 0 2.700 2.700 0 0 1-5.300 0zM5.500 12v8.500h13V12M10 20.500V15h4v5.500"/>',
+  crown: '<path d="m4 8 4 4 4-6.500L16 12l4-4-1.500 10h-13z"/>',
+  bean: '<ellipse cx="12" cy="12" rx="5.500" ry="8" transform="rotate(35 12 12)"/><path d="M8.500 7.500c2.500 2.500 1.500 4.500 3.500 6.500s3 2 3.500 3"/>',
+  flame: '<path d="M12 21a6 6 0 0 1-6-6c0-4 3.500-5.500 4.500-11.500C14 6 18 10 18 15a6 6 0 0 1-6 6z"/>',
+  snow: '<path d="M12 3v18M4.200 7.500l15.600 9M19.800 7.500l-15.600 9M9.500 4.500l2.500 2 2.500-2M9.500 19.500l2.500-2 2.500 2"/>',
+  scale: '<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 10a4 4 0 0 1 8 0M12 10l1.500-2.500"/>',
+  box: '<path d="m3.500 7.500 8.500-4 8.500 4v9l-8.500 4-8.500-4z"/><path d="m3.500 7.500 8.500 4 8.500-4M12 11.500v9"/>',
+  wind: '<path d="M3 9h10.500a2.500 2.500 0 1 0-2.500-2.500M3 13h15a2.500 2.500 0 1 1-2.500 2.500M3 17h7"/>',
+  iron: '<path d="M3.500 17.500h17V13a4 4 0 0 0-4-4H9M3.500 17.500c0-4 2.500-6.500 7-6.500h10M9 9V6.500h7"/>',
+  hanger: '<path d="M12 8.500V7.500a2 2 0 1 0-2-2M12 8.500 3.500 15.500a1 1 0 0 0 .6 1.800h15.800a1 1 0 0 0 .6-1.800z"/>',
+  shield: '<path d="M12 3.500 19 6v6c0 4.500-3 7.500-7 8.500-4-1-7-4-7-8.500V6z"/><path d="m9 12 2 2 4-4.500"/>',
+  camera: '<path d="M4 8h3.500L9 5.500h6L16.500 8H20v11H4z"/><circle cx="12" cy="13" r="3.500"/>',
+  more: '<circle class="f" cx="5" cy="12" r="1.600"/><circle class="f" cx="12" cy="12" r="1.600"/><circle class="f" cx="19" cy="12" r="1.600"/>',
+  list: '<path d="M8.500 6.500H20M8.500 12H20M8.500 17.500H20M4 6.500h.500M4 12h.500M4 17.500h.500"/>',
+  percent: '<circle cx="7.500" cy="7.500" r="2.500"/><circle cx="16.500" cy="16.500" r="2.500"/><path d="M18.500 5.500 5.500 18.500"/>',
+  thermo: '<path d="M10 4.500a2 2 0 0 1 4 0V14a4 4 0 1 1-4 0z"/><path d="M12 9v7.500"/>',
+  medal: '<circle cx="12" cy="9.500" r="5.500"/><path d="m8.500 14-1.500 6.500 5-2.500 5 2.500-1.500-6.500"/>',
+  syringe: '<path d="m14.500 4.500 5 5M17 7l-9.500 9.500-3 .500.500-3L14.500 4.500M4.500 19.500l2-2M10.500 9l2 2M8 11.500l2 2"/>',
+  note: '<path d="M6 3.500h8.500L19 8v12.500H6z"/><path d="M14 3.500v5h5M9 13h6M9 16.500h4"/>',
+  image: '<rect x="3.500" y="5" width="17" height="14" rx="2"/><circle cx="9" cy="10" r="1.500"/><path d="m4 17 5-4.500 3.500 3 3-2.500 4.500 4"/>',
+  wash: '<rect x="4.500" y="3.500" width="15" height="17" rx="2"/><circle cx="12" cy="13" r="4.500"/><path d="M7.500 6.500h.500M10.500 6.500h.500M9.500 13c1-1 2-1 2.500 0s1.500 1 2.500 0"/>',
+  basket: '<path d="M4 10h16l-1.500 9.500h-13z"/><path d="m8 10 2.500-6M16 10l-2.500-6M9.500 13.500v3M14.500 13.500v3"/>',
+  door: '<path d="M6.500 20.500v-17h11v17M4 20.500h16M14 12.500v.2"/>',
+  coins: '<circle cx="9" cy="9" r="5.500"/><path d="M13.500 13.800a5.500 5.500 0 1 0 2-9.600"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.600 5.600 7 7M17 17l1.400 1.400M18.400 5.600 17 7M7 17l-1.400 1.400"/>',
+  house: '<path d="M4 11 12 4l8 7M6 9.500V20h12V9.500M10 20v-5h4v5"/>',
+  eye: '<path d="M2.500 12S6 5.500 12 5.500 21.500 12 21.500 12 18 18.500 12 18.500 2.500 12 2.500 12z"/><circle cx="12" cy="12" r="3"/>',
+  spa: '<path d="M12 20c-5 0-8-3-8.500-7 3 0 5.500 1 8.500 4 3-3 5.500-4 8.500-4-.500 4-3.500 7-8.500 7zM12 17c-2.500-3-2.500-8 0-12 2.500 4 2.500 9 0 12z"/>',
+  dry: '<path d="M4 8h9a3 3 0 0 0 0-6H4zM7 8l1.500 9h3L13 8M16 4h4M16 6.500h3"/>',
+  tooth: '<path d="M7 4c-2 0-3.500 1.500-3.500 4 0 3 1.500 4.500 2 8 .300 2 .800 4 2 4 1.500 0 1-5 4.500-5s3 5 4.500 5c1.200 0 1.700-2 2-4 .500-3.500 2-5 2-8 0-2.500-1.500-4-3.500-4s-3 1.500-5 1.500S9 4 7 4z"/>',
+  bed: '<path d="M3.500 18.500v-12M3.500 14.500h17v4M20.500 14.500V11a2.500 2.500 0 0 0-2.500-2.500h-7.500v6"/><circle cx="7" cy="11" r="1.800"/>',
+  shoe: '<path d="M3.500 17.500v-8l3-1 2.500 3 6 2.500c3 1 5 1.500 5 3.500z"/><path d="M3.500 14.500h17M11 12.500l-1 1.500M13.500 13.500l-1 1.500"/>',
+  dress: '<path d="M9 3.500v3L7 10l2 2-3 8.500h12L15 12l2-2-2-3.500v-3M9 6.500c1.500 1 4.500 1 6 0"/>',
+  pants: '<path d="M6.500 3.500h11l1 17h-5L12 9l-1.500 11.500h-5z"/><path d="M6.500 6.500h11"/>',
+  suit: '<path d="M8.500 3.500 4 6v14.500h16V6l-4.500-2.500L12 8zM12 8v12.500M8.500 3.500 9.500 11 12 8l2.500 3 1-7.500"/>',
+  curtain: '<path d="M3.500 4h17M5.500 4v16.500c3-1 4-5 4-9.500V4M18.500 4v16.500c-3-1-4-5-4-9.500V4"/>',
+  walk: '<circle cx="13" cy="4.500" r="1.800"/><path d="m9 21 2.500-6-2-3 1-4.500 3 1.500 2 2.500 3 1M10.500 7.500l-3 2-.500 3.500M13.500 12.500l1 3.500 2.500 4.500"/>'
+};
+
 'use strict';
-const W = {
- zh: {brand:'快洗 FreshFold', h1:'今晚来收，明晚送回', lede:'洗好、烘干、叠整齐，按公斤算。骑手到楼下会先打电话。', when:'什么时候来收？', what:'要洗的（骑手到了会再称一次）', where:'在哪里收', addrNote:'保安处可以签收',
-      w1:'今晚', w1t:'8–9 点', w2:'今晚', w2t:'9–10 点', w3:'明早', w3t:'9–10 点', i_kg:'洗、烘、叠', i_kgd:'RM 6 / 公斤', i_shirt:'衬衫干洗', i_shirtd:'RM 9 / 件', i_bed:'被子床单', i_bedd:'RM 28 / 套', kg:'{n} 公斤', pc:'{n} 件', set:'{n} 套',
-      call:'叫骑手来收 · 大约 {p}', none:'先选要洗的', ridT:'Hafiz 在路上', ridS:'红色摩托 · WTF 3821', near:'Hafiz 快到楼下了', got:'衣服收到了', gotS:'称了 {k} 公斤 · {p}', min:'分钟', back:'明晚 {w} 送回',
-      t1:'骑手出发', t1s:'从 SS15 洗衣房出发', t2:'快到了', t2s:'到楼下先打电话', t3:'已收件', t3s:'当面称重，拍照存底', t4:'洗好送回', t4s:'明晚同一时段', rateQ:'这次收件怎么样？', thanks:'谢谢，{n} 颗星', fin:'好的'},
- en: {brand:'FreshFold', h1:'Collected tonight, back tomorrow night', lede:'Washed, dried and folded, priced by the kilo. The rider calls when downstairs.', when:'When should we collect?', what:'What to wash (the rider weighs it again)', where:'Collect from', addrNote:'Guardhouse can sign for it',
-      w1:'Tonight', w1t:'8–9 pm', w2:'Tonight', w2t:'9–10 pm', w3:'Tomorrow', w3t:'9–10 am', i_kg:'Wash, dry, fold', i_kgd:'RM 6 / kg', i_shirt:'Shirt dry clean', i_shirtd:'RM 9 / piece', i_bed:'Duvet and sheets', i_bedd:'RM 28 / set', kg:'{n} kg', pc:'{n} pcs', set:'{n} sets',
-      call:'Send a rider · about {p}', none:'Choose what to wash', ridT:'Hafiz is on the way', ridS:'Red motorbike · WTF 3821', near:'Hafiz is nearly downstairs', got:'Laundry collected', gotS:'Weighed {k} kg · {p}', min:'min', back:'Back tomorrow {w}',
-      t1:'Rider on the way', t1s:'Leaving the SS15 laundry', t2:'Nearly there', t2s:'Calls you from downstairs', t3:'Collected', t3s:'Weighed in front of you, photo kept', t4:'Washed and returned', t4s:'Tomorrow, same time', rateQ:'How was the pickup?', thanks:'Thanks, {n} stars', fin:'Done'},
- ms: {brand:'FreshFold', h1:'Diambil malam ini, dihantar esok malam', lede:'Dibasuh, dikeringkan dan dilipat, dikira ikut kilo. Penghantar telefon bila sampai di bawah.', when:'Bila kami ambil?', what:'Apa yang dibasuh (ditimbang semula oleh penghantar)', where:'Ambil di', addrNote:'Pondok pengawal boleh terima',
-      w1:'Malam ini', w1t:'8–9 mlm', w2:'Malam ini', w2t:'9–10 mlm', w3:'Esok', w3t:'9–10 pg', i_kg:'Basuh, kering, lipat', i_kgd:'RM 6 / kg', i_shirt:'Cuci kering kemeja', i_shirtd:'RM 9 / helai', i_bed:'Selimut dan cadar', i_bedd:'RM 28 / set', kg:'{n} kg', pc:'{n} helai', set:'{n} set',
-      call:'Panggil penghantar · lebih kurang {p}', none:'Pilih apa yang dibasuh', ridT:'Hafiz dalam perjalanan', ridS:'Motosikal merah · WTF 3821', near:'Hafiz hampir sampai', got:'Pakaian sudah diambil', gotS:'Ditimbang {k} kg · {p}', min:'min', back:'Dihantar esok {w}',
-      t1:'Penghantar bertolak', t1s:'Dari dobi SS15', t2:'Hampir sampai', t2s:'Telefon anda dari bawah', t3:'Sudah diambil', t3s:'Ditimbang depan anda, foto disimpan', t4:'Dibasuh dan dihantar', t4s:'Esok, masa yang sama', rateQ:'Bagaimana pengambilan tadi?', thanks:'Terima kasih, {n} bintang', fin:'Siap'}};
-const IC = {kg:'<svg viewBox="0 0 32 32" fill="none" stroke="#1F2A44" stroke-width="1.8"><rect x="6" y="4" width="20" height="24" rx="4"/><circle cx="16" cy="17" r="6"/><path d="M10 8h2"/></svg>',
-  shirt:'<svg viewBox="0 0 32 32" fill="none" stroke="#1F2A44" stroke-width="1.8" stroke-linejoin="round"><path d="M11 5l5 3 5-3 6 4-3 5-2-1v14H10V13l-2 1-3-5z"/></svg>',
-  bed:'<svg viewBox="0 0 32 32" fill="none" stroke="#1F2A44" stroke-width="1.8" stroke-linejoin="round"><path d="M4 22V10M28 22v-6H4"/><path d="M8 16v-3h6v3"/><path d="M4 22h24"/></svg>'};
-const ITEMS = [{id:'kg', p:6, n:4, max:20, u:'kg'}, {id:'shirt', p:9, n:0, max:20, u:'pc'}, {id:'bed', p:28, n:0, max:6, u:'set'}];
-const STAR = '<svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>';
-const $ = id => document.getElementById(id), Q = new URLSearchParams(location.search);
-let L = ['zh', 'en', 'ms'].includes(Q.get('lang')) ? Q.get('lang') : 'zh', when = 'w1', stage = 0, raf = 0, stars = 0, kgReal = 0, timers = [];
-const t = (k, o = {}) => (W[L][k] ?? W.zh[k] ?? k).replace(/\{(\w+)\}/g, (_, x) => o[x] ?? '');
-const rm = v => 'RM ' + v.toFixed(2);
-const est = () => ITEMS.reduce((a, i) => a + i.p * i.n, 0);
-function show(id) { for (const s of document.querySelectorAll('.scr')) s.hidden = s.id !== id; }
-function order() {
-  $('when').innerHTML = ['w1', 'w2', 'w3'].map(w => `<button type="button" data-w="${w}" aria-pressed="${w === when}">${t(w)}<small>${t(w + 't')}</small></button>`).join('');
-  $('items').innerHTML = ITEMS.map(i => `<div class="it"><span class="ic">${IC[i.id]}</span><span><b>${t('i_' + i.id)}</b><small>${t('i_' + i.id + 'd')}</small></span><span class="step"><button type="button" data-m="${i.id}" aria-label="−">−</button><output>${t(i.u, {n: i.n})}</output><button type="button" data-p="${i.id}" aria-label="+">+</button></span></div>`).join('');
-  const e = est(); $('call').disabled = !e; $('call').textContent = e ? t('call', {p: rm(e)}) : t('none');
+/* The kit under every sample app: screens, tabs, sheets, words in three languages, and a tour that plays by itself.
+   A page that holds the app can set its language (postMessage({lang}) or ?lang=) and ask for the tour (?auto=1). */
+const Q = new URLSearchParams(location.search);
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const LANGS = ['zh', 'en', 'ms'], HTMLLANG = { zh: 'zh-CN', en: 'en', ms: 'ms' };
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const K = { id: '', lang: 'zh', W: {}, S: {}, acts: {}, ins: {}, stack: [], cur: null, tabs: [], jumps: {}, timers: [],
+  fast: Q.get('fast') === '1', calm: matchMedia('(prefers-reduced-motion: reduce)').matches, sheetEl: null, sheetFn: null };
+const T = (k, v) => { let s = (K.W[K.lang] || {})[k]; if (s == null) s = k; return v ? s.replace(/\{(\w+)\}/g, (m, n) => v[n] != null ? v[n] : m) : s; };
+const L = o => o == null ? '' : (typeof o === 'string' ? o : (o[K.lang] != null ? o[K.lang] : o.en));
+const I = (n, c) => `<svg class="i${c ? ' ' + c : ''}" viewBox="0 0 24 24" aria-hidden="true">${ICON[n] || ''}</svg>`;
+const money = n => '$' + (Math.round(n * 100) / 100).toFixed(2);
+const pad2 = n => String(n).padStart(2, '0');
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const SEP = () => K.lang === 'zh' ? '、' : ', ';   /* between the items of a list written in one line */
+/* small things every app writes the same way */
+const tri = (zh, en, ms) => ({ zh, en, ms });
+const dstr = (d, o) => new Intl.DateTimeFormat({ zh: 'zh-CN', en: 'en-GB', ms: 'ms' }[K.lang], o).format(d);
+const dayS = d => dstr(d, { month: 'short', day: 'numeric', weekday: 'short' });
+const hm = d => pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+const ago = (days, h, m) => { const d = new Date(); d.setDate(d.getDate() - days); d.setHours(h, m, 0, 0); return d; };
+const plus = n => { const d = new Date(); d.setDate(d.getDate() + n); return d; };
+const bar = (title, right) => `<header class="bar sat"><div><button type="button" class="ib" data-back aria-label="${esc(T('k.back'))}">${I('left')}</button><h1>${esc(title)}</h1>${right || '<i class="ib"></i>'}</div></header>`;
+const sw = (on, act, label) => `<button type="button" class="switch" role="switch" aria-checked="${!!on}" aria-label="${esc(label)}" data-a="${act}"><i></i></button>`;
+const qr = (k, size) => { const q = K.QR[k]; return `<svg class="qrc" viewBox="-2 -2 ${q.n + 4} ${q.n + 4}" width="${size}" height="${size}" role="img" aria-label="QR"><rect x="-2" y="-2" width="${q.n + 4}" height="${q.n + 4}" fill="#fff"/><path d="${q.d}" fill="#16191D"/></svg>`; };
+
+K.on = (n, f) => { K.acts[n] = f; };
+K.def = (n, o) => { K.S[n] = o; };
+K.after = (ms, f) => { const id = setTimeout(f, K.fast ? ms / 10 : ms); K.timers.push(id); return id; };
+K.every = (ms, f) => { const id = setInterval(f, ms); K.timers.push(id); return id; };
+
+function paint(el, name, p) {
+  const o = K.S[name], b = $('.body', el), y = b ? b.scrollTop : 0;
+  const keep = $$('[data-keep]', el).map(n => [n.dataset.keep, n.scrollLeft, n.scrollTop]);
+  el.innerHTML = o.render(p || {});
+  const nb = $('.body', el); if (nb && y) nb.scrollTop = y;
+  keep.forEach(([k, x, yy]) => { const n = $(`[data-keep="${k}"]`, el); if (n) { n.scrollLeft = x; n.scrollTop = yy; } });
+  el._dirty = false;
+  /* strip: the band behind the phone's clock turns solid once this many px of the screen's picture have scrolled away */
+  if (o.strip && nb) { el.classList.add('strip'); const f = () => el.classList.toggle('sc', nb.scrollTop > o.strip); nb.addEventListener('scroll', f, { passive: true }); f(); }
+  if (o.after) o.after(el, p || {});
 }
-function line(k) {
-  stage = k; const e = est();
-  $('tl').innerHTML = [1, 2, 3, 4].map(i => `<li class="${i <= k + 1 ? 'on' : ''}${i === k + 1 ? ' now' : ''}"><i></i><span><b>${t('t' + i)}</b><small>${i === 3 && k >= 2 ? t('gotS', {k: kgReal.toFixed(1), p: rm(e - ITEMS[0].p * ITEMS[0].n + ITEMS[0].p * kgReal)}) : i === 4 ? t('back', {w: t(when + 't')}) : t('t' + i + 's')}</small></span></li>`).join('');
-  $('etaT').textContent = k >= 2 ? t('got') : k === 1 ? t('near') : t('ridT'); $('etaS').textContent = k >= 2 ? t('back', {w: t(when + 't')}) : t('ridS');
-  $('rate').classList.toggle('on', k >= 2); $('fin').hidden = k < 2;
-  if (k >= 2) requestAnimationFrame(() => $('rate').scrollIntoView({block: 'nearest', behavior: 'smooth'}));
+const tabEl = n => $(`#stack>.tabscr[data-s="${n}"]`);
+K.topEl = () => K.stack.length ? K.stack[K.stack.length - 1].el : tabEl(K.cur);
+K.topName = () => K.stack.length ? K.stack[K.stack.length - 1].name : K.cur;
+function syncBar() { const o = K.S[K.topName()] || {}; const sb = $('.sb'); if (sb) sb.style.color = K.sheetEl ? '#fff' : (o.sb || ''); }
+function drawTabs() {
+  $('#tabs').innerHTML = K.tabs.map(t => { const o = K.S[t]; const n = o.badge ? o.badge() : 0;
+    return `<button type="button" data-tab="${t}" class="${o.tabcls || ''}"${t === K.cur ? ' aria-current="page"' : ''}>${I(o.icon)}<span>${esc(T(o.label))}</span>${n ? `<i class="dot">${n}</i>` : ''}</button>`; }).join('');
 }
-function ride() {
-  const P = $('route'), D = $('done'), R = $('rider'), len = P.getTotalLength(), T = Q.get('fast') ? 2500 : 9000; let t0 = 0;
-  kgReal = ITEMS[0].n ? Math.round((ITEMS[0].n + 0.3) * 10) / 10 : 0; line(0);
-  const step = ts => { if (!t0) t0 = ts; const f = Math.min(1, (ts - t0) / T), pt = P.getPointAtLength(len * f);
-    R.setAttribute('transform', `translate(${pt.x} ${pt.y})`); D.setAttribute('stroke-dasharray', `${len * f} 2000`); $('etaM').textContent = Math.max(0, Math.ceil(6 * (1 - f)));
-    if (f > .62 && stage < 1) line(1);
-    if (f < 1) raf = requestAnimationFrame(step); else line(2); };
-  cancelAnimationFrame(raf); raf = requestAnimationFrame(step);
-}
-function rate() { $('stars').innerHTML = [1, 2, 3, 4, 5].map(n => `<button type="button" data-s="${n}" class="${n <= stars ? 'on' : ''}" aria-label="${n}">${STAR}</button>`).join(''); $('thanks').textContent = stars ? t('thanks', {n: stars}) : ''; }
-function words() {
-  document.documentElement.lang = L === 'zh' ? 'zh-CN' : L; document.title = L === 'zh' ? '快洗 FreshFold' : 'FreshFold';
-  for (const e of document.querySelectorAll('[data-t]')) e.textContent = t(e.dataset.t);
-  for (const b of document.querySelectorAll('.lang button')) b.setAttribute('aria-pressed', String(b.dataset.l === L));
-  order(); rate(); if (!$('sTrack').hidden) line(stage);
-}
+K.tab = (name, quiet) => {
+  K.closeSheet(true);
+  while (K.stack.length) { const t = K.stack.pop(); (K.S[t.name].hide || (() => { }))(t.el); t.el.remove(); }
+  K.cur = name;
+  $$('#stack>.tabscr').forEach(el => { const on = el.dataset.s === name; el.hidden = !on; el.classList.remove('under'); if (on && el._dirty !== false) paint(el, name); });
+  drawTabs(); syncBar();
+  const o = K.S[name], el = tabEl(name); if (!quiet && o.show) o.show(el);
+};
+K.go = (name, p) => {
+  K.closeSheet(true);
+  const o = K.S[name], el = document.createElement('section');
+  el.className = 'scr push ' + (o.cls || ''); el.dataset.s = name;
+  const under = K.topEl();
+  $('#stack').appendChild(el); paint(el, name, p);
+  K.stack.push({ name, p: p || {}, el });
+  const inn = () => { el.classList.add('in'); if (under && !o.up) under.classList.add('under'); };
+  if (K.calm) inn(); else requestAnimationFrame(() => requestAnimationFrame(inn));
+  syncBar(); if (o.show) o.show(el, p || {});
+  return el;
+};
+K.back = () => {
+  K.closeSheet(true);
+  const t = K.stack.pop(); if (!t) return;
+  t.el.classList.remove('in'); (K.S[t.name].hide || (() => { }))(t.el);
+  setTimeout(() => t.el.remove(), K.calm ? 0 : 360);
+  const u = K.topEl(); if (u) { u.classList.remove('under'); if (u._dirty) paint(u, K.topName(), K.stack.length ? K.stack[K.stack.length - 1].p : {}); }
+  syncBar();
+};
+K.home = () => K.tab(K.tabs[0]);
+/* something changed: redraw what is on top now, the rest when it is next shown */
+K.dirty = () => $$('#stack>.scr').forEach(el => { el._dirty = true; });
+K.draw = () => {
+  K.dirty();
+  const el = K.topEl(); if (el) paint(el, K.topName(), K.stack.length ? K.stack[K.stack.length - 1].p : {});
+  drawTabs();
+  if (K.sheetEl && K.sheetFn) { const b = $('.sbody', K.sheetEl), y = b ? b.scrollTop : 0; K.sheetEl.innerHTML = '<div class="grab"></div>' + K.sheetFn(); const nb = $('.sbody', K.sheetEl); if (nb) nb.scrollTop = y; }
+};
+K.sheet = (fn, cls) => {
+  K.closeSheet(true);
+  const sh = $('#shade'), el = document.createElement('div');
+  el.className = 'sheet ' + (cls || ''); el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true');
+  K.sheetFn = typeof fn === 'function' ? fn : null;
+  el.innerHTML = '<div class="grab"></div>' + (K.sheetFn ? fn() : fn);
+  $('#app').appendChild(el); K.sheetEl = el;
+  const inn = () => { el.classList.add('in'); sh.classList.add('in'); };
+  if (K.calm) inn(); else requestAnimationFrame(() => requestAnimationFrame(inn));
+  syncBar(); return el;
+};
+K.closeSheet = now => {
+  const el = K.sheetEl; if (!el) return;
+  K.sheetEl = null; K.sheetFn = null; el.classList.remove('in'); $('#shade').classList.remove('in');
+  if (now || K.calm) el.remove(); else setTimeout(() => el.remove(), 380);
+  syncBar();
+};
+K.toast = (m, ms) => { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(K._tt); K._tt = setTimeout(() => t.classList.remove('on'), ms || 1900); };
+K.note = (title, text, icon, act) => {
+  const n = $('#note'); n.innerHTML = `<i class="ni">${I(icon || 'bell', 'm')}</i><div><b>${esc(title)}</b><span>${esc(text)}</span></div><small>${esc(T('k.now'))}</small>`;
+  n.dataset.a = act || 'k.nonote'; n.classList.add('on'); clearTimeout(K._nt); K._nt = setTimeout(() => n.classList.remove('on'), 4200);
+};
+K.on('k.nonote', () => $('#note').classList.remove('on'));
+K.setLang = l => {
+  if (!LANGS.includes(l)) return; K.lang = l;
+  document.documentElement.lang = HTMLLANG[l]; document.title = T('app.title');
+  const on = $('.outnote'); if (on) on.innerHTML = T('k.out');
+  if (K.cur) K.draw();
+};
+
 document.addEventListener('click', e => {
-  const b = e.target.closest('button'); if (!b || b.disabled) return; const d = b.dataset;
-  if (d.l) { L = d.l; words(); }
-  else if (d.w) { when = d.w; order(); }
-  else if (d.m || d.p) { const i = ITEMS.find(x => x.id === (d.m || d.p)); i.n = Math.max(0, Math.min(i.max, i.n + (d.p ? 1 : -1))); order(); }
-  else if (d.s) { stars = +d.s; rate(); }
+  const a = e.target.closest('[data-a],[data-tab],[data-back],[data-close]');
+  if (!a || a.disabled || a.getAttribute('aria-disabled') === 'true') return;
+  if (a.dataset.a) { const [n, ...r] = a.dataset.a.split(':'); const f = K.acts[n]; if (f) f(r, a, e); }
+  else if (a.dataset.tab) K.tab(a.dataset.tab);
+  else if ('back' in a.dataset) K.back();
+  else K.closeSheet();
 });
-$('call').onclick = () => { stars = 0; rate(); show('sTrack'); ride(); };
-$('back1').onclick = () => { cancelAnimationFrame(raf); show('sOrder'); };
-$('fin').onclick = () => { cancelAnimationFrame(raf); $('rate').classList.remove('on'); ITEMS.forEach((i, k) => i.n = k ? 0 : 4); when = 'w1'; order(); show('sOrder'); };
-addEventListener('message', e => { const l = e.data && e.data.lang; if (['zh', 'en', 'ms'].includes(l) && l !== L) { L = l; words(); } });
-words(); show('sOrder');
-if (Q.get('auto') === '1') {
-  const tap = $('tap'); let stop = false;
-  const at = q => { const el = typeof q === 'string' ? document.querySelector(q) : q; if (!el) return; const r = el.getBoundingClientRect(); tap.style.left = (r.left + r.width / 2) + 'px'; tap.style.top = (r.top + r.height / 2) + 'px'; tap.classList.add('on'); setTimeout(() => tap.classList.remove('on'), 260); el.click(); };
-  const S = [[1300, () => at('[data-w=w2]')], [1000, () => at('[data-p=kg]')], [900, () => at('[data-p=shirt]')], [800, () => at('[data-p=shirt]')], [1200, () => at('#call')], [10400, () => at('[data-s="5"]')], [2200, () => at('#fin')]];
-  const run = (i = 0) => { if (stop) return; const [w, f] = S[i % S.length]; setTimeout(() => { if (!stop) { f(); run(i + 1); } }, w); };
-  addEventListener('pointerdown', e => { if (e.isTrusted) stop = true; }, {capture: true}); run();
+document.addEventListener('input', e => { const n = e.target.dataset && e.target.dataset.in; if (n && K.ins[n]) K.ins[n](e.target.value, e.target); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { if (K.sheetEl) K.closeSheet(); else if (K.stack.length) K.back(); } });
+/* pull a sheet down by its handle to close it */
+document.addEventListener('pointerdown', e => {
+  const g = e.target.closest('.sheet .grab'); if (!g) return;
+  const el = K.sheetEl, y0 = e.clientY; let dy = 0;
+  const mv = ev => { dy = Math.max(0, ev.clientY - y0); el.style.transition = 'none'; el.style.transform = `translateY(${dy}px)`; };
+  const up = () => { removeEventListener('pointermove', mv); removeEventListener('pointerup', up); el.style.transition = ''; el.style.transform = ''; if (dy > 72) K.closeSheet(); };
+  addEventListener('pointermove', mv); addEventListener('pointerup', up);
+});
+
+/* ---------- the tour: a finger that taps through the app, again and again, until somebody touches the screen ---------- */
+const A = { on: false,
+  wait: ms => new Promise((res, rej) => setTimeout(() => A.on ? res() : rej(new Error('stop')), ms)),
+  look(sel) { for (const r of [K.sheetEl, K.topEl(), $('#tabs'), $('#note')]) { if (!r) continue; const el = $$(sel, r).find(n => n.offsetParent !== null || n.getClientRects().length); if (el) return el; } return null; },
+  async find(sel, ms) { const t0 = Date.now(); for (;;) { const el = A.look(sel); if (el) return el; if (Date.now() - t0 > (ms || 5000)) throw new Error('lost ' + sel); await A.wait(120); } },
+  /* bring it into view inside the app only: scrollIntoView would also move the page that holds the app */
+  async show(el) {
+    let sc = el.parentElement; const app = $('#app');
+    while (sc && sc !== app) { const cs = getComputedStyle(sc);
+      if (/(auto|scroll)/.test(cs.overflowY) && sc.scrollHeight > sc.clientHeight + 4) { const r = el.getBoundingClientRect(), s = sc.getBoundingClientRect(); const d = (r.top + r.height / 2) - (s.top + s.height * .52); if (Math.abs(d) > s.height * .26) { sc.scrollBy({ top: d, behavior: K.calm ? 'auto' : 'smooth' }); await A.wait(520); } }
+      if (/(auto|scroll)/.test(cs.overflowX) && sc.scrollWidth > sc.clientWidth + 4) { const r = el.getBoundingClientRect(), s = sc.getBoundingClientRect(); if (r.left < s.left + 8 || r.right > s.right - 8) { sc.scrollBy({ left: (r.left + r.width / 2) - (s.left + s.width / 2), behavior: K.calm ? 'auto' : 'smooth' }); await A.wait(480); } }
+      sc = sc.parentElement; }
+  },
+  async tap(sel, after) {
+    const el = typeof sel === 'string' ? await A.find(sel) : sel; await A.show(el);
+    const f = $('.finger'), r = el.getBoundingClientRect(), a = $('#app').getBoundingClientRect(), z = a.width / $('#app').offsetWidth || 1;
+    f.style.left = ((r.left + r.width / 2 - a.left) / z) + 'px'; f.style.top = ((r.top + r.height / 2 - a.top) / z) + 'px'; f.classList.add('on');
+    await A.wait(620); f.classList.add('down'); await A.wait(150); if (el.click) el.click(); else el.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true })); f.classList.remove('down');   /* a shape in a drawing has no click() of its own */
+    await A.wait(after == null ? 800 : after);
+  },
+  async scroll(dy, sel) { const b = sel ? await A.find(sel) : $('.sbody', K.sheetEl || document.createElement('i')) || $('.body', K.topEl()); if (b) b.scrollBy({ top: dy, behavior: K.calm ? 'auto' : 'smooth' }); await A.wait(900); },
+  async type(sel, text) { const el = await A.find(sel); await A.show(el); for (const ch of text) { el.value += ch; el.dispatchEvent(new Event('input', { bubbles: true })); await A.wait(70); } await A.wait(400); },
+  stop() { if (!A.on) return; A.on = false; document.documentElement.classList.remove('auto'); const f = $('.finger'); if (f) f.classList.remove('on'); }
+};
+K.autoplay = async tour => {
+  A.on = true; document.documentElement.classList.add('auto');
+  while (A.on) {
+    try { await A.wait(900); await tour(A); await A.wait(1600); } catch (e) { if (!A.on) break; }
+    if (!A.on) break; K.reset();
+  }
+};
+['pointerdown', 'wheel', 'keydown', 'touchstart'].forEach(ev => addEventListener(ev, e => { if (e.isTrusted) A.stop(); }, { passive: true, capture: true }));
+
+K.reset = () => { K.timers.forEach(id => { clearTimeout(id); clearInterval(id); }); K.timers = []; K.closeSheet(true); $('#note').classList.remove('on'); K.init(); $$('#stack>.tabscr').forEach(el => { el._dirty = true; const b = $('.body', el); if (b) b.scrollTop = 0; }); K.tab(K.tabs[0]); };
+K.boot = o => {
+  Object.assign(K, o);
+  const de = document.documentElement, framed = self !== top;
+  if (framed) de.classList.add('inframe');
+  const wide = matchMedia('(min-width:700px)');
+  const emb = () => de.classList.toggle('emb', framed || wide.matches || Q.get('emb') === '1');   /* ?emb=1: draw the phone's own top bar, for pictures */ emb(); wide.addEventListener('change', emb);
+  $('#app').innerHTML = `<div id="stack">${K.tabs.map(t => `<section class="scr tabscr" data-s="${t}" hidden></section>`).join('')}</div><nav id="tabs"></nav>
+<div class="sb"><b id="sbt"></b><span><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5" width="3" height="7" rx=".8"/><rect x="10" y="2.5" width="3" height="9.5" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></svg><svg viewBox="0 0 16 12"><path d="M8 2.2c2.3 0 4.4.9 6 2.4l1-1.1A10.2 10.2 0 0 0 8 .7 10.2 10.2 0 0 0 1 3.500l1 1.100a8.700 8.700 0 0 1 6-2.400zm0 3.300c1.400 0 2.700.5 3.700 1.400l1-1.100A7 7 0 0 0 8 4a7 7 0 0 0-4.700 1.800l1 1.100c1-.9 2.300-1.400 3.700-1.400zm0 3.200c-.8 0-1.500.3-2 .8l2 2.300 2-2.300c-.5-.5-1.200-.8-2-.8z"/></svg><svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="17" height="8" rx="1.8"/><path d="M24 4v4c.8-.3 1.500-1.100 1.500-2S24.800 4.300 24 4z" opacity=".5"/></svg></span></div>
+<div class="shade" id="shade" data-close></div><div id="toast" role="status"></div><button type="button" id="note"></button><i class="finger"></i><i class="homebar"></i>`;
+  const clock = () => { const d = new Date(); $('#sbt').textContent = d.getHours() + ':' + pad2(d.getMinutes()); }; clock(); setInterval(clock, 20000);
+  const ql = Q.get('lang'), nl = (navigator.language || '').slice(0, 2);
+  K.lang = LANGS.includes(ql) ? ql : (nl === 'zh' ? 'zh' : nl === 'ms' ? 'ms' : (ql == null && nl === 'en') ? 'en' : 'zh');
+  document.documentElement.lang = HTMLLANG[K.lang]; document.title = T('app.title');
+  const on = $('.outnote'); if (on) on.innerHTML = T('k.out');
+  K.init(); K.tab(K.tabs[0]);
+  addEventListener('message', e => { const l = e.data && e.data.lang; if (LANGS.includes(l) && l !== K.lang) K.setLang(l); });
+  const s = Q.get('s'); if (s && K.jumps[s]) K.jumps[s]();
+  if (Q.get('auto') === '1' && !K.calm && K.tour) K.autoplay(K.tour);
+};
+window.KIT = K; window.KITA = A;
+
+/* a small made-up city for the map screens: 400 x 300, the same streets in every app, coloured by the app */
+const CITY = {
+  roads: ['M-10 62C80 50 140 76 200 62S330 50 410 66', 'M-10 150H410', 'M-10 236C100 246 180 226 260 238S360 250 410 240', 'M72 -10C66 80 80 160 70 310', 'M190 -10V310', 'M312 -10C320 90 300 200 316 310'],
+  lanes: ['M130 62V150', 'M250 150V238', 'M-10 106H70', 'M190 196H313', 'M313 108H410', 'M130 150V240', 'M250 62V150', 'M72 196H190'],
+  blocks: [[84, 72, 36, 30], [84, 112, 36, 28], [142, 72, 38, 68], [202, 160, 38, 26], [262, 160, 40, 26], [202, 206, 38, 22], [262, 206, 40, 22], [84, 160, 36, 26], [142, 160, 38, 28], [142, 204, 38, 24], [84, 204, 36, 24],
+    [10, 72, 50, 26], [10, 114, 50, 28], [10, 160, 50, 66], [324, 72, 60, 28], [324, 116, 60, 26], [324, 160, 66, 68], [260, 72, 42, 68], [84, 10, 96, 40], [202, 10, 100, 40], [10, 250, 50, 40], [84, 250, 96, 40], [202, 250, 100, 40], [324, 250, 66, 40], [324, 10, 60, 40]]
+};
+function cityMap(o) {
+  return `<svg class="citymap" viewBox="${o.vb || '0 0 400 300'}" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+<rect x="-20" y="-20" width="440" height="340" fill="${o.land}"/>
+<path d="M-20 -20H96C80 4 52 2 30 18S0 34 -20 30z" fill="${o.water}"/>
+<g fill="${o.block}">${CITY.blocks.map(b => `<rect x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" rx="3"/>`).join('')}</g>
+<rect x="199" y="72" width="42" height="68" rx="8" fill="${o.park}"/><ellipse cx="220" cy="118" rx="12" ry="8" fill="${o.water}"/>
+<g fill="${o.tree || o.park}" opacity=".9"><circle cx="210" cy="84" r="5"/><circle cx="224" cy="90" r="6"/><circle cx="232" cy="80" r="4"/><circle cx="208" cy="98" r="4"/></g>
+<g fill="none" stroke-linecap="round" stroke="${o.edge}">${CITY.lanes.map(d => `<path d="${d}" stroke-width="7"/>`).join('')}${CITY.roads.map(d => `<path d="${d}" stroke-width="13"/>`).join('')}</g>
+<g fill="none" stroke-linecap="round" stroke="${o.road}">${CITY.lanes.map(d => `<path d="${d}" stroke-width="5"/>`).join('')}${CITY.roads.map(d => `<path d="${d}" stroke-width="10"/>`).join('')}</g>
+${o.extra || ''}</svg>`;
 }
-})();
+
+K.W = {"zh":{"k.now":"现在","k.back":"返回","k.out":"样板 App，内容是演示用的 · <a href=\"https://dinamics.dev/craft/app\">Dinamics</a> 制作","app.title":"快洗 FreshFold · 样板 App","tab.home":"首页","tab.new":"下单","tab.orders":"订单","tab.plans":"套餐","tab.me":"我的","today":"今天","tmr":"明天","next":"下一步","less":"减少","more":"增加","free":"免费","from":"{v} 起","cancel":"先不换","call":"打电话","chat":"发消息","again":"再来一单","month":"月","inbox.t":"消息","hi.am":"早上好，{n}","hi.pm":"下午好，{n}","hi.eve":"晚上好，{n}","home.to":"上门地址","cta.t":"脏衣服交给我们","cta.s":"最快 {d} {w} 上门","cta.go":"叫人来收","home.live":"正在处理","home.serv":"能洗什么","prices.t":"价目表","prices.s":"按公斤和按件的价格","plan.name":"{n}套餐","plan.left":"本月还剩 {n} 公斤","plan.used":"已用 {a} / {b} 公斤","plan.renew":"{d} 续期","how.t":"怎么洗的","how.1":"上门收","how.1s":"骑手带着袋子上门","how.2":"单独洗","how.2s":"你家的衣服自己一台机器","how.3":"送回家","how.3s":"折好或挂好，送到门口","demo.addr":"样板里不能加新地址","demo.call":"样板里不会拨电话","demo.chat":"样板里没有接客服","addr.t":"地址","addr.add":"加一个地址","new.t":"下单","new.again":"照上次的再洗","m.kg":"按公斤洗","m.kg.s":"日常衣物：洗、烘、折","m.kg.min":"{n} 公斤起","m.pc":"按件洗","m.pc.s":"衬衫、西装、床品、鞋","care.mine":"我的洗护习惯","care.hint":"以后每一单都先按这个来，下单时还能改","care.temp":"水温","temp.30":"冷水","temp.40":"温水","temp.60":"热水","care.det":"洗衣液","det.reg":"普通","det.soft":"敏感肌","det.none":"无香","care.soft":"加柔顺剂","care.softs":"毛巾建议不加","care.dry":"烘干","dry.low":"低温烘","dry.norm":"正常烘","dry.hang":"晾干","care.fold":"送回时","fold.fold":"折好","fold.hang":"挂起","flow.s1":"洗什么","flow.s2":"怎么洗","flow.s3":"什么时候收","flow.s4":"确认","f1.q":"这次洗多少","kg.about":"大约 {n} 件 T 恤的量","kg.hint":"先估一个数。收到后我们实称，按实际重量算","f2.q":"想怎么洗","st.t":"污渍","st.s":"在图上点一下位置","st.add":"标记这里","st.del":"去掉这个标记","st.none":"没有污渍就不用标","st.n":"标了 {n} 处","g.shirt":"上衣","g.pants":"裤子","stain.oil":"油渍","stain.drink":"红酒饮料","stain.ink":"墨水","stain.mud":"泥","stain.sweat":"汗渍","zone.shirt.0":"领口","zone.shirt.1":"左胸","zone.shirt.2":"右胸","zone.shirt.3":"肚子","zone.shirt.4":"下摆","zone.shirt.5":"左袖","zone.shirt.6":"右袖","zone.pants.0":"腰","zone.pants.1":"左大腿","zone.pants.2":"右大腿","zone.pants.3":"左膝","zone.pants.4":"右膝","zone.pants.5":"左裤脚","zone.pants.6":"右裤脚","f3.q":"哪天来收","f3.back":"多快送回","sp.std":"标准","sp.express":"加急","sp.by":"{d}送回","f3.where":"收和送的地址","note.door":"放门口","note.call":"到了打电话","note.desk":"交给前台","f4.q":"核对一下","r.pick":"上门收","r.back":"送回","r.addr":"地址","r.care":"洗护","o.kg":"{n} 公斤","sum.kg":"{n} 公斤 × {p}","sum.pc":"{n} 件","sum.plan":"{n}套餐抵扣","sum.ride":"上门收送","sum.total":"合计","sum.est":"估算","sum.est1":"预估","pay.t":"支付方式","pay.card":"银行卡","pay.card.s":"尾号 4417","pay.mobile":"手机支付","pay.mobile.s":"用手机里的钱包付","pay.cash":"送回时付现金","pay.cash.s":"交给骑手","pay.ing":"正在下单","f4.hint":"实称后如果重量不同，会先请你确认差价再洗","f4.hintpc":"收到后我们会逐件清点，数量不对会先联系你","f4.go":"下单","sg.placed":"已下单","sg.coming":"骑手在路上","sg.got":"已收走","sg.weigh":"待确认重量","sg.weigh.pc":"已清点","sg.wash":"洗涤中","sg.fold":"烘干折叠","sg.back":"送回途中","sg.done":"已送达","sg.placed.l":"订单收到了，正在派骑手","sg.coming.l":"骑手正在来收","sg.got.l":"衣服已收走，送往洗衣房","sg.weigh.l":"称好了","sg.weigh.lpc":"逐件清点好了","sg.wash.l":"正在洗","sg.fold.l":"正在烘干、折叠","sg.back.l":"骑手正在送回","sg.done.l":"送到了","eta.wash":"还有大约 {m} 分钟","eta.done":"{t} 放在门口","eta.weigh":"确认后马上开始洗","w.est":"你估的","w.real":"实称","w.more":"多出的部分","w.less":"少收","w.ok":"确认，开始洗","w.hint":"套餐里的公斤数会先抵扣","w.done":"确认了，开始洗","rider.in":"正在来收","rider.out":"正在送回","rate.q":"这次洗得怎么样","rate.thanks":"谢谢你的评分","rate.toast":"评分收到了","row.placed":"下单","row.got":"上门收","row.weigh":"称重","row.wash":"洗涤","row.fold":"烘干折叠","row.done":"送回","note.t":"衣服送到了","note.b":"{id} 放在门口了","ord.live":"进行中","ord.past":"以前的订单","plans.t":"月套餐","plans.all":"全部套餐","plans.vs":"不买套餐 {p} / kg","plans.cur":"现在用的","plans.per":"相当于每公斤 {p}","plans.perks":"每个套餐都有","perk.1":"上门收送不收费","perk.1s":"次数不限","perk.2":"加急半价","perk.2s":"每月两次","perk.3":"没用完的公斤数留一个月","perk.3s":"最多留 5 公斤","plans.same":"现在用的就是这个","plans.to":"换成{n}套餐","plans.tos":"每月 {kg} 公斤，{p}。今天生效，{d} 续期","plans.do":"确认更换","plans.done":"已换成{n}套餐","me.n":"洗过 {n} 单","me.lang":"语言","me.help":"帮助","me.about":"关于这个样板","about.p":"这是 Dinamics 做的样板 App。骑手、价格、地址和订单都是演示用的，不会真的扣款","about.go":"看 Dinamics 怎么做 App","prices.more":"其他","prices.ex":"24 小时内送回","prices.ride":"3 公斤起","in.wash.t":"FF-58213 开始洗了","in.wash.b":"实称 6.4 公斤，温水，敏感肌洗衣液","in.plan.t":"这个月用了一半多","in.plan.b":"家庭套餐还剩 7.6 公斤","in.done.t":"FF-57960 送到了","in.done.b":"3 件衬衫、1 套西装，挂好交给前台","faq.q1":"会和别人的衣服一起洗吗","faq.q1a":"不会。每一单用一台机器，从收到送都在自己的袋子里。","faq.q2":"洗坏了或少了怎么办","faq.q2a":"48 小时内在订单里告诉我们。核实后照价赔，最多十倍洗费。","faq.q3":"不在家可以收吗","faq.q3a":"可以。选「放门口」或「交给前台」，骑手收到会拍照。","faq.q4":"套餐没用完会怎样","faq.q4a":"没用完的留到下个月，最多留 5 公斤。","help.chat":"找客服"},"en":{"k.now":"now","k.back":"Back","k.out":"A sample app with demo content · made by <a href=\"https://dinamics.dev/craft/app\">Dinamics</a>","app.title":"FreshFold · sample app","tab.home":"Home","tab.new":"Order","tab.orders":"Orders","tab.plans":"Plans","tab.me":"Account","today":"Today","tmr":"Tomorrow","next":"Next","less":"Less","more":"More","free":"Free","from":"from {v}","cancel":"Not now","call":"Call","chat":"Message","again":"Order again","month":"month","inbox.t":"Inbox","hi.am":"Good morning, {n}","hi.pm":"Good afternoon, {n}","hi.eve":"Good evening, {n}","home.to":"Collect from","cta.t":"Hand us the laundry","cta.s":"Next pickup: {d}, {w}","cta.go":"Book a pickup","home.live":"In progress","home.serv":"What we clean","prices.t":"Price list","prices.s":"By the kilo and by the piece","plan.name":"{n} plan","plan.left":"{n} kg left this month","plan.used":"{a} of {b} kg used","plan.renew":"Renews {d}","how.t":"How it works","how.1":"We collect","how.1s":"A rider comes with a bag","how.2":"Washed apart","how.2s":"Your load gets its own machine","how.3":"Brought back","how.3s":"Folded or hung, at your door","demo.addr":"The sample cannot add an address","demo.call":"The sample does not place calls","demo.chat":"The sample has no live chat","addr.t":"Addresses","addr.add":"Add an address","new.t":"New order","new.again":"Same as last time","m.kg":"By the kilo","m.kg.s":"Everyday clothes: washed, dried, folded","m.kg.min":"from {n} kg","m.pc":"By the piece","m.pc.s":"Shirts, suits, bedding, shoes","care.mine":"My care settings","care.hint":"Every new order starts from these. You can still change them per order","care.temp":"Water","temp.30":"Cold","temp.40":"Warm","temp.60":"Hot","care.det":"Detergent","det.reg":"Regular","det.soft":"Sensitive skin","det.none":"Unscented","care.soft":"Fabric softener","care.softs":"Best left out for towels","care.dry":"Drying","dry.low":"Tumble low","dry.norm":"Tumble normal","dry.hang":"Hang dry","care.fold":"Returned","fold.fold":"Folded","fold.hang":"On hangers","flow.s1":"What to wash","flow.s2":"How to wash it","flow.s3":"Pickup time","flow.s4":"Review","f1.q":"How much this time","kg.about":"About {n} T-shirts' worth","kg.hint":"Give us an estimate. We weigh it on arrival and charge the real weight","f2.q":"How should we wash it","st.t":"Stains","st.s":"Tap where it is","st.add":"Mark this spot","st.del":"Remove this mark","st.none":"Nothing to mark? Skip this","st.n":"{n} marked","g.shirt":"Top","g.pants":"Trousers","stain.oil":"Oil","stain.drink":"Wine or drink","stain.ink":"Ink","stain.mud":"Mud","stain.sweat":"Sweat","zone.shirt.0":"Collar","zone.shirt.1":"Left chest","zone.shirt.2":"Right chest","zone.shirt.3":"Front","zone.shirt.4":"Hem","zone.shirt.5":"Left sleeve","zone.shirt.6":"Right sleeve","zone.pants.0":"Waist","zone.pants.1":"Left thigh","zone.pants.2":"Right thigh","zone.pants.3":"Left knee","zone.pants.4":"Right knee","zone.pants.5":"Left hem","zone.pants.6":"Right hem","f3.q":"When should we collect","f3.back":"How fast back","sp.std":"Standard","sp.express":"Express","sp.by":"Back: {d}","f3.where":"Collection and return address","note.door":"Leave at the door","note.call":"Call on arrival","note.desk":"Hand to the front desk","f4.q":"Check the details","r.pick":"Pickup","r.back":"Return","r.addr":"Address","r.care":"Care","o.kg":"{n} kg","sum.kg":"{n} kg × {p}","sum.pc":"{n} pieces","sum.plan":"Covered by the {n} plan","sum.ride":"Collection and return","sum.total":"Total","sum.est":"estimate","sum.est1":"Estimate","pay.t":"Payment","pay.card":"Card","pay.card.s":"Ending in 4417","pay.mobile":"Mobile pay","pay.mobile.s":"Pay with your phone wallet","pay.cash":"Cash on return","pay.cash.s":"Paid to the rider","pay.ing":"Placing your order","f4.hint":"If the real weight differs, we ask you to confirm the difference before washing","f4.hintpc":"We count every piece on arrival and contact you first if the number differs","f4.go":"Place order","sg.placed":"Placed","sg.coming":"Rider on the way","sg.got":"Collected","sg.weigh":"Confirm weight","sg.weigh.pc":"Counted","sg.wash":"Washing","sg.fold":"Drying & folding","sg.back":"On its way back","sg.done":"Delivered","sg.placed.l":"Order in. Finding a rider","sg.coming.l":"Your rider is on the way","sg.got.l":"Collected. Heading to the laundry","sg.weigh.l":"Weighed","sg.weigh.lpc":"Every piece counted","sg.wash.l":"In the wash","sg.fold.l":"Drying and folding","sg.back.l":"Your rider is bringing it back","sg.done.l":"Delivered","eta.wash":"About {m} minutes left","eta.done":"Left at your door at {t}","eta.weigh":"We start washing as soon as you confirm","w.est":"Your estimate","w.real":"Weighed","w.more":"Extra","w.less":"Less to pay","w.ok":"Confirm and start washing","w.hint":"Your plan covers its kilos first","w.done":"Confirmed. Washing starts now","rider.in":"Coming to collect","rider.out":"Bringing it back","rate.q":"How did we do","rate.thanks":"Thank you for rating","rate.toast":"Rating saved","row.placed":"Ordered","row.got":"Collected","row.weigh":"Weighed","row.wash":"Washed","row.fold":"Dried and folded","row.done":"Returned","note.t":"Your laundry is back","note.b":"{id} has been left at your door","ord.live":"In progress","ord.past":"Past orders","plans.t":"Monthly plans","plans.all":"All plans","plans.vs":"{p} / kg without a plan","plans.cur":"Current","plans.per":"Works out at {p} per kg","plans.perks":"Every plan includes","perk.1":"Free collection and return","perk.1s":"As often as you like","perk.2":"Express at half price","perk.2s":"Twice a month","perk.3":"Unused kilos roll over one month","perk.3s":"Up to 5 kg","plans.same":"This is your current plan","plans.to":"Switch to {n}","plans.tos":"{kg} kg a month for {p}. Starts today and renews on {d}","plans.do":"Switch plan","plans.done":"Switched to {n}","me.n":"{n} orders","me.lang":"Language","me.help":"Help","me.about":"About this sample","about.p":"A sample app built by Dinamics. The riders, prices, addresses and orders are for demonstration, and nothing is charged","about.go":"See how Dinamics builds apps","prices.more":"Other","prices.ex":"Back within 24 hours","prices.ride":"For orders from 3 kg","in.wash.t":"FF-58213 is in the wash","in.wash.b":"Weighed 6.4 kg. Warm water, sensitive-skin detergent","in.plan.t":"More than half of this month is used","in.plan.b":"7.6 kg left on the Family plan","in.done.t":"FF-57960 has been delivered","in.done.b":"3 shirts and a suit, on hangers, left with the front desk","faq.q1":"Is my laundry washed with other people's","faq.q1a":"No. Every order gets its own machine and stays in its own bag from door to door.","faq.q2":"What if something is damaged or missing","faq.q2a":"Tell us in the order within 48 hours. Once checked, we pay its value, up to ten times the cleaning fee.","faq.q3":"Can you collect if I am out","faq.q3a":"Yes. Choose \"Leave at the door\" or \"Hand to the front desk\" and the rider takes a photo.","faq.q4":"What happens to unused kilos","faq.q4a":"They roll over to next month, up to 5 kg.","help.chat":"Chat with us"},"ms":{"k.now":"kini","k.back":"Kembali","k.out":"Aplikasi contoh dengan kandungan demo · dibina oleh <a href=\"https://dinamics.dev/craft/app\">Dinamics</a>","app.title":"FreshFold · aplikasi contoh","tab.home":"Utama","tab.new":"Pesan","tab.orders":"Pesanan","tab.plans":"Pelan","tab.me":"Akaun","today":"Hari ini","tmr":"Esok","next":"Seterusnya","less":"Kurang","more":"Tambah","free":"Percuma","from":"dari {v}","cancel":"Bukan sekarang","call":"Panggil","chat":"Mesej","again":"Pesan lagi","month":"bulan","inbox.t":"Peti masuk","hi.am":"Selamat pagi, {n}","hi.pm":"Selamat petang, {n}","hi.eve":"Selamat malam, {n}","home.to":"Ambil dari","cta.t":"Serahkan dobi kepada kami","cta.s":"Ambilan seterusnya: {d}, {w}","cta.go":"Tempah ambilan","home.live":"Sedang diproses","home.serv":"Apa yang kami cuci","prices.t":"Senarai harga","prices.s":"Ikut kilo dan ikut helai","plan.name":"Pelan {n}","plan.left":"Baki {n} kg bulan ini","plan.used":"{a} daripada {b} kg digunakan","plan.renew":"Diperbaharui {d}","how.t":"Cara ia berfungsi","how.1":"Kami ambil","how.1s":"Penghantar datang dengan beg","how.2":"Dibasuh berasingan","how.2s":"Dobi anda dalam mesin sendiri","how.3":"Dihantar balik","how.3s":"Dilipat atau digantung, di pintu anda","demo.addr":"Contoh ini tidak boleh menambah alamat","demo.call":"Contoh ini tidak membuat panggilan","demo.chat":"Contoh ini tiada sembang langsung","addr.t":"Alamat","addr.add":"Tambah alamat","new.t":"Pesanan baharu","new.again":"Sama seperti dahulu","m.kg":"Ikut kilo","m.kg.s":"Pakaian harian: dibasuh, dikering, dilipat","m.kg.min":"dari {n} kg","m.pc":"Ikut helai","m.pc.s":"Kemeja, sut, cadar, kasut","care.mine":"Tetapan jagaan saya","care.hint":"Setiap pesanan baharu bermula dengan ini. Anda masih boleh mengubahnya bagi setiap pesanan","care.temp":"Suhu air","temp.30":"Sejuk","temp.40":"Suam","temp.60":"Panas","care.det":"Sabun","det.reg":"Biasa","det.soft":"Kulit sensitif","det.none":"Tanpa wangian","care.soft":"Pelembut fabrik","care.softs":"Lebih baik tanpa untuk tuala","care.dry":"Pengeringan","dry.low":"Kering rendah","dry.norm":"Kering biasa","dry.hang":"Sidai","care.fold":"Dipulangkan","fold.fold":"Dilipat","fold.hang":"Digantung","flow.s1":"Apa yang dibasuh","flow.s2":"Cara membasuh","flow.s3":"Masa ambilan","flow.s4":"Semak","f1.q":"Berapa banyak kali ini","kg.about":"Kira-kira {n} helai kemeja-T","kg.hint":"Beri anggaran. Kami timbang semasa tiba dan caj mengikut berat sebenar","f2.q":"Bagaimana kami patut membasuhnya","st.t":"Kotoran","st.s":"Tekan di tempatnya","st.add":"Tanda di sini","st.del":"Buang tanda ini","st.none":"Tiada kotoran? Langkau sahaja","st.n":"{n} ditanda","g.shirt":"Baju","g.pants":"Seluar","stain.oil":"Minyak","stain.drink":"Wain atau minuman","stain.ink":"Dakwat","stain.mud":"Lumpur","stain.sweat":"Peluh","zone.shirt.0":"Kolar","zone.shirt.1":"Dada kiri","zone.shirt.2":"Dada kanan","zone.shirt.3":"Bahagian depan","zone.shirt.4":"Kelepet","zone.shirt.5":"Lengan kiri","zone.shirt.6":"Lengan kanan","zone.pants.0":"Pinggang","zone.pants.1":"Paha kiri","zone.pants.2":"Paha kanan","zone.pants.3":"Lutut kiri","zone.pants.4":"Lutut kanan","zone.pants.5":"Kaki seluar kiri","zone.pants.6":"Kaki seluar kanan","f3.q":"Bila kami patut ambil","f3.back":"Berapa cepat dipulangkan","sp.std":"Standard","sp.express":"Ekspres","sp.by":"Pulang: {d}","f3.where":"Alamat ambilan dan pulangan","note.door":"Tinggal di pintu","note.call":"Telefon bila sampai","note.desk":"Serah di kaunter","f4.q":"Semak butiran","r.pick":"Ambilan","r.back":"Pulangan","r.addr":"Alamat","r.care":"Jagaan","o.kg":"{n} kg","sum.kg":"{n} kg × {p}","sum.pc":"{n} helai","sum.plan":"Dilindungi pelan {n}","sum.ride":"Ambilan dan pulangan","sum.total":"Jumlah","sum.est":"anggaran","sum.est1":"Anggaran","pay.t":"Pembayaran","pay.card":"Kad","pay.card.s":"Berakhir 4417","pay.mobile":"Bayaran mudah alih","pay.mobile.s":"Bayar dengan dompet telefon","pay.cash":"Tunai semasa pulangan","pay.cash.s":"Dibayar kepada penghantar","pay.ing":"Membuat pesanan anda","f4.hint":"Jika berat sebenar berbeza, kami minta anda sahkan perbezaannya sebelum membasuh","f4.hintpc":"Kami kira setiap helai semasa tiba dan hubungi anda dahulu jika bilangannya berbeza","f4.go":"Buat pesanan","sg.placed":"Dibuat","sg.coming":"Penghantar dalam perjalanan","sg.got":"Sudah diambil","sg.weigh":"Sahkan berat","sg.weigh.pc":"Sudah dikira","sg.wash":"Sedang dibasuh","sg.fold":"Mengering & melipat","sg.back":"Dalam perjalanan pulang","sg.done":"Sudah dihantar","sg.placed.l":"Pesanan diterima. Mencari penghantar","sg.coming.l":"Penghantar anda dalam perjalanan","sg.got.l":"Sudah diambil. Menuju ke dobi","sg.weigh.l":"Sudah ditimbang","sg.weigh.lpc":"Setiap helai sudah dikira","sg.wash.l":"Sedang dibasuh","sg.fold.l":"Mengering dan melipat","sg.back.l":"Penghantar sedang menghantarnya balik","sg.done.l":"Sudah dihantar","eta.wash":"Kira-kira {m} minit lagi","eta.done":"Ditinggalkan di pintu anda pada {t}","eta.weigh":"Kami mula membasuh sebaik anda sahkan","w.est":"Anggaran anda","w.real":"Ditimbang","w.more":"Tambahan","w.less":"Kurang dibayar","w.ok":"Sahkan dan mula basuh","w.hint":"Pelan anda melindungi kilonya dahulu","w.done":"Disahkan. Basuhan bermula sekarang","rider.in":"Datang mengambil","rider.out":"Sedang menghantar balik","rate.q":"Bagaimana perkhidmatan kami","rate.thanks":"Terima kasih atas penilaian anda","rate.toast":"Penilaian disimpan","row.placed":"Dipesan","row.got":"Diambil","row.weigh":"Ditimbang","row.wash":"Dibasuh","row.fold":"Dikering dan dilipat","row.done":"Dipulangkan","note.t":"Dobi anda sudah sampai","note.b":"{id} telah ditinggalkan di pintu anda","ord.live":"Sedang berjalan","ord.past":"Pesanan lepas","plans.t":"Pelan bulanan","plans.all":"Semua pelan","plans.vs":"{p} / kg tanpa pelan","plans.cur":"Semasa","plans.per":"Bersamaan {p} sekilo","plans.perks":"Setiap pelan termasuk","perk.1":"Ambilan dan pulangan percuma","perk.1s":"Sekerap yang anda mahu","perk.2":"Ekspres separuh harga","perk.2s":"Dua kali sebulan","perk.3":"Kilo yang tidak digunakan dibawa sebulan","perk.3s":"Sehingga 5 kg","plans.same":"Ini pelan semasa anda","plans.to":"Tukar ke {n}","plans.tos":"{kg} kg sebulan pada {p}. Bermula hari ini dan diperbaharui pada {d}","plans.do":"Tukar pelan","plans.done":"Ditukar ke {n}","me.n":"{n} pesanan","me.lang":"Bahasa","me.help":"Bantuan","me.about":"Tentang contoh ini","about.p":"Aplikasi contoh oleh Dinamics. Penghantar, harga, alamat dan pesanan hanyalah demonstrasi, dan tiada caj dikenakan","about.go":"Lihat cara Dinamics membina aplikasi","prices.more":"Lain-lain","prices.ex":"Pulang dalam 24 jam","prices.ride":"Untuk pesanan dari 3 kg","in.wash.t":"FF-58213 sedang dibasuh","in.wash.b":"Ditimbang 6.4 kg. Air suam, sabun kulit sensitif","in.plan.t":"Lebih separuh bulan ini sudah digunakan","in.plan.b":"Baki 7.6 kg dalam pelan Keluarga","in.done.t":"FF-57960 sudah dihantar","in.done.b":"3 kemeja dan satu sut, digantung, diserahkan di kaunter","faq.q1":"Adakah dobi saya dibasuh bersama orang lain","faq.q1a":"Tidak. Setiap pesanan ada mesin sendiri dan kekal dalam beg sendiri dari pintu ke pintu.","faq.q2":"Bagaimana jika ada yang rosak atau hilang","faq.q2a":"Beritahu kami dalam pesanan dalam 48 jam. Selepas disemak, kami bayar nilainya, sehingga sepuluh kali caj cucian.","faq.q3":"Bolehkah ambil jika saya tiada","faq.q3a":"Boleh. Pilih \"Tinggal di pintu\" atau \"Serah di kaunter\" dan penghantar akan mengambil gambar.","faq.q4":"Apa jadi dengan kilo yang tidak digunakan","faq.q4a":"Ia dibawa ke bulan depan, sehingga 5 kg.","help.chat":"Sembang dengan kami"}};
+K.QR = {};
+/* 快洗 FreshFold: a sample app for laundry that is collected and brought back. The people, prices, addresses and orders are made up for the demo. */
+const KG = 2.8, EXPRESS = 5, MINKG = 3;
+const SERV = [
+  { id: 'wash', icon: 'basket', mode: 'kg', n: tri('洗衣折叠', 'Wash & fold', 'Basuh & lipat'), d: tri('按公斤算', 'By the kilo', 'Ikut kilo') },
+  { id: 'dry', icon: 'hanger', mode: 'pc', n: tri('干洗', 'Dry cleaning', 'Cucian kering'), d: tri('按件算', 'By the piece', 'Ikut helai') },
+  { id: 'iron', icon: 'iron', mode: 'pc', n: tri('熨烫', 'Pressing', 'Gosok'), d: tri('洗好再熨', 'Washed, then pressed', 'Dibasuh, kemudian digosok') },
+  { id: 'shoe', icon: 'shoe', mode: 'pc', n: tri('洗鞋', 'Shoe care', 'Cuci kasut'), d: tri('手洗、除味', 'Hand-washed, deodorised', 'Dicuci tangan, dinyahbau') },
+  { id: 'bed', icon: 'bed', mode: 'pc', n: tri('床品', 'Bedding', 'Cadar'), d: tri('高温洗、烘干', 'Hot wash, tumble dry', 'Basuhan panas, dikeringkan') },
+  { id: 'curtain', icon: 'curtain', mode: 'pc', n: tri('窗帘', 'Curtains', 'Langsir'), d: tri('拆下来交给我们', 'Take them down, hand them over', 'Turunkan dan serahkan') }
+];
+const ITEMS = [
+  { id: 'shirt', icon: 'shirt', p: 4.5, n: tri('衬衫', 'Shirt', 'Kemeja') }, { id: 'pants', icon: 'pants', p: 5.5, n: tri('裤子', 'Trousers', 'Seluar') },
+  { id: 'dress', icon: 'dress', p: 8, n: tri('连衣裙', 'Dress', 'Gaun') }, { id: 'suit', icon: 'suit', p: 14, n: tri('西装两件套', 'Two-piece suit', 'Sut dua helai') },
+  { id: 'coat', icon: 'hanger', p: 12, n: tri('大衣', 'Coat', 'Kot') }, { id: 'bed', icon: 'bed', p: 9, n: tri('床单被套一套', 'Bedding set', 'Set cadar') },
+  { id: 'shoe', icon: 'shoe', p: 9, n: tri('运动鞋一双', 'Trainers, one pair', 'Kasut sukan, sepasang') }, { id: 'curtain', icon: 'curtain', p: 7, n: tri('窗帘一片', 'Curtain panel', 'Langsir sehelai') }
+];
+const IT = {}; ITEMS.forEach(i => { IT[i.id] = i; });
+const CARE = { temp: ['30', '40', '60'], det: ['reg', 'soft', 'none'], dry: ['low', 'norm', 'hang'], fold: ['fold', 'hang'] };
+const STAIN = { oil: '#D9940A', drink: '#B5304F', ink: '#3F3BB8', mud: '#7A5230', sweat: '#B9A21A' };
+const ZONES = { shirt: [[150, 54], [112, 100], [188, 100], [150, 150], [150, 222], [50, 100], [250, 100]], pants: [[150, 46], [116, 108], [184, 108], [110, 172], [190, 172], [104, 236], [196, 236]] };
+const SHAPE = { shirt: 'M110 30C125 46 175 46 190 30L238 48 278 100 246 126 224 102V250Q150 262 76 250V102L54 126 22 100 62 48Z', pants: 'M92 24H208L226 256H164L150 98 136 256H74Z' };
+const WINS = [['08', '10'], ['10', '12'], ['12', '14'], ['14', '16'], ['18', '20']];
+const PLANS = [
+  { id: 'lite', kg: 10, p: 25, n: tri('轻量', 'Lite', 'Ringan'), d: tri('一个人，每周一袋', 'One person, a bag a week', 'Seorang, satu beg seminggu') },
+  { id: 'family', kg: 20, p: 46, n: tri('家庭', 'Family', 'Keluarga'), d: tri('两三个人，包括床品', 'Two or three people, bedding included', 'Dua atau tiga orang, termasuk cadar') },
+  { id: 'plus', kg: 35, p: 75, n: tri('大户', 'Plus', 'Plus'), d: tri('一家四五口，随时叫收', 'A household of four or five', 'Isi rumah empat atau lima orang') }
+];
+const PL = {}; PLANS.forEach(p => { PL[p.id] = p; });
+const STG = ['placed', 'coming', 'got', 'weigh', 'wash', 'fold', 'back', 'done'];
+const PAYS = ['card', 'mobile', 'cash'], PAYI = { card: 'card', mobile: 'phone', cash: 'coins' };
+const NOTES = ['door', 'call', 'desk'];
+const FAQ = ['q1', 'q2', 'q3', 'q4'];
+const HOME = [190, 214], SHOP = [336, 30], ROUTE = 'M336 30L314 62C318 100 308 130 310 150H190V214';
+
+/* ---------- pictures ---------- */
+const sv = (inner, cls, vb) => `<svg class="art${cls ? ' ' + cls : ''}" viewBox="${vb || '0 0 120 120'}" aria-hidden="true">${inner}</svg>`;
+/* a wash label's own signs: the tub with dots for heat, the square with a circle for the dryer, the line for hanging */
+const SIGN = {
+  tub: n => `<path d="M3 8l2.200 10.500h13.600L21 8"/><path d="M2 8c2-1.500 3.500 1.500 5.500 0s3.500 1.500 5.500 0 3.500 1.500 5.500 0 2.500.5 3.500 0"/>${[['12'], ['10', '14'], ['8.500', '12', '15.500']][n - 1].map(x => `<circle cx="${x}" cy="13.500" r="1.100" class="f"/>`).join('')}`,
+  low: '<rect x="3.500" y="3.500" width="17" height="17" rx="1"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="1.100" class="f"/>',
+  norm: '<rect x="3.500" y="3.500" width="17" height="17" rx="1"/><circle cx="12" cy="12" r="6"/><circle cx="10" cy="12" r="1.100" class="f"/><circle cx="14" cy="12" r="1.100" class="f"/>',
+  hang: '<rect x="3.500" y="3.500" width="17" height="17" rx="1"/><path d="M12 7v10"/>'
+};
+const sign = (k, cls) => `<svg class="i${cls ? ' ' + cls : ''}" viewBox="0 0 24 24" aria-hidden="true">${k === '30' ? SIGN.tub(1) : k === '40' ? SIGN.tub(2) : k === '60' ? SIGN.tub(3) : SIGN[k]}</svg>`;
+function bagArt(kg, cls) {
+  const s = .62 + Math.min(15, kg) / 15 * .4;
+  return sv(`<ellipse cx="60" cy="110" rx="${30 * s + 6}" ry="5" fill="#0F1B2D" opacity=".1"/><g transform="translate(60 110) scale(${s.toFixed(3)}) translate(-60 -110)">
+<path d="M42 42C24 54 14 76 14 94c0 12 12 16 46 16s46-4 46-16c0-18-10-40-28-52z" fill="#DCE7FF"/><path d="M78 42c18 12 28 34 28 52 0 9-7 13-24 15 8-18 6-46-10-67z" fill="#C5D6FF"/>
+<path d="M44 42c4-8 3-15-2-22h36c-5 7-6 14-2 22z" fill="#EDF2FF"/><path d="M40 42h40" stroke="#1F5EFF" stroke-width="5" stroke-linecap="round"/><path d="M60 42c-10 4-16 10-18 18M60 42c8 5 13 12 14 20" fill="none" stroke="#1F5EFF" stroke-width="3" stroke-linecap="round"/>
+<g transform="rotate(-8 48 80)"><rect x="34" y="68" width="30" height="22" rx="3" fill="#fff"/><path d="M40 75l1.500 8h15l1.500-8M39 75c2.500-1.500 4.500 1.500 7 0s4.500 1.500 7 0 3.500 1 6 0" fill="none" stroke="#1F5EFF" stroke-width="1.600" stroke-linecap="round" stroke-linejoin="round"/></g></g>`, cls);
+}
+const CLOTH = ['#FF8A7A', '#18C3B3', '#FFC84D', '#7C8CFF'];
+function machineArt(cls, spin) {
+  return sv(`<ellipse cx="60" cy="113" rx="40" ry="4.500" fill="#0F1B2D" opacity=".1"/><rect x="20" y="8" width="80" height="104" rx="10" fill="#fff" stroke="#C9D4E3" stroke-width="2"/>
+<path d="M20 30h80" stroke="#C9D4E3" stroke-width="2"/><circle cx="34" cy="19" r="4.500" fill="#1F5EFF"/><rect x="62" y="14" width="28" height="10" rx="3" fill="#0F1B2D"/><path d="M67 19h6M77 19h8" stroke="#18C3B3" stroke-width="2" stroke-linecap="round"/>
+<circle cx="60" cy="70" r="31" fill="#E3ECFF" stroke="#C9D4E3" stroke-width="2"/><clipPath id="mdr"><circle cx="60" cy="70" r="24"/></clipPath><g clip-path="url(#mdr)"><rect x="30" y="40" width="60" height="60" fill="#BFD4FF"/>
+<g class="${spin ? 'spinning' : ''}" style="transform-origin:60px 70px"><path d="M44 62c6-8 16-8 20 0s-4 14-12 12-12-6-8-12z" fill="${CLOTH[0]}"/><path d="M66 72c6-4 14 0 12 8s-12 10-16 4 0-10 4-12z" fill="${CLOTH[1]}"/><path d="M48 80c4-4 10-2 10 4s-8 8-12 4 0-6 2-8z" fill="${CLOTH[2]}"/><path d="M62 52c4-2 10 0 10 5s-6 7-10 4-3-7 0-9z" fill="${CLOTH[3]}"/></g>
+<path class="wave" d="M20 80c7-5 13 5 20 0s13 5 20 0 13 5 20 0 13 5 20 0v24H20z" fill="#1F5EFF" opacity=".35"/></g><circle cx="60" cy="70" r="24" fill="none" stroke="#fff" stroke-width="3" opacity=".9"/><path d="M44 58c4-6 10-9 16-9" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/>`, cls);
+}
+function stackArt(cls) {
+  const lay = (y, c, d) => `<path d="M24 ${y}h72a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H24a5 5 0 0 1-5-5v-8a5 5 0 0 1 5-5z" fill="${c}"/><path d="M26 ${y + 9}h46" stroke="${d}" stroke-width="2.400" stroke-linecap="round"/>`;
+  return sv(`<ellipse cx="60" cy="108" rx="44" ry="5" fill="#0F1B2D" opacity=".1"/>${lay(84, '#7C8CFF', '#5C6BE0')}${lay(64, '#FFC84D', '#E5A91F')}${lay(44, '#18C3B3', '#0E9C8F')}${lay(24, '#FF8A7A', '#E56A5A')}
+<g transform="rotate(8 86 30)"><rect x="76" y="14" width="22" height="16" rx="2.500" fill="#fff" stroke="#C9D4E3"/><path d="M81 19l1 6h10l1-6M80 19c2-1 3 1 5 0s3 1 5 0 3 1 5 0" fill="none" stroke="#1F5EFF" stroke-width="1.400" stroke-linecap="round" stroke-linejoin="round"/></g>`, cls);
+}
+function scaleArt(kg, cls) {
+  return sv(`<ellipse cx="60" cy="110" rx="42" ry="5" fill="#0F1B2D" opacity=".1"/><g transform="translate(22 -6) scale(.64)">${bagArt(9).replace(/<\/?svg[^>]*>/g, '')}</g>
+<rect x="18" y="74" width="84" height="12" rx="6" fill="#C9D4E3"/><rect x="26" y="84" width="68" height="24" rx="8" fill="#0F1B2D"/><text x="60" y="101.500" text-anchor="middle" fill="#18C3B3" font-size="13" font-weight="600" font-family="inherit">${kg.toFixed(1)} kg</text>`, cls);
+}
+function doorArt(cls) {
+  return sv(`<rect x="34" y="10" width="52" height="96" rx="4" fill="#fff" stroke="#C9D4E3" stroke-width="2"/><rect x="42" y="20" width="36" height="30" rx="3" fill="#E3ECFF"/><circle cx="76" cy="62" r="3" fill="#0F1B2D"/><path d="M22 106h76" stroke="#C9D4E3" stroke-width="3" stroke-linecap="round"/>
+<g transform="translate(12 46) scale(.56)">${bagArt(7).replace(/<\/?svg[^>]*>/g, '')}</g><circle cx="92" cy="26" r="13" fill="#12805C"/><path d="M86 26l4.500 4.500L98.500 22" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`, cls);
+}
+/* the garment a stain is marked on: tap a spot, it gets a numbered dot in the colour of what was spilled */
+function garment(kind, marks, open) {
+  return `<svg class="garm" viewBox="0 0 300 280" role="img" aria-label="${esc(T('g.' + kind))}"><path d="${SHAPE[kind]}" fill="#fff" stroke="#9FB2CC" stroke-width="2.500" stroke-linejoin="round"/>
+${kind === 'shirt' ? '<path d="M110 30c12 22 68 22 80 0M150 46v208" fill="none" stroke="#C9D4E3" stroke-width="2" stroke-dasharray="1 7" stroke-linecap="round"/><path d="M168 96h30v26h-30z" fill="none" stroke="#C9D4E3" stroke-width="2"/>' : '<path d="M92 44h116M150 44v54" fill="none" stroke="#C9D4E3" stroke-width="2" stroke-dasharray="1 7" stroke-linecap="round"/><path d="M104 44c0 14 6 22 20 24M196 44c0 14-6 22-20 24" fill="none" stroke="#C9D4E3" stroke-width="2"/>'}
+${open ? ZONES[kind].map((z, i) => marks.some(m => m.z === i) ? '' : `<g class="zone" data-a="stain:${i}" role="button" aria-label="${esc(T('st.add'))} ${i + 1}"><circle cx="${z[0]}" cy="${z[1]}" r="22" fill="transparent"/><circle cx="${z[0]}" cy="${z[1]}" r="9" fill="none" stroke="#1F5EFF" stroke-width="2" stroke-dasharray="3 4"/><path d="M${z[0] - 4} ${z[1]}h8M${z[0]} ${z[1] - 4}v8" stroke="#1F5EFF" stroke-width="2" stroke-linecap="round"/></g>`).join('') : ''}
+${marks.map((m, i) => { const z = ZONES[kind][m.z]; return `<g class="mark"><circle cx="${z[0]}" cy="${z[1]}" r="17" fill="${STAIN[m.t]}" opacity=".22"/><circle cx="${z[0]}" cy="${z[1]}" r="11" fill="${STAIN[m.t]}"/><text x="${z[0]}" y="${z[1] + 4.500}" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">${i + 1}</text></g>`; }).join('')}</svg>`;
+}
+/* the rider on the map, from the laundry to the door */
+function routeMap(moving) {
+  const rider = `<g class="rider"${moving ? '' : ` transform="translate(${HOME[0]} ${HOME[1] - 40})"`}><circle r="13" fill="#1F5EFF" stroke="#fff" stroke-width="3"/><g transform="translate(-7.200 -7.200) scale(.6)" fill="none" stroke="#fff" stroke-width="2.600" stroke-linecap="round" stroke-linejoin="round">${ICON.bike}</g>${moving ? `<animateMotion dur="${K.fast ? 1.5 : 13}s" fill="freeze" path="${ROUTE}" calcMode="linear"/>` : ''}</g>`;
+  return cityMap({ vb: '110 0 290 240', land: '#EEF3FA', road: '#FFFFFF', edge: '#D7E0EC', park: '#D5EFDF', tree: '#B9E3C8', water: '#CFE3FB', block: '#E2E9F3', extra:
+    `<path d="${ROUTE}" fill="none" stroke="#1F5EFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1 9" opacity=".7"/>
+<g transform="translate(${SHOP[0]} ${SHOP[1]})"><rect x="-13" y="-13" width="26" height="26" rx="8" fill="#0F1B2D"/><g transform="translate(-8.400 -8.400) scale(.7)" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICON.wash}</g></g>
+<g transform="translate(${HOME[0]} ${HOME[1]})"><path d="M0 0c-9-11-14-17-14-24a14 14 0 0 1 28 0c0 7-5 13-14 24z" fill="#18C3B3" stroke="#fff" stroke-width="2"/><g transform="translate(-7.200 -31) scale(.6)" fill="none" stroke="#fff" stroke-width="2.400" stroke-linecap="round" stroke-linejoin="round">${ICON.house}</g></g>${moving ? rider : ''}` });
+}
+/* how much of a monthly plan is used */
+const ring = (f, cls) => `<svg class="ringp${cls ? ' ' + cls : ''}" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="33" fill="none" stroke="var(--tint)" stroke-width="9"/><circle cx="40" cy="40" r="33" fill="none" stroke="var(--brand)" stroke-width="9" stroke-linecap="round" pathLength="100" stroke-dasharray="${Math.round(clamp(f, 0, 1) * 100)} 100" transform="rotate(-90 40 40)"/></svg>`;
+
+/* ---------- state ---------- */
+let S, O = null;   /* O: the order being written */
+const ord = id => S.orders.find(o => o.id === id);
+const pieces = o => Object.values(o.items).reduce((s, n) => s + n, 0);
+const price = o => o.mode === 'kg' ? (o.weight || o.kg) * KG : Object.keys(o.items).reduce((s, k) => s + IT[k].p * o.items[k], 0);
+const planLeft = () => Math.max(0, PL[S.plan].kg - S.used);
+const bill = o => { const base = price(o), cover = o.mode === 'kg' ? Math.min(o.weight || o.kg, o.cov != null ? o.cov : planLeft()) * KG : 0, ex = o.speed === 'express' ? EXPRESS : 0; return { base, cover, ex, total: Math.max(0, base - cover) + ex }; };
+const what = o => o.mode === 'kg' ? T('o.kg', { n: (o.weight || o.kg).toFixed(o.weight ? 1 : 0) }) : Object.keys(o.items).filter(k => o.items[k]).map(k => L(IT[k].n) + ' × ' + o.items[k]).join(SEP());
+const win = w => WINS[w][0] + ':00 – ' + WINS[w][1] + ':00';
+const dayT = n => n === 0 ? T('today') : n === 1 ? T('tmr') : dayS(plus(n));
+const backDay = o => o.day + (o.speed === 'express' ? 1 : 2);
+const actives = () => S.orders.filter(o => o.stage < 7), dones = () => S.orders.filter(o => o.stage === 7);
+const nmarks = o => o.stains.shirt.length + o.stains.pants.length;
+const nextWin = () => { const h = new Date().getHours(), i = WINS.findIndex(w => +w[0] > h); return i < 0 ? { day: 1, win: 0 } : { day: 0, win: i }; };
+const newO = o => Object.assign({ step: 1, mode: 'kg', kg: 6, items: { shirt: 3, pants: 1 }, care: Object.assign({}, S.care), gk: 'shirt', st: 'oil', stains: { shirt: [], pants: [] }, speed: 'std', note: 'door' }, nextWin(), o || {});
+K.init = () => {
+  const n = new Date(), t = m => new Date(n - m * 6e4);
+  S = { name: 'Sam', plan: 'family', used: 12.4, pay: 'card', addr: 'home', care: { temp: '40', det: 'soft', soft: true, dry: 'low', fold: 'fold' }, unread: 1, seq: 0, renew: plus(11),
+    addrs: [{ id: 'home', n: tri('家', 'Home', 'Rumah'), a: tri('湖景公寓 B 座 16-08', 'Lakeview Residences, Tower B, 16-08', 'Lakeview Residences, Blok B, 16-08') }, { id: 'work', n: tri('公司', 'Office', 'Pejabat'), a: tri('北岸大厦 7 楼', 'Northbank Tower, Level 7', 'Northbank Tower, Aras 7') }],
+    orders: [
+      { id: 'FF-58213', mode: 'kg', kg: 6, weight: 6.4, ok: 1, cov: 6.4, items: {}, care: { temp: '40', det: 'soft', soft: true, dry: 'low', fold: 'fold' }, stains: { shirt: [{ z: 1, t: 'oil' }], pants: [] }, day: 0, win: 1, speed: 'std', note: 'door', stage: 4, ts: { 0: t(190), 2: t(150), 3: t(120), 4: t(22) }, mins: 18 },
+      { id: 'FF-57960', mode: 'pc', kg: 0, items: { shirt: 3, suit: 1 }, care: { temp: '30', det: 'reg', soft: false, dry: 'hang', fold: 'hang' }, stains: { shirt: [], pants: [] }, day: -6, win: 2, speed: 'express', note: 'desk', stage: 7, ts: { 0: ago(6, 12, 20), 7: ago(5, 17, 40) }, stars: 5 },
+      { id: 'FF-57702', mode: 'kg', kg: 8, weight: 8.2, ok: 1, cov: 8.2, items: {}, care: { temp: '40', det: 'soft', soft: true, dry: 'low', fold: 'fold' }, stains: { shirt: [], pants: [] }, day: -15, win: 0, speed: 'std', note: 'door', stage: 7, ts: { 0: ago(15, 8, 5), 7: ago(13, 18, 10) }, stars: 0 }],
+    inbox: [{ k: 'wash', n: 1, t: t(22) }, { k: 'plan', t: ago(3, 9, 0) }, { k: 'done', t: ago(5, 17, 40) }]
+  };
+  O = null;
+};
+
+/* ---------- small parts ---------- */
+const careLine = c => `<span class="carel">${sign(c.temp, 's')}${c.temp}°${sign(c.dry, 's')}${esc(T('dry.' + c.dry))}<i>·</i>${esc(T('det.' + c.det))}<i>·</i>${esc(T('fold.' + c.fold))}</span>`;
+const stageT = o => T('sg.' + STG[o.stage] + (o.stage === 3 && o.mode === 'pc' ? '.pc' : ''));
+const pct = o => [6, 20, 34, 46, 62, 78, 90, 100][o.stage];
+const ocard = o => `<button type="button" class="ocard tagc${o.stage < 7 ? ' live' : ''}" data-a="go:track:${o.id}"><div class="oh"><span><b>${esc(o.id)}</b><small>${esc(what(o))}</small></span><i class="chip${o.stage < 7 ? ' on' : ''}">${esc(stageT(o))}</i></div>
+${o.stage < 7 ? `<div class="obar"><i style="width:${pct(o)}%"></i></div>` : ''}<div class="of"><small>${esc(o.stage < 7 ? T('sp.by', { d: dayT(backDay(o)) }) : dayS(o.ts[7]))}</small><b class="pr">${money(bill(o).total)}</b></div></button>`;
+
+/* ---------- home ---------- */
+K.def('home', { icon: 'home', label: 'tab.home',
+  render() {
+    const a = S.addrs.find(x => x.id === S.addr), h = new Date().getHours(), nw = nextWin(), lv = actives()[0], p = PL[S.plan];
+    return `<div class="body"><div class="hd sat"><div class="hdrow"><button type="button" class="apill" data-a="addrsheet">${I('pin', 'm')}<span><small>${esc(T('home.to'))}</small><b>${esc(L(a.n))} · ${esc(L(a.a))}</b></span>${I('down', 's')}</button>
+<button type="button" class="ib" data-a="go:inbox" aria-label="${esc(T('inbox.t'))}">${I('bell')}${S.unread ? '<i class="pip"></i>' : ''}</button></div><h1>${esc(T(h < 11 ? 'hi.am' : h < 18 ? 'hi.pm' : 'hi.eve', { n: S.name }))}</h1></div>
+<div class="cta"><span><b>${esc(T('cta.t'))}</b><small>${esc(T('cta.s', { d: dayT(nw.day), w: win(nw.win) }))}</small><button type="button" class="btn inv" data-a="start:kg">${esc(T('cta.go'))}</button></span>${bagArt(8)}</div>
+${lv ? `<section class="sec"><div class="sech"><h2>${esc(T('home.live'))}</h2></div>${ocard(lv)}</section>` : ''}
+<section class="sec"><div class="sech"><h2>${esc(T('home.serv'))}</h2><button type="button" class="lk" data-a="go:prices">${esc(T('prices.t'))} ${I('right', 's')}</button></div>
+<div class="sgrid">${SERV.map(s => `<button type="button" data-a="start:${s.mode}">${I(s.icon)}<b>${esc(L(s.n))}</b><small>${esc(L(s.d))}</small></button>`).join('')}</div></section>
+<section class="sec"><button type="button" class="planc" data-tab="plans">${ring(S.used / p.kg)}<span><small>${esc(T('plan.name', { n: L(p.n) }))}</small><b>${esc(T('plan.left', { n: planLeft().toFixed(1) }))}</b><em>${esc(T('plan.used', { a: S.used.toFixed(1), b: p.kg }))}</em></span>${I('right', 's')}</button></section>
+<section class="sec"><div class="sech"><h2>${esc(T('how.t'))}</h2></div><ol class="how">${[['bike', 'how.1'], ['wash', 'how.2'], ['door', 'how.3']].map((s, i) => `<li><i>${I(s[0])}</i><b>${esc(T(s[1]))}</b><small>${esc(T(s[1] + 's'))}</small></li>`).join('')}</ol></section></div>`;
+  }
+});
+K.on('go', ([n, a]) => K.go(n, a ? { id: a } : {}));
+K.on('start', ([m]) => { O = newO({ mode: m }); K.go('flow'); });
+K.on('demo', ([k]) => K.toast(T('demo.' + k)));
+K.on('addrsheet', () => K.sheet(() => `<div class="sbody"><h2 class="sh">${esc(T('addr.t'))}</h2><div class="amap">${routeMap(false)}</div><div class="plist">${S.addrs.map(a => `<button type="button" class="row" data-a="setaddr:${a.id}" aria-pressed="${S.addr === a.id}">${I(a.id === 'home' ? 'house' : 'store')}<span><b>${esc(L(a.n))}</b><small>${esc(L(a.a))}</small></span><i class="radio"></i></button>`).join('')}</div><button type="button" class="btn ghost wide" data-a="demo:addr">${I('plus', 's')} ${esc(T('addr.add'))}</button></div>`));
+K.on('setaddr', ([id]) => { S.addr = id; K.closeSheet(); K.draw(); });
+
+/* ---------- the Order tab: where an order starts ---------- */
+K.def('new', { icon: 'plus', label: 'tab.new',
+  render() { const last = dones()[0];
+    return `<header class="pt sat"><h1>${esc(T('new.t'))}</h1></header><div class="body"><div class="sec first mcards">
+<button type="button" class="mcard" data-a="start:kg">${bagArt(9)}<span><b>${esc(T('m.kg'))}</b><small>${esc(T('m.kg.s'))}</small><em><b class="pr">${money(KG)}</b> / kg · ${esc(T('m.kg.min', { n: MINKG }))}</em></span>${I('right', 's')}</button>
+<button type="button" class="mcard" data-a="start:pc">${stackArt()}<span><b>${esc(T('m.pc'))}</b><small>${esc(T('m.pc.s'))}</small><em>${esc(T('from', { v: money(4.5) }))}</em></span>${I('right', 's')}</button></div>
+${last ? `<section class="sec"><div class="sech"><h2>${esc(T('new.again'))}</h2></div><div class="card"><div class="row">${I('refresh')}<span><b>${esc(what(last))}</b><small>${esc(dayS(last.ts[7]))} · ${money(bill(last).total)}</small></span><button type="button" class="btn sm" data-a="again:${last.id}">${esc(T('again'))}</button></div></div></section>` : ''}
+<section class="sec"><div class="card"><button type="button" class="row" data-a="go:prices">${I('tag')}<span><b>${esc(T('prices.t'))}</b><small>${esc(T('prices.s'))}</small></span>${I('right', 's')}</button><button type="button" class="row" data-a="caresheet">${I('tune')}<span><b>${esc(T('care.mine'))}</b><small>${careLine(S.care)}</small></span>${I('right', 's')}</button></div></section></div>`; }
+});
+K.on('again', ([id]) => { const o = ord(id); O = newO({ mode: o.mode, kg: o.kg || 6, items: Object.assign({}, o.items), care: Object.assign({}, o.care), speed: o.speed, step: 3 }); K.go('flow'); });
+
+/* ---------- writing an order, four steps ---------- */
+const copt = (grp, cur, act) => `<fieldset class="cg"><legend>${esc(T('care.' + grp))}</legend><div class="copts">${CARE[grp].map(v => `<button type="button" data-a="${act}:${grp}:${v}" aria-pressed="${cur[grp] === v}">${grp === 'temp' || grp === 'dry' ? sign(v) : ''}<span>${grp === 'temp' ? v + '° ' : ''}${esc(T(grp + '.' + v))}</span></button>`).join('')}</div></fieldset>`;
+const careForm = (c, act) => copt('temp', c, act) + copt('det', c, act) + `<div class="card softr"><div class="row">${I('drop')}<span><b>${esc(T('care.soft'))}</b><small>${esc(T('care.softs'))}</small></span>${sw(c.soft, act + ':soft:x', T('care.soft'))}</div></div>` + copt('dry', c, act) + copt('fold', c, act);
+const fOK = () => O.step === 1 ? (O.mode === 'kg' ? O.kg >= MINKG : pieces(O) > 0) : true;
+const fstep = {
+  1: () => `<h2 class="fq">${esc(T('f1.q'))}</h2><div class="seg">${['kg', 'pc'].map(m => `<button type="button" data-a="fmode:${m}" aria-pressed="${O.mode === m}">${esc(T('m.' + m))}</button>`).join('')}</div>
+${O.mode === 'kg' ? `<div class="kgbox">${bagArt(O.kg, 'bag')}<div class="qty big"><button type="button" data-a="fkg:-1" aria-label="${esc(T('less'))}"${O.kg <= MINKG ? ' disabled' : ''}>${I('minus')}</button><b>${O.kg}<small>kg</small></b><button type="button" data-a="fkg:1" aria-label="${esc(T('more'))}"${O.kg >= 15 ? ' disabled' : ''}>${I('plus')}</button></div>
+<p>${esc(T('kg.about', { n: O.kg * 5 }))}</p></div><p class="hint">${esc(T('kg.hint'))}</p>`
+    : `<div class="card itl">${ITEMS.map(it => { const n = O.items[it.id] || 0; return `<div class="row">${I(it.icon)}<span><b>${esc(L(it.n))}</b><small class="pr">${money(it.p)}</small></span><div class="qty sm"><button type="button" data-a="fit:${it.id}:-1" aria-label="${esc(T('less'))}"${n ? '' : ' disabled'}>${I('minus', 's')}</button><b>${n}</b><button type="button" data-a="fit:${it.id}:1" aria-label="${esc(T('more'))}">${I('plus', 's')}</button></div></div>`; }).join('')}</div>`}`,
+  2: () => { const ms = O.stains[O.gk];
+    return `<h2 class="fq">${esc(T('f2.q'))}</h2>${careForm(O.care, 'fcare')}
+<h3 class="fh">${esc(T('st.t'))}<small>${esc(T('st.s'))}</small></h3><div class="stn"><div class="seg">${['shirt', 'pants'].map(k => `<button type="button" data-a="fgk:${k}" aria-pressed="${O.gk === k}">${esc(T('g.' + k))}${O.stains[k].length ? ' · ' + O.stains[k].length : ''}</button>`).join('')}</div>
+<div class="stypes">${Object.keys(STAIN).map(k => `<button type="button" data-a="fst:${k}" aria-pressed="${O.st === k}"><i style="background:${STAIN[k]}"></i>${esc(T('stain.' + k))}</button>`).join('')}</div>
+<div class="gwrap">${garment(O.gk, ms, true)}</div>
+${ms.length ? `<ul class="marks">${ms.map((m, i) => `<li><i style="background:${STAIN[m.t]}">${i + 1}</i><span>${esc(T('stain.' + m.t))} · ${esc(T('zone.' + O.gk + '.' + m.z))}</span><button type="button" class="ib" data-a="unstain:${i}" aria-label="${esc(T('st.del'))}">${I('x', 'm')}</button></li>`).join('')}</ul>` : `<p class="hint">${esc(T('st.none'))}</p>`}</div>`; },
+  3: () => { const a = S.addrs.find(x => x.id === S.addr);
+    return `<h2 class="fq">${esc(T('f3.q'))}</h2><div class="hs days" data-keep="days">${Array.from({ length: 7 }, (_, i) => { const d = plus(i); return `<button type="button" class="dayb" data-a="fday:${i}" aria-pressed="${O.day === i}"><small>${esc(i === 0 ? T('today') : dstr(d, { weekday: 'short' }))}</small><b>${d.getDate()}</b></button>`; }).join('')}</div>
+<div class="wins">${WINS.map((w, i) => `<button type="button" data-a="fwin:${i}" aria-pressed="${O.win === i}"${O.day === 0 && +w[0] <= new Date().getHours() ? ' disabled' : ''}>${win(i)}</button>`).join('')}</div>
+<h3 class="fh">${esc(T('f3.back'))}</h3><div class="spd">${[['std', 2, 0], ['express', 1, EXPRESS]].map(s => `<button type="button" data-a="fspeed:${s[0]}" aria-pressed="${O.speed === s[0]}"><span><b>${esc(T('sp.' + s[0]))}</b><small>${esc(T('sp.by', { d: dayT(O.day + s[1]) }))}</small></span><em class="pr">${s[2] ? '+' + money(s[2]) : esc(T('free'))}</em><i class="radio"></i></button>`).join('')}</div>
+<h3 class="fh">${esc(T('f3.where'))}</h3><div class="card"><button type="button" class="row" data-a="addrsheet">${I('pin')}<span><b>${esc(L(a.n))}</b><small>${esc(L(a.a))}</small></span>${I('right', 's')}</button></div>
+<div class="chips notes">${NOTES.map(k => `<button type="button" data-a="fnote:${k}" aria-pressed="${O.note === k}">${esc(T('note.' + k))}</button>`).join('')}</div>`; },
+  4: () => { const b = bill(O), a = S.addrs.find(x => x.id === S.addr);
+    return `<h2 class="fq">${esc(T('f4.q'))}</h2><div class="tagc sumc"><div class="sumh">${O.mode === 'kg' ? bagArt(O.kg) : stackArt()}<span><b>${esc(O.mode === 'kg' ? T('m.kg') : T('m.pc'))}</b><small>${esc(what(O))}</small></span></div>
+<dl><div><dt>${esc(T('r.pick'))}</dt><dd>${esc(dayT(O.day))} ${win(O.win)}</dd></div><div><dt>${esc(T('r.back'))}</dt><dd>${esc(dayT(backDay(O)))} · ${esc(T('sp.' + O.speed))}</dd></div><div><dt>${esc(T('r.addr'))}</dt><dd>${esc(L(a.n))} · ${esc(T('note.' + O.note))}</dd></div>
+<div><dt>${esc(T('r.care'))}</dt><dd>${careLine(O.care)}</dd></div>${nmarks(O) ? `<div><dt>${esc(T('st.t'))}</dt><dd>${esc(T('st.n', { n: nmarks(O) }))}</dd></div>` : ''}</dl></div>
+<div class="sum card padc"><p><span>${esc(O.mode === 'kg' ? T('sum.kg', { n: O.kg, p: money(KG) }) : T('sum.pc', { n: pieces(O) }))}</span><b>${money(b.base)}</b></p>${b.cover ? `<p class="off"><span>${esc(T('sum.plan', { n: L(PL[S.plan].n) }))}</span><b>−${money(b.cover)}</b></p>` : ''}${b.ex ? `<p><span>${esc(T('sp.express'))}</span><b>${money(b.ex)}</b></p>` : ''}
+<p><span>${esc(T('sum.ride'))}</span><b>${esc(T('free'))}</b></p><p class="tot"><span>${esc(T('sum.total'))}${O.mode === 'kg' ? `<small>${esc(T('sum.est'))}</small>` : ''}</span><b>${money(b.total)}</b></p></div>
+<div class="card"><button type="button" class="row" data-a="paysheet">${I(PAYI[S.pay])}<span><b>${esc(T('pay.t'))}</b></span><em>${esc(T('pay.' + S.pay))}</em>${I('right', 's')}</button></div><p class="hint">${esc(T(O.mode === 'kg' ? 'f4.hint' : 'f4.hintpc'))}</p>`; }
+};
+K.def('flow', {
+  render() { const st = O.step, b = bill(O);
+    return `<header class="bar sat"><div><button type="button" class="ib" data-a="fback" aria-label="${esc(T('k.back'))}">${I(st === 1 ? 'x' : 'left')}</button><h1>${esc(T('flow.s' + st))}</h1><i class="ib num">${st}/4</i></div><div class="fprog">${[1, 2, 3, 4].map(i => `<i class="${i <= st ? 'on' : ''}"></i>`).join('')}</div></header>
+<div class="body fbody">${fstep[st]()}</div>
+<footer class="foot pfoot"><div><small>${esc(T(O.mode === 'kg' ? 'sum.est1' : 'sum.total'))}</small><b>${money(b.total)}</b></div><button type="button" class="btn" data-a="fnext"${fOK() ? '' : ' disabled'}>${esc(st === 4 ? T('f4.go') : T('next'))}</button></footer>`; }
+});
+const fset = (k, v) => { O[k] = v; K.draw(); };
+K.on('fmode', ([m]) => fset('mode', m)); K.on('fkg', ([n]) => fset('kg', clamp(O.kg + +n, MINKG, 15)));
+K.on('fit', ([id, n]) => { O.items[id] = clamp((O.items[id] || 0) + +n, 0, 20); K.draw(); });
+K.on('fcare', ([g, v]) => { if (g === 'soft') O.care.soft = !O.care.soft; else O.care[g] = v; K.draw(); });
+K.on('fgk', ([k]) => fset('gk', k)); K.on('fst', ([k]) => fset('st', k));
+K.on('stain', ([z]) => { O.stains[O.gk].push({ z: +z, t: O.st }); K.draw(); });
+K.on('unstain', ([i]) => { O.stains[O.gk].splice(+i, 1); K.draw(); });
+K.on('fday', ([i]) => { O.day = +i; if (O.day === 0 && +WINS[O.win][0] <= new Date().getHours()) O.win = nextWin().day ? WINS.length - 1 : nextWin().win; K.draw(); });
+K.on('fwin', ([i]) => fset('win', +i)); K.on('fspeed', ([s]) => fset('speed', s)); K.on('fnote', ([k]) => fset('note', k));
+K.on('fback', () => { if (O.step === 1) return K.back(); O.step--; K.draw(); $('.fbody', K.topEl()).scrollTop = 0; });
+K.on('fnext', () => {
+  if (!fOK()) return;
+  if (O.step < 4) { O.step++; K.draw(); $('.fbody', K.topEl()).scrollTop = 0; return; }
+  K.sheet(`<div class="sbody paying"><i class="spin"></i><h2>${esc(T('pay.ing'))}</h2><p>${money(bill(O).total)} · ${esc(T('pay.' + S.pay))}</p></div>`);
+  K.after(1400, () => { const o = Object.assign(O, { id: 'FF-' + (58240 + S.seq++ * 7), stage: 0, ts: { 0: new Date() }, cov: O.mode === 'kg' ? Math.min(O.kg, planLeft()) : 0, mins: 24 }); delete o.step; S.orders.unshift(o); O = null; K.closeSheet(true); K.tab('orders', true); K.go('track', { id: o.id }); });
+});
+K.on('paysheet', () => K.sheet(() => `<div class="sbody"><h2 class="sh">${esc(T('pay.t'))}</h2><div class="plist">${PAYS.map(p => `<button type="button" class="row" data-a="setpay:${p}" aria-pressed="${S.pay === p}">${I(PAYI[p])}<span><b>${esc(T('pay.' + p))}</b><small>${esc(T('pay.' + p + '.s'))}</small></span><i class="radio"></i></button>`).join('')}</div></div>`));
+K.on('setpay', ([p]) => { S.pay = p; K.closeSheet(); K.draw(); });
+K.on('caresheet', () => K.sheet(() => `<div class="sbody"><h2 class="sh">${esc(T('care.mine'))}</h2>${careForm(S.care, 'mycare')}<p class="hint">${esc(T('care.hint'))}</p></div>`));
+K.on('mycare', ([g, v]) => { if (g === 'soft') S.care.soft = !S.care.soft; else S.care[g] = v; K.draw(); });
+
+/* ---------- an order on its way: collected, weighed, washed, folded, brought back ---------- */
+function adv(o) {
+  o.stage++; o.ts[o.stage] = new Date();
+  if (o.stage === 3) { if (o.mode === 'kg') o.weight = o.weight || o.kg + .4; else o.ok = 1; }
+  if (o.stage === 7) { if (o.mode === 'kg') S.used = Math.min(PL[S.plan].kg, S.used + Math.min(o.weight, o.cov || 0)); K.note(T('note.t'), T('note.b', { id: o.id }), 'door', 'go:track:' + o.id); }
+  K.draw();
+}
+function run(o) { if (o.run || o.stage >= 7 || (o.stage === 3 && !o.ok)) return; o.run = 1; K.after(4600, () => { o.run = 0; adv(o); run(o); }); }
+const stageTop = o => {
+  const s = o.stage;
+  if (s === 1 || s === 6) return `<div class="tmap">${routeMap(!K.calm)}</div>`;
+  return `<div class="tart s${s}">${s === 0 ? bagArt(o.kg || 7) : s === 2 ? bagArt(o.kg || 7) : s === 3 ? (o.mode === 'kg' ? scaleArt(o.weight) : stackArt()) : s === 4 ? machineArt('', !K.calm) : s === 5 ? stackArt() : doorArt()}</div>`;
+};
+K.def('track', {
+  render(q) {
+    const o = ord(q.id), b = bill(o), s = o.stage, rows = [['placed', 0], ['got', 2], ['weigh', 3], ['wash', 4], ['fold', 5], ['done', 7]];
+    const isDone = r => s > r[1] || (s === r[1] && (r[1] !== 3 || o.ok)); const nowI = rows.findIndex(r => !isDone(r));
+    const diff = o.mode === 'kg' && o.weight ? (o.weight - o.kg) : 0;
+    return `<header class="bar sat"><div><button type="button" class="ib" data-back aria-label="${esc(T('k.back'))}">${I('left')}</button><h1>${esc(o.id)}</h1><button type="button" class="ib" data-a="go:help" aria-label="${esc(T('me.help'))}">${I('help')}</button></div></header>
+<div class="body trk">${stageTop(o)}<div class="thead"><h2>${esc(T('sg.' + STG[s] + '.l' + (s === 3 && o.mode === 'pc' ? 'pc' : '')))}</h2><p>${esc(s === 4 ? T('eta.wash', { m: o.mins }) : s === 7 ? T('eta.done', { t: hm(o.ts[7]) }) : s === 3 && !o.ok ? T('eta.weigh') : T('sp.by', { d: dayT(backDay(o)) }))}</p></div>
+${s === 3 && !o.ok ? `<div class="weigh card"><dl><div><dt>${esc(T('w.est'))}</dt><dd>${o.kg.toFixed(1)} kg</dd></div><div><dt>${esc(T('w.real'))}</dt><dd><b>${o.weight.toFixed(1)} kg</b></dd></div><div><dt>${esc(T(diff >= 0 ? 'w.more' : 'w.less'))}</dt><dd>${money(Math.abs(diff) * KG)}</dd></div></dl><button type="button" class="btn wide" data-a="wok:${o.id}">${esc(T('w.ok'))}</button><p class="hint">${esc(T('w.hint'))}</p></div>` : ''}
+${s === 1 || s === 6 ? `<div class="rider card"><i class="rav">${I('bike')}</i><span><b>Marco</b><small>${esc(T(s === 1 ? 'rider.in' : 'rider.out'))} · R-2187</small></span><button type="button" class="ib soft" data-a="demo:call" aria-label="${esc(T('call'))}">${I('phone', 'm')}</button><button type="button" class="ib soft" data-a="demo:chat" aria-label="${esc(T('chat'))}">${I('chat', 'm')}</button></div>` : ''}
+${s === 7 ? `<div class="card rate"><h3>${esc(o.stars ? T('rate.thanks') : T('rate.q'))}</h3><div class="stars">${[1, 2, 3, 4, 5].map(i => `<button type="button" data-a="rate:${o.id}:${i}" aria-label="${i}" aria-pressed="${i <= (o.stars || 0)}">${I(i <= (o.stars || 0) ? 'starf' : 'star', 'l')}</button>`).join('')}</div></div>` : ''}
+<ol class="steps">${rows.map((r, i) => `<li class="${isDone(r) ? 'done' : i === nowI ? 'now' : ''}"><i>${isDone(r) ? I('check', 's') : ''}</i><b>${esc(T('row.' + r[0]))}</b><small>${o.ts[r[1]] && isDone(r) ? hm(o.ts[r[1]]) : ''}</small></li>`).join('')}</ol>
+<div class="tagc sumc"><div class="sumh">${o.mode === 'kg' ? bagArt(o.kg) : stackArt()}<span><b>${esc(o.mode === 'kg' ? T('m.kg') : T('m.pc'))}</b><small>${esc(what(o))}</small></span><b class="pr">${money(b.total)}</b></div>
+<dl><div><dt>${esc(T('r.pick'))}</dt><dd>${esc(dayT(o.day))} ${win(o.win)}</dd></div><div><dt>${esc(T('r.care'))}</dt><dd>${careLine(o.care)}</dd></div>${nmarks(o) ? `<div><dt>${esc(T('st.t'))}</dt><dd>${esc(T('st.n', { n: nmarks(o) }))}</dd></div>` : ''}${b.cover ? `<div><dt>${esc(T('sum.plan', { n: L(PL[S.plan].n) }))}</dt><dd>−${money(b.cover)}</dd></div>` : ''}</dl></div>
+${s === 7 ? `<button type="button" class="btn ghost wide" data-a="again:${o.id}">${I('refresh', 's')} ${esc(T('again'))}</button>` : ''}</div>`;
+  },
+  show(el, q) { run(ord(q.id)); }
+});
+K.on('wok', ([id]) => { const o = ord(id); o.ok = 1; K.draw(); K.toast(T('w.done')); run(o); });
+K.on('rate', ([id, n]) => { ord(id).stars = +n; K.draw(); K.toast(T('rate.toast')); });
+
+/* ---------- orders ---------- */
+K.def('orders', { icon: 'receipt', label: 'tab.orders', badge: () => actives().length,
+  render() { const a = actives(), d = dones();
+    return `<header class="pt sat"><h1>${esc(T('tab.orders'))}</h1></header><div class="body">${a.length ? `<section class="sec first"><h2 class="sl">${esc(T('ord.live'))}</h2>${a.map(ocard).join('')}</section>` : ''}
+<section class="sec${a.length ? '' : ' first'}"><h2 class="sl">${esc(T('ord.past'))}</h2>${d.map(ocard).join('')}</section></div>`; }
+});
+
+/* ---------- monthly plans ---------- */
+K.def('plans', { icon: 'crown', label: 'tab.plans',
+  render() { const p = PL[S.plan];
+    return `<header class="pt sat"><h1>${esc(T('plans.t'))}</h1></header><div class="body"><div class="sec first"><div class="mine">${ring(S.used / p.kg, 'big')}<span><small>${esc(T('plan.name', { n: L(p.n) }))}</small><b>${S.used.toFixed(1)}<em> / ${p.kg} kg</em></b><i>${esc(T('plan.renew', { d: dstr(S.renew, { month: 'long', day: 'numeric' }) }))}</i></span></div></div>
+<section class="sec"><div class="sech"><h2>${esc(T('plans.all'))}</h2><small>${esc(T('plans.vs', { p: money(KG) }))}</small></div>${PLANS.map(x => `<button type="button" class="pcard${x.id === S.plan ? ' on' : ''}" data-a="plan:${x.id}"><span><b>${esc(L(x.n))}${x.id === S.plan ? `<i class="chip on">${esc(T('plans.cur'))}</i>` : ''}</b><small>${esc(L(x.d))}</small><em>${esc(T('plans.per', { p: money(x.p / x.kg) }))}</em></span><span class="pp"><b class="pr">${money(x.p)}</b><small>${x.kg} kg / ${esc(T('month'))}</small></span></button>`).join('')}</section>
+<section class="sec"><div class="sech"><h2>${esc(T('plans.perks'))}</h2></div><div class="card">${[['bike', 'perk.1'], ['bolt', 'perk.2'], ['refresh', 'perk.3']].map(k => `<div class="row">${I(k[0])}<span><b>${esc(T(k[1]))}</b><small>${esc(T(k[1] + 's'))}</small></span></div>`).join('')}</div></section></div>`; }
+});
+K.on('plan', ([id]) => { const x = PL[id]; if (id === S.plan) return K.toast(T('plans.same'));
+  K.sheet(`<div class="sbody rds">${ring(Math.min(1, S.used / x.kg), 'big')}<h2>${esc(T('plans.to', { n: L(x.n) }))}</h2><p>${esc(T('plans.tos', { kg: x.kg, p: money(x.p), d: dstr(S.renew, { month: 'long', day: 'numeric' }) }))}</p><button type="button" class="btn wide" data-a="setplan:${id}">${esc(T('plans.do'))}</button><button type="button" class="btn ghost wide" data-close>${esc(T('cancel'))}</button></div>`); });
+K.on('setplan', ([id]) => { S.plan = id; K.closeSheet(); K.draw(); K.toast(T('plans.done', { n: L(PL[id].n) })); });
+
+/* ---------- account ---------- */
+K.def('me', { icon: 'user', label: 'tab.me',
+  render() { return `<header class="pt sat"><h1>${esc(T('tab.me'))}</h1><button type="button" class="ib" data-a="go:inbox" aria-label="${esc(T('inbox.t'))}">${I('bell')}${S.unread ? '<i class="pip"></i>' : ''}</button></header><div class="body">
+<div class="prof"><i class="av">${esc(S.name[0])}</i><span><b>${esc(S.name)}</b><small>${esc(T('plan.name', { n: L(PL[S.plan].n) }))} · ${esc(T('me.n', { n: S.orders.length + 21 }))}</small></span></div>
+<section class="card mlistc"><button type="button" class="row" data-a="addrsheet">${I('pin')}<span><b>${esc(T('addr.t'))}</b></span><em>${S.addrs.length}</em>${I('right', 's')}</button>
+<button type="button" class="row" data-a="paysheet">${I('card')}<span><b>${esc(T('pay.t'))}</b></span><em>${esc(T('pay.' + S.pay))}</em>${I('right', 's')}</button>
+<button type="button" class="row" data-a="caresheet">${I('tune')}<span><b>${esc(T('care.mine'))}</b><small>${careLine(S.care)}</small></span>${I('right', 's')}</button>
+<button type="button" class="row" data-a="go:prices">${I('tag')}<span><b>${esc(T('prices.t'))}</b></span>${I('right', 's')}</button></section>
+<section class="card mlistc"><button type="button" class="row" data-a="langsheet">${I('globe')}<span><b>${esc(T('me.lang'))}</b></span><em>${{ zh: '中文', en: 'English', ms: 'Bahasa Melayu' }[K.lang]}</em>${I('right', 's')}</button>
+<button type="button" class="row" data-a="go:help">${I('help')}<span><b>${esc(T('me.help'))}</b></span>${I('right', 's')}</button>
+<button type="button" class="row" data-a="about">${I('info')}<span><b>${esc(T('me.about'))}</b></span>${I('right', 's')}</button></section><p class="ver">FreshFold 4.1.0</p></div>`; }
+});
+K.on('langsheet', () => K.sheet(() => `<div class="sbody"><h2 class="sh">${esc(T('me.lang'))}</h2><div class="plist">${[['zh', '中文'], ['en', 'English'], ['ms', 'Bahasa Melayu']].map(l => `<button type="button" class="row" data-a="setlang:${l[0]}" aria-pressed="${K.lang === l[0]}"><span><b>${l[1]}</b></span><i class="radio"></i></button>`).join('')}</div></div>`));
+K.on('setlang', ([l]) => { K.closeSheet(); K.setLang(l); });
+K.on('about', () => K.sheet(`<div class="sbody about">${stackArt('ab')}<h2>FreshFold</h2><p>${esc(T('about.p'))}</p><a class="btn ghost wide" href="https://dinamics.dev/craft/app" target="_blank" rel="noopener">${esc(T('about.go'))}</a></div>`));
+K.def('prices', { render() { return bar(T('prices.t')) + `<div class="body pad"><div class="kgp"><span><b>${esc(T('m.kg'))}</b><small>${esc(T('m.kg.s'))}</small></span><b class="pr">${money(KG)}<small> / kg</small></b></div>
+<h2 class="sl">${esc(T('m.pc'))}</h2><div class="card">${ITEMS.map(it => `<div class="row">${I(it.icon)}<span><b>${esc(L(it.n))}</b></span><em class="pr">${money(it.p)}</em></div>`).join('')}</div>
+<h2 class="sl">${esc(T('prices.more'))}</h2><div class="card"><div class="row">${I('bolt')}<span><b>${esc(T('sp.express'))}</b><small>${esc(T('prices.ex'))}</small></span><em class="pr">+${money(EXPRESS)}</em></div><div class="row">${I('bike')}<span><b>${esc(T('sum.ride'))}</b><small>${esc(T('prices.ride'))}</small></span><em class="pr">${esc(T('free'))}</em></div></div></div>`; } });
+K.def('inbox', {
+  render() { return bar(T('inbox.t')) + `<div class="body pad">${S.inbox.map(n => `<div class="nrow${n.n ? ' new' : ''}"><i>${I({ wash: 'wash', plan: 'crown', done: 'door' }[n.k], 'm')}</i><span><b>${esc(T('in.' + n.k + '.t'))}</b><small>${esc(T('in.' + n.k + '.b'))}</small><em>${esc(dayS(n.t))} ${hm(n.t)}</em></span></div>`).join('')}</div>`; },
+  show() { if (S.unread) { S.unread = 0; setTimeout(() => { S.inbox.forEach(n => { n.n = 0; }); K.dirty(); }, 600); } }
+});
+K.def('help', { render() { return bar(T('me.help')) + `<div class="body pad">${FAQ.map(q => `<details class="faq"><summary>${esc(T('faq.' + q))}${I('down', 's')}</summary><p>${esc(T('faq.' + q + 'a'))}</p></details>`).join('')}<button type="button" class="btn ghost wide" data-a="demo:chat">${I('chat', 's')} ${esc(T('help.chat'))}</button></div>`; } });
+
+/* ---------- deep links for pictures and checks, and the tour ---------- */
+const jt = (st, fix) => { K.tab('orders', true); const o = ord('FF-58213'); o.run = 1; Object.assign(o, { stage: st, ok: st > 3 ? 1 : 0 }, fix || {}); for (let i = 0; i <= st; i++) o.ts[i] = o.ts[i] || new Date(); K.go('track', { id: o.id }); };
+K.jumps = {
+  'new'() { K.tab('new'); }, orders() { K.tab('orders'); }, plans() { K.tab('plans'); }, me() { K.tab('me'); }, prices() { K.go('prices'); },
+  f1() { O = newO(); K.go('flow'); }, f1pc() { O = newO({ mode: 'pc' }); K.go('flow'); }, f2() { O = newO({ step: 2 }); O.stains.shirt.push({ z: 1, t: 'oil' }, { z: 3, t: 'drink' }); O.st = 'drink'; K.go('flow'); },
+  f3() { O = newO({ step: 3, day: 1, win: 3, speed: 'express' }); K.go('flow'); }, f4() { O = newO({ step: 4, day: 1, win: 3, speed: 'express' }); O.stains.shirt.push({ z: 1, t: 'oil' }); K.go('flow'); },
+  addr() { K.acts.addrsheet(); }, paysh() { K.jumps.f4(); K.acts.paysheet(); }, care() { K.tab('me', true); K.acts.caresheet(); }, plansw() { K.tab('plans', true); K.acts.plan(['plus']); }, inbox() { K.go('inbox'); }, help() { K.go('help'); },
+  lang() { K.tab('me', true); K.acts.langsheet(); }, about() { K.tab('me', true); K.acts.about(); }, f2pants() { K.jumps.f2(); O.gk = 'pants'; O.stains.pants.push({ z: 3, t: 'mud' }); K.draw(); }, f4pc() { O = newO({ mode: 'pc', step: 4 }); K.go('flow'); },
+  placed() { jt(0); }, got() { jt(2); }, pcdone() { K.tab('orders', true); K.go('track', { id: 'FF-57960' }); },
+  coming() { jt(1); }, weigh() { jt(3); }, wash() { jt(4); }, fold() { jt(5); }, back() { jt(6); }, done() { jt(7); }, track() { K.tab('orders', true); K.go('track', { id: 'FF-58213' }); }
+};
+K.tour = async A => {
+  const w = n => A.wait(K.fast ? n / 8 : n);
+  await A.tap('.cta .btn'); await A.tap('[data-a="fkg:1"]', 350); await A.tap('[data-a="fkg:1"]', 700); await A.tap('[data-a="fnext"]', 700);
+  await A.tap('[data-a="fcare:temp:30"]', 500); await A.tap('[data-a="fcare:det:none"]', 500); await A.tap('.zone[data-a="stain:1"]', 600); await A.tap('[data-a="fst:drink"]', 500); await A.tap('.zone[data-a="stain:3"]', 800); await A.tap('[data-a="fnext"]', 700);
+  await A.tap('[data-a="fday:1"]', 500); await A.tap('[data-a="fwin:3"]', 500); await A.tap('[data-a="fspeed:express"]', 700); await A.tap('[data-a="fnext"]', 700);
+  await A.scroll(260); await A.tap('[data-a="fnext"]', K.fast ? 900 : 2400); await w(4800); await w(4600); await w(5200);
+  await A.tap('[data-a^="wok"]', 900); await w(4400); await w(4800); await w(4800); await w(5600);
+  await A.tap('.stars button:nth-child(5)', 1300); await A.tap('.bar [data-back]', 700); await A.tap('#tabs [data-tab="plans"]', 900); await A.tap('[data-a="plan:plus"]', 900); await A.tap('[data-a="setplan:plus"]', 1500);
+  await A.tap('#tabs [data-tab="me"]', 800); await A.tap('[data-a="go:prices"]', 900); await A.scroll(260);
+};
+K.boot({ id: 'freshfold', tabs: ['home', 'new', 'orders', 'plans', 'me'] });
+
 </script>
 </body>
 </html>

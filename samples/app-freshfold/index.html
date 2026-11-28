@@ -983,7 +983,7 @@ K.def('flow', {
   render() { const st = O.step, b = bill(O);
     return `<header class="bar sat"><div><button type="button" class="ib" data-a="fback" aria-label="${esc(T('k.back'))}">${I(st === 1 ? 'x' : 'left')}</button><h1>${esc(T('flow.s' + st))}</h1><i class="ib num">${st}/4</i></div><div class="fprog">${[1, 2, 3, 4].map(i => `<i class="${i <= st ? 'on' : ''}"></i>`).join('')}</div></header>
 <div class="body fbody">${fstep[st]()}</div>
-<footer class="foot pfoot"><div><small>${esc(T(O.mode === 'kg' ? 'sum.est1' : 'sum.total'))}</small><b>${money(b.total)}</b></div><button type="button" class="btn" data-a="fnext"${fOK() ? '' : ' disabled'}>${esc(st === 4 ? T('f4.go') : T('next'))}</button></footer>`; }
+<footer class="foot pfoot"><div><small>${esc(T(O.mode === 'kg' ? 'sum.est1' : 'sum.total'))}</small><b>${esc(due(O))}</b></div><button type="button" class="btn" data-a="fnext"${fOK() ? '' : ' disabled'}>${esc(st === 4 ? T('f4.go') : T('next'))}</button></footer>`; }
 });
 const fset = (k, v) => { O[k] = v; K.draw(); };
 K.on('fmode', ([m]) => fset('mode', m)); K.on('fkg', ([n]) => fset('kg', clamp(O.kg + +n, MINKG, 15)));
@@ -998,7 +998,7 @@ K.on('fback', () => { if (O.step === 1) return K.back(); O.step--; K.draw(); $('
 K.on('fnext', () => {
   if (!fOK()) return;
   if (O.step < 4) { O.step++; K.draw(); $('.fbody', K.topEl()).scrollTop = 0; return; }
-  K.sheet(`<div class="sbody paying"><i class="spin"></i><h2>${esc(T('pay.ing'))}</h2><p>${money(bill(O).total)} · ${esc(T('pay.' + S.pay))}</p></div>`);
+  K.sheet(`<div class="sbody paying"><i class="spin"></i><h2>${esc(T('pay.ing'))}</h2><p>${esc(due(O))}${bill(O).total > 0 ? ' · ' + esc(T('pay.' + S.pay)) : ''}</p></div>`);
   K.after(1400, () => { const o = Object.assign(O, { id: 'FF-' + (58240 + S.seq++ * 7), stage: 0, ts: { 0: new Date() }, cov: O.mode === 'kg' ? Math.min(O.kg, planLeft()) : 0, mins: 24 }); delete o.step; S.orders.unshift(o); O = null; K.closeSheet(true); K.tab('orders', true); K.go('track', { id: o.id }); });
 });
 K.on('paysheet', () => K.sheet(() => `<div class="sbody"><h2 class="sh">${esc(T('pay.t'))}</h2><div class="plist">${PAYS.map(p => `<button type="button" class="row" data-a="setpay:${p}" aria-pressed="${S.pay === p}">${I(PAYI[p])}<span><b>${esc(T('pay.' + p))}</b><small>${esc(T('pay.' + p + '.s'))}</small></span><i class="radio"></i></button>`).join('')}</div></div>`));

@@ -216,7 +216,7 @@ const q=s=>R.querySelector(s),qa=s=>[...R.querySelectorAll(s)],V=q('.fc-v'),F=q(
   RM=matchMedia('(prefers-reduced-motion: reduce)'),SAVE=!!(navigator.connection&&navigator.connection.saveData),
   LIVE=/(^|\.)dinamics\.dev$/.test(location.hostname)||!!window.DN_TEST,
   S={g(k){try{return localStorage.getItem(k)}catch(e){return null}},s(k,v){try{localStorage.setItem(k,v)}catch(e){}}},
-  T=()=>C.words[C.lang()]||C.words.zh,LOC={zh:'zh-CN',en:'en-US',ms:'ms-MY'},fmt=s=>{s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+  T=()=>C.words[C.lang()]||C.words.zh,LOC={zh:'zh-CN',en:'en-US',ms:'ms'},fmt=s=>{s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 let armed=!C.lazy,want=S.g('dn-film-sound')!=='off',blocked=false,uP=false,aP=false,ended=false,seen=false,started=false,pending=false,ate=0,raf=0;
 const dur=()=>isFinite(V.duration)&&V.duration>0?V.duration:(C.len||60);
 function cls(){const pl=!V.paused&&!V.ended,t=T();
@@ -260,10 +260,8 @@ V.addEventListener('play',()=>{cls();if(!raf)raf=requestAnimationFrame(loop)});
 V.addEventListener('loadedmetadata',tick);V.addEventListener('timeupdate',()=>{if(!raf)tick()});
 V.addEventListener('ended',()=>{ended=true;cls();if(fsEl()===F)fsExit()});
 SEEK.addEventListener('input',()=>{const d=dur();try{V.currentTime=SEEK.value/1000*d}catch(e){}if(ended&&V.currentTime<d-.3)ended=false;tick();cls()});
-/* on screen or not; this tab or another */
-new IntersectionObserver(es=>{for(const e of es){const r=e.intersectionRatio;
-  if(r>=.5&&!seen){seen=true;if(!started)start();else if(aP&&!uP&&!ended&&!document.hidden){aP=false;play()}}
-  else if(r<.25&&seen){seen=false;if(!V.paused){aP=true;V.pause()}}}},{threshold:[0,.25,.5,.75,1]}).observe(F);
+/* on screen or not (measured at the end); this tab or another */
+function see(on){if(on===seen)return;seen=on;if(on){if(!started)start();else if(aP&&!uP&&!ended&&!document.hidden){aP=false;play()}}else if(!V.paused){aP=true;V.pause()}}
 document.addEventListener('visibilitychange',()=>{if(document.hidden){if(!V.paused){aP=true;V.pause()}}else if(aP&&seen&&!uP&&!ended){aP=false;play()}});
 /* the language: the other film from the same second */
 function setSrc(l){if(!armed)return;l=C.src[l]?l:l==='ms'&&C.src.en?'en':'zh';const f=C.src[l],B=C.base||'';if(!f||V.dataset.l===l)return;const t=V.currentTime||0,was=!V.paused&&!V.ended;   /* no Malay film yet: the English one */
@@ -287,7 +285,6 @@ function like(b){burst(b);if(liked)return;liked=true;S.s(LK,'1');if(n!=null)n++;
 qa('.fc-like').forEach(b=>b.addEventListener('click',()=>like(b)));
 /* the count is asked for only once the film comes near: the page does not call the counter service before anyone scrolls there (11-23: it timed out once during a speed test) */
 const getN=()=>{if(LIVE)fetch(API+'/get'+PATH).then(r=>r.status===404?{value:0}:r.ok?r.json():null).then(j=>{if(j&&typeof j.value==='number'){n=Math.max(j.value,n||0);drawLike()}}).catch(()=>{})};
-if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){io.disconnect();getN()}},{rootMargin:'120px 0px'});io.observe(R)}else getN();
 /* leave a note: emailed to us */
 const fbb=q('.fc-fbb'),FS='https://formsubmit.co/ajax/'+(C.mail||'contact@dinamics.dev');
 function openFb(){FB.hidden=false;fbb.setAttribute('aria-expanded','true');
@@ -315,7 +312,20 @@ FB.addEventListener('submit',e=>{e.preventDefault();if(sending)return;const t=T(
     .catch(()=>{msg.textContent=T().fc_err;msg.classList.add('err')})
     .finally(()=>{sending=false;sb.disabled=false;sb.textContent=T().fc_send})});
 q('.fc-more').addEventListener('click',()=>{q('.fc-done').hidden=true;q('.fc-body').hidden=false;FB.elements.m.focus()});
-if(!armed){const lz=new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)){lz.disconnect();arm()}},{rootMargin:'120px 0px'});lz.observe(F)}
+/* where the film is, measured by the film itself. An observer alone is not enough: on a page that holds the film in a 3D layer (the walk),
+   iPhone browsers never tell an observer that it showed up (11-26: it never started on an iPhone). So it also looks whenever that layer changes,
+   and on scroll and resize; a layer still fading in counts as only partly there. Plays from half on screen, stops below a quarter. */
+const L3=R.closest('[data-l3]');let vq=0,askedN=false;
+function onScr(){const r=F.getBoundingClientRect();if(!r.width||!r.height)return 0;
+  const w=Math.min(r.right,innerWidth)-Math.max(r.left,0),h=Math.min(r.bottom,innerHeight)-Math.max(r.top,0);
+  return w>0&&h>0?w*h/(r.width*r.height)*(L3?+getComputedStyle(L3).opacity:1):0}
+const near=el=>{const r=el.getBoundingClientRect();return r.width>0&&r.bottom>-120&&r.top<innerHeight+120&&r.right>0&&r.left<innerWidth};
+function look(){vq=0;const f=onScr();if(f>=.5)see(true);else if(f<.25)see(false);
+  if(!armed&&near(F))arm();if(!askedN&&near(R)){askedN=true;getN()}}
+const soon=()=>{if(!vq)vq=requestAnimationFrame(look)};
+new IntersectionObserver(soon,{threshold:[0,.25,.5,.75,1]}).observe(F);
+if(L3)new MutationObserver(soon).observe(L3,{attributes:true,attributeFilter:['style','class']});
+addEventListener('scroll',soon,{passive:true});addEventListener('resize',soon);soon();
 /* keys pressed inside the film stay inside (the home page reads keys for its wall) */
 R.addEventListener('keydown',e=>e.stopPropagation());
 C.on(l=>{setSrc(l);words();drawLike();cls()});

@@ -1198,17 +1198,17 @@ const S={zh:{cur:'¥',price:[68,45,96],items:['单品咖啡豆 · 250 克','挂�
   st:['Unpaid','Paid','Shipped','Delivered'],go:{1:'Ship',2:'Deliver'},steps:['Ordered','Paid','Shipped','Delivered'],toast:'Order placed · {id}',db:'Database · {n} rows',
   q:'Search an order or member, e.g. Lin or DN1052',found:'Found {m} in <b>{n}</b> rows in <b>{ms}</b> ms',none:'Nothing in <b>{n}</b> rows; took <b>{ms}</b> ms',latest:'Newest orders on top',
   sur:['Lin','Chen','Wang','Zhang','Li','Huang','Wu','Liu','Tsai','Cheng','Hsu','Ho','Hsieh','Kuo','Lo','Liang','Song','Tang','Han','Feng'],ti:[]},
- ms:{cur:'RM',price:[42,29,59],items:['Biji kopi asal tunggal · 250 g','Kopi titis · 10 paket','Kopi bancuhan sejuk · 6 botol'],me:'Mia Lin',av:'M',tier:'Ahli emas · M0001',pts:'Mata',
+ ms:{cur:'$',price:[9.5,6.5,13.5],items:['Biji kopi asal tunggal · 250 g','Kopi titis · 10 paket','Kopi bancuhan sejuk · 6 botol'],me:'Mia Lin',av:'M',tier:'Ahli emas · M0001',pts:'Mata',
   st:['Belum dibayar','Dibayar','Dihantar','Sampai'],go:{1:'Hantar',2:'Serah'},steps:['Dipesan','Dibayar','Dihantar','Sampai'],toast:'Pesanan dibuat · {id}',db:'Pangkalan data · {n} baris',
   q:'Cari pesanan atau ahli, cth. Tan atau DN1052',found:'Menemui {m} dalam <b>{n}</b> baris dalam <b>{ms}</b> ms',none:'Tiada dalam <b>{n}</b> baris; mengambil <b>{ms}</b> ms',latest:'Pesanan terbaharu di atas',
-  sur:['Ahmad','Tan','Lim','Wong','Kumar','Ismail','Lee','Ong','Abdullah','Raj','Chong','Yusof','Ng','Hassan','Goh','Lau','Rahman','Teo','Singh','Chan'],ti:[]}};
+  sur:['Lin','Chen','Wang','Zhang','Li','Huang','Wu','Liu','Tsai','Cheng','Hsu','Ho','Hsieh','Kuo','Lo','Liang','Song','Tang','Han','Feng'],ti:[]}};
 let L=DN.lang,T=S[L],ready=false;
 const ICON=['<ellipse cx="12" cy="12" rx="6.2" ry="8.6" transform="rotate(32 12 12)"/><path d="M15.6 4.8c-3.4 2.7-.2 7.6-3.4 10.2-1.4 1.2-3 1.6-4.4 1.9"/>','<path d="M6 8h10v6a4 4 0 0 1-4 4h-2a4 4 0 0 1-4-4zM16 10h2a2 2 0 0 1 0 4h-2M9 3v2M12 3v2"/>','<path d="M9 3h6M10 3v4l-3 3v11h10V10l-3-3V3M7 14h10"/>'];
 const NM=2400,members=[],orders=[];let seq=100000,pts=1280,cart=[0,0,0],fresh=new Set(),q='',now=0,day0=0;
 const mname=(m,l)=>m.id==='M0001'?S[l].me:l==='zh'?S.zh.sur[m.s]+S.zh.ti[m.t]:S[l].sur[m.s]+' '+m.c+'.';
 const key=o=>(o.id+' '+mname(o.m,'zh')+' '+mname(o.m,'en')+' '+o.m.id).toLowerCase();
 const amt=(o,l=L)=>S[l].price[o.p]*o.q;
-const money=v=>T.cur+v.toLocaleString(L==='zh'?'zh-CN':L==='ms'?'ms-MY':'en-US',{minimumFractionDigits:L==='zh'?0:2,maximumFractionDigits:2});
+const money=v=>T.cur+v.toLocaleString(L==='zh'?'zh-CN':L==='ms'?'ms':'en-US',{minimumFractionDigits:L==='zh'?0:2,maximumFractionDigits:2});
 const hm=t=>{const d=new Date(t),p=n=>String(n).padStart(2,'0');return t>=day0?p(d.getHours())+':'+p(d.getMinutes()):p(d.getMonth()+1)+'-'+p(d.getDate())};
 function make(){let sd=20261122;const rnd=()=>{sd|=0;sd=sd+0x6D2B79F5|0;let t=Math.imul(sd^sd>>>15,1|sd);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
   for(let i=0;i<NM;i++){const s=i?Math.floor(rnd()*20):0,t=i?Math.floor(rnd()*3):1,c=i?String.fromCharCode(65+Math.floor(rnd()*26)):'M';members.push({id:'M'+String(i+1).padStart(4,'0'),s,t,c})}
@@ -1317,7 +1317,7 @@ const q=s=>R.querySelector(s),qa=s=>[...R.querySelectorAll(s)],V=q('.fc-v'),F=q(
   RM=matchMedia('(prefers-reduced-motion: reduce)'),SAVE=!!(navigator.connection&&navigator.connection.saveData),
   LIVE=/(^|\.)dinamics\.dev$/.test(location.hostname)||!!window.DN_TEST,
   S={g(k){try{return localStorage.getItem(k)}catch(e){return null}},s(k,v){try{localStorage.setItem(k,v)}catch(e){}}},
-  T=()=>C.words[C.lang()]||C.words.zh,LOC={zh:'zh-CN',en:'en-US',ms:'ms-MY'},fmt=s=>{s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+  T=()=>C.words[C.lang()]||C.words.zh,LOC={zh:'zh-CN',en:'en-US',ms:'ms'},fmt=s=>{s=Math.max(0,Math.floor(s||0));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 let armed=!C.lazy,want=S.g('dn-film-sound')!=='off',blocked=false,uP=false,aP=false,ended=false,seen=false,started=false,pending=false,ate=0,raf=0;
 const dur=()=>isFinite(V.duration)&&V.duration>0?V.duration:(C.len||60);
 function cls(){const pl=!V.paused&&!V.ended,t=T();

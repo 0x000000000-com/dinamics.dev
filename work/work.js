@@ -20,6 +20,40 @@
   $$('.lang button').forEach(b => b.addEventListener('click', () => pick(b.dataset.l)));
   const ls = $('.lsel'); if (ls) ls.addEventListener('change', () => pick(ls.value));   /* phones: one menu, 16px so iOS does not zoom */
 
+  /* 返回上一页: when another door is behind this one (the trail below, the same as on the new craft pages), the visitor goes back to it;
+     from the galaxy, or with nothing behind, the link itself goes to the home page at this craft's planet. */
+  const bk = $('a[data-prev]');
+  if (bk) {
+    const TRAIL = /*trail>*/(I => {
+  // the doors the visitor walked through in this tab, in order: [path, planet]. 返回上一页 reads the page before from here; the browser's own
+  // history cannot tell (the samples that play inside a page add their own entries to it). Kept in sessionStorage; a page inside a frame keeps out.
+  const K = 'dn-trail', KB = 'dn-trail-to', here = location.pathname, cut = p => p.replace(/(index)?\.html$/, ''), same = (a, b) => cut(a) === cut(b);
+  const rd = () => { try { const t = JSON.parse(sessionStorage.getItem(K) || '[]'); return Array.isArray(t) ? t : []; } catch (e) { return []; } };
+  const wr = t => { try { sessionStorage.setItem(K, JSON.stringify(t.slice(-12))); } catch (e) { } };
+  if (window.top !== window) return { prev: () => null, go() { } };
+  function show(kept) {
+    let t = rd(), r = null, self = false, to = null;
+    try { to = sessionStorage.getItem(KB); sessionStorage.removeItem(KB); } catch (e) { }
+    try { const u = new URL(document.referrer); if (u.origin === location.origin) { self = same(u.pathname, here); if (cut(u.pathname) !== '/' && !self) r = u.pathname; } } catch (e) { }
+    const top = t.length ? t[t.length - 1][0] : '', nav = kept ? 'back_forward' : ((performance.getEntriesByType('navigation')[0] || {}).type || 'navigate');
+    const on = () => same(top, r) ? t.concat([[here, I]]) : [[r, -1], [here, I]];
+    if (same(top, here) && (self || (to && same(to, here)))) return;   // the button brought the visitor here, or the page opened itself again: the trail is right
+    if (!r) t = [[here, I]];                                             // from the galaxy, from outside, or by its address: nothing of ours behind it
+    else if (nav === 'navigate') t = on();
+    else { let k = -1; t.forEach((x, j) => { if (same(x[0], here)) k = j; }); t = k >= 0 ? t.slice(0, k + 1) : on(); }   // the browser's back, or a reload
+    wr(t);
+  }
+  show(false); addEventListener('pageshow', e => { if (e.persisted) show(true); });
+  return { prev() { const t = rd(); return t.length > 1 && same(t[t.length - 1][0], here) ? t[t.length - 2] : null; },
+           go(p) { const t = rd(); t.pop(); wr(t); try { sessionStorage.setItem(KB, p[0]); } catch (e) { } } };
+})/*<trail*/(+bk.hash.slice(2));
+    bk.addEventListener('click', e => {
+      if (e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const p = TRAIL.prev(); if (!p) return;
+      e.preventDefault(); TRAIL.go(p); location.href = p[0];
+    });
+  }
+
   /* the sign: starts as the Dinamics mark, becomes this craft's sign (the same move as on the home page wall) */
   const g = $('.hero .glyph');
   if (g && P.g0 && P.g) {

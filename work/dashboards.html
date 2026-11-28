@@ -135,7 +135,7 @@ function kpis(){const n=Q.length;$('dbK1').textContent=n.toLocaleString()+(L==='
   const rv=Q.filter(q=>q.s==='reviewed').length;
   $('dbPl').innerHTML=[[T.pl[0],raw],[T.pl[1],dups],[T.pl[2],nomag,nomag>0],[T.pl[3],rv],[T.pl[4],n-rv],[T.pl[5],n]].map(([a,b,w])=>`<li class="${w?'warn':''}"><span>${a}</span><b>${b.toLocaleString()}</b></li>`).join('')}
 function status(k){const s=$('dbSt');s.className='db-st'+(k==='live'?'':' '+k);s.textContent=T[k]}
-function when(){if(!at){$('dbWhen').textContent='';return}$('dbWhen').textContent=T.when.replace('{t}',new Date(at).toLocaleTimeString(L==='zh'?'zh-CN':L==='ms'?'ms-MY':'en-US',{hour:'2-digit',minute:'2-digit'})).replace('{n}',next)}
+function when(){if(!at){$('dbWhen').textContent='';return}$('dbWhen').textContent=T.when.replace('{t}',new Date(at).toLocaleTimeString(L==='zh'?'zh-CN':L==='ms'?'ms':'en-US',{hour:'2-digit',minute:'2-digit'})).replace('{n}',next)}
 /* collect, clean, index */
 async function pull(){status('wait');try{const r=await fetch(FEED,{cache:'no-cache'});if(!r.ok)throw 0;const j=await r.json();const seen=new Set();raw=j.features.length;dups=0;nomag=0;const out=[];
     for(const f of j.features){if(seen.has(f.id)){dups++;continue}seen.add(f.id);const p=f.properties,g=f.geometry&&f.geometry.coordinates;if(p.mag==null||!g){nomag++;continue}

@@ -141,7 +141,7 @@ function paint(){$('inNodes').innerHTML=nodes.map((n,i)=>{let sl='',k=0;for(cons
   const run=nodes.reduce((s,n)=>s+n.jobs.length,0),cap=nodes.filter(n=>n.on).length*CAP,u=nodes.reduce((s,n)=>s+used(n),0);
   $('inS1').textContent=run;$('inS2').textContent=queue.length;$('inS3').textContent=cap?Math.round(u/cap*100)+'%':'0%';$('inS4').textContent=moved;
   $('inLog').innerHTML=logs.map(l=>`<li class="${l.k||''}">${l.s}</li>`).join('');
-  const d=new Date();$('inClock').textContent=d.toLocaleTimeString(L==='zh'?'zh-CN':L==='ms'?'ms-MY':'en-GB',{hour12:false})}
+  const d=new Date();$('inClock').textContent=d.toLocaleTimeString(L==='zh'?'zh-CN':L==='ms'?'ms':'en-GB',{hour12:false})}
 $('inNodes').addEventListener('click',e=>{const b=e.target.closest('.in-nd');if(!b)return;const n=nodes[+b.dataset.i];
   if(n.on){n.on=false;const js=n.jobs;n.jobs=[];log(T.down.replace('{n}',n.id).replace('{k}',js.length),'dn');
     for(const j of js){const to=place(j);if(to){moved++;log(T.moved.replace('{j}',j.id).replace('{a}',n.id).replace('{b}',to.id),'mv')}else{queue.unshift(j);log(T.queued.replace('{j}',j.id),'mv')}}}

@@ -147,7 +147,7 @@ function check(){const seen=new Map(),flags=[],now=Date.now();
     else if(f.d.getTime()>now+864e5)flags.push({f,i,k:'fut',d:f.d});
     if(!seen.has(f.no))seen.set(f.no,f.v)}
   return flags}
-const fmt=v=>v.toLocaleString(L==='zh'?'zh-CN':L==='ms'?'ms-MY':'en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmt=v=>v.toLocaleString(L==='zh'?'zh-CN':L==='ms'?'ms':'en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
 const ds=d=>d.toLocaleDateString(L==='zh'?'zh-CN':'en-CA');
 function why(x){const w=T.why[x.k];return x.k==='sum'?w.replace('{a}',fmt(x.a)).replace('{b}',fmt(x.b)):x.k==='dup'?w.replace('{o}',x.o):x.k==='tax'?w.replace('{t}',x.t):w.replace('{d}',ds(x.d))}
 const upTo=n=>res?res.flags.filter(x=>x.i<n):[];
@@ -168,7 +168,7 @@ $('auGo').addEventListener('click',go);
 function next3(){const out=[];let t=new Date();t.setSeconds(0,0);
   for(let g=0;out.length<3&&g<24*60*10;g++){t=new Date(t.getTime()+60000);const h=t.getHours(),m=t.getMinutes(),wd=t.getDay();
     if(cron===2?m===0:(h===9&&m===0&&(cron===0||(wd>0&&wd<6))))out.push(new Date(t))}
-  $('auNext').innerHTML=out.map(d=>`<li><b>${d.toLocaleDateString(L==='zh'?'zh-CN':L==='ms'?'ms-MY':'en-US',{weekday:'short',month:'short',day:'numeric'})}</b><span>${d.toLocaleTimeString(L==='zh'?'zh-CN':L==='ms'?'ms-MY':'en-US',{hour:'2-digit',minute:'2-digit'})}</span></li>`).join('');
+  $('auNext').innerHTML=out.map(d=>`<li><b>${d.toLocaleDateString(L==='zh'?'zh-CN':L==='ms'?'ms':'en-US',{weekday:'short',month:'short',day:'numeric'})}</b><span>${d.toLocaleTimeString(L==='zh'?'zh-CN':L==='ms'?'ms':'en-US',{hour:'2-digit',minute:'2-digit'})}</span></li>`).join('');
   $('auSeg').innerHTML=T.cron.map((c,i)=>`<button type="button" aria-pressed="${i===cron}" data-c="${i}">${c}</button>`).join('');
   let z='';try{z=Intl.DateTimeFormat().resolvedOptions().timeZone}catch(e){}$('auTz').textContent=z?T.tz.replace('{z}',z):''}
 $('auSeg').addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(b){cron=+b.dataset.c;next3()}});

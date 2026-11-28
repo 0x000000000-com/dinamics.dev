@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#F3F1EC">
+<title>快洗 FreshFold</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%231F2A44'/%3E%3Cpath d='M14 26l18-10 18 10v20H14z' fill='%23F3F1EC'/%3E%3Cpath d='M20 34h24M20 40h24' stroke='%232B59C3' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E">
+<style>
+b,strong,h1,h2,h3,h4{font-weight:500}
+body{font-variant-numeric:tabular-nums}
+
+/* 快洗 FreshFold — a sample pickup-and-delivery app by Dinamics. Folded linen, a city at night, one cobalt route line. */
+:root{--ink:#1F2A44;--mut:#646D7E;--line:#E2DFD7;--bg:#F3F1EC;--card:#FFFFFF;--c:#2B59C3;--c0:#E6ECFA;--lem:#F6D55C;--ok:#1E9E62;
+  font-family:"Avenir Next","Segoe UI","PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);background:var(--bg)}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible{outline:3px solid var(--c);outline-offset:2px}
+.app{position:relative;height:100%;max-width:520px;margin:0 auto;background:var(--bg);overflow:hidden}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;transition:transform .38s cubic-bezier(.22,1,.36,1),opacity .3s}
+.scr[hidden]{display:flex!important;visibility:hidden;opacity:0;transform:translateX(30%);pointer-events:none}
+.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:0 0 116px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(16px + env(safe-area-inset-top)) 20px 0}
+.brand{display:flex;align-items:center;gap:12px;font-weight:600;letter-spacing:.1px}
+.brand svg{width:32px;height:32px}
+.lang{display:flex;gap:2px;background:var(--card);border:1px solid var(--line);border-radius:99px;padding:4px}
+.lang button{font-size:12px;padding:4px 8px;border-radius:99px;color:var(--mut)}
+.lang button[aria-pressed=true]{background:var(--ink);color:#fff;font-weight:600}
+h1{font-size:25px;line-height:1.2;font-weight:600;padding:24px 20px 0}
+.lede{font-size:14px;color:var(--mut);padding:8px 20px 0;line-height:1.5}
+.lab{font-size:13px;font-weight:500;color:var(--mut);padding:20px 20px 12px}
+.seg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:0 16px}
+.seg button{padding:12px 4px;border-radius:12px;background:var(--card);border:1.5px solid var(--line);font-size:13.5px;font-weight:500;line-height:1.3}
+.seg button small{display:block;font-weight:400;color:var(--mut);font-size:12px}
+.seg button[aria-pressed=true]{border-color:var(--c);background:var(--c0)}
+.list{margin:0 16px;background:var(--card);border:1px solid var(--line);border-radius:16px}
+.it{display:flex;align-items:center;gap:12px;padding:16px}
+.it + .it{border-top:1px solid var(--line)}
+.it .ic{flex:none;width:42px;height:42px;border-radius:12px;background:var(--bg);display:grid;place-items:center}
+.it .ic svg{width:26px;height:26px}
+.it b{display:block;font-size:15px;font-weight:500}
+.it small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px;font-variant-numeric:tabular-nums}
+.step{margin-left:auto;flex:none;display:flex;align-items:center;gap:8px}
+.step button{width:32px;height:32px;border-radius:10px;border:1.5px solid var(--line);font-size:18px;font-weight:500;line-height:1}
+.step output{min-width:34px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums;font-size:14.5px}
+.addr{display:flex;align-items:center;gap:12px;margin:0 16px;padding:16px;background:var(--card);border:1px solid var(--line);border-radius:16px}
+.addr svg{flex:none;width:22px;height:22px;color:var(--c)}
+.addr b{display:block;font-size:14.5px;font-weight:500}
+.addr small{display:block;color:var(--mut);font-size:12.5px;margin-top:2px}
+.cta{position:absolute;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));padding:16px;border-radius:16px;background:var(--ink);color:#fff;font-weight:600;font-size:16px;text-align:center;font-variant-numeric:tabular-nums}
+.cta[disabled]{opacity:.45}
+/* tracking */
+.map{position:relative;height:46%;min-height:250px;background:#1A2238;overflow:hidden}
+.map svg{position:absolute;inset:0;width:100%;height:100%}
+.back{position:absolute;left:12px;top:calc(12px + env(safe-area-inset-top));width:40px;height:40px;border-radius:12px;background:#ffffffe6;display:grid;place-items:center;z-index:2}
+.back svg{width:22px;height:22px}
+.sheet{flex:1;margin-top:-24px;position:relative;background:var(--bg);border-radius:22px 22px 0 0;overflow-y:auto;padding:20px 0 112px;scroll-padding-bottom:104px}
+.eta{display:flex;align-items:center;gap:12px;padding:0 20px}
+.eta .av{flex:none;width:46px;height:46px;border-radius:50%;background:var(--lem);display:grid;place-items:center;font-weight:600;color:var(--ink)}
+.eta b{display:block;font-size:18px;font-weight:600}
+.eta small{display:block;color:var(--mut);font-size:13px;margin-top:2px}
+.eta .min{margin-left:auto;text-align:right;font-variant-numeric:tabular-nums}
+.eta .min b{font-size:26px;line-height:1}
+.tl{list-style:none;padding:0;margin:20px 20px 0}
+.tl li{display:flex;gap:12px;position:relative;padding-bottom:20px;color:var(--mut)}
+.tl li::before{content:"";position:absolute;left:9px;top:22px;bottom:2px;width:2px;background:var(--line)}
+.tl li:last-child::before{display:none}
+.tl i{flex:none;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);background:var(--card);margin-top:1px;position:relative;z-index:1;transition:.3s}
+.tl li.on{color:var(--ink)}
+.tl li.on i{border-color:var(--c);background:var(--c)}
+.tl li.now i{box-shadow:0 0 0 5px #2B59C326}
+.tl b{display:block;font-size:15px;font-weight:500}
+.tl small{font-size:12.5px;font-variant-numeric:tabular-nums}
+.rate{margin:8px 16px 0;padding:16px;border-radius:16px;background:var(--card);border:1px solid var(--line);text-align:center;opacity:0;transform:translateY(8px);transition:.4s;pointer-events:none}
+.rate.on{opacity:1;transform:none;pointer-events:auto}
+.rate p{font-size:14px;font-weight:500}
+.stars{display:flex;justify-content:center;gap:8px;margin-top:12px}
+.stars button{width:40px;height:40px;display:grid;place-items:center}
+.stars svg{width:30px;height:30px;fill:#D9D5CB;transition:fill .15s}
+.stars button.on svg{fill:var(--lem)}
+.thanks{font-size:13px;color:var(--mut);margin-top:8px;min-height:18px}
+.tap{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:#2B59C355;border:2px solid #2B59C3;pointer-events:none;z-index:20;opacity:0;transition:opacity .2s,transform .2s}
+.tap.on{opacity:1;transform:scale(.8)}
+@media (max-width:360px){h1{font-size:22px}.seg button{font-size:12.5px}.step button{width:30px;height:30px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<section class="scr" id="sOrder">
+  <div class="scroll">
+    <div class="top">
+      <div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#1F2A44"/><path d="M14 26l18-10 18 10v20H14z" fill="#F3F1EC"/><path d="M20 34h24M20 40h24" stroke="#2B59C3" stroke-width="4" stroke-linecap="round"/></svg><span data-t="brand">快洗 FreshFold</span></div>
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-l="zh" aria-pressed="true">中</button><button type="button" data-l="en" aria-pressed="false">EN</button><button type="button" data-l="ms" aria-pressed="false">BM</button></div>
+    </div>
+    <h1 data-t="h1">今晚来收，明晚送回</h1>
+    <p class="lede" data-t="lede">洗好、烘干、叠整齐，按公斤算。骑手到楼下会先打电话。</p>
+    <p class="lab" data-t="when">什么时候来收？</p>
+    <div class="seg" id="when" role="group"></div>
+    <p class="lab" data-t="what">要洗的（骑手到了会再称一次）</p>
+    <div class="list" id="items"></div>
+    <p class="lab" data-t="where">在哪里收</p>
+    <div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span><b>Menara Hijau, 12-3A</b><small data-t="addrNote">保安处可以签收</small></span></div>
+  </div>
+  <button type="button" class="cta" id="call"></button>
+</section>
+
+<section class="scr" id="sTrack" hidden>
+  <div class="map" id="map">
+    <svg viewBox="0 0 390 300" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <rect width="390" height="300" fill="#1A2238"/>
+      <path d="M-10 210 C 80 190, 140 250, 230 230 S 360 170, 410 190" stroke="#24406E" stroke-width="26" fill="none"/>
+      <g stroke="#2A3352" stroke-width="12" stroke-linecap="square" fill="none"><path d="M0 70H390M0 150H390M60 0V300M170 0V300M290 0V300M0 260H390"/></g>
+      <g fill="#222B47"><rect x="72" y="82" width="86" height="56" rx="6"/><rect x="182" y="82" width="96" height="56" rx="6"/><rect x="302" y="82" width="80" height="56" rx="6"/><rect x="72" y="8" width="86" height="50" rx="6"/><rect x="182" y="8" width="96" height="50" rx="6"/><rect x="8" y="162" width="40" height="86" rx="6"/><rect x="302" y="8" width="80" height="50" rx="6"/></g>
+      <path id="route" d="M300 268 H170 V150 H60 V70 H118" stroke="#2B59C3" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <path id="done" d="M300 268 H170 V150 H60 V70 H118" stroke="#9DB6F0" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="0 2000"/>
+      <g transform="translate(118 70)"><circle r="13" fill="#F6D55C"/><path d="M-5 -1l5-4 5 4v6h-10z" fill="#1F2A44"/></g>
+      <g id="rider"><circle r="16" fill="#2B59C3" opacity=".25"/><circle r="9" fill="#fff"/><circle r="5" fill="#2B59C3"/></g>
+    </svg>
+    <button type="button" class="back" id="back1" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+  </div>
+  <div class="sheet">
+    <div class="eta"><span class="av">H</span><span><b id="etaT"></b><small id="etaS"></small></span><span class="min"><b id="etaM">6</b><small data-t="min">分钟</small></span></div>
+    <ol class="tl" id="tl"></ol>
+    <div class="rate" id="rate"><p data-t="rateQ">这次收件怎么样？</p><div class="stars" id="stars"></div><p class="thanks" id="thanks"></p></div>
+  </div>
+  <button type="button" class="cta" id="fin" data-t="fin" hidden>好的</button>
+</section>
+
+<div class="tap" id="tap"></div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const W = {
+ zh: {brand:'快洗 FreshFold', h1:'今晚来收，明晚送回', lede:'洗好、烘干、叠整齐，按公斤算。骑手到楼下会先打电话。', when:'什么时候来收？', what:'要洗的（骑手到了会再称一次）', where:'在哪里收', addrNote:'保安处可以签收',
+      w1:'今晚', w1t:'8–9 点', w2:'今晚', w2t:'9–10 点', w3:'明早', w3t:'9–10 点', i_kg:'洗、烘、叠', i_kgd:'RM 6 / 公斤', i_shirt:'衬衫干洗', i_shirtd:'RM 9 / 件', i_bed:'被子床单', i_bedd:'RM 28 / 套', kg:'{n} 公斤', pc:'{n} 件', set:'{n} 套',
+      call:'叫骑手来收 · 大约 {p}', none:'先选要洗的', ridT:'Hafiz 在路上', ridS:'红色摩托 · WTF 3821', near:'Hafiz 快到楼下了', got:'衣服收到了', gotS:'称了 {k} 公斤 · {p}', min:'分钟', back:'明晚 {w} 送回',
+      t1:'骑手出发', t1s:'从 SS15 洗衣房出发', t2:'快到了', t2s:'到楼下先打电话', t3:'已收件', t3s:'当面称重，拍照存底', t4:'洗好送回', t4s:'明晚同一时段', rateQ:'这次收件怎么样？', thanks:'谢谢，{n} 颗星', fin:'好的'},
+ en: {brand:'FreshFold', h1:'Collected tonight, back tomorrow night', lede:'Washed, dried and folded, priced by the kilo. The rider calls when downstairs.', when:'When should we collect?', what:'What to wash (the rider weighs it again)', where:'Collect from', addrNote:'Guardhouse can sign for it',
+      w1:'Tonight', w1t:'8–9 pm', w2:'Tonight', w2t:'9–10 pm', w3:'Tomorrow', w3t:'9–10 am', i_kg:'Wash, dry, fold', i_kgd:'RM 6 / kg', i_shirt:'Shirt dry clean', i_shirtd:'RM 9 / piece', i_bed:'Duvet and sheets', i_bedd:'RM 28 / set', kg:'{n} kg', pc:'{n} pcs', set:'{n} sets',
+      call:'Send a rider · about {p}', none:'Choose what to wash', ridT:'Hafiz is on the way', ridS:'Red motorbike · WTF 3821', near:'Hafiz is nearly downstairs', got:'Laundry collected', gotS:'Weighed {k} kg · {p}', min:'min', back:'Back tomorrow {w}',
+      t1:'Rider on the way', t1s:'Leaving the SS15 laundry', t2:'Nearly there', t2s:'Calls you from downstairs', t3:'Collected', t3s:'Weighed in front of you, photo kept', t4:'Washed and returned', t4s:'Tomorrow, same time', rateQ:'How was the pickup?', thanks:'Thanks, {n} stars', fin:'Done'},
+ ms: {brand:'FreshFold', h1:'Diambil malam ini, dihantar esok malam', lede:'Dibasuh, dikeringkan dan dilipat, dikira ikut kilo. Penghantar telefon bila sampai di bawah.', when:'Bila kami ambil?', what:'Apa yang dibasuh (ditimbang semula oleh penghantar)', where:'Ambil di', addrNote:'Pondok pengawal boleh terima',
+      w1:'Malam ini', w1t:'8–9 mlm', w2:'Malam ini', w2t:'9–10 mlm', w3:'Esok', w3t:'9–10 pg', i_kg:'Basuh, kering, lipat', i_kgd:'RM 6 / kg', i_shirt:'Cuci kering kemeja', i_shirtd:'RM 9 / helai', i_bed:'Selimut dan cadar', i_bedd:'RM 28 / set', kg:'{n} kg', pc:'{n} helai', set:'{n} set',
+      call:'Panggil penghantar · lebih kurang {p}', none:'Pilih apa yang dibasuh', ridT:'Hafiz dalam perjalanan', ridS:'Motosikal merah · WTF 3821', near:'Hafiz hampir sampai', got:'Pakaian sudah diambil', gotS:'Ditimbang {k} kg · {p}', min:'min', back:'Dihantar esok {w}',
+      t1:'Penghantar bertolak', t1s:'Dari dobi SS15', t2:'Hampir sampai', t2s:'Telefon anda dari bawah', t3:'Sudah diambil', t3s:'Ditimbang depan anda, foto disimpan', t4:'Dibasuh dan dihantar', t4s:'Esok, masa yang sama', rateQ:'Bagaimana pengambilan tadi?', thanks:'Terima kasih, {n} bintang', fin:'Siap'}};
+const IC = {kg:'<svg viewBox="0 0 32 32" fill="none" stroke="#1F2A44" stroke-width="1.8"><rect x="6" y="4" width="20" height="24" rx="4"/><circle cx="16" cy="17" r="6"/><path d="M10 8h2"/></svg>',
+  shirt:'<svg viewBox="0 0 32 32" fill="none" stroke="#1F2A44" stroke-width="1.8" stroke-linejoin="round"><path d="M11 5l5 3 5-3 6 4-3 5-2-1v14H10V13l-2 1-3-5z"/></svg>',
+  bed:'<svg viewBox="0 0 32 32" fill="none" stroke="#1F2A44" stroke-width="1.8" stroke-linejoin="round"><path d="M4 22V10M28 22v-6H4"/><path d="M8 16v-3h6v3"/><path d="M4 22h24"/></svg>'};
+const ITEMS = [{id:'kg', p:6, n:4, max:20, u:'kg'}, {id:'shirt', p:9, n:0, max:20, u:'pc'}, {id:'bed', p:28, n:0, max:6, u:'set'}];
+const STAR = '<svg viewBox="0 0 24 24"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>';
+const $ = id => document.getElementById(id), Q = new URLSearchParams(location.search);
+let L = ['zh', 'en', 'ms'].includes(Q.get('lang')) ? Q.get('lang') : 'zh', when = 'w1', stage = 0, raf = 0, stars = 0, kgReal = 0, timers = [];
+const t = (k, o = {}) => (W[L][k] ?? W.zh[k] ?? k).replace(/\{(\w+)\}/g, (_, x) => o[x] ?? '');
+const rm = v => 'RM ' + v.toFixed(2);
+const est = () => ITEMS.reduce((a, i) => a + i.p * i.n, 0);
+function show(id) { for (const s of document.querySelectorAll('.scr')) s.hidden = s.id !== id; }
+function order() {
+  $('when').innerHTML = ['w1', 'w2', 'w3'].map(w => `<button type="button" data-w="${w}" aria-pressed="${w === when}">${t(w)}<small>${t(w + 't')}</small></button>`).join('');
+  $('items').innerHTML = ITEMS.map(i => `<div class="it"><span class="ic">${IC[i.id]}</span><span><b>${t('i_' + i.id)}</b><small>${t('i_' + i.id + 'd')}</small></span><span class="step"><button type="button" data-m="${i.id}" aria-label="−">−</button><output>${t(i.u, {n: i.n})}</output><button type="button" data-p="${i.id}" aria-label="+">+</button></span></div>`).join('');
+  const e = est(); $('call').disabled = !e; $('call').textContent = e ? t('call', {p: rm(e)}) : t('none');
+}
+function line(k) {
+  stage = k; const e = est();
+  $('tl').innerHTML = [1, 2, 3, 4].map(i => `<li class="${i <= k + 1 ? 'on' : ''}${i === k + 1 ? ' now' : ''}"><i></i><span><b>${t('t' + i)}</b><small>${i === 3 && k >= 2 ? t('gotS', {k: kgReal.toFixed(1), p: rm(e - ITEMS[0].p * ITEMS[0].n + ITEMS[0].p * kgReal)}) : i === 4 ? t('back', {w: t(when + 't')}) : t('t' + i + 's')}</small></span></li>`).join('');
+  $('etaT').textContent = k >= 2 ? t('got') : k === 1 ? t('near') : t('ridT'); $('etaS').textContent = k >= 2 ? t('back', {w: t(when + 't')}) : t('ridS');
+  $('rate').classList.toggle('on', k >= 2); $('fin').hidden = k < 2;
+  if (k >= 2) requestAnimationFrame(() => $('rate').scrollIntoView({block: 'nearest', behavior: 'smooth'}));
+}
+function ride() {
+  const P = $('route'), D = $('done'), R = $('rider'), len = P.getTotalLength(), T = Q.get('fast') ? 2500 : 9000; let t0 = 0;
+  kgReal = ITEMS[0].n ? Math.round((ITEMS[0].n + 0.3) * 10) / 10 : 0; line(0);
+  const step = ts => { if (!t0) t0 = ts; const f = Math.min(1, (ts - t0) / T), pt = P.getPointAtLength(len * f);
+    R.setAttribute('transform', `translate(${pt.x} ${pt.y})`); D.setAttribute('stroke-dasharray', `${len * f} 2000`); $('etaM').textContent = Math.max(0, Math.ceil(6 * (1 - f)));
+    if (f > .62 && stage < 1) line(1);
+    if (f < 1) raf = requestAnimationFrame(step); else line(2); };
+  cancelAnimationFrame(raf); raf = requestAnimationFrame(step);
+}
+function rate() { $('stars').innerHTML = [1, 2, 3, 4, 5].map(n => `<button type="button" data-s="${n}" class="${n <= stars ? 'on' : ''}" aria-label="${n}">${STAR}</button>`).join(''); $('thanks').textContent = stars ? t('thanks', {n: stars}) : ''; }
+function words() {
+  document.documentElement.lang = L === 'zh' ? 'zh-CN' : L; document.title = L === 'zh' ? '快洗 FreshFold' : 'FreshFold';
+  for (const e of document.querySelectorAll('[data-t]')) e.textContent = t(e.dataset.t);
+  for (const b of document.querySelectorAll('.lang button')) b.setAttribute('aria-pressed', String(b.dataset.l === L));
+  order(); rate(); if (!$('sTrack').hidden) line(stage);
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || b.disabled) return; const d = b.dataset;
+  if (d.l) { L = d.l; words(); }
+  else if (d.w) { when = d.w; order(); }
+  else if (d.m || d.p) { const i = ITEMS.find(x => x.id === (d.m || d.p)); i.n = Math.max(0, Math.min(i.max, i.n + (d.p ? 1 : -1))); order(); }
+  else if (d.s) { stars = +d.s; rate(); }
+});
+$('call').onclick = () => { stars = 0; rate(); show('sTrack'); ride(); };
+$('back1').onclick = () => { cancelAnimationFrame(raf); show('sOrder'); };
+$('fin').onclick = () => { cancelAnimationFrame(raf); $('rate').classList.remove('on'); ITEMS.forEach((i, k) => i.n = k ? 0 : 4); when = 'w1'; order(); show('sOrder'); };
+addEventListener('message', e => { const l = e.data && e.data.lang; if (['zh', 'en', 'ms'].includes(l) && l !== L) { L = l; words(); } });
+words(); show('sOrder');
+if (Q.get('auto') === '1') {
+  const tap = $('tap'); let stop = false;
+  const at = q => { const el = typeof q === 'string' ? document.querySelector(q) : q; if (!el) return; const r = el.getBoundingClientRect(); tap.style.left = (r.left + r.width / 2) + 'px'; tap.style.top = (r.top + r.height / 2) + 'px'; tap.classList.add('on'); setTimeout(() => tap.classList.remove('on'), 260); el.click(); };
+  const S = [[1300, () => at('[data-w=w2]')], [1000, () => at('[data-p=kg]')], [900, () => at('[data-p=shirt]')], [800, () => at('[data-p=shirt]')], [1200, () => at('#call')], [10400, () => at('[data-s="5"]')], [2200, () => at('#fin')]];
+  const run = (i = 0) => { if (stop) return; const [w, f] = S[i % S.length]; setTimeout(() => { if (!stop) { f(); run(i + 1); } }, w); };
+  addEventListener('pointerdown', e => { if (e.isTrusted) stop = true; }, {capture: true}); run();
+}
+})();
+</script>
+</body>
+</html>

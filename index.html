@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<script>/* opened anywhere but dinamics.dev (a preview, a saved copy): this page's own files stay beside it, links to the site's other pages go to dinamics.dev */window.DN_AWAY=!/(^|\.)dinamics\.dev$|^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname)</script>
 <meta name="description" content="Dinamics：网站、App、AI 智能体、交易系统、智能合约、视频，十八般技术，一家做齐。">
 <meta property="og:title" content="Dinamics · 你要的，都造得出来">
 <meta property="og:description" content="你要的，都造得出来。十八般技术，一家做齐。">
@@ -501,6 +502,13 @@ function go(el) {
   if (e && e.flyTo) { const st = el.dataset && el.dataset.st ? e.stop(el.dataset.st) : null; e.flyTo(st !== null && st !== undefined ? st : el.getBoundingClientRect().top + scrollY); }
   else el.scrollIntoView({ behavior: RED ? 'auto' : 'smooth' });
 }
+// away from dinamics.dev (DN_AWAY): every link to another page of the site points at dinamics.dev, the ones added later too
+if (window.DN_AWAY) {
+  const one = a => { const h = a.getAttribute('href'); if (h && !/^(#|[a-z][a-z0-9+.-]*:|\/\/)/i.test(h)) a.setAttribute('href', new URL(h, 'https://dinamics.dev/').href); };
+  const fix = n => { if (n.nodeType !== 1) return; if (n.matches('a[href]')) one(n); n.querySelectorAll('a[href]').forEach(one); };
+  fix(document.documentElement);
+  new MutationObserver(ms => ms.forEach(m => m.type === 'attributes' ? fix(m.target) : m.addedNodes.forEach(fix))).observe(document.documentElement, { childList: true, subtree: true, attributes: true, attributeFilter: ['href'] });
+}
 document.addEventListener('click', e => {
   const a = e.target.closest('a[href^="#"]');
   if (a && a.getAttribute('href').length > 1) { const el = document.querySelector(a.getAttribute('href')); if (el) { e.preventDefault(); menu.classList.remove('open'); go(el); history.replaceState(null, '', a.getAttribute('href')); } }
@@ -583,7 +591,7 @@ const airOff = ms => setTimeout(() => de.classList.remove('air', 'rev'), ms);
 function hazeTo(i, op, ms) { if (i >= 0) haze.style.setProperty('--hz', D.haze[i]); haze.style.transition = ms ? `opacity ${ms}ms ease` : 'none'; haze.style.opacity = op; }
 document.addEventListener('click', e => {
   const a = e.target.closest('a[data-dive]'), en = eng();
-  if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || !en || !en.ready || RED || de.classList.contains('no-gl')) return;
+  if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || !en || !en.ready || RED || window.DN_AWAY || de.classList.contains('no-gl')) return;
   e.preventDefault(); if (leaving) return; leaving = true; de.classList.remove('rev'); de.classList.add('leaving', 'air'); pick(false);
   const i = +a.dataset.dive, go = () => {   // the page changes only once the screen is full of the air (a slow dive gets there in a quick fade)
     if (gone) return; gone = true; try { sessionStorage.setItem('dn-haze', JSON.stringify({ i, t: Date.now() })); } catch (x) { }

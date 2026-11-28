@@ -2,7 +2,7 @@
 (() => {
   const { $, h, put, t, tf, toast, store } = window.Desk, DN = window.DN, F = window.Free;
   const form = $('#iv-form'), out = $('#iv-out');
-  const CUR = [['MYR', 'RM', 2], ['SGD', 'S$', 2], ['THB', '฿', 2], ['IDR', 'Rp', 0], ['PHP', '₱', 2], ['VND', '₫', 0], ['USD', 'US$', 2], ['CNY', '¥', 2], ['HKD', 'HK$', 2], ['TWD', 'NT$', 0], ['AUD', 'A$', 2], ['EUR', '€', 2], ['GBP', '£', 2], ['INR', '₹', 2]];
+  const CUR = [['USD', 'US$', 2], ['EUR', '€', 2], ['GBP', '£', 2], ['SGD', 'S$', 2], ['MYR', 'RM', 2], ['THB', '฿', 2], ['IDR', 'Rp', 0], ['PHP', '₱', 2], ['VND', '₫', 0], ['CNY', '¥', 2], ['HKD', 'HK$', 2], ['TWD', 'NT$', 0], ['AUD', 'A$', 2], ['INR', '₹', 2]];
   const PRE = { QT: 'QT', INV: 'INV', RC: 'RC' };
   // the words printed on the document: its own language, whatever language this page is in
   const DL = {
@@ -19,7 +19,7 @@
   const day = (d = new Date()) => new Date(d.getTime() - d.getTimezoneOffset() * 6e4).toISOString().slice(0, 10);
   const plus = n => { const d = new Date(); d.setDate(d.getDate() + n); return day(d); };
   const blank = () => ({ buyer: { name: '', addr: '' }, items: [{ d: '', q: '1', p: '' }], date: day(), until: plus(14), method: '', noEdited: false });
-  const S = Object.assign({ type: 'QT', dl: DN.lang === 'ms' ? 'ms' : 'zh', cur: 'MYR', seller: { name: '', reg: '', addr: '', phone: '', email: '' }, disc: '', tax: '', taxName: '', notes: '', bank: '', sign: false, logo: null, seq: { QT: 1, INV: 1, RC: 1 }, no: '' }, blank(), store.get('dn-free-inv', {}));
+  const S = Object.assign({ type: 'QT', dl: DN.lang === 'ms' ? 'ms' : 'zh', cur: 'USD', seller: { name: '', reg: '', addr: '', phone: '', email: '' }, disc: '', tax: '', taxName: '', notes: '', bank: '', sign: false, logo: null, seq: { QT: 1, INV: 1, RC: 1 }, no: '' }, blank(), store.get('dn-free-inv', {}));
   if (!PRE[S.type]) S.type = 'QT';
   let logoImg = null;
   if (S.logo) { const im = new Image(); im.onload = () => { logoImg = im; render(); }; im.src = S.logo; }

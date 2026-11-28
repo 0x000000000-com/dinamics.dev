@@ -126,7 +126,7 @@
         todo.length ? h('ul', { cls: 'fr-checks' }, todo.map(item)) : null,
         fine.length ? h('details', { cls: 'fr-fine', open: !todo.length }, h('summary', {}, tf('good_n', { n: fine.length })), h('ul', { cls: 'fr-checks' }, fine.map(item))) : null);
     });
-    const when = new Date().toLocaleString({ en: 'en-GB', ms: 'ms-MY' }[DN.lang] || 'zh-CN', { dateStyle: 'medium', timeStyle: 'short' });
+    const when = new Date().toLocaleString({ en: 'en-GB', ms: 'ms' }[DN.lang] || 'zh-CN', { dateStyle: 'medium', timeStyle: 'short' });
     put(out,
       h('div', { cls: 'fr-rhead' }, h('h2', {}, t('r_for')), h('p', {}, h('a', { href: r.url, target: '_blank', rel: 'noopener nofollow' }, nice(r.url))), h('p', { cls: 'note' }, r.cached ? t('r_cached') : tf('r_at', { t: when }))),
       h('div', { cls: 'fr-score' }, h('div', { cls: 'fr-ringwrap' }, ring, h('span', {}, t('r_total'))), h('div', {}, h('p', { cls: 'fr-verdict' }, t('v_' + (b === 'warn' ? 'ok' : b))), cats)),

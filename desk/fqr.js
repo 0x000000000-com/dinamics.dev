@@ -37,7 +37,7 @@
   function payload(k) {
     if (k === 'wa') {
       let d = S.num.replace(/\D/g, ''), zero = false;
-      if (S.cc && d.startsWith('0')) { d = d.replace(/^0+/, ''); zero = true; }   // 012 345 6789 → +60 12 345 6789
+      if (S.cc && d.startsWith('0')) { d = d.replace(/^0+/, ''); zero = true; }   // a leading 0 goes once the country code is in front
       d = S.cc + d;
       if (d.length < 8 || d.length > 15) return { err: 'e_wa', field: 'num' };
       const m = (S.msg ?? t('msg_def')).trim();

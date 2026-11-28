@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#17233B">
+<title>毛孩 Pawsome</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2317233B'/%3E%3Cellipse cx='32' cy='40' rx='11' ry='9' fill='%23FFB38A'/%3E%3Ccircle cx='20' cy='26' r='5' fill='%23FFB38A'/%3E%3Ccircle cx='28' cy='19' r='5' fill='%23FFB38A'/%3E%3Ccircle cx='36' cy='19' r='5' fill='%23FFB38A'/%3E%3Ccircle cx='44' cy='26' r='5' fill='%23FFB38A'/%3E%3C/svg%3E">
+<style>
+b,strong,h1,h2,h3,h4{font-weight:500}
+body{font-variant-numeric:tabular-nums}
+
+/* 毛孩 Pawsome — a sample booking app by Dinamics. A grooming room: bath-water blue, towel white, the peach of a freshly washed coat. */
+:root{--ink:#17233B;--ink2:#2B3A57;--b:#2F6FD0;--b0:#E7EFFB;--p:#FFB38A;--p0:#FFF1E8;--w:#F6F8FB;--mut:#5D6A80;--line:#DFE5EE;--ok:#1F9D63;
+  font-family:ui-rounded,"SF Pro Rounded","Segoe UI","PingFang SC","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;color:var(--ink);background:var(--w)}
+*{box-sizing:border-box;margin:0}
+html,body{height:100%}
+body{overflow:hidden;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible{outline:3px solid var(--b);outline-offset:2px}
+button[disabled]{cursor:default}
+.app{position:relative;height:100%;max-width:520px;margin:0 auto;background:var(--w);overflow:hidden}
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;transition:transform .38s cubic-bezier(.22,1,.36,1),opacity .3s}
+.scr[hidden]{display:flex!important;visibility:hidden;opacity:0;transform:translateX(30%);pointer-events:none}
+.scroll{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:0 0 116px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:calc(16px + env(safe-area-inset-top)) 20px 0}
+.brand{display:flex;align-items:center;gap:12px;font-weight:600}
+.brand svg{width:32px;height:32px}
+.lang{display:flex;gap:2px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:4px}
+.lang button{font-size:12px;padding:4px 8px;border-radius:99px;color:var(--mut)}
+.lang button[aria-pressed=true]{background:var(--ink);color:#fff;font-weight:600}
+h1{font-size:24px;line-height:1.25;font-weight:600;padding:20px 20px 0}
+.lede{font-size:14px;color:var(--mut);padding:8px 20px 0;line-height:1.5}
+.lab{font-size:13px;font-weight:500;color:var(--mut);padding:20px 20px 12px}
+.pets{display:flex;gap:12px;padding:0 20px;overflow-x:auto}
+.pet{flex:none;display:flex;align-items:center;gap:12px;padding:8px 16px 8px 8px;border-radius:16px;background:#fff;border:1.5px solid var(--line);font-weight:500;font-size:14.5px}
+.pet svg{width:40px;height:40px;border-radius:12px}
+.pet small{display:block;font-weight:400;color:var(--mut);font-size:12px}
+.pet[aria-pressed=true]{border-color:var(--b);background:var(--b0)}
+.svc{display:grid;gap:12px;padding:0 16px}
+.svc button{display:flex;gap:16px;align-items:center;text-align:left;padding:16px;border-radius:16px;background:#fff;border:1.5px solid var(--line)}
+.svc button[aria-pressed=true]{border-color:var(--b);box-shadow:0 0 0 3px #2F6FD01f}
+.svc .ic{flex:none;width:44px;height:44px;border-radius:12px;background:var(--b0);display:grid;place-items:center;color:var(--b)}
+.svc .ic svg{width:24px;height:24px}
+.svc b{display:block;font-size:15.5px}
+.svc small{display:block;color:var(--mut);font-size:12.5px;margin-top:4px;line-height:1.4}
+.svc .pr{margin-left:auto;flex:none;text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
+.svc .pr small{margin-top:4px}
+.cta{position:absolute;left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));padding:16px;border-radius:16px;background:var(--ink);color:#fff;font-weight:600;font-size:16px;text-align:center}
+.cta[disabled]{opacity:.45}
+.head{display:flex;align-items:center;gap:12px;padding:calc(16px + env(safe-area-inset-top)) 16px 12px;background:#fff;border-bottom:1px solid var(--line)}
+.head button{width:38px;height:38px;border-radius:12px;display:grid;place-items:center}
+.head button svg{width:22px;height:22px}
+.head h2{font-size:17px}
+.head p{font-size:12.5px;color:var(--mut)}
+.days{display:flex;gap:8px;padding:0 16px;overflow-x:auto}
+.days button{flex:none;width:56px;padding:12px 0;border-radius:14px;background:#fff;border:1.5px solid var(--line);text-align:center}
+.days b{display:block;font-size:20px;font-variant-numeric:tabular-nums}
+.days small{display:block;font-size:12px;color:var(--mut);margin-top:2px}
+.days button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.days button[aria-pressed=true] small{color:#ffffffb0}
+.slots{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:0 16px}
+.slots button{padding:12px 0;border-radius:12px;background:#fff;border:1.5px solid var(--line);font-weight:500;font-variant-numeric:tabular-nums}
+.slots button[disabled]{color:#AEB7C6;text-decoration:line-through;background:var(--w)}
+.slots button[aria-pressed=true]{background:var(--b);border-color:var(--b);color:#fff}
+.pros{display:flex;gap:8px;padding:0 16px;flex-wrap:wrap}
+.pros button{display:flex;align-items:center;gap:8px;padding:8px 16px 8px 8px;border-radius:99px;background:#fff;border:1.5px solid var(--line);font-weight:500;font-size:14px}
+.pros i{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-size:12px;color:#fff}
+.pros button[aria-pressed=true]{border-color:var(--b);background:var(--b0)}
+.ticket{margin:calc(20px + env(safe-area-inset-top)) 16px 0;border-radius:22px;background:var(--ink);color:#fff;overflow:hidden;position:relative}
+.t-top{display:flex;gap:16px;align-items:center;padding:20px 20px 20px}
+.t-top svg{width:62px;height:62px;border-radius:18px;flex:none}
+.t-top small{display:block;font-size:12.5px;color:#ffffffa8}
+.t-top b{display:block;font-size:20px;margin-top:2px}
+.t-mid{border-top:2px dashed #ffffff30;margin:0 16px;position:relative}
+.t-mid::before,.t-mid::after{content:"";position:absolute;top:-12px;width:22px;height:22px;border-radius:50%;background:var(--w)}
+.t-mid::before{left:-28px}.t-mid::after{right:-28px}
+.t-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 12px;padding:20px 20px 20px}
+.t-grid small{display:block;font-size:12px;color:#ffffffa0}
+.t-grid b{display:block;font-size:15.5px;margin-top:4px;font-variant-numeric:tabular-nums}
+.t-ok{display:flex;align-items:center;gap:8px;font-size:13px;color:#BFF0D6;padding:0 20px 20px}
+.t-ok i{width:8px;height:8px;border-radius:50%;background:#53D68F}
+.row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 16px 0;padding:16px 16px;border-radius:16px;background:#fff;border:1px solid var(--line)}
+.row b{display:block;font-size:15px}
+.row small{display:block;font-size:12.5px;color:var(--mut);margin-top:2px}
+.sw{flex:none;width:50px;height:30px;border-radius:99px;background:#C9D2DF;position:relative;transition:background .2s}
+.sw::after{content:"";position:absolute;left:3px;top:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .2s cubic-bezier(.22,1,.36,1);box-shadow:0 1px 2px #0002}
+.sw[aria-checked=true]{background:var(--ok)}
+.sw[aria-checked=true]::after{transform:translateX(20px)}
+.btns{display:flex;gap:12px;margin:16px 16px 0}
+.btns button{flex:1;padding:16px;border-radius:14px;font-weight:500;border:1.5px solid var(--line);background:#fff}
+.btns .dark{background:var(--ink);border-color:var(--ink);color:#fff}
+.paws{display:flex;justify-content:center;gap:8px;margin:20px 0 0}
+.paws span{width:22px;height:22px;opacity:.18;transition:opacity .3s}
+.paws span.on{opacity:1}
+.pawl{text-align:center;font-size:12.5px;color:var(--mut);margin-top:8px}
+.toast{position:absolute;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,40px);opacity:0;background:var(--ink);color:#fff;font-size:14px;padding:12px 16px;border-radius:99px;transition:transform .3s,opacity .3s;white-space:nowrap;max-width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis;z-index:9}
+.toast.on{transform:translate(-50%,0);opacity:1}
+.tap{position:absolute;width:44px;height:44px;margin:-22px 0 0 -22px;border-radius:50%;background:#2F6FD055;border:2px solid #2F6FD0;pointer-events:none;z-index:20;opacity:0;transition:opacity .2s,transform .2s}
+.tap.on{opacity:1;transform:scale(.8)}
+@media (max-width:360px){h1{font-size:21px}.slots{grid-template-columns:repeat(3,1fr)}.days button{width:52px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<section class="scr" id="sPick">
+  <div class="scroll">
+    <div class="top">
+      <div class="brand"><svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#17233B"/><ellipse cx="32" cy="40" rx="11" ry="9" fill="#FFB38A"/><circle cx="20" cy="26" r="5" fill="#FFB38A"/><circle cx="28" cy="19" r="5" fill="#FFB38A"/><circle cx="36" cy="19" r="5" fill="#FFB38A"/><circle cx="44" cy="26" r="5" fill="#FFB38A"/></svg><span data-t="brand">毛孩 Pawsome</span></div>
+      <div class="lang" role="group" aria-label="Language"><button type="button" data-l="zh" aria-pressed="true">中</button><button type="button" data-l="en" aria-pressed="false">EN</button><button type="button" data-l="ms" aria-pressed="false">BM</button></div>
+    </div>
+    <h1 data-t="h1">给毛孩订下一次美容</h1>
+    <p class="lede" data-t="lede">SS2 店 · 每天 10:00–20:00。订好以后，前一天会提醒你。</p>
+    <p class="lab" data-t="who">给谁洗？</p>
+    <div class="pets" id="pets" role="group"></div>
+    <p class="lab" data-t="what">做什么？</p>
+    <div class="svc" id="svc" role="group"></div>
+  </div>
+  <button type="button" class="cta" id="next1" disabled></button>
+</section>
+
+<section class="scr" id="sTime" hidden>
+  <div class="head"><button type="button" id="back1" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 5l-7 7 7 7"/></svg></button><div><h2 data-t="when">选时间</h2><p id="sumLine"></p></div></div>
+  <div class="scroll">
+    <p class="lab" data-t="day">哪一天</p><div class="days" id="days" role="group"></div>
+    <p class="lab" data-t="slot">几点（划掉的已经订满）</p><div class="slots" id="slots" role="group"></div>
+    <p class="lab" data-t="pro">美容师</p><div class="pros" id="pros" role="group"></div>
+  </div>
+  <button type="button" class="cta" id="book" disabled></button>
+</section>
+
+<section class="scr" id="sDone" hidden>
+  <div class="scroll">
+    <div class="ticket" role="group" aria-label="Booking">
+      <div class="t-top"><span id="tPet"></span><span><small data-t="booked">已经订好</small><b id="tWho"></b></span></div>
+      <div class="t-mid"></div>
+      <div class="t-grid"><span><small data-t="gWhen">时间</small><b id="tWhen"></b></span><span><small data-t="gSvc">服务</small><b id="tSvc"></b></span><span><small data-t="gPro">美容师</small><b id="tPro"></b></span><span><small data-t="gCode">预约号</small><b id="tCode"></b></span></div>
+      <p class="t-ok"><i></i><span data-t="okLine">店里已经收到，到时直接来</span></p>
+    </div>
+    <div class="row"><span><b data-t="remind">前一天提醒我</b><small id="remLine"></small></span><button type="button" class="sw" id="remind" role="switch" aria-checked="true" aria-labelledby="remind"></button></div>
+    <div class="btns"><button type="button" id="move" data-t="move">改时间</button><button type="button" class="dark" id="done" data-t="doneB">好的</button></div>
+    <div class="paws" id="paws" aria-hidden="true"></div><p class="pawl" data-t="pawl">再来 2 次，第 5 次洗澡免费</p>
+  </div>
+</section>
+
+<div class="toast" id="toast" role="status"></div>
+<div class="tap" id="tap"></div>
+</div>
+
+<script>
+(() => {
+'use strict';
+const W = {
+ zh: {brand:'毛孩 Pawsome', h1:'给毛孩订下一次美容', lede:'SS2 店 · 每天 10:00–20:00。订好以后，前一天会提醒你。', who:'给谁洗？', what:'做什么？', next:'选时间', nextP:'下一步：选时间 · {p}', when:'选时间', day:'哪一天', slot:'几点（划掉的已经订满）', pro:'美容师',
+      book:'订 {d} {t}', pick:'先选一个时间', booked:'已经订好', gWhen:'时间', gSvc:'服务', gPro:'美容师', gCode:'预约号', okLine:'店里已经收到，到时直接来', remind:'前一天提醒我', remOn:'{d} 晚上 8 点发 WhatsApp', remOff:'不提醒', move:'改时间', doneB:'好的', pawl:'再来 2 次，第 5 次洗澡免费',
+      any:'谁有空都行', min:'{n} 分钟', moved:'改好了：{x}', saved:'提醒已开', unsaved:'提醒已关', today:'今天', tmr:'明天', wd:['周日','周一','周二','周三','周四','周五','周六'],
+      s_bath:'洗澡吹干', s_bathd:'温水洗、吹干、梳毛', s_full:'全套美容', s_fulld:'洗澡、修剪造型、清耳朵', s_nail:'剪指甲', s_naild:'剪好再磨圆，不刮地板', p_mochi:'Mochi', p_mochid:'柯基 · 3 岁', p_kopi:'Kopi', p_kopid:'英短猫 · 5 岁'},
+ en: {brand:'Pawsome', h1:"Book your pet's next groom", lede:'SS2 · daily 10:00–20:00. We remind you the day before.', who:'Who is it for?', what:'What do they need?', next:'Pick a time', nextP:'Next: pick a time · {p}', when:'Pick a time', day:'Day', slot:'Time (crossed out = full)', pro:'Groomer',
+      book:'Book {d} {t}', pick:'Pick a time first', booked:'Booked', gWhen:'When', gSvc:'Service', gPro:'Groomer', gCode:'Booking no.', okLine:'The shop has it. Just come in', remind:'Remind me the day before', remOn:'WhatsApp at 8 pm on {d}', remOff:'No reminder', move:'Change time', doneB:'Done', pawl:'2 more visits and the 5th bath is free',
+      any:'Whoever is free', min:'{n} min', moved:'Changed: {x}', saved:'Reminder on', unsaved:'Reminder off', today:'Today', tmr:'Tmrw', wd:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+      s_bath:'Bath and blow-dry', s_bathd:'Warm wash, dry, brush-out', s_full:'Full groom', s_fulld:'Bath, trim and style, ear clean', s_nail:'Nail trim', s_naild:'Clipped and filed smooth', p_mochi:'Mochi', p_mochid:'Corgi · 3 yrs', p_kopi:'Kopi', p_kopid:'British Shorthair · 5 yrs'},
+ ms: {brand:'Pawsome', h1:'Tempah dandanan seterusnya', lede:'SS2 · setiap hari 10:00–20:00. Kami ingatkan anda sehari sebelum.', who:'Untuk siapa?', what:'Apa yang diperlukan?', next:'Pilih masa', nextP:'Seterusnya: pilih masa · {p}', when:'Pilih masa', day:'Hari', slot:'Masa (dipangkah = penuh)', pro:'Pendandan',
+      book:'Tempah {d} {t}', pick:'Pilih masa dahulu', booked:'Sudah ditempah', gWhen:'Masa', gSvc:'Servis', gPro:'Pendandan', gCode:'No. tempahan', okLine:'Kedai sudah terima. Datang sahaja', remind:'Ingatkan saya sehari sebelum', remOn:'WhatsApp pukul 8 malam, {d}', remOff:'Tiada peringatan', move:'Tukar masa', doneB:'Siap', pawl:'2 kali lagi, mandian ke-5 percuma',
+      any:'Sesiapa yang lapang', min:'{n} min', moved:'Ditukar: {x}', saved:'Peringatan dibuka', unsaved:'Peringatan ditutup', today:'Hari ini', tmr:'Esok', wd:['Ahd','Isn','Sel','Rab','Kha','Jum','Sab'],
+      s_bath:'Mandi dan keringkan', s_bathd:'Basuh air suam, keringkan, sikat', s_full:'Dandanan penuh', s_fulld:'Mandi, gunting dan gaya, bersih telinga', s_nail:'Potong kuku', s_naild:'Dipotong dan dikikir licin', p_mochi:'Mochi', p_mochid:'Corgi · 3 tahun', p_kopi:'Kopi', p_kopid:'British Shorthair · 5 tahun'}};
+const DOG = `<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#FFF1E8"/><path d="M14 20l8 12M50 20l-8 12" stroke="#D9824F" stroke-width="7" stroke-linecap="round"/><ellipse cx="32" cy="38" rx="17" ry="15" fill="#E8955F"/><ellipse cx="32" cy="44" rx="10" ry="8" fill="#FFF1E8"/><circle cx="25" cy="34" r="2.6" fill="#17233B"/><circle cx="39" cy="34" r="2.6" fill="#17233B"/><ellipse cx="32" cy="41" rx="3.4" ry="2.4" fill="#17233B"/></svg>`;
+const CAT = `<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="16" fill="#E7EFFB"/><path d="M16 30l2-15 10 9M48 30l-2-15-10 9" fill="#8C97A8"/><ellipse cx="32" cy="38" rx="17" ry="15" fill="#9AA5B6"/><circle cx="25" cy="35" r="3" fill="#F2C14E"/><circle cx="39" cy="35" r="3" fill="#F2C14E"/><path d="M29 42l3 2 3-2" stroke="#17233B" stroke-width="2" fill="none" stroke-linecap="round"/></svg>`;
+const IC = {bath:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 12h16v2a6 6 0 0 1-6 6h-4a6 6 0 0 1-6-6z"/><path d="M7 12V6a2 2 0 0 1 4 0"/><path d="M15 8h.01M18 6h.01M17 10h.01"/></svg>',
+  full:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M20 4L8.5 15.5M14.5 14.5L20 20M8.5 8.5L12 12"/></svg>',
+  nail:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><ellipse cx="12" cy="15" rx="5" ry="4"/><circle cx="6" cy="9" r="2"/><circle cx="10" cy="6" r="2"/><circle cx="14" cy="6" r="2"/><circle cx="18" cy="9" r="2"/></svg>'};
+const PAW = '<svg viewBox="0 0 64 64"><ellipse cx="32" cy="40" rx="11" ry="9" fill="#2F6FD0"/><circle cx="20" cy="26" r="5" fill="#2F6FD0"/><circle cx="28" cy="19" r="5" fill="#2F6FD0"/><circle cx="36" cy="19" r="5" fill="#2F6FD0"/><circle cx="44" cy="26" r="5" fill="#2F6FD0"/></svg>';
+const SVC = [{id:'bath', p:45, m:60}, {id:'full', p:85, m:90}, {id:'nail', p:15, m:15}];
+const PROS = [{id:'any', c:'#5D6A80'}, {id:'Aina', c:'#2F6FD0'}, {id:'Ben', c:'#E8955F'}];
+const SLOTS = ['10:00', '10:30', '11:00', '11:30', '14:00', '14:30', '15:00', '16:30', '17:00', '18:00', '18:30', '19:00'];
+const $ = id => document.getElementById(id), Q = new URLSearchParams(location.search);
+let L = ['zh', 'en', 'ms'].includes(Q.get('lang')) ? Q.get('lang') : 'zh', pet = 'mochi', svc = null, day = 1, slot = null, pro = 'any', remind = true, code = '';
+const t = (k, o = {}) => (W[L][k] ?? W.zh[k] ?? k).toString().replace(/\{(\w+)\}/g, (_, x) => o[x] ?? '');
+const D0 = (() => { const d = new Date(); d.setHours(12, 0, 0, 0); return d; })();
+const dayAt = i => { const d = new Date(D0); d.setDate(d.getDate() + i); return d; };
+const dayName = i => i === 0 ? t('today') : i === 1 ? t('tmr') : W[L].wd[dayAt(i).getDay()];
+const dayLong = i => `${W[L].wd[dayAt(i).getDay()]} ${dayAt(i).getDate()}/${dayAt(i).getMonth() + 1}`;
+// some slots are already taken, the same way every visit (so the screen does not flicker between renders)
+const taken = (i, s) => ((i * 7 + SLOTS.indexOf(s) * 5) % 11) < 3 || (i === 0 && SLOTS.indexOf(s) < 6);
+const rm = v => 'RM ' + v;
+function show(id) { for (const s of document.querySelectorAll('.scr')) s.hidden = s.id !== id; $('toast').classList.remove('on'); }
+function toast(m) { const e = $('toast'); e.textContent = m; e.classList.add('on'); clearTimeout(e._t); e._t = setTimeout(() => e.classList.remove('on'), 1600); }
+function pick() {
+  $('pets').innerHTML = ['mochi', 'kopi'].map(p => `<button type="button" class="pet" data-pet="${p}" aria-pressed="${p === pet}">${p === 'mochi' ? DOG : CAT}<span>${t('p_' + p)}<small>${t('p_' + p + 'd')}</small></span></button>`).join('');
+  $('svc').innerHTML = SVC.map(s => `<button type="button" data-svc="${s.id}" aria-pressed="${s.id === svc}"><span class="ic">${IC[s.id]}</span><span><b>${t('s_' + s.id)}</b><small>${t('s_' + s.id + 'd')}</small></span><span class="pr">${rm(s.p)}<small>${t('min', {n: s.m})}</small></span></button>`).join('');
+  const s = SVC.find(x => x.id === svc); $('next1').disabled = !s; $('next1').textContent = s ? t('nextP', {p: rm(s.p)}) : t('next');
+}
+function times() {
+  const s = SVC.find(x => x.id === svc); $('sumLine').textContent = `${t('p_' + pet)} · ${t('s_' + s.id)} · ${rm(s.p)}`;
+  $('days').innerHTML = [0, 1, 2, 3, 4, 5, 6].map(i => `<button type="button" data-day="${i}" aria-pressed="${i === day}"><small>${dayName(i)}</small><b>${dayAt(i).getDate()}</b></button>`).join('');
+  $('slots').innerHTML = SLOTS.map(x => `<button type="button" data-slot="${x}" aria-pressed="${x === slot}"${taken(day, x) ? ' disabled' : ''}>${x}</button>`).join('');
+  $('pros').innerHTML = PROS.map(p => `<button type="button" data-pro="${p.id}" aria-pressed="${p.id === pro}"><i style="background:${p.c}">${p.id === 'any' ? '✓' : p.id[0]}</i>${p.id === 'any' ? t('any') : p.id}</button>`).join('');
+  $('book').disabled = !slot; $('book').textContent = slot ? t('book', {d: dayLong(day), t: slot}) : t('pick');
+}
+function ticket() {
+  const s = SVC.find(x => x.id === svc);
+  $('tPet').innerHTML = pet === 'mochi' ? DOG : CAT; $('tWho').textContent = t('p_' + pet);
+  $('tWhen').textContent = `${dayLong(day)} ${slot}`; $('tSvc').textContent = t('s_' + s.id); $('tPro').textContent = pro === 'any' ? t('any') : pro; $('tCode').textContent = code;
+  $('remind').setAttribute('aria-checked', String(remind)); $('remLine').textContent = remind ? t('remOn', {d: dayLong(Math.max(0, day - 1))}) : t('remOff');
+  $('paws').innerHTML = [0, 1, 2, 3, 4].map(i => `<span class="${i < 3 ? 'on' : ''}">${PAW}</span>`).join('');
+}
+function words() {
+  document.documentElement.lang = L === 'zh' ? 'zh-CN' : L; document.title = L === 'zh' ? '毛孩 Pawsome' : 'Pawsome';
+  for (const e of document.querySelectorAll('[data-t]')) e.textContent = t(e.dataset.t);
+  for (const b of document.querySelectorAll('.lang button')) b.setAttribute('aria-pressed', String(b.dataset.l === L));
+  pick(); if (svc) times(); if (code) ticket();
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || b.disabled) return;
+  const d = b.dataset;
+  if (d.l) { L = d.l; words(); }
+  else if (d.pet) { pet = d.pet; pick(); }
+  else if (d.svc) { svc = d.svc; pick(); }
+  else if (d.day) { day = +d.day; if (slot && taken(day, slot)) slot = null; times(); }
+  else if (d.slot) { slot = d.slot; times(); }
+  else if (d.pro) { pro = d.pro; times(); }
+});
+$('next1').onclick = () => { show('sTime'); times(); };
+$('back1').onclick = () => show(code ? 'sDone' : 'sPick');
+$('book').onclick = () => { const was = code; code = code || ('PW-' + (4100 + Math.floor(Math.random() * 800))); ticket(); show('sDone'); if (was) toast(t('moved', {x: `${dayLong(day)} ${slot}`})); };
+$('remind').onclick = () => { remind = !remind; ticket(); toast(t(remind ? 'saved' : 'unsaved')); };
+$('move').onclick = () => { show('sTime'); times(); };
+$('done').onclick = () => { code = ''; svc = null; slot = null; pro = 'any'; day = 1; pick(); show('sPick'); };
+addEventListener('message', e => { const l = e.data && e.data.lang; if (['zh', 'en', 'ms'].includes(l) && l !== L) { L = l; words(); } });
+words(); show('sPick');
+if (Q.get('auto') === '1') {
+  const tap = $('tap'); let stop = false;
+  const at = q => { const el = typeof q === 'string' ? document.querySelector(q) : q; if (!el) return; const r = el.getBoundingClientRect(); tap.style.left = (r.left + r.width / 2) + 'px'; tap.style.top = (r.top + r.height / 2) + 'px'; tap.classList.add('on'); setTimeout(() => tap.classList.remove('on'), 260); el.click(); };
+  const free = () => [...document.querySelectorAll('#slots button:not([disabled])')][1];
+  const S = [[1300, () => at('[data-pet=kopi]')], [1000, () => at('[data-pet=mochi]')], [1100, () => at('[data-svc=full]')], [1200, () => at('#next1')], [1400, () => at('[data-day="2"]')],
+    [1100, () => at(free())], [1000, () => at('[data-pro=Aina]')], [1300, () => at('#book')], [2200, () => at('#remind')], [1600, () => at('#remind')], [2400, () => at('#done')]];
+  const run = (i = 0) => { if (stop) return; const [w, f] = S[i % S.length]; setTimeout(() => { if (!stop) { f(); run(i + 1); } }, w); };
+  addEventListener('pointerdown', e => { if (e.isTrusted) stop = true; }, {capture: true}); run();
+}
+})();
+</script>
+</body>
+</html>
